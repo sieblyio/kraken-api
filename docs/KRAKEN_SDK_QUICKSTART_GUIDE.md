@@ -192,6 +192,11 @@ siebly:
 
 Build Kraken integrations in JavaScript or TypeScript without hand-rolling raw HTTP requests, Kraken JWTs/request signing for authenticated APIs, WebSocket authentication, heartbeats, reconnects, or exchange-specific payload handling. This guide also covers HTTP, HTTPS, and SOCKS proxy configuration for Spot and Futures connections.
 
+<!-- siebly:website-omit:start -->
+> [!TIP]
+> Read this guide in tutorial format on the Siebly website: [Kraken JavaScript REST API and WebSocket Tutorial](https://siebly.io/sdk/kraken/javascript/tutorial)
+<!-- siebly:website-omit:end -->
+
 This Kraken JavaScript tutorial uses [`@siebly/kraken-api`](https://www.npmjs.com/package/@siebly/kraken-api), the [Kraken JavaScript SDK by Siebly.io](https://siebly.io/sdk/kraken/javascript), to walk through the API surfaces most developers need:
 
 - Kraken Spot REST API
