@@ -20,6 +20,7 @@ import {
   WsKey,
   WSOperation,
   WSRequestOperationKraken,
+  WSSubscriptionRequest,
   WSTopicRequest,
 } from './lib/websocket/websocket-util.js';
 import { WSConnectedResult } from './lib/websocket/WsStore.types.js';
@@ -91,7 +92,8 @@ export class WebsocketClient extends BaseWebsocketClient<WsKey, any> {
 
   /**
    * Request subscription to one or more topics. Pass topics as either an array of strings, or array of objects (if the topic has parameters).
-   * Objects should be formatted as {topic: string, params: object}.
+   * Objects should be formatted as {topic: string, payload: object}.
+   * Unified public subscriptions require a payload with asset_class and channel-specific parameters.
    *
    * - Subscriptions are automatically routed to the correct websocket connection.
    * - Authentication/connection is automatic.
@@ -99,6 +101,11 @@ export class WebsocketClient extends BaseWebsocketClient<WsKey, any> {
    *
    * Call `unsubscribe(topics)` to remove topics
    */
+  public subscribe<TWSKey extends WsKey>(
+    requests: WSSubscriptionRequest<TWSKey> | WSSubscriptionRequest<TWSKey>[],
+    wsKey: TWSKey,
+  ): void;
+
   public subscribe(
     requests:
       | (WSTopicRequest<WSTopic> | WSTopic)
@@ -120,7 +127,13 @@ export class WebsocketClient extends BaseWebsocketClient<WsKey, any> {
    *
    * - Requests are automatically routed to the correct websocket connection.
    * - These topics will be removed from the topic cache, so they won't be subscribed to again.
+   * - Pass the same topic and payload used to subscribe, including optional parameters.
    */
+  public unsubscribe<TWSKey extends WsKey>(
+    requests: WSSubscriptionRequest<TWSKey> | WSSubscriptionRequest<TWSKey>[],
+    wsKey: TWSKey,
+  ): void;
+
   public unsubscribe(
     requests:
       | (WSTopicRequest<WSTopic> | WSTopic)
@@ -301,6 +314,9 @@ export class WebsocketClient extends BaseWebsocketClient<WsKey, any> {
     }
 
     switch (wsKey) {
+      case WS_KEY_MAP.unifiedPublicV2: {
+        return 'wss://uws.kraken.com/v2/public';
+      }
       /**
        * https://docs.kraken.com/api/docs/guides/spot-ws-intro/
        *
@@ -351,6 +367,7 @@ export class WebsocketClient extends BaseWebsocketClient<WsKey, any> {
         }
         break;
       }
+      case WS_KEY_MAP.unifiedPublicV2:
       case WS_KEY_MAP.spotPublicV2:
       case WS_KEY_MAP.spotPrivateV2:
       case WS_KEY_MAP.spotL3V2:
@@ -697,6 +714,7 @@ export class WebsocketClient extends BaseWebsocketClient<WsKey, any> {
       const req_id = this.getNewRequestId();
 
       switch (wsKey) {
+        case WS_KEY_MAP.unifiedPublicV2:
         case WS_KEY_MAP.spotPublicV2:
         case WS_KEY_MAP.spotPrivateV2:
         case WS_KEY_MAP.spotL3V2:
@@ -908,6 +926,7 @@ export class WebsocketClient extends BaseWebsocketClient<WsKey, any> {
           return;
         }
 
+        case WS_KEY_MAP.unifiedPublicV2:
         case WS_KEY_MAP.spotPublicV2:
         case WS_KEY_MAP.spotBetaPublicV2:
         case WS_KEY_MAP.derivativesPublicV1: {
