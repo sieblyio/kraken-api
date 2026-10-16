@@ -56,6 +56,7 @@ Complete & robust JavaScript & Node.js SDK for the Kraken REST APIs and WebSocke
     - [Derivatives (Futures) Trading](#derivatives-futures-trading)
   - [WebSockets](#websockets)
     - [Public WebSocket Streams](#public-websocket-streams)
+    - [Unified Public WebSocket Streams](#unified-public-websocket-streams)
     - [Private WebSocket Streams](#private-websocket-streams)
     - [WebSocket API (WebsocketAPIClient)](#websocket-api-websocketapiclient)
 - [Customise Logging](#customise-logging)
@@ -418,6 +419,46 @@ wsClient.subscribe(
   'derivativesPublicV1',
 );
 ```
+
+### Unified Public WebSocket Streams
+
+Use `WS_KEY_MAP.unifiedPublicV2` for Kraken's unified endpoint at `wss://uws.kraken.com/v2/public`. It reuses the client's connection management, heartbeats, and automatic resubscription. Each subscription specifies its own `asset_class`.
+
+```typescript
+import {
+  WebsocketClient,
+  WS_KEY_MAP,
+  WSUnifiedPublicMessageEvent,
+  WSUnifiedPublicTopicRequest,
+} from '@siebly/kraken-api';
+
+const client = new WebsocketClient();
+const subscription: WSUnifiedPublicTopicRequest = {
+  topic: 'ticker',
+  payload: { asset_class: 'derivatives', symbol: ['PF_XBTUSD'] },
+};
+
+// This client only subscribes to unified public streams.
+client.on('message', (event: WSUnifiedPublicMessageEvent) => {
+  if (event.channel === 'ticker') console.log(event.data);
+});
+client.on('response', (event) => console.log(event));
+client.on('exception', (event) => console.error(event));
+client.subscribe(subscription, WS_KEY_MAP.unifiedPublicV2);
+
+// Later, reuse the complete request to remove it from the reconnect cache:
+// client.unsubscribe(subscription, WS_KEY_MAP.unifiedPublicV2);
+```
+
+Supported unauthenticated channels are `ticker`, `book`, `ohlc`, `trade`, and `instrument`. The current Kraken documentation limits unified `trade` to `asset_class: 'derivatives'`. Other channels accept `spot` or `derivatives`, subject to Kraken's rollout. Discover symbols through `instrument` for the chosen asset class; do not convert symbols between API families. Incoming messages are passed through without inferring or adding `asset_class`.
+
+A public endpoint check on 5 October 2026 received derivatives instrument, ticker, book, and trade data. Spot subscriptions were rejected with `currently supports only 'derivatives'`. OHLC subscribe and unsubscribe succeeded with `tick_type` omitted or set to `trade`, while `tick_type: 'mark'` was rejected. No candle messages arrived during a 65-second subscription, so live OHLC data delivery remains unverified. The example uses the default candle type during this rollout.
+
+Status updates are emitted on `message`; heartbeats and pongs are handled internally. Exported `WSUnifiedPublicTopicRequest`, `WSUnifiedPublicMessageEvent`, and `WSUnifiedPublicResponseEvent` types describe requests and received events. The client adds `wsKey` and `isWSAPIResponse` to emitted events.
+
+This stage covers public streams without authentication. Unified Level 3, private account streams, and trading commands will follow separately. Existing Spot and derivatives connections keep their current behavior. `testnet` selects the legacy derivatives demo endpoint only; no unified demo URL is configured.
+
+See the [unified public example](./examples/Unified/WebSockets/publicWs.ts) and [Kraken's unified WS reference](https://docs.kraken.com/exchange/api-reference/unified-ws/ticker).
 
 ### Private WebSocket Streams
 

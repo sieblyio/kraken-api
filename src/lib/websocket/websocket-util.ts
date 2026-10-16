@@ -2,6 +2,7 @@ import WebSocket from 'isomorphic-ws';
 
 import { WSAPIRequestOperationKrakenSpot } from '../../types/websockets/ws-api.js';
 import { WSTopic } from '../../types/websockets/ws-subscriptions.js';
+import { WSUnifiedPublicTopicRequest } from '../../types/websockets/ws-unified.js';
 
 /** Should be one WS key per unique URL */
 export const WS_KEY_MAP = {
@@ -18,6 +19,13 @@ export const WS_KEY_MAP = {
   spotL3V2: 'spotL3V2',
   spotBetaPublicV2: 'spotBetaPublicV2',
   spotBetaPrivateV2: 'spotBetaPrivateV2',
+  /**
+   * Unauthenticated unified v2 market data for Spot and Derivatives.
+   * Specify asset_class in each subscription payload.
+   * Authenticated Level 3 and unified private channels are not supported yet.
+   * https://docs.kraken.com/exchange/api-reference/unified-ws/ticker
+   */
+  unifiedPublicV2: 'unifiedPublicV2',
   /**
    * Public WebSocket subscriptions for Kraken Derivatives products, via the V1 API:
    *
@@ -48,6 +56,12 @@ export interface WSTopicRequest<
   topic: TWSTopic;
   payload?: TWSPayload;
 }
+
+/** Unified subscriptions require channel-specific payloads; existing keys retain their interface. */
+export type WSSubscriptionRequest<TWSKey extends WsKey> =
+  TWSKey extends 'unifiedPublicV2'
+    ? WSUnifiedPublicTopicRequest
+    : WSTopicRequest<WSTopic> | WSTopic;
 
 /**
  * Conveniently allow users to request a topic either as string topics or objects (containing string topic + params)
