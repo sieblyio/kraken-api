@@ -41,14 +41,12 @@ jobs:
         env:
           API_FUTURES_KEY: ${{ secrets.API_FUTURES_KEY }}
           API_FUTURES_SECRET: ${{ secrets.API_FUTURES_SECRET }}
-          API_FUTURES_TESTNET: ${{ secrets.API_FUTURES_TESTNET }}
 
-      - name: Test Private Futures Write API Calls
+      - name: Test Private Futures Read-only API Calls
         run: npm run test -- private.futures.write.test.ts
         env:
           API_FUTURES_KEY: ${{ secrets.API_FUTURES_KEY }}
           API_FUTURES_SECRET: ${{ secrets.API_FUTURES_SECRET }}
-          API_FUTURES_TESTNET: ${{ secrets.API_FUTURES_TESTNET }}
 
       - name: Test Private Spot Read API Calls
         run: npm run test -- private.spot.read.test.ts

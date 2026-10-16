@@ -534,7 +534,6 @@ import { DerivativesClient } from '@siebly/kraken-api';
 const client = new DerivativesClient({
   apiKey: process.env.API_FUTURES_KEY!,
   apiSecret: process.env.API_FUTURES_SECRET!,
-  // testnet: true, // optional: route Derivatives REST calls to Kraken's demo environment
 });
 
 async function placeFuturesOrder() {
@@ -957,7 +956,6 @@ import { DerivativesClient } from '@siebly/kraken-api';
 const client = new DerivativesClient({
   apiKey: process.env.API_FUTURES_KEY!,
   apiSecret: process.env.API_FUTURES_SECRET!,
-  // testnet: true, // optional: route Derivatives REST API calls to Kraken's demo environment
 });
 ```
 

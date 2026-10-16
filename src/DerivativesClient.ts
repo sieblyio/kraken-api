@@ -474,6 +474,8 @@ export class DerivativesClient extends BaseRestClient {
    * Retrieve current portfolio margin calculation parameters.
    * Also includes user specific limits related to options trading.
    * Note: This is currently available exclusively in the Kraken Futures DEMO environment.
+   *
+   * @deprecated Kraken retired the Futures demo environment on 14 July 2026, so this endpoint is no longer available. See https://support.kraken.com/articles/360024809011-api-testing-environment-derivatives
    */
   getPortfolioMarginParameters(): Promise<
     DerivativesAPISuccessResponse<FuturesPortfolioMarginParameters>
@@ -486,6 +488,8 @@ export class DerivativesClient extends BaseRestClient {
    *
    * For a given portfolio of balances and positions (futures and options), calculate the margin requirements, pnl and option greeks.
    * Note: This is currently available exclusively in the Kraken Futures DEMO environment.
+   *
+   * @deprecated Kraken retired the Futures demo environment on 14 July 2026, so this endpoint is no longer available. See https://support.kraken.com/articles/360024809011-api-testing-environment-derivatives
    */
   simulateMarginRequirements(params: {
     json: any; // Complex structure for portfolio simulation
@@ -777,6 +781,8 @@ export class DerivativesClient extends BaseRestClient {
    *
    * Retrieve all currently open RFQs.
    * Note: This is currently available exclusively in the Kraken Futures DEMO environment.
+   *
+   * @deprecated Kraken retired the Futures demo environment on 14 July 2026, so this endpoint is no longer available. See https://support.kraken.com/articles/360024809011-api-testing-environment-derivatives
    */
   getOpenRFQs(): Promise<
     DerivativesAPISuccessResponse<{ rfqs: FuturesRfq[] }>
@@ -789,6 +795,8 @@ export class DerivativesClient extends BaseRestClient {
    *
    * Retrieve a specific open RFQ by its unique identifier.
    * Note: This is currently available exclusively in the Kraken Futures DEMO environment.
+   *
+   * @deprecated Kraken retired the Futures demo environment on 14 July 2026, so this endpoint is no longer available. See https://support.kraken.com/articles/360024809011-api-testing-environment-derivatives
    */
   getOpenRFQ(params: {
     rfqUid: string;
@@ -801,6 +809,8 @@ export class DerivativesClient extends BaseRestClient {
    *
    * Retrieve all open offers for the account on currently open RFQs.
    * Note: This is currently available exclusively in the Kraken Futures DEMO environment.
+   *
+   * @deprecated Kraken retired the Futures demo environment on 14 July 2026, so this endpoint is no longer available. See https://support.kraken.com/articles/360024809011-api-testing-environment-derivatives
    */
   getRFQOpenOffers(): Promise<
     DerivativesAPISuccessResponse<{ openOffers: FuturesOpenOffer[] }>
@@ -813,6 +823,8 @@ export class DerivativesClient extends BaseRestClient {
    *
    * Place a new offer for the given amount in USD on the specified open RFQ, bid and ask are optional but at least one must be provided.
    * Note: This is currently available exclusively in the Kraken Futures DEMO environment.
+   *
+   * @deprecated Kraken retired the Futures demo environment on 14 July 2026, so this endpoint is no longer available. See https://support.kraken.com/articles/360024809011-api-testing-environment-derivatives
    */
   submitRFQNewOffer(params: {
     rfqUid: string;
@@ -830,6 +842,8 @@ export class DerivativesClient extends BaseRestClient {
    *
    * Replace the current open offer on the specified open RFQ, bid and ask are optional but at least one must be provided.
    * Note: This is currently available exclusively in the Kraken Futures DEMO environment.
+   *
+   * @deprecated Kraken retired the Futures demo environment on 14 July 2026, so this endpoint is no longer available. See https://support.kraken.com/articles/360024809011-api-testing-environment-derivatives
    */
   updateRFQOpenOffer(params: {
     rfqUid: string;
@@ -847,6 +861,8 @@ export class DerivativesClient extends BaseRestClient {
    *
    * Cancel the current open offer on the specified open RFQ.
    * Note: This is currently available exclusively in the Kraken Futures DEMO environment.
+   *
+   * @deprecated Kraken retired the Futures demo environment on 14 July 2026, so this endpoint is no longer available. See https://support.kraken.com/articles/360024809011-api-testing-environment-derivatives
    */
   cancelRFQOffer(params: {
     rfqUid: string;

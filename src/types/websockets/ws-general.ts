@@ -13,13 +13,12 @@ export interface WSClientConfigurableOptions {
   apiSecret?: string;
 
   /**
-   * Set to `true` to connect to testnet (Kraken's demo environment). The live environment is used by default.
+   * Kraken retired the Futures demo (testnet) environment on 14 July 2026.
+   * There is no replacement demo host, and Spot never had a testnet.
    *
-   * Note: as of November 2025, only the derivatives environment supports testnet connections. Kraken refer to this as the "Demo" environment, but it is effectively a testnet.
-   * This is a place to test your API integration. It is not a good place to test strategy performance, as the liquidity and orderbook dynamics are very different to the live environment.
+   * Setting this to `true` throws when a connection URL is resolved. The live environment is used when it is omitted or `false`.
    *
-   * Refer to the following for more information:
-   * https://github.com/tiagosiebler/awesome-crypto-examples/wiki/CEX-Testnets
+   * See https://support.kraken.com/articles/360024809011-api-testing-environment-derivatives
    */
   testnet?: boolean;
 

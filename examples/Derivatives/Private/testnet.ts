@@ -3,6 +3,10 @@ import { DerivativesClient } from '../../../src/index.js';
 
 // This example shows how to call Kraken API testnet (demo) endpoints with either node.js,
 // javascript (js) or typescript (ts) with the npm module "@siebly/kraken-api" for Kraken exchange
+//
+// UPDATE: Kraken retired the Futures demo on 14 July 2026. testnet: true throws.
+// There is no replacement demo host. These calls use the live Derivatives REST API.
+// See https://support.kraken.com/articles/360024809011-api-testing-environment-derivatives
 
 /**
  * import { DerivativesClient } from '@siebly/kraken-api';
@@ -20,9 +24,9 @@ import { DerivativesClient } from '../../../src/index.js';
  */
 const client = new DerivativesClient({
   // https://demo-futures.kraken.com to create demo account
+  // Retired 14 July 2026. Do not set testnet: it throws. There is no replacement demo host.
   apiKey: 'testnetKeyHere',
   apiSecret: 'testnetSecretHere',
-  testnet: true,
 });
 
 async function getWallets() {

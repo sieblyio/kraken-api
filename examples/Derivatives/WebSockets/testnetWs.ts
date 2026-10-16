@@ -25,6 +25,7 @@ const customLogger: DefaultLogger = {
 
 async function start() {
   // https://demo-futures.kraken.com to create demo account
+  // Retired 14 July 2026. Do not set testnet: it throws. See https://support.kraken.com/articles/360024809011-api-testing-environment-derivatives
   const account = {
     key: '1mVo6NgddD3os5nnGTPcEcHIncSplLED3Grz1Fnb6l/Vy0iu2TGftQ0Z',
     secret:
@@ -32,6 +33,8 @@ async function start() {
   };
 
   /**
+   * UPDATE: Kraken retired the Futures demo on 14 July 2026. Do not set `testnet: true`. It throws. There is no replacement demo host.
+   *
    * Kraken Derivatives has a demo environment (testnet) that you can connect to via WebSocket. All you need to do is set the `testnet` option to `true` when creating the WebsocketClient instance, as shown below.
    * Everything else behaves exactly the same way.
    *
@@ -45,7 +48,6 @@ async function start() {
     {
       apiKey: account.key,
       apiSecret: account.secret,
-      testnet: true,
     },
     customLogger,
   );

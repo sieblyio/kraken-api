@@ -230,92 +230,6 @@ async function start()
 // Notification: https://docs.kraken.com/api/docs/futures-api/websocket/notifications
 
 ================
-File: examples/Derivatives/WebSockets/testnetWs.ts
-================
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-import {
-  DefaultLogger,
-  LogParams,
-  WebsocketClient,
-  WS_KEY_MAP,
-  WSTopicRequest,
-} from '../../../src/index.js';
-import { WSDerivativesTopic } from '../../../src/types/websockets/ws-subscriptions.js';
-// normally you should install this module via npm: `npm install @siebly/kraken-api` and import the module:
-// import { LogParams, WebsocketClient, WsTopicRequest } from '@siebly/kraken-api';
-⋮----
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-⋮----
-// console.log(new Date(), '--> trace', ...params);
-⋮----
-async function start()
-⋮----
-// https://demo-futures.kraken.com to create demo account
-⋮----
-/**
-   * Kraken Derivatives has a demo environment (testnet) that you can connect to via WebSocket. All you need to do is set the `testnet` option to `true` when creating the WebsocketClient instance, as shown below.
-   * Everything else behaves exactly the same way.
-   *
-   * Note: as of November 2025, only the DerivativesClient supports testnet connections. Kraken refer to this as the "Demo" environment, but it is effectively a testnet.
-   * This is a place to test your API integration. It is not a good place to test strategy performance, as the liquidity and orderbook dynamics are very different to the live environment.
-   *
-   * Refer to the following for more information:
-   * https://github.com/tiagosiebler/awesome-crypto-examples/wiki/CEX-Testnets
-   */
-⋮----
-// Data received
-⋮----
-// Something happened, attempting to reconnect
-⋮----
-// Reconnect successful
-⋮----
-// Connection closed. If unexpected, expect reconnect -> reconnected.
-⋮----
-// Reply to a request, e.g. "subscribe"/"unsubscribe"/"authenticate"
-⋮----
-/**
-   * The below examples demonstrate how you can subscribe to private topics.
-   *
-   * Note: while the documentation specifies "api_key", "original_challenge" and "signed_challenge" as required parameters, but don't worry about that. The SDK will automatically:
-   * - Fetch the challenge using your API key,
-   * - Cache the challenge
-   * - Include the key, original challenge and signed challenge parameters for you when subscribing to private topics on the derivativesPrivateV1 WebSocket connection.
-   *
-   * You do NOT need to manually fetch or provide the "original_challenge" and "signed_challenge" tokens when subscribing to private topics.
-   *
-   * Do note that all of these include the "derivativesPrivateV1" WsKey reference. This tells the WebsocketClient to use the private "wss://futures.kraken.com/ws/v1" endpoint for these private subscription requests. It will also automatically authenticate the connection when it is established.
-   */
-⋮----
-/**
-     * All of the following parameters require API keys for Derivatives APIs.
-     *
-     * Note: your "WsTopicRequest" does not need to include "api_key", "original_challenge" and "signed_challenge". See above for details, or below for examples.
-     */
-⋮----
-// Open orders: https://docs.kraken.com/api/docs/futures-api/websocket/open_orders
-⋮----
-// Note: if there are no parameters needed, you can also just request the topic by name
-// This is the same as openOrdersTopicRequest, since openOrdersTopicRequest contains no parameters
-// client.subscribe('open_orders', WS_KEY_MAP.derivativesPrivateV1);
-⋮----
-// Open orders (verbose): https://docs.kraken.com/api/docs/futures-api/websocket/open_orders
-⋮----
-// Fills: https://docs.kraken.com/api/docs/futures-api/websocket/fills
-⋮----
-// Optionally, the product_ids field can be used to subscribe only to specific product.
-// payload: {
-//   product_ids: ['PF_XBTUSD'],
-// },
-⋮----
-// Balances: https://docs.kraken.com/api/docs/futures-api/websocket/balances
-⋮----
-// Open Position: https://docs.kraken.com/api/docs/futures-api/websocket/open_position
-⋮----
-// Account Log: https://docs.kraken.com/api/docs/futures-api/websocket/account_log
-⋮----
-// Notification: https://docs.kraken.com/api/docs/futures-api/websocket/notifications
-
-================
 File: examples/Spot/Public/marketData.ts
 ================
 import { SpotClient } from '../../../src/index.js';
@@ -662,28 +576,6 @@ export async function signMessage(
 ): Promise<string>
 ⋮----
 export function checkWebCryptoAPISupported()
-
-================
-File: src/types/request/affiliate.types.ts
-================
-export interface AffiliateGetCpaProgressParams {
-  iiban: string;
-}
-⋮----
-export interface AffiliateGetPayoutHistoryParams {
-  cursor?: string;
-  limit?: number;
-}
-⋮----
-export interface AffiliateGetDailyActivityParams {
-  activity_date?: string;
-  iiban?: string;
-  start_date?: string;
-  end_date?: string;
-  all_users?: boolean;
-  cursor?: string;
-  limit?: number;
-}
 
 ================
 File: src/types/request/institutional.types.ts
@@ -1287,169 +1179,6 @@ export interface OTCUpdateQuoteParams {
   nonce?: number;
   quote_id: string;
   status: OtcQuoteStatus;
-}
-
-================
-File: src/types/response/affiliate.types.ts
-================
-export interface AffiliateCpaConditionMeasurement {
-  current: string;
-  target: string;
-  unit?: string;
-  percentage: string;
-}
-⋮----
-export interface AffiliateCpaConditionProgress {
-  label: string;
-  kind: 'amount' | 'count' | 'verification' | 'binary' | (string & {});
-  state: 'incomplete' | 'complete' | (string & {});
-  measurement?: AffiliateCpaConditionMeasurement;
-}
-⋮----
-export interface AffiliateCpaBountyProgress {
-  bounty_position?: number;
-  description?: string;
-  reward_amount: string;
-  reward_asset: string;
-  status:
-    | 'in_progress'
-    | 'qualified_payment_pending'
-    | 'paid'
-    | 'expired'
-    | 'no_longer_eligible'
-    | 'not_tracked'
-    | (string & {});
-  qualified_at?: string;
-  progress_availability: 'available' | 'unavailable' | (string & {});
-  conditions?: AffiliateCpaConditionProgress[];
-}
-⋮----
-export interface AffiliateReferralCpaProgress {
-  bounties?: AffiliateCpaBountyProgress[];
-}
-⋮----
-export interface AffiliateGetCpaProgressResponse {
-  progress: AffiliateReferralCpaProgress;
-}
-⋮----
-export interface AffiliatePayout {
-  payout_id: string;
-  amount: string;
-  asset: string;
-  status:
-    | 'pending'
-    | 'paid'
-    | 'action_needed'
-    | 'on_hold'
-    | 'refunded'
-    | 'cancelled'
-    | (string & {});
-  created_at: string;
-  source:
-    | 'revshare'
-    | 'prop'
-    | 'cpa'
-    | 'futures_accelerator_bonus'
-    | (string & {});
-  prop_purchase_id?: string;
-}
-⋮----
-export interface AffiliatePropPayoutSummary {
-  paid: string;
-  pending: string;
-  order_count: number;
-}
-⋮----
-export interface AffiliateCpaPayoutSummary {
-  paid: string;
-  pending: string;
-  bounty_count: number;
-}
-⋮----
-export interface AffiliatePayoutSummary {
-  paid: string;
-  pending: string;
-  prop: AffiliatePropPayoutSummary;
-  cpa: AffiliateCpaPayoutSummary;
-}
-⋮----
-export interface AffiliateGetPayoutHistoryResponse {
-  items?: AffiliatePayout[];
-  next_cursor?: string;
-  summary: AffiliatePayoutSummary;
-  limit: number;
-}
-⋮----
-export interface AffiliateMakerTakerActivity {
-  volume: string;
-  fees: string;
-  commission: string;
-  event_count: number;
-}
-⋮----
-export interface AffiliateGeoBlockedActivity {
-  volume?: string;
-  fees: string;
-  event_count: number;
-}
-⋮----
-export interface AffiliateProductActivity {
-  volume?: string;
-  fees: string;
-  commission: string;
-  event_count: number;
-  geo_blocked?: AffiliateGeoBlockedActivity;
-  maker?: AffiliateMakerTakerActivity;
-  taker?: AffiliateMakerTakerActivity;
-}
-⋮----
-export interface AffiliateProductActivityMap {
-  [product: string]: AffiliateProductActivity;
-}
-⋮----
-export interface AffiliateReferralPlan {
-  referral_code: string;
-  campaign?: string;
-  referral_level?: number;
-  enrolled_at?: string;
-  status?: string;
-  earning?: boolean;
-  expires_at?: string;
-  products?: AffiliateProductActivityMap;
-}
-⋮----
-export interface AffiliateDailyActivityItem {
-  activity_date?: string;
-  iiban?: string;
-  masked_iiban?: string;
-  plans: AffiliateReferralPlan[];
-  referee_reference: string;
-  opted_out?: boolean;
-  enrolled_at?: string;
-  estimated?: boolean;
-}
-⋮----
-export interface AffiliateGatedActivitySummary {
-  active_participants: number;
-  products?: AffiliateProductActivityMap;
-}
-⋮----
-export type AffiliateGatedActivity =
-  | { suppressed: Record<string, unknown> }
-  | { summary: AffiliateGatedActivitySummary };
-⋮----
-export interface AffiliateGetDailyActivityResponse {
-  activity_date?: string;
-  currency: string;
-  revision?: string;
-  generated_at: string;
-  active_users?: number;
-  totals?: AffiliateProductActivityMap;
-  next_cursor?: string;
-  items?: AffiliateDailyActivityItem[];
-  estimated?: boolean;
-  opted_out?: AffiliateGatedActivity;
-  limit: number;
 }
 
 ================
@@ -2256,56 +1985,6 @@ export interface WSAPITopicResponseMap {
 }
 
 ================
-File: src/AffiliateClient.ts
-================
-import { BaseRestClient } from './lib/BaseRestClient.js';
-import { REST_CLIENT_TYPE_ENUM, RestClientType } from './lib/requestUtils.js';
-import {
-  AffiliateGetCpaProgressParams,
-  AffiliateGetDailyActivityParams,
-  AffiliateGetPayoutHistoryParams,
-} from './types/request/affiliate.types.js';
-import {
-  AffiliateGetCpaProgressResponse,
-  AffiliateGetDailyActivityResponse,
-  AffiliateGetPayoutHistoryResponse,
-} from './types/response/affiliate.types.js';
-⋮----
-/**
- * Affiliate REST reporting for approved affiliates.
- * Responses are the JSON object itself, not `{ error, result }`.
- */
-export class AffiliateClient extends BaseRestClient
-⋮----
-getClientType(): RestClientType
-⋮----
-/**
-   * Get CPA Progress
-   */
-getCpaProgress(
-    params: AffiliateGetCpaProgressParams,
-): Promise<AffiliateGetCpaProgressResponse>
-⋮----
-/**
-   * Get Payout History
-   */
-getPayoutHistory(
-    params?: AffiliateGetPayoutHistoryParams,
-): Promise<AffiliateGetPayoutHistoryResponse>
-⋮----
-/**
-   * Get Daily Activity
-   */
-getDailyActivity(
-    params?: AffiliateGetDailyActivityParams,
-): Promise<AffiliateGetDailyActivityResponse>
-
-================
-File: src/index.ts
-================
-
-
-================
 File: src/WebsocketAPIClient.ts
 ================
 import { DefaultLogger } from './lib/websocket/logger.js';
@@ -2834,6 +2513,95 @@ async function start()
 // Trade: https://docs.kraken.com/api/docs/futures-api/websocket/ticker
 
 ================
+File: examples/Derivatives/WebSockets/testnetWs.ts
+================
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import {
+  DefaultLogger,
+  LogParams,
+  WebsocketClient,
+  WS_KEY_MAP,
+  WSTopicRequest,
+} from '../../../src/index.js';
+import { WSDerivativesTopic } from '../../../src/types/websockets/ws-subscriptions.js';
+// normally you should install this module via npm: `npm install @siebly/kraken-api` and import the module:
+// import { LogParams, WebsocketClient, WsTopicRequest } from '@siebly/kraken-api';
+⋮----
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+⋮----
+// console.log(new Date(), '--> trace', ...params);
+⋮----
+async function start()
+⋮----
+// https://demo-futures.kraken.com to create demo account
+// Retired 14 July 2026. Do not set testnet: it throws. See https://support.kraken.com/articles/360024809011-api-testing-environment-derivatives
+⋮----
+/**
+   * UPDATE: Kraken retired the Futures demo on 14 July 2026. Do not set `testnet: true`. It throws. There is no replacement demo host.
+   *
+   * Kraken Derivatives has a demo environment (testnet) that you can connect to via WebSocket. All you need to do is set the `testnet` option to `true` when creating the WebsocketClient instance, as shown below.
+   * Everything else behaves exactly the same way.
+   *
+   * Note: as of November 2025, only the DerivativesClient supports testnet connections. Kraken refer to this as the "Demo" environment, but it is effectively a testnet.
+   * This is a place to test your API integration. It is not a good place to test strategy performance, as the liquidity and orderbook dynamics are very different to the live environment.
+   *
+   * Refer to the following for more information:
+   * https://github.com/tiagosiebler/awesome-crypto-examples/wiki/CEX-Testnets
+   */
+⋮----
+// Data received
+⋮----
+// Something happened, attempting to reconnect
+⋮----
+// Reconnect successful
+⋮----
+// Connection closed. If unexpected, expect reconnect -> reconnected.
+⋮----
+// Reply to a request, e.g. "subscribe"/"unsubscribe"/"authenticate"
+⋮----
+/**
+   * The below examples demonstrate how you can subscribe to private topics.
+   *
+   * Note: while the documentation specifies "api_key", "original_challenge" and "signed_challenge" as required parameters, but don't worry about that. The SDK will automatically:
+   * - Fetch the challenge using your API key,
+   * - Cache the challenge
+   * - Include the key, original challenge and signed challenge parameters for you when subscribing to private topics on the derivativesPrivateV1 WebSocket connection.
+   *
+   * You do NOT need to manually fetch or provide the "original_challenge" and "signed_challenge" tokens when subscribing to private topics.
+   *
+   * Do note that all of these include the "derivativesPrivateV1" WsKey reference. This tells the WebsocketClient to use the private "wss://futures.kraken.com/ws/v1" endpoint for these private subscription requests. It will also automatically authenticate the connection when it is established.
+   */
+⋮----
+/**
+     * All of the following parameters require API keys for Derivatives APIs.
+     *
+     * Note: your "WsTopicRequest" does not need to include "api_key", "original_challenge" and "signed_challenge". See above for details, or below for examples.
+     */
+⋮----
+// Open orders: https://docs.kraken.com/api/docs/futures-api/websocket/open_orders
+⋮----
+// Note: if there are no parameters needed, you can also just request the topic by name
+// This is the same as openOrdersTopicRequest, since openOrdersTopicRequest contains no parameters
+// client.subscribe('open_orders', WS_KEY_MAP.derivativesPrivateV1);
+⋮----
+// Open orders (verbose): https://docs.kraken.com/api/docs/futures-api/websocket/open_orders
+⋮----
+// Fills: https://docs.kraken.com/api/docs/futures-api/websocket/fills
+⋮----
+// Optionally, the product_ids field can be used to subscribe only to specific product.
+// payload: {
+//   product_ids: ['PF_XBTUSD'],
+// },
+⋮----
+// Balances: https://docs.kraken.com/api/docs/futures-api/websocket/balances
+⋮----
+// Open Position: https://docs.kraken.com/api/docs/futures-api/websocket/open_position
+⋮----
+// Account Log: https://docs.kraken.com/api/docs/futures-api/websocket/account_log
+⋮----
+// Notification: https://docs.kraken.com/api/docs/futures-api/websocket/notifications
+
+================
 File: examples/Spot/Private/account.ts
 ================
 /* eslint-disable @typescript-eslint/no-unused-vars */
@@ -2923,6 +2691,183 @@ async function getTradingVolume()
 // getLedgers();
 // getLedgersInfo();
 // getTradingVolume();
+
+================
+File: examples/Spot/Private/depositWithdraw.ts
+================
+/* eslint-disable @typescript-eslint/no-unused-vars */
+import { SpotClient } from '../../../src/index.js';
+⋮----
+// This example shows how to call Kraken API endpoint with either node.js,
+// javascript (js) or typescript (ts) with the npm module "@siebly/kraken-api" for Kraken exchange
+// for DEPOSIT AND WITHDRAWAL
+⋮----
+/**
+ * import { SpotClient } from '@siebly/kraken-api';
+ */
+⋮----
+// initialise the client
+/**
+ *
+ * Kraken API uses API Key and Private Key (base64 encoded)
+ *
+ * Example:
+ * {
+ *   apiKey: 'your-api-key',
+ *   apiSecret: 'your-base64-encoded-private-key',
+ * }
+ *
+ * API Key Permissions Required:
+ * - Funds permissions - Query
+ * - Funds permissions - Deposit
+ * - Funds permissions - Withdraw
+ * - Data - Query ledger entries
+ *
+ */
+⋮----
+async function withdrawFunds()
+⋮----
+// Make a withdrawal request
+⋮----
+key: 'btc_2709', // Withdrawal key name from your account
+⋮----
+address: 'bc1kar0ssrr7xf3vy5l6d3lydnwkre5og2zz3f5ldq', // Optional confirmation
+⋮----
+// Response includes:
+// - refid: Reference ID for the withdrawal
+⋮----
+async function getDepositMethods()
+⋮----
+// Get available deposit methods for an asset
+⋮----
+// Response includes:
+// - method: Name of deposit method
+// - limit: Maximum net amount that can be deposited
+// - fee: Fees that will be paid
+// - address-setup-fee: Whether method has setup fee
+// - gen-address: Whether new addresses can be generated
+// - minimum: Minimum net amount
+⋮----
+async function getDepositAddresses()
+⋮----
+// Get or generate deposit address
+⋮----
+new: false, // Set to true to generate new address
+⋮----
+// Response includes:
+// - address: Deposit address
+// - expiretm: Expiration time or 0 if not expiring
+// - new: Whether address has ever been used
+// - tag: Contains tags/memos for XRP, STX, XLM, EOS
+⋮----
+async function generateNewDepositAddress()
+⋮----
+// Generate a new deposit address
+⋮----
+new: true, // Generate new address
+⋮----
+async function getWithdrawalMethods()
+⋮----
+// Get available withdrawal methods
+⋮----
+// Response includes:
+// - asset: Name of asset being withdrawn
+// - method: Name of withdrawal method
+// - network: Blockchain/network name
+// - minimum: Minimum net amount that can be withdrawn
+⋮----
+async function getWithdrawalAddresses()
+⋮----
+// Get withdrawal addresses
+⋮----
+verified: true, // Filter by verification status
+⋮----
+// Response includes:
+// - address: Withdrawal address
+// - asset: Asset name
+// - method: Withdrawal method
+// - key: Withdrawal key name
+// - tag: Tags/memos for XRP, STX, XLM, EOS
+// - verified: Verification status
+⋮----
+async function getWithdrawalAddressByKey()
+⋮----
+// Find withdrawal address by key name
+⋮----
+key: 'btc_2709', // Withdrawal key name
+⋮----
+async function getWithdrawalsStatus()
+⋮----
+// Get status of recent withdrawals
+⋮----
+// Status values:
+// - Initial: withdrawal just created
+// - Pending: withdrawal pending
+// - Settled: withdrawal settled
+// - Success: withdrawal successful
+// - Failure: withdrawal failed
+⋮----
+// Status properties (if available):
+// - cancel-pending: cancelation requested
+// - canceled: canceled
+// - cancel-denied: cancelation denied
+// - return: return transaction by Kraken
+// - onhold: on hold pending review
+⋮----
+async function getWithdrawalsStatusWithPagination()
+⋮----
+// Get withdrawals with pagination
+⋮----
+cursor: true, // Enable pagination
+limit: 10, // Results per page
+⋮----
+async function getDepositsStatus()
+⋮----
+// Get status of recent deposits
+⋮----
+// Similar status values as withdrawals
+⋮----
+async function cancelWithdrawal()
+⋮----
+// Cancel a recent withdrawal (if not yet processed)
+⋮----
+refid: 'AGBSO6T-UFMTTQ-I7KGS6', // Reference ID from withdrawal
+⋮----
+// Returns true if cancellation successful
+⋮----
+async function getWithdrawalInfo()
+⋮----
+// Get withdrawal fee information before withdrawing
+⋮----
+// Response includes:
+// - method: Withdrawal method
+// - limit: Maximum amount that can be withdrawn
+// - amount: Net amount to be withdrawn
+// - fee: Withdrawal fee
+⋮----
+async function transferToFutures()
+⋮----
+async function transferToSubaccount()
+⋮----
+from: 'UID', // get From API, getSubaccounts()
+to: 'UID', // get From API, getSubaccounts()
+⋮----
+// Uncomment the function you want to test:
+⋮----
+// withdrawFunds();
+// getDepositMethods();
+// getDepositAddresses();
+// generateNewDepositAddress();
+// getWithdrawalMethods();
+// getWithdrawalAddresses();
+// getWithdrawalAddressByKey();
+// getWithdrawalsStatus();
+// getWithdrawalsStatusWithPagination();
+// getDepositsStatus();
+// cancelWithdrawal();
+// getWithdrawalInfo();
+// transferToFutures();
+// transferToSubaccount();
 
 ================
 File: examples/Spot/Private/orderManagement.ts
@@ -3831,145 +3776,26 @@ public async assertIsAuthenticated(wsKey: TWSKey): Promise<unknown>
 // Start authentication, it should automatically store/return a promise.
 
 ================
-File: src/lib/requestUtils.ts
+File: src/types/request/affiliate.types.ts
 ================
-/**
- * Used to switch how authentication/requests work under the hood
- */
-⋮----
-/** Spot */
-⋮----
-/** Futures */
-⋮----
-/** Futures Demo */
-⋮----
-/** Institutional */
-⋮----
-/** Partner */
-⋮----
-/** Affiliate reporting */
-⋮----
-export type RestClientType =
-  (typeof REST_CLIENT_TYPE_ENUM)[keyof typeof REST_CLIENT_TYPE_ENUM];
-⋮----
-export interface RestClientOptions {
-  /** Your API key */
-  apiKey?: string;
-
-  /** Your API secret */
-  apiSecret?: string;
-
-  /**
-   * Set to `true` to connect to testnet (Kraken's demo environment). The live environment is used by default.
-   *
-   * Note: as of November 2025, only the DerivativesClient supports testnet connections. Kraken refer to this as the "Demo" environment, but it is effectively a testnet.
-   * This is a place to test your API integration. It is not a good place to test strategy performance, as the liquidity and orderbook dynamics are very different to the live environment.
-   *
-   * Refer to the following for more information:
-   * https://github.com/tiagosiebler/awesome-crypto-examples/wiki/CEX-Testnets
-   */
-  testnet?: boolean;
-
-  /**
-   * Use access token instead of sign, if this is provided.
-   * For guidance refer to: https://github.com/tiagosiebler/kucoin-api/issues/2
-   */
-  apiAccessToken?: string;
-
-  /** Default: false. If true, we'll throw errors if any params are undefined */
-  strictParamValidation?: boolean;
-
-  /**
-   * Optionally override API protocol + domain
-   * e.g baseUrl: 'https://api.kraken.com'
-   **/
-  baseUrl?: string;
-
-  /** Default: true. whether to try and post-process request exceptions (and throw them). */
-  parseExceptions?: boolean;
-
-  customTimestampFn?: () => number;
-
-  /**
-   * Enable keep alive for REST API requests (via axios).
-   */
-  keepAlive?: boolean;
-
-  /**
-   * When using HTTP KeepAlive, how often to send TCP KeepAlive packets over sockets being kept alive. Default = 1000.
-   * Only relevant if keepAlive is set to true.
-   * Default: 1000 (defaults comes from https agent)
-   */
-  keepAliveMsecs?: number;
-
-  /**
-   * Allows you to provide a custom "signMessage" function, e.g. to use node's much faster createHmac method
-   *
-   * Look in the examples folder for a demonstration on using node's createHmac instead.
-   */
-  customSignMessageFn?: (message: string, secret: string) => Promise<string>;
+export interface AffiliateGetCpaProgressParams {
+  iiban: string;
 }
 ⋮----
-/** Your API key */
+export interface AffiliateGetPayoutHistoryParams {
+  cursor?: string;
+  limit?: number;
+}
 ⋮----
-/** Your API secret */
-⋮----
-/**
-   * Set to `true` to connect to testnet (Kraken's demo environment). The live environment is used by default.
-   *
-   * Note: as of November 2025, only the DerivativesClient supports testnet connections. Kraken refer to this as the "Demo" environment, but it is effectively a testnet.
-   * This is a place to test your API integration. It is not a good place to test strategy performance, as the liquidity and orderbook dynamics are very different to the live environment.
-   *
-   * Refer to the following for more information:
-   * https://github.com/tiagosiebler/awesome-crypto-examples/wiki/CEX-Testnets
-   */
-⋮----
-/**
-   * Use access token instead of sign, if this is provided.
-   * For guidance refer to: https://github.com/tiagosiebler/kucoin-api/issues/2
-   */
-⋮----
-/** Default: false. If true, we'll throw errors if any params are undefined */
-⋮----
-/**
-   * Optionally override API protocol + domain
-   * e.g baseUrl: 'https://api.kraken.com'
-   **/
-⋮----
-/** Default: true. whether to try and post-process request exceptions (and throw them). */
-⋮----
-/**
-   * Enable keep alive for REST API requests (via axios).
-   */
-⋮----
-/**
-   * When using HTTP KeepAlive, how often to send TCP KeepAlive packets over sockets being kept alive. Default = 1000.
-   * Only relevant if keepAlive is set to true.
-   * Default: 1000 (defaults comes from https agent)
-   */
-⋮----
-/**
-   * Allows you to provide a custom "signMessage" function, e.g. to use node's much faster createHmac method
-   *
-   * Look in the examples folder for a demonstration on using node's createHmac instead.
-   */
-⋮----
-export function serializeParams<T extends Record<string, any> | undefined = {}>(
-  params: T,
-  strict_validation: boolean | undefined,
-  encodeValues: boolean,
-  prefixWith: string,
-  repeatArrayValuesAsKVPairs: boolean,
-): string
-⋮----
-// Only prefix if there's a value
-⋮----
-export function isEmptyObject(obj: any, acceptStringIfNotEmpty: boolean)
-⋮----
-export function getRestBaseUrl(
-  restClientOptions: RestClientOptions,
-  restClientType: RestClientType,
-): string
+export interface AffiliateGetDailyActivityParams {
+  activity_date?: string;
+  iiban?: string;
+  start_date?: string;
+  end_date?: string;
+  all_users?: boolean;
+  cursor?: string;
+  limit?: number;
+}
 
 ================
 File: src/types/request/partner.types.ts
@@ -4746,6 +4572,169 @@ export interface WSAPIEditSpotOrderParams {
 /** @deprecated Deprecated 18 Sep 2025. */
 
 ================
+File: src/types/response/affiliate.types.ts
+================
+export interface AffiliateCpaConditionMeasurement {
+  current: string;
+  target: string;
+  unit?: string;
+  percentage: string;
+}
+⋮----
+export interface AffiliateCpaConditionProgress {
+  label: string;
+  kind: 'amount' | 'count' | 'verification' | 'binary' | (string & {});
+  state: 'incomplete' | 'complete' | (string & {});
+  measurement?: AffiliateCpaConditionMeasurement;
+}
+⋮----
+export interface AffiliateCpaBountyProgress {
+  bounty_position?: number;
+  description?: string;
+  reward_amount: string;
+  reward_asset: string;
+  status:
+    | 'in_progress'
+    | 'qualified_payment_pending'
+    | 'paid'
+    | 'expired'
+    | 'no_longer_eligible'
+    | 'not_tracked'
+    | (string & {});
+  qualified_at?: string;
+  progress_availability: 'available' | 'unavailable' | (string & {});
+  conditions?: AffiliateCpaConditionProgress[];
+}
+⋮----
+export interface AffiliateReferralCpaProgress {
+  bounties?: AffiliateCpaBountyProgress[];
+}
+⋮----
+export interface AffiliateGetCpaProgressResponse {
+  progress: AffiliateReferralCpaProgress;
+}
+⋮----
+export interface AffiliatePayout {
+  payout_id: string;
+  amount: string;
+  asset: string;
+  status:
+    | 'pending'
+    | 'paid'
+    | 'action_needed'
+    | 'on_hold'
+    | 'refunded'
+    | 'cancelled'
+    | (string & {});
+  created_at: string;
+  source:
+    | 'revshare'
+    | 'prop'
+    | 'cpa'
+    | 'futures_accelerator_bonus'
+    | (string & {});
+  prop_purchase_id?: string;
+}
+⋮----
+export interface AffiliatePropPayoutSummary {
+  paid: string;
+  pending: string;
+  order_count: number;
+}
+⋮----
+export interface AffiliateCpaPayoutSummary {
+  paid: string;
+  pending: string;
+  bounty_count: number;
+}
+⋮----
+export interface AffiliatePayoutSummary {
+  paid: string;
+  pending: string;
+  prop: AffiliatePropPayoutSummary;
+  cpa: AffiliateCpaPayoutSummary;
+}
+⋮----
+export interface AffiliateGetPayoutHistoryResponse {
+  items?: AffiliatePayout[];
+  next_cursor?: string;
+  summary: AffiliatePayoutSummary;
+  limit: number;
+}
+⋮----
+export interface AffiliateMakerTakerActivity {
+  volume: string;
+  fees: string;
+  commission: string;
+  event_count: number;
+}
+⋮----
+export interface AffiliateGeoBlockedActivity {
+  volume?: string;
+  fees: string;
+  event_count: number;
+}
+⋮----
+export interface AffiliateProductActivity {
+  volume?: string;
+  fees: string;
+  commission: string;
+  event_count: number;
+  geo_blocked?: AffiliateGeoBlockedActivity;
+  maker?: AffiliateMakerTakerActivity;
+  taker?: AffiliateMakerTakerActivity;
+}
+⋮----
+export interface AffiliateProductActivityMap {
+  [product: string]: AffiliateProductActivity;
+}
+⋮----
+export interface AffiliateReferralPlan {
+  referral_code: string;
+  campaign?: string;
+  referral_level?: number;
+  enrolled_at?: string;
+  status?: string;
+  earning?: boolean;
+  expires_at?: string;
+  products?: AffiliateProductActivityMap;
+}
+⋮----
+export interface AffiliateDailyActivityItem {
+  activity_date?: string;
+  iiban?: string;
+  masked_iiban?: string;
+  plans: AffiliateReferralPlan[];
+  referee_reference: string;
+  opted_out?: boolean;
+  enrolled_at?: string;
+  estimated?: boolean;
+}
+⋮----
+export interface AffiliateGatedActivitySummary {
+  active_participants: number;
+  products?: AffiliateProductActivityMap;
+}
+⋮----
+export type AffiliateGatedActivity =
+  | { suppressed: Record<string, unknown> }
+  | { summary: AffiliateGatedActivitySummary };
+⋮----
+export interface AffiliateGetDailyActivityResponse {
+  activity_date?: string;
+  currency: string;
+  revision?: string;
+  generated_at: string;
+  active_users?: number;
+  totals?: AffiliateProductActivityMap;
+  next_cursor?: string;
+  items?: AffiliateDailyActivityItem[];
+  estimated?: boolean;
+  opted_out?: AffiliateGatedActivity;
+  limit: number;
+}
+
+================
 File: src/types/response/partner.types.ts
 ================
 // Partner API response types
@@ -5506,6 +5495,56 @@ export interface WSSpotBalancesSubscribeParams {
 }
 
 ================
+File: src/AffiliateClient.ts
+================
+import { BaseRestClient } from './lib/BaseRestClient.js';
+import { REST_CLIENT_TYPE_ENUM, RestClientType } from './lib/requestUtils.js';
+import {
+  AffiliateGetCpaProgressParams,
+  AffiliateGetDailyActivityParams,
+  AffiliateGetPayoutHistoryParams,
+} from './types/request/affiliate.types.js';
+import {
+  AffiliateGetCpaProgressResponse,
+  AffiliateGetDailyActivityResponse,
+  AffiliateGetPayoutHistoryResponse,
+} from './types/response/affiliate.types.js';
+⋮----
+/**
+ * Affiliate REST reporting for approved affiliates.
+ * Responses are the JSON object itself, not `{ error, result }`.
+ */
+export class AffiliateClient extends BaseRestClient
+⋮----
+getClientType(): RestClientType
+⋮----
+/**
+   * Get CPA Progress
+   */
+getCpaProgress(
+    params: AffiliateGetCpaProgressParams,
+): Promise<AffiliateGetCpaProgressResponse>
+⋮----
+/**
+   * Get Payout History
+   */
+getPayoutHistory(
+    params?: AffiliateGetPayoutHistoryParams,
+): Promise<AffiliateGetPayoutHistoryResponse>
+⋮----
+/**
+   * Get Daily Activity
+   */
+getDailyActivity(
+    params?: AffiliateGetDailyActivityParams,
+): Promise<AffiliateGetDailyActivityResponse>
+
+================
+File: src/index.ts
+================
+
+
+================
 File: src/InstitutionalClient.ts
 ================
 import { nanoid } from 'nanoid';
@@ -5970,6 +6009,167 @@ verbose: true, // report individual test
 // watchman: true,
 
 ================
+File: examples/Derivatives/Private/account.ts
+================
+/* eslint-disable @typescript-eslint/no-unused-vars */
+import { DerivativesClient } from '../../../src/index.js';
+⋮----
+// This example shows how to call Kraken API endpoint with either node.js,
+// javascript (js) or typescript (ts) with the npm module "@siebly/kraken-api" for Kraken exchange
+// for FUTURES ACCOUNT INFORMATION
+⋮----
+/**
+ * import { DerivativesClient } from '@siebly/kraken-api';
+ */
+⋮----
+// initialise the client
+/**
+ *
+ * Kraken Futures API uses API Key and API Secret
+ *
+ * Example:
+ * {
+ *   apiKey: 'your-api-key',
+ *   apiSecret: 'your-api-secret',
+ * }
+ *
+ * API Key Permissions Required:
+ * - Read access for account information
+ * - Withdrawal permissions for transfers
+ *
+ */
+⋮----
+async function getWallets()
+⋮----
+// Get all wallets (cash and margin accounts)
+⋮----
+// Response includes:
+// - cash: Cash account with balances
+// - flex: Multi-collateral wallet with margin info
+// - Available margin, portfolio value, PnL
+// - Initial/maintenance margin requirements
+// For each margin account:
+//   - balances, auxiliary (pv, pnl, af, funding)
+//   - marginRequirements (im, mm, lt, tt)
+//   - triggerEstimates
+⋮----
+async function getOpenPositions()
+⋮----
+// Get all open Futures positions
+⋮----
+// Response includes for each position:
+// - symbol: Futures symbol
+// - side: long or short
+// - size: Position size
+// - price: Average entry price
+// - fillTime: When position was opened
+// - unrealizedFunding: Unrealized funding
+⋮----
+async function getFills()
+⋮----
+// Get filled orders history (last 100)
+⋮----
+// Response includes for each fill:
+// - fill_id: Unique fill identifier
+// - order_id: Associated order ID
+// - symbol: Futures symbol
+// - side: buy or sell
+// - size: Fill size
+// - price: Fill price
+// - fillTime: Execution time
+// - fillType: maker, taker, liquidation, etc.
+⋮----
+async function getFillsBeforeTime()
+⋮----
+// Get fills before specific time
+⋮----
+lastFillTime: new Date(Date.now() - 86400000).toISOString(), // 24h ago
+⋮----
+// Returns 100 fills before specified time
+⋮----
+async function initiateWalletTransfer()
+⋮----
+// Transfer between margin accounts or to/from cash account
+⋮----
+// Transfers funds between accounts instantly
+⋮----
+async function initiateWithdrawalToSpot()
+⋮----
+// Withdraw from Futures to Spot wallet
+⋮----
+sourceWallet: 'cash', // Default is cash wallet
+⋮----
+// Response includes:
+// - uid: Withdrawal reference ID
+⋮----
+async function getOrderEvents()
+⋮----
+// Get order history events
+⋮----
+sort: 'desc', // desc = newest first
+opened: true, // Include opened orders
+closed: true, // Include closed orders
+⋮----
+// Response includes:
+// - elements: Array of order events
+// - Order placed, cancelled, rejected, executed events
+// - continuationToken: For pagination
+⋮----
+async function getOrderEventsBySymbol()
+⋮----
+// Filter order events by symbol
+⋮----
+async function getExecutionEvents()
+⋮----
+// Get execution/trade history
+⋮----
+// Response includes for each execution:
+// - execution: Fill details (price, quantity, timestamp)
+// - order: Associated order details
+// - fee: Fee paid
+// - positionSize: Position size after execution
+⋮----
+async function getExecutionEventsBySymbol()
+⋮----
+// Filter executions by symbol
+⋮----
+async function getAccountLog()
+⋮----
+// Get account log (all account activities)
+⋮----
+// Log includes:
+// - futures trade, liquidation, funding rate change
+// - conversions, transfers, settlements
+// - interest payments, fees
+⋮----
+async function getAccountLogFiltered()
+⋮----
+// Filter account log by info types
+⋮----
+async function enableFuturesSubTrading()
+⋮----
+async function getSubaccountTradingStatus()
+⋮----
+async function getSubaccounts()
+// Uncomment the function you want to test:
+⋮----
+// getWallets();
+// getOpenPositions();
+// getFills();
+// getFillsBeforeTime();
+// initiateWalletTransfer();
+// initiateWithdrawalToSpot();
+// getOrderEvents();
+// getOrderEventsBySymbol();
+// getExecutionEvents();
+// getExecutionEventsBySymbol();
+// getAccountLog();
+// getAccountLogFiltered();
+// enableFuturesSubTrading();
+// getSubaccountTradingStatus();
+// getSubaccounts();
+
+================
 File: examples/Derivatives/Private/orderManagement.ts
 ================
 /* eslint-disable @typescript-eslint/no-unused-vars */
@@ -6129,324 +6329,6 @@ order_tag: 'order-1', // Tag to map responses
 // submitPostOnlyOrder();
 // submitReduceOnlyOrder();
 //batchOrderSubmit();
-
-================
-File: examples/Derivatives/Private/testnet.ts
-================
-/* eslint-disable @typescript-eslint/no-unused-vars */
-import { DerivativesClient } from '../../../src/index.js';
-⋮----
-// This example shows how to call Kraken API testnet (demo) endpoints with either node.js,
-// javascript (js) or typescript (ts) with the npm module "@siebly/kraken-api" for Kraken exchange
-⋮----
-/**
- * import { DerivativesClient } from '@siebly/kraken-api';
- */
-⋮----
-/**
- * Kraken Derivatives has a demo environment (testnet) that you can connect to via WebSocket. All you need to do is set the `testnet` option to `true` when creating the WebsocketClient instance, as shown below.
- * Everything else behaves exactly the same way.
- *
- * Note: as of November 2025, only the DerivativesClient supports testnet connections. Kraken refer to this as the "Demo" environment, but it is effectively a testnet.
- * This is a place to test your API integration. It is not a good place to test strategy performance, as the liquidity and orderbook dynamics are very different to the live environment.
- *
- * Refer to the following for more information:
- * https://github.com/tiagosiebler/awesome-crypto-examples/wiki/CEX-Testnets
- */
-⋮----
-// https://demo-futures.kraken.com to create demo account
-⋮----
-async function getWallets()
-⋮----
-// Get all wallets (cash and margin accounts)
-⋮----
-// Response includes:
-// - cash: Cash account with balances
-// - flex: Multi-collateral wallet with margin info
-// - Available margin, portfolio value, PnL
-// - Initial/maintenance margin requirements
-// For each margin account:
-//   - balances, auxiliary (pv, pnl, af, funding)
-//   - marginRequirements (im, mm, lt, tt)
-//   - triggerEstimates
-⋮----
-async function getOpenPositions()
-⋮----
-// Get all open Futures positions
-⋮----
-// Response includes for each position:
-// - symbol: Futures symbol
-// - side: long or short
-// - size: Position size
-// - price: Average entry price
-// - fillTime: When position was opened
-// - unrealizedFunding: Unrealized funding
-⋮----
-async function getFills()
-⋮----
-// Get filled orders history (last 100)
-⋮----
-// Response includes for each fill:
-// - fill_id: Unique fill identifier
-// - order_id: Associated order ID
-// - symbol: Futures symbol
-// - side: buy or sell
-// - size: Fill size
-// - price: Fill price
-// - fillTime: Execution time
-// - fillType: maker, taker, liquidation, etc.
-⋮----
-async function getFillsBeforeTime()
-⋮----
-// Get fills before specific time
-⋮----
-lastFillTime: new Date(Date.now() - 86400000).toISOString(), // 24h ago
-⋮----
-// Returns 100 fills before specified time
-⋮----
-async function initiateWalletTransfer()
-⋮----
-// Transfer between margin accounts or to/from cash account
-⋮----
-fromAccount: 'cash', // or margin account name
-toAccount: 'flex', // or other margin account
-⋮----
-// Transfers funds between accounts instantly
-⋮----
-async function initiateWithdrawalToSpot()
-⋮----
-// Withdraw from Futures to Spot wallet
-⋮----
-sourceWallet: 'cash', // Default is cash wallet
-⋮----
-// Response includes:
-// - uid: Withdrawal reference ID
-⋮----
-async function getOrderEvents()
-⋮----
-// Get order history events
-⋮----
-sort: 'desc', // desc = newest first
-opened: true, // Include opened orders
-closed: true, // Include closed orders
-⋮----
-// Response includes:
-// - elements: Array of order events
-// - Order placed, cancelled, rejected, executed events
-// - continuationToken: For pagination
-⋮----
-async function getOrderEventsBySymbol()
-⋮----
-// Filter order events by symbol
-⋮----
-async function getExecutionEvents()
-⋮----
-// Get execution/trade history
-⋮----
-// Response includes for each execution:
-// - execution: Fill details (price, quantity, timestamp)
-// - order: Associated order details
-// - fee: Fee paid
-// - positionSize: Position size after execution
-⋮----
-async function getExecutionEventsBySymbol()
-⋮----
-// Filter executions by symbol
-⋮----
-async function getAccountLog()
-⋮----
-// Get account log (all account activities)
-⋮----
-// Log includes:
-// - futures trade, liquidation, funding rate change
-// - conversions, transfers, settlements
-// - interest payments, fees
-⋮----
-async function getAccountLogFiltered()
-⋮----
-// Filter account log by info types
-⋮----
-// Uncomment the function you want to test:
-⋮----
-// initiateWalletTransfer();
-// initiateWithdrawalToSpot();
-
-================
-File: examples/Spot/Private/depositWithdraw.ts
-================
-/* eslint-disable @typescript-eslint/no-unused-vars */
-import { SpotClient } from '../../../src/index.js';
-⋮----
-// This example shows how to call Kraken API endpoint with either node.js,
-// javascript (js) or typescript (ts) with the npm module "@siebly/kraken-api" for Kraken exchange
-// for DEPOSIT AND WITHDRAWAL
-⋮----
-/**
- * import { SpotClient } from '@siebly/kraken-api';
- */
-⋮----
-// initialise the client
-/**
- *
- * Kraken API uses API Key and Private Key (base64 encoded)
- *
- * Example:
- * {
- *   apiKey: 'your-api-key',
- *   apiSecret: 'your-base64-encoded-private-key',
- * }
- *
- * API Key Permissions Required:
- * - Funds permissions - Query
- * - Funds permissions - Deposit
- * - Funds permissions - Withdraw
- * - Data - Query ledger entries
- *
- */
-⋮----
-async function withdrawFunds()
-⋮----
-// Make a withdrawal request
-⋮----
-key: 'btc_2709', // Withdrawal key name from your account
-⋮----
-address: 'bc1kar0ssrr7xf3vy5l6d3lydnwkre5og2zz3f5ldq', // Optional confirmation
-⋮----
-// Response includes:
-// - refid: Reference ID for the withdrawal
-⋮----
-async function getDepositMethods()
-⋮----
-// Get available deposit methods for an asset
-⋮----
-// Response includes:
-// - method: Name of deposit method
-// - limit: Maximum net amount that can be deposited
-// - fee: Fees that will be paid
-// - address-setup-fee: Whether method has setup fee
-// - gen-address: Whether new addresses can be generated
-// - minimum: Minimum net amount
-⋮----
-async function getDepositAddresses()
-⋮----
-// Get or generate deposit address
-⋮----
-new: false, // Set to true to generate new address
-⋮----
-// Response includes:
-// - address: Deposit address
-// - expiretm: Expiration time or 0 if not expiring
-// - new: Whether address has ever been used
-// - tag: Contains tags/memos for XRP, STX, XLM, EOS
-⋮----
-async function generateNewDepositAddress()
-⋮----
-// Generate a new deposit address
-⋮----
-new: true, // Generate new address
-⋮----
-async function getWithdrawalMethods()
-⋮----
-// Get available withdrawal methods
-⋮----
-// Response includes:
-// - asset: Name of asset being withdrawn
-// - method: Name of withdrawal method
-// - network: Blockchain/network name
-// - minimum: Minimum net amount that can be withdrawn
-⋮----
-async function getWithdrawalAddresses()
-⋮----
-// Get withdrawal addresses
-⋮----
-verified: true, // Filter by verification status
-⋮----
-// Response includes:
-// - address: Withdrawal address
-// - asset: Asset name
-// - method: Withdrawal method
-// - key: Withdrawal key name
-// - tag: Tags/memos for XRP, STX, XLM, EOS
-// - verified: Verification status
-⋮----
-async function getWithdrawalAddressByKey()
-⋮----
-// Find withdrawal address by key name
-⋮----
-key: 'btc_2709', // Withdrawal key name
-⋮----
-async function getWithdrawalsStatus()
-⋮----
-// Get status of recent withdrawals
-⋮----
-// Status values:
-// - Initial: withdrawal just created
-// - Pending: withdrawal pending
-// - Settled: withdrawal settled
-// - Success: withdrawal successful
-// - Failure: withdrawal failed
-⋮----
-// Status properties (if available):
-// - cancel-pending: cancelation requested
-// - canceled: canceled
-// - cancel-denied: cancelation denied
-// - return: return transaction by Kraken
-// - onhold: on hold pending review
-⋮----
-async function getWithdrawalsStatusWithPagination()
-⋮----
-// Get withdrawals with pagination
-⋮----
-cursor: true, // Enable pagination
-limit: 10, // Results per page
-⋮----
-async function getDepositsStatus()
-⋮----
-// Get status of recent deposits
-⋮----
-// Similar status values as withdrawals
-⋮----
-async function cancelWithdrawal()
-⋮----
-// Cancel a recent withdrawal (if not yet processed)
-⋮----
-refid: 'AGBSO6T-UFMTTQ-I7KGS6', // Reference ID from withdrawal
-⋮----
-// Returns true if cancellation successful
-⋮----
-async function getWithdrawalInfo()
-⋮----
-// Get withdrawal fee information before withdrawing
-⋮----
-// Response includes:
-// - method: Withdrawal method
-// - limit: Maximum amount that can be withdrawn
-// - amount: Net amount to be withdrawn
-// - fee: Withdrawal fee
-⋮----
-async function transferToFutures()
-⋮----
-async function transferToSubaccount()
-⋮----
-from: 'UID', // get From API, getSubaccounts()
-to: 'UID', // get From API, getSubaccounts()
-⋮----
-// Uncomment the function you want to test:
-⋮----
-// withdrawFunds();
-// getDepositMethods();
-// getDepositAddresses();
-// generateNewDepositAddress();
-// getWithdrawalMethods();
-// getWithdrawalAddresses();
-// getWithdrawalAddressByKey();
-// getWithdrawalsStatus();
-// getWithdrawalsStatusWithPagination();
-// getDepositsStatus();
-// cancelWithdrawal();
-// getWithdrawalInfo();
-// transferToFutures();
-// transferToSubaccount();
 
 ================
 File: src/lib/websocket/websocket-util.ts
@@ -6751,6 +6633,148 @@ addTopic(key: WsKey, topic: TWSTopicSubscribeEventArgs)
 deleteTopic(key: WsKey, topic: TWSTopicSubscribeEventArgs)
 ⋮----
 // Check if we're subscribed to a topic like this
+
+================
+File: src/lib/requestUtils.ts
+================
+/**
+ * Used to switch how authentication/requests work under the hood
+ */
+⋮----
+/** Spot */
+⋮----
+/** Futures */
+⋮----
+/** Institutional */
+⋮----
+/** Partner */
+⋮----
+/** Affiliate reporting */
+⋮----
+export type RestClientType =
+  (typeof REST_CLIENT_TYPE_ENUM)[keyof typeof REST_CLIENT_TYPE_ENUM];
+⋮----
+/**
+ * Kraken decommissioned demo-futures.kraken.com at 13:00 UTC on 14 July 2026.
+ * No replacement demo host exists, and Spot never had a testnet.
+ */
+⋮----
+export interface RestClientOptions {
+  /** Your API key */
+  apiKey?: string;
+
+  /** Your API secret */
+  apiSecret?: string;
+
+  /**
+   * Kraken retired the Futures demo (testnet) environment on 14 July 2026.
+   * There is no replacement demo host, and Spot never had a testnet.
+   *
+   * Setting this to `true` throws. The live environment is used when it is omitted or `false`.
+   *
+   * See https://support.kraken.com/articles/360024809011-api-testing-environment-derivatives
+   */
+  testnet?: boolean;
+
+  /**
+   * Use access token instead of sign, if this is provided.
+   * For guidance refer to: https://github.com/tiagosiebler/kucoin-api/issues/2
+   */
+  apiAccessToken?: string;
+
+  /** Default: false. If true, we'll throw errors if any params are undefined */
+  strictParamValidation?: boolean;
+
+  /**
+   * Optionally override API protocol + domain
+   * e.g baseUrl: 'https://api.kraken.com'
+   **/
+  baseUrl?: string;
+
+  /** Default: true. whether to try and post-process request exceptions (and throw them). */
+  parseExceptions?: boolean;
+
+  customTimestampFn?: () => number;
+
+  /**
+   * Enable keep alive for REST API requests (via axios).
+   */
+  keepAlive?: boolean;
+
+  /**
+   * When using HTTP KeepAlive, how often to send TCP KeepAlive packets over sockets being kept alive. Default = 1000.
+   * Only relevant if keepAlive is set to true.
+   * Default: 1000 (defaults comes from https agent)
+   */
+  keepAliveMsecs?: number;
+
+  /**
+   * Allows you to provide a custom "signMessage" function, e.g. to use node's much faster createHmac method
+   *
+   * Look in the examples folder for a demonstration on using node's createHmac instead.
+   */
+  customSignMessageFn?: (message: string, secret: string) => Promise<string>;
+}
+⋮----
+/** Your API key */
+⋮----
+/** Your API secret */
+⋮----
+/**
+   * Kraken retired the Futures demo (testnet) environment on 14 July 2026.
+   * There is no replacement demo host, and Spot never had a testnet.
+   *
+   * Setting this to `true` throws. The live environment is used when it is omitted or `false`.
+   *
+   * See https://support.kraken.com/articles/360024809011-api-testing-environment-derivatives
+   */
+⋮----
+/**
+   * Use access token instead of sign, if this is provided.
+   * For guidance refer to: https://github.com/tiagosiebler/kucoin-api/issues/2
+   */
+⋮----
+/** Default: false. If true, we'll throw errors if any params are undefined */
+⋮----
+/**
+   * Optionally override API protocol + domain
+   * e.g baseUrl: 'https://api.kraken.com'
+   **/
+⋮----
+/** Default: true. whether to try and post-process request exceptions (and throw them). */
+⋮----
+/**
+   * Enable keep alive for REST API requests (via axios).
+   */
+⋮----
+/**
+   * When using HTTP KeepAlive, how often to send TCP KeepAlive packets over sockets being kept alive. Default = 1000.
+   * Only relevant if keepAlive is set to true.
+   * Default: 1000 (defaults comes from https agent)
+   */
+⋮----
+/**
+   * Allows you to provide a custom "signMessage" function, e.g. to use node's much faster createHmac method
+   *
+   * Look in the examples folder for a demonstration on using node's createHmac instead.
+   */
+⋮----
+export function serializeParams<T extends Record<string, any> | undefined = {}>(
+  params: T,
+  strict_validation: boolean | undefined,
+  encodeValues: boolean,
+  prefixWith: string,
+  repeatArrayValuesAsKVPairs: boolean,
+): string
+⋮----
+// Only prefix if there's a value
+⋮----
+export function isEmptyObject(obj: any, acceptStringIfNotEmpty: boolean)
+⋮----
+export function getRestBaseUrl(
+  restClientOptions: RestClientOptions,
+  restClientType: RestClientType,
+): string
 
 ================
 File: src/types/response/derivatives.types.ts
@@ -7838,6 +7862,666 @@ export type FuturesSelfTradeStrategy =
   | 'CANCEL_MAKER_ANY';
 
 ================
+File: webpack/webpack.config.cjs
+================
+function generateConfig(name)
+⋮----
+// Add '.ts' and '.tsx' as resolvable extensions.
+⋮----
+// Node.js core modules not available in browsers
+// The REST client's https.Agent (for keepAlive) is Node.js-only and won't work in browsers
+⋮----
+// Code is already transpiled from TypeScript, no additional loaders needed
+
+================
+File: .gitignore
+================
+!.gitkeep
+.DS_STORE
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
+report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
+pids
+*.pid
+*.seed
+*.pid.lock
+node_modules/
+.npm
+.eslintcache
+.node_repl_history
+*.tgz
+.yarn-integrity
+.env
+.env.test
+.cache
+dist
+bundleReport.html
+.history/
+examples/ignoreme
+localtest.sh
+repomix.sh
+doc
+
+================
+File: examples/Derivatives/Private/testnet.ts
+================
+/* eslint-disable @typescript-eslint/no-unused-vars */
+import { DerivativesClient } from '../../../src/index.js';
+⋮----
+// This example shows how to call Kraken API testnet (demo) endpoints with either node.js,
+// javascript (js) or typescript (ts) with the npm module "@siebly/kraken-api" for Kraken exchange
+//
+// UPDATE: Kraken retired the Futures demo on 14 July 2026. testnet: true throws.
+// There is no replacement demo host. These calls use the live Derivatives REST API.
+// See https://support.kraken.com/articles/360024809011-api-testing-environment-derivatives
+⋮----
+/**
+ * import { DerivativesClient } from '@siebly/kraken-api';
+ */
+⋮----
+/**
+ * Kraken Derivatives has a demo environment (testnet) that you can connect to via WebSocket. All you need to do is set the `testnet` option to `true` when creating the WebsocketClient instance, as shown below.
+ * Everything else behaves exactly the same way.
+ *
+ * Note: as of November 2025, only the DerivativesClient supports testnet connections. Kraken refer to this as the "Demo" environment, but it is effectively a testnet.
+ * This is a place to test your API integration. It is not a good place to test strategy performance, as the liquidity and orderbook dynamics are very different to the live environment.
+ *
+ * Refer to the following for more information:
+ * https://github.com/tiagosiebler/awesome-crypto-examples/wiki/CEX-Testnets
+ */
+⋮----
+// https://demo-futures.kraken.com to create demo account
+// Retired 14 July 2026. Do not set testnet: it throws. There is no replacement demo host.
+⋮----
+async function getWallets()
+⋮----
+// Get all wallets (cash and margin accounts)
+⋮----
+// Response includes:
+// - cash: Cash account with balances
+// - flex: Multi-collateral wallet with margin info
+// - Available margin, portfolio value, PnL
+// - Initial/maintenance margin requirements
+// For each margin account:
+//   - balances, auxiliary (pv, pnl, af, funding)
+//   - marginRequirements (im, mm, lt, tt)
+//   - triggerEstimates
+⋮----
+async function getOpenPositions()
+⋮----
+// Get all open Futures positions
+⋮----
+// Response includes for each position:
+// - symbol: Futures symbol
+// - side: long or short
+// - size: Position size
+// - price: Average entry price
+// - fillTime: When position was opened
+// - unrealizedFunding: Unrealized funding
+⋮----
+async function getFills()
+⋮----
+// Get filled orders history (last 100)
+⋮----
+// Response includes for each fill:
+// - fill_id: Unique fill identifier
+// - order_id: Associated order ID
+// - symbol: Futures symbol
+// - side: buy or sell
+// - size: Fill size
+// - price: Fill price
+// - fillTime: Execution time
+// - fillType: maker, taker, liquidation, etc.
+⋮----
+async function getFillsBeforeTime()
+⋮----
+// Get fills before specific time
+⋮----
+lastFillTime: new Date(Date.now() - 86400000).toISOString(), // 24h ago
+⋮----
+// Returns 100 fills before specified time
+⋮----
+async function initiateWalletTransfer()
+⋮----
+// Transfer between margin accounts or to/from cash account
+⋮----
+fromAccount: 'cash', // or margin account name
+toAccount: 'flex', // or other margin account
+⋮----
+// Transfers funds between accounts instantly
+⋮----
+async function initiateWithdrawalToSpot()
+⋮----
+// Withdraw from Futures to Spot wallet
+⋮----
+sourceWallet: 'cash', // Default is cash wallet
+⋮----
+// Response includes:
+// - uid: Withdrawal reference ID
+⋮----
+async function getOrderEvents()
+⋮----
+// Get order history events
+⋮----
+sort: 'desc', // desc = newest first
+opened: true, // Include opened orders
+closed: true, // Include closed orders
+⋮----
+// Response includes:
+// - elements: Array of order events
+// - Order placed, cancelled, rejected, executed events
+// - continuationToken: For pagination
+⋮----
+async function getOrderEventsBySymbol()
+⋮----
+// Filter order events by symbol
+⋮----
+async function getExecutionEvents()
+⋮----
+// Get execution/trade history
+⋮----
+// Response includes for each execution:
+// - execution: Fill details (price, quantity, timestamp)
+// - order: Associated order details
+// - fee: Fee paid
+// - positionSize: Position size after execution
+⋮----
+async function getExecutionEventsBySymbol()
+⋮----
+// Filter executions by symbol
+⋮----
+async function getAccountLog()
+⋮----
+// Get account log (all account activities)
+⋮----
+// Log includes:
+// - futures trade, liquidation, funding rate change
+// - conversions, transfers, settlements
+// - interest payments, fees
+⋮----
+async function getAccountLogFiltered()
+⋮----
+// Filter account log by info types
+⋮----
+// Uncomment the function you want to test:
+⋮----
+// initiateWalletTransfer();
+// initiateWithdrawalToSpot();
+
+================
+File: src/PartnerClient.ts
+================
+import { BaseRestClient } from './lib/BaseRestClient.js';
+import { REST_CLIENT_TYPE_ENUM, RestClientType } from './lib/requestUtils.js';
+import {
+  PartnerCancelCustomOrderParams,
+  PartnerCreateCustomOrderParams,
+  PartnerCreateUserParams,
+  PartnerExecuteQuoteParams,
+  PartnerGetAssetParams,
+  PartnerGetCustomOrderParams,
+  PartnerGetEarnSummaryParams,
+  PartnerGetPortfolioHistoryParams,
+  PartnerGetPortfolioSummaryParams,
+  PartnerGetQuoteLimitsParams,
+  PartnerGetQuoteParams,
+  PartnerGetRampCheckoutUrlParams,
+  PartnerGetRampLimitsParams,
+  PartnerGetRampProspectiveQuoteParams,
+  PartnerGetSettlementReportParams,
+  PartnerListAssetRatesParams,
+  PartnerListAssetsParams,
+  PartnerListCustomOrdersParams,
+  PartnerListEarnAssetsParams,
+  PartnerListFundingTransactionsParams,
+  PartnerListPortfolioDetailsParams,
+  PartnerListPortfolioTransactionsParams,
+  PartnerListSettlementReportsParams,
+  PartnerRequestProspectiveQuoteParams,
+  PartnerRequestQuoteParams,
+  PartnerSubmitVerificationParams,
+  PartnerToggleAutoEarnParams,
+  PartnerUpdateUserParams,
+  PartnerWithdrawFundsParams,
+} from './types/request/partner.types.js';
+import {
+  PartnerCancelCustomOrderResponse,
+  PartnerCreateCustomOrderResponse,
+  PartnerCreateUserResponse,
+  PartnerExecuteQuoteResponse,
+  PartnerGetAssetResponse,
+  PartnerGetCustomOrderResponse,
+  PartnerGetEarnSummaryResponse,
+  PartnerGetPortfolioHistoryResponse,
+  PartnerGetPortfolioSummaryResponse,
+  PartnerGetQuoteLimitsResponse,
+  PartnerGetQuoteResponse,
+  PartnerGetRampCheckoutUrlResponse,
+  PartnerGetRampLimitsResponse,
+  PartnerGetRampProspectiveQuoteResponse,
+  PartnerGetSettlementReportResponse,
+  PartnerGetUserResponse,
+  PartnerListAssetRatesResponse,
+  PartnerListAssetsResponse,
+  PartnerListCustomOrdersResponse,
+  PartnerListEarnAssetsResponse,
+  PartnerListFundingTransactionsResponse,
+  PartnerListPortfolioDetailsResponse,
+  PartnerListPortfolioTransactionsResponse,
+  PartnerListRampBuyCryptoAssetsResponse,
+  PartnerListRampCountriesResponse,
+  PartnerListRampFiatCurrenciesResponse,
+  PartnerListRampPaymentMethodsResponse,
+  PartnerListSettlementReportsResponse,
+  PartnerRequestProspectiveQuoteResponse,
+  PartnerRequestQuoteResponse,
+  PartnerSubmitVerificationResponse,
+  PartnerToggleAutoEarnResponse,
+  PartnerUpdateUserResponse,
+  PartnerWithdrawFundsResponse,
+} from './types/response/partner.types.js';
+⋮----
+/**
+ * The PartnerClient provides integration to the Kraken Partner API.
+ *
+ * Docs:
+ * - https://docs.kraken.com/api/docs/embed-api
+ * - https://docs.kraken.com/api/docs/ramp-api
+ */
+export class PartnerClient extends BaseRestClient
+⋮----
+getClientType(): RestClientType
+⋮----
+/**
+   *
+   * Partner REST API - Embed API - Users
+   *
+   */
+⋮----
+/**
+   * Create User
+   *
+   * Create a new user in the Kraken system.
+   */
+createEmbedUser(
+    params: PartnerCreateUserParams,
+): Promise<PartnerCreateUserResponse>
+⋮----
+/**
+   * Get User
+   *
+   * Get a previously created user.
+   */
+getEmbedUser(params:
+⋮----
+/**
+   * Update User
+   *
+   * Update an existing user's profile.
+   */
+updateEmbedUser(
+    params: PartnerUpdateUserParams,
+): Promise<PartnerUpdateUserResponse>
+⋮----
+/**
+   *
+   * Partner REST API - Embed API - Verifications
+   *
+   */
+⋮----
+/**
+   * Submit Verification
+   *
+   * Submit a verification for a user with documents and details.
+   * A verification is defined as a check that has been performed on a user to verify information provided by the user.
+   * Note: This endpoint uses multipart/form-data for file uploads.
+   */
+submitEmbedVerification(
+    params: PartnerSubmitVerificationParams,
+): Promise<PartnerSubmitVerificationResponse>
+⋮----
+/**
+   *
+   * Partner REST API - Embed API - Assets
+   *
+   */
+⋮----
+/**
+   * List Assets
+   *
+   * List all assets available on the platform.
+   * This endpoint returns a list of all assets available on the platform.
+   */
+listEmbedAssets(
+    params?: PartnerListAssetsParams,
+): Promise<PartnerListAssetsResponse>
+⋮----
+/**
+   * Get Asset
+   *
+   * Get information about a specific asset.
+   */
+getEmbedAsset(
+    params: PartnerGetAssetParams,
+): Promise<PartnerGetAssetResponse>
+⋮----
+/**
+   * List Asset Rates
+   *
+   * Returns historical rates for a given asset.
+   * This endpoint returns historical rates for a given asset with timestamp and median price for each period.
+   */
+listEmbedAssetRates(
+    params: PartnerListAssetRatesParams,
+): Promise<PartnerListAssetRatesResponse>
+⋮----
+/**
+   *
+   * Partner REST API - Embed API - Quotes
+   *
+   */
+⋮----
+/**
+   * Request Quote
+   *
+   * Request a price quote for an asset, that may be used to execute a trade later on.
+   */
+requestEmbedQuote(
+    params: PartnerRequestQuoteParams,
+): Promise<PartnerRequestQuoteResponse>
+⋮----
+/**
+   * Get Quote
+   *
+   * Gets the status of a quote that was previously requested.
+   */
+getEmbedQuote(
+    params: PartnerGetQuoteParams,
+): Promise<PartnerGetQuoteResponse>
+⋮----
+/**
+   * Execute Quote
+   *
+   * Executes a quote that was previously requested.
+   */
+executeEmbedQuote(
+    params: PartnerExecuteQuoteParams,
+): Promise<PartnerExecuteQuoteResponse>
+⋮----
+/**
+   * Get Quote Limits (RFQ)
+   *
+   * Request minimum, maximum and precision for trade using a given asset pair.
+   */
+getEmbedQuoteLimits(
+    params: PartnerGetQuoteLimitsParams,
+): Promise<PartnerGetQuoteLimitsResponse>
+⋮----
+/**
+   * Request Prospective Quote (RFQ)
+   *
+   * Request a prospective quote for an asset pair, to receive an indicative price and fee.
+   */
+requestEmbedProspectiveQuote(
+    params: PartnerRequestProspectiveQuoteParams,
+): Promise<PartnerRequestProspectiveQuoteResponse>
+⋮----
+/**
+   *
+   * Partner REST API - Embed API - Custom Orders
+   *
+   */
+⋮----
+/**
+   * Create Custom Order
+   *
+   * Submit a custom order with a specified trigger condition (e.g. price-triggered).
+   */
+createEmbedCustomOrder(
+    params: PartnerCreateCustomOrderParams,
+): Promise<PartnerCreateCustomOrderResponse>
+⋮----
+/**
+   * List Custom Orders
+   *
+   * Get a list of custom orders that were previously submitted.
+   */
+listEmbedCustomOrders(
+    params: PartnerListCustomOrdersParams,
+): Promise<PartnerListCustomOrdersResponse>
+⋮----
+/**
+   * Get Custom Order
+   *
+   * Get a single custom order by ID.
+   */
+getEmbedCustomOrder(
+    params: PartnerGetCustomOrderParams,
+): Promise<PartnerGetCustomOrderResponse>
+⋮----
+/**
+   * Cancel Custom Order
+   *
+   * Cancels a custom order that was previously submitted but not yet completed.
+   */
+cancelEmbedCustomOrder(
+    params: PartnerCancelCustomOrderParams,
+): Promise<PartnerCancelCustomOrderResponse>
+⋮----
+/**
+   *
+   * Partner REST API - Embed API - Portfolios
+   *
+   */
+⋮----
+/**
+   * Get Portfolio Summary
+   *
+   * Get the portfolio summary for a user.
+   */
+getEmbedPortfolioSummary(
+    params: PartnerGetPortfolioSummaryParams,
+): Promise<PartnerGetPortfolioSummaryResponse>
+⋮----
+/**
+   * Get Portfolio History
+   *
+   * Gets a portfolio's historical balances and valuations over time.
+   * Note: Balance for the last day shows up at UTC + 5h due to processing times.
+   */
+getEmbedPortfolioHistory(
+    params: PartnerGetPortfolioHistoryParams,
+): Promise<PartnerGetPortfolioHistoryResponse>
+⋮----
+/**
+   * List Portfolio Details
+   *
+   * Lists owned assets in a user's portfolio.
+   */
+listEmbedPortfolioDetails(
+    params: PartnerListPortfolioDetailsParams,
+): Promise<PartnerListPortfolioDetailsResponse>
+⋮----
+/**
+   * List Portfolio Transactions
+   *
+   * Lists the user's trades and transactions.
+   */
+listEmbedPortfolioTransactions(
+    params: PartnerListPortfolioTransactionsParams,
+): Promise<PartnerListPortfolioTransactionsResponse>
+⋮----
+/**
+   *
+   * Partner REST API - Embed API - Earn
+   *
+   */
+⋮----
+/**
+   * Get Earn Summary
+   *
+   * Get Earn summary of a user.
+   * Response holds total amounts (all-time). For per-asset granularity, use listEarnAssets().
+   */
+getEmbedEarnSummary(
+    params: PartnerGetEarnSummaryParams,
+): Promise<PartnerGetEarnSummaryResponse>
+⋮----
+/**
+   * List Earn Assets
+   *
+   * List Earn Assets.
+   * The user can optionally be passed in the request, which shows active asset allocations of the user in the response.
+   */
+listEmbedEarnAssets(
+    params?: PartnerListEarnAssetsParams,
+): Promise<PartnerListEarnAssetsResponse>
+⋮----
+/**
+   * Toggle Auto-Earn
+   *
+   * Toggle Auto-Earn of a user.
+   * Toggling Auto-Earn is an async operation. The response is empty on success.
+   * To fetch the user's current Auto-Earn status, use getEarnSummary().
+   */
+toggleEmbedAutoEarn(
+    params: PartnerToggleAutoEarnParams,
+): Promise<PartnerToggleAutoEarnResponse>
+⋮----
+/**
+   *
+   * Partner REST API - Embed API - Transfers
+   *
+   */
+⋮----
+/**
+   * Withdraw Funds
+   *
+   * Withdraw funds.
+   * Note: Currently, this is a master-only operation. No User parameter exists.
+   */
+withdrawEmbedFunds(
+    params: PartnerWithdrawFundsParams,
+): Promise<PartnerWithdrawFundsResponse>
+⋮----
+/**
+   * List Funding Transactions
+   *
+   * List Funding transactions.
+   * Funding transactions can be of type withdrawal or deposit.
+   * Note: Currently, this is a master-only operation. No User parameter exists.
+   */
+listEmbedFundingTransactions(
+    params: PartnerListFundingTransactionsParams,
+): Promise<PartnerListFundingTransactionsResponse>
+⋮----
+/**
+   *
+   * Partner REST API - Embed API - Reports
+   *
+   */
+⋮----
+/**
+   * List Settlement Reports
+   *
+   * Retrieves a paginated list of settlement reports available to the authenticated master user,
+   * with optional filters for date range and report type.
+   */
+listEmbedSettlementReports(
+    params?: PartnerListSettlementReportsParams,
+): Promise<PartnerListSettlementReportsResponse>
+⋮----
+/**
+   * Get Settlement Report
+   *
+   * Retrieves a settlement report and provides a secure download URL for the authenticated master user.
+   */
+getEmbedSettlementReport(
+    params: PartnerGetSettlementReportParams,
+): Promise<PartnerGetSettlementReportResponse>
+⋮----
+/**
+   *
+   * Partner REST API - Ramp API - Supported Options
+   *
+   */
+⋮----
+/**
+   * List Buy Crypto Assets
+   *
+   * List cryptocurrency assets available for Ramp buy transactions,
+   * including the networks, withdrawal methods, and provider-specific identifiers.
+   */
+listRampBuyCryptoAssets(): Promise<PartnerListRampBuyCryptoAssetsResponse>
+⋮----
+/**
+   * List Fiat Currencies
+   *
+   * List fiat currencies supported for funding Ramp transactions.
+   */
+listRampFiatCurrencies(): Promise<PartnerListRampFiatCurrenciesResponse>
+⋮----
+/**
+   * List Payment Methods
+   *
+   * List fiat payment methods supported for Ramp deposits,
+   * including optional mapping to provider-specific identifiers.
+   */
+listRampPaymentMethods(): Promise<PartnerListRampPaymentMethodsResponse>
+⋮----
+/**
+   * List Countries
+   *
+   * List countries and regions where Ramp is available.
+   * Depending on regulatory rules, availability may be scoped to specific states, provinces, or regions.
+   */
+listRampCountries(): Promise<PartnerListRampCountriesResponse>
+⋮----
+/**
+   *
+   * Partner REST API - Ramp API - Quotes
+   *
+   */
+⋮----
+/**
+   * Get Limits
+   *
+   * Retrieve combined min/max limits for a Ramp transaction configuration.
+   */
+getRampLimits(
+    params: PartnerGetRampLimitsParams,
+): Promise<PartnerGetRampLimitsResponse>
+⋮----
+/**
+   * Get Prospective Quote
+   *
+   * Retrieve a prospective quote for a Ramp transaction without reserving liquidity.
+   * Use this to preview spend/receive amounts before creating a checkout URL.
+   */
+getRampProspectiveQuote(
+    params: PartnerGetRampProspectiveQuoteParams,
+): Promise<PartnerGetRampProspectiveQuoteResponse>
+⋮----
+/**
+   *
+   * Partner REST API - Ramp API - Checkout
+   *
+   */
+⋮----
+/**
+   * Get Checkout URL
+   *
+   * Generate a hosted Ramp checkout URL for the provided transaction configuration.
+   * The response echoes the request parameters so the Ramp partner can confirm what was submitted.
+   */
+getRampCheckoutUrl(
+    params: PartnerGetRampCheckoutUrlParams,
+): Promise<PartnerGetRampCheckoutUrlResponse>
+
+================
 File: src/WebsocketClient.ts
 ================
 import {
@@ -7846,7 +8530,10 @@ import {
   MidflightWsRequestEvent,
 } from './lib/BaseWSClient.js';
 import { neverGuard } from './lib/misc-util.js';
-import { RestClientOptions } from './lib/requestUtils.js';
+import {
+  KRAKEN_FUTURES_TESTNET_RETIRED_ERROR,
+  RestClientOptions,
+} from './lib/requestUtils.js';
 import {
   hashMessage,
   SignAlgorithm,
@@ -8189,209 +8876,580 @@ private async signWSAPIRequest(
 // authParams.broker = APIIDMain;
 
 ================
-File: webpack/webpack.config.cjs
+File: src/lib/BaseRestClient.ts
 ================
-function generateConfig(name)
+import axios, { AxiosRequestConfig, AxiosResponse, Method } from 'axios';
+// NOTE: https.Agent is Node.js-only and not available in browser environments
+// Browser builds (via webpack) exclude this module - see webpack.config.js fallback settings
+import https from 'https';
 ⋮----
-// Add '.ts' and '.tsx' as resolvable extensions.
+import { neverGuard } from './misc-util.js';
+import {
+  APIIDMain,
+  APIIDMainKey,
+  getRestBaseUrl,
+  isEmptyObject,
+  REST_CLIENT_TYPE_ENUM,
+  RestClientOptions,
+  RestClientType,
+  serializeParams,
+} from './requestUtils.js';
+import {
+  checkWebCryptoAPISupported,
+  hashMessage,
+  SignAlgorithm,
+  SignEncodeMethod,
+  signMessage,
+  SignMessageOptions,
+} from './webCryptoAPI.js';
 ⋮----
-// Node.js core modules not available in browsers
-// The REST client's https.Agent (for keepAlive) is Node.js-only and won't work in browsers
+interface SignedRequest<
+  T extends object | undefined = {},
+  TReqData = object,
+  TReqQuery = object,
+> {
+  originalParams: T;
+  paramsWithSign?: T & { sign: string };
+  // all request params intended for request body (e.g. POST)
+  requestData?: TReqData;
+  // all params intended for request query string (e.g. GET)
+  requestQuery?: TReqQuery;
+  serializedParams: string;
+  sign: string;
+  queryParamsWithSign: string;
+  timestamp: number;
+  recvWindow: number;
+  nonce?: string;
+}
 ⋮----
-// Code is already transpiled from TypeScript, no additional loaders needed
-
-================
-File: .gitignore
-================
-!.gitkeep
-.DS_STORE
-*.log
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-lerna-debug.log*
-report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
-pids
-*.pid
-*.seed
-*.pid.lock
-node_modules/
-.npm
-.eslintcache
-.node_repl_history
-*.tgz
-.yarn-integrity
-.env
-.env.test
-.cache
-dist
-bundleReport.html
-.history/
-examples/ignoreme
-localtest.sh
-repomix.sh
-doc
-
-================
-File: examples/Derivatives/Private/account.ts
-================
-/* eslint-disable @typescript-eslint/no-unused-vars */
-import { DerivativesClient } from '../../../src/index.js';
+// all request params intended for request body (e.g. POST)
 ⋮----
-// This example shows how to call Kraken API endpoint with either node.js,
-// javascript (js) or typescript (ts) with the npm module "@siebly/kraken-api" for Kraken exchange
-// for FUTURES ACCOUNT INFORMATION
+// all params intended for request query string (e.g. GET)
+⋮----
+interface UnsignedRequest<T extends object | undefined = {}> {
+  originalParams: T;
+  paramsWithSign: T;
+  queryParamsWithSign: undefined;
+}
+⋮----
+type SignMethod = 'kraken';
 ⋮----
 /**
- * import { DerivativesClient } from '@siebly/kraken-api';
+ * Some requests require some params to be in the query string and some in the body. Some even support passing params via headers.
+ * This type anticipates these are possible in any combination.
+ *
+ * The request builder will automatically handle where parameters should go.
  */
+type ParamsInQueryBodyOrHeader = {
+  query?: object;
+  body?: object;
+  headers?: object;
+};
 ⋮----
-// initialise the client
+// request: {
+//   url: response.config.url,
+//   method: response.config.method,
+//   data: response.config.data,
+//   headers: response.config.headers,
+// },
+⋮----
 /**
- *
- * Kraken Futures API uses API Key and API Secret
- *
- * Example:
- * {
- *   apiKey: 'your-api-key',
- *   apiSecret: 'your-api-secret',
- * }
- *
- * API Key Permissions Required:
- * - Read access for account information
- * - Withdrawal permissions for transfers
- *
+ * Impure, mutates params to remove any values that have a key but are undefined.
+ */
+function deleteUndefinedValues(params?: any): void
+⋮----
+export abstract class BaseRestClient
+⋮----
+// A unique incrementing nonce
+⋮----
+/** Defines the client type (affecting how requests & signatures behave) */
+abstract getClientType(): RestClientType;
+⋮----
+/**
+   * Create an instance of the REST client. Pass API credentials in the object in the first parameter.
+   * @param {RestClientOptions} [restClientOptions={}] options to configure REST API connectivity
+   * @param {AxiosRequestConfig} [networkOptions={}] HTTP networking options for axios
+   */
+constructor(
+    restClientOptions: RestClientOptions = {},
+    networkOptions: AxiosRequestConfig = {},
+)
+⋮----
+/** Throw errors if any request params are empty */
+⋮----
+/** in ms == 5 minutes by default */
+⋮----
+/** inject custom request options based on axios specs - see axios docs for more guidance on AxiosRequestConfig: https://github.com/axios/axios#request-config */
+⋮----
+// If enabled, configure a https agent with keepAlive enabled
+// NOTE: This is Node.js-only functionality. In browser environments, this code is skipped
+// as the 'https' module is excluded via webpack fallback configuration.
+// Browser connection pooling is handled automatically by the browser itself.
+⋮----
+// Extract existing https agent parameters, if provided, to prevent the keepAlive flag from overwriting an existing https agent completely
+⋮----
+// For more advanced configuration, raise an issue on GitHub or use the "networkOptions"
+// parameter to define a custom httpsAgent with the desired properties
+⋮----
+// Check Web Crypto API support when credentials are provided
+⋮----
+// Throw if one of the 3 values is missing, but at least one of them is set
+⋮----
+/**
+   * Generates a timestamp for signing API requests.
+   *
+   * This method can be overridden or customized using `customTimestampFn`
+   * to implement a custom timestamp synchronization mechanism.
+   * If no custom function is provided, it defaults to the current system time.
+   */
+private getSignTimestampMs(): number
+⋮----
+private getNextRequestNonce(): string
+⋮----
+private hasValidCredentials()
+⋮----
+setAccessToken(newAccessToken: string)
+⋮----
+hasAccessToken(): boolean
+⋮----
+protected get(endpoint: string, params?: object)
+⋮----
+// GET only supports params in the query string
+⋮----
+protected post(endpoint: string, params?: ParamsInQueryBodyOrHeader)
+⋮----
+protected getPrivate(endpoint: string, params?: object)
+⋮----
+// GET only supports params in the query string
+⋮----
+protected postPrivate(endpoint: string, params?: ParamsInQueryBodyOrHeader)
+⋮----
+protected deletePrivate(
+    endpoint: string,
+    params?: ParamsInQueryBodyOrHeader,
+)
+⋮----
+protected putPrivate(endpoint: string, params?: ParamsInQueryBodyOrHeader)
+⋮----
+// protected patchPrivate(endpoint: string, params?: any) {
+protected patchPrivate(endpoint: string, params?: ParamsInQueryBodyOrHeader)
+⋮----
+/**
+   * @private Make a HTTP request to a specific endpoint. Private endpoint API calls are automatically signed.
+   */
+private async _call(
+    method: Method,
+    endpoint: string,
+    params?: ParamsInQueryBodyOrHeader,
+    isPublicApi?: boolean,
+): Promise<any>
+⋮----
+// Sanity check to make sure it's only ever prefixed by one forward slash
+⋮----
+// Build a request and handle signature process
+⋮----
+// Dispatch request
+⋮----
+// Throw if API returns an error (e.g. insufficient balance)
+⋮----
+// const res = {
+//   result: 'error',
+//   error: 'authenticationError',
+//   serverTime: '2025-10-29T15:02:39.341Z',
+// };
+⋮----
+/**
+   * @private generic handler to parse request exceptions
+   */
+parseException(e: any, requestParams: any): unknown
+⋮----
+// Something happened in setting up the request that triggered an error
+⋮----
+// request made but no response received
+⋮----
+// The request was made and the server responded with a status code
+// that falls out of the range of 2xx
+⋮----
+// console.error('err: ', response?.data);
+⋮----
+// Prevent credentials from leaking into error messages
+⋮----
+private async signMessage(
+    paramsStr: string,
+    secret: string,
+    method: SignEncodeMethod,
+    algorithm: SignAlgorithm,
+    options?: SignMessageOptions,
+): Promise<string>
+⋮----
+/**
+   * @private sign request and set recv window
+   */
+private async signRequest<
+    T extends ParamsInQueryBodyOrHeader | undefined = {},
+  >(
+    data: T,
+    endpoint: string,
+    method: Method,
+    signMethod: SignMethod,
+): Promise<SignedRequest<T>>
+⋮----
+// handle JSON preprocessing for requests, including embedded stringify
+⋮----
+// Don't prefix with ? as part of sign. Prefix after sign
+⋮----
+// Array values are repeated into key value pairs
+// E.g. orderIds:[1,2] becomes orderIds=1&orderIds=2
+⋮----
+// Set default nonce, if not set yet
+⋮----
+// Allow nonce override in reuqest
+// Should never fallback to new nonce, since it's pre-set above with default val
+⋮----
+// for spot, serialise GET params, use JSON for POST
+⋮----
+// Only sign when no access token is provided
+⋮----
+// node:crypto equivalent
+// const sign = createHmac(
+//   'sha512',
+//   Buffer.from(this.apiSecret!, 'base64'),
+// )
+//   .update(signMessage, 'binary')
+//   .digest('base64');
+⋮----
+// Check if this is a base64 decoding error (invalid API credentials)
+⋮----
+// Re-throw other errors as-is
+⋮----
+// ONLY the query params. The rest goes in the body, if there is a body.
+⋮----
+const nonce = ''; //this.getNextRequestNonce();
+⋮----
+// Only sign when no access token is provided
+⋮----
+// node:crypto equivalent
+// const sign = createHmac(
+//   'sha512',
+//   Buffer.from(this.apiSecret!, 'base64'),
+// )
+//   .update(signMessage, 'binary')
+//   .digest('base64');
+⋮----
+// Submitted as query string in form body
+⋮----
+private async prepareSignParams<TParams extends object | undefined>(
+    method: Method,
+    endpoint: string,
+    signMethod: SignMethod,
+    params?: TParams,
+    isPublicApi?: true,
+  ): Promise<UnsignedRequest<TParams>>;
+⋮----
+private async prepareSignParams<TParams extends object | undefined>(
+    method: Method,
+    endpoint: string,
+    signMethod: SignMethod,
+    params?: TParams,
+    isPublicApi?: false | undefined,
+  ): Promise<SignedRequest<TParams>>;
+⋮----
+private async prepareSignParams<TParams extends object | undefined>(
+    method: Method,
+    endpoint: string,
+    signMethod: SignMethod,
+    params?: TParams,
+    isPublicApi?: boolean,
+)
+⋮----
+/** Returns an axios request object. Handles signing process automatically if this is a private API call */
+private async buildRequest(
+    method: Method,
+    endpoint: string,
+    url: string,
+    params?: ParamsInQueryBodyOrHeader,
+    isPublicApi?: boolean,
+): Promise<AxiosRequestConfig>
+⋮----
+// Support for Authorization header, if provided:
+// https://github.com/tiagosiebler/kucoin-api/issues/2
+// Use restClient.setAccessToken(newToken), if you need to store a new access token
+// Not supported for Kraken at this time
+
+================
+File: src/types/request/derivatives.types.ts
+================
+/**
+ * Order Management
  */
 ⋮----
-async function getWallets()
+export interface FuturesBatchOrderSend {
+  order: 'send';
+  order_tag: string;
+  orderType:
+    | 'lmt'
+    | 'post'
+    | 'ioc'
+    | 'mkt'
+    | 'stp'
+    | 'take_profit'
+    | 'trailing_stop'
+    | 'fok';
+  symbol: string;
+  side: 'buy' | 'sell';
+  size: number;
+  limitPrice?: number;
+  stopPrice?: number;
+  cliOrdId?: string;
+  triggerSignal?: 'mark' | 'index' | 'last';
+  reduceOnly?: boolean;
+  trailingStopMaxDeviation?: number;
+  trailingStopDeviationUnit?: 'PERCENT' | 'QUOTE_CURRENCY';
+}
 ⋮----
-// Get all wallets (cash and margin accounts)
+export interface FuturesBatchOrderEdit {
+  order: 'edit';
+  order_id: string;
+  cliOrdId?: string | null;
+  size?: number;
+  limitPrice?: number;
+  stopPrice?: number;
+  trailingStopMaxDeviation?: number;
+  trailingStopDeviationUnit?: 'PERCENT' | 'QUOTE_CURRENCY';
+  qtyMode?: 'ABSOLUTE' | 'RELATIVE';
+}
 ⋮----
-// Response includes:
-// - cash: Cash account with balances
-// - flex: Multi-collateral wallet with margin info
-// - Available margin, portfolio value, PnL
-// - Initial/maintenance margin requirements
-// For each margin account:
-//   - balances, auxiliary (pv, pnl, af, funding)
-//   - marginRequirements (im, mm, lt, tt)
-//   - triggerEstimates
+export interface FuturesBatchOrderCancel {
+  order: 'cancel';
+  order_id?: string;
+  cliOrdId?: string;
+}
 ⋮----
-async function getOpenPositions()
+export interface FuturesBatchOrderParams {
+  ProcessBefore?: string;
+  json: {
+    batchOrder: (
+      | FuturesBatchOrderSend
+      | FuturesBatchOrderEdit
+      | FuturesBatchOrderCancel
+    )[];
+  };
+}
 ⋮----
-// Get all open Futures positions
+export interface FuturesCancelOrderParams {
+  processBefore?: string;
+  order_id?: string;
+  cliOrdId?: string;
+}
 ⋮----
-// Response includes for each position:
-// - symbol: Futures symbol
-// - side: long or short
-// - size: Position size
-// - price: Average entry price
-// - fillTime: When position was opened
-// - unrealizedFunding: Unrealized funding
+export interface FuturesEditOrderParams {
+  processBefore?: string;
+  orderId?: string;
+  cliOrdId?: string;
+  size?: number;
+  limitPrice?: number;
+  stopPrice?: number;
+  trailingStopMaxDeviation?: number;
+  trailingStopDeviationUnit?: 'PERCENT' | 'QUOTE_CURRENCY';
+  qtyMode?: 'ABSOLUTE' | 'RELATIVE';
+}
 ⋮----
-async function getFills()
+export interface FuturesSendOrderParams {
+  processBefore?: string;
+  orderType:
+    | 'lmt'
+    | 'post'
+    | 'ioc'
+    | 'mkt'
+    | 'stp'
+    | 'take_profit'
+    | 'trailing_stop'
+    | 'fok';
+  symbol: string;
+  side: 'buy' | 'sell';
+  size: number;
+  limitPrice?: number;
+  stopPrice?: number;
+  cliOrdId?: string;
+  triggerSignal?: 'mark' | 'index' | 'last';
+  reduceOnly?: boolean;
+  trailingStopMaxDeviation?: number;
+  trailingStopDeviationUnit?: 'PERCENT' | 'QUOTE_CURRENCY';
+  limitPriceOffsetValue?: number;
+  limitPriceOffsetUnit?: 'QUOTE_CURRENCY' | 'PERCENT';
+  broker?: string;
+}
 ⋮----
-// Get filled orders history (last 100)
+/**
+ * Assignment Program
+ */
 ⋮----
-// Response includes for each fill:
-// - fill_id: Unique fill identifier
-// - order_id: Associated order ID
-// - symbol: Futures symbol
-// - side: buy or sell
-// - size: Fill size
-// - price: Fill price
-// - fillTime: Execution time
-// - fillType: maker, taker, liquidation, etc.
+export interface FuturesAddAssignmentPreferenceParams {
+  contractType: string;
+  contract?: string;
+  maxSize?: number;
+  maxPosition?: number;
+  acceptLong: boolean;
+  acceptShort: boolean;
+  timeFrame: 'all' | 'weekdays' | 'weekends';
+  enabled: boolean;
+  minimumProfitabilityPerAssignmentLongBps?: number;
+  minimumProfitabilityPerAssignmentShortBps?: number;
+}
 ⋮----
-async function getFillsBeforeTime()
+/**
+ * Trading Settings
+ */
 ⋮----
-// Get fills before specific time
+export interface FuturesSetRfqAssignmentMaxLeverageParams {
+  maxLeverage: number;
+}
 ⋮----
-lastFillTime: new Date(Date.now() - 86400000).toISOString(), // 24h ago
+export interface FuturesUpdateSelfTradeStrategyParams {
+  strategy:
+    | 'REJECT_TAKER'
+    | 'CANCEL_MAKER_SELF'
+    | 'CANCEL_MAKER_CHILD'
+    | 'CANCEL_MAKER_ANY';
+}
 ⋮----
-// Returns 100 fills before specified time
+/**
+ * Transfers
+ */
 ⋮----
-async function initiateWalletTransfer()
+export interface FuturesInitiateWalletTransferParams {
+  fromAccount: string;
+  toAccount: string;
+  unit: string;
+  amount: number;
+}
 ⋮----
-// Transfer between margin accounts or to/from cash account
+export interface FuturesInitiateSubaccountTransferParams {
+  fromUser: string;
+  toUser: string;
+  fromAccount: string;
+  toAccount: string;
+  unit: string;
+  amount: string;
+}
 ⋮----
-// Transfers funds between accounts instantly
+export interface FuturesSubmitToSpotParams {
+  currency: string;
+  amount: string;
+  sourceWallet?: string;
+}
 ⋮----
-async function initiateWithdrawalToSpot()
+/**
+ * Account History
+ */
 ⋮----
-// Withdraw from Futures to Spot wallet
+export interface FuturesHistoryBaseParams {
+  since?: number; // Timestamp in milliseconds
+  before?: number; // Timestamp in milliseconds
+  sort?: 'asc' | 'desc';
+  continuation_token?: string; // base64
+  count?: number;
+  tradeable?: string;
+}
 ⋮----
-sourceWallet: 'cash', // Default is cash wallet
+since?: number; // Timestamp in milliseconds
+before?: number; // Timestamp in milliseconds
 ⋮----
-// Response includes:
-// - uid: Withdrawal reference ID
+continuation_token?: string; // base64
 ⋮----
-async function getOrderEvents()
+export interface FuturesGetOrderEventsParams extends FuturesHistoryBaseParams {
+  opened?: boolean;
+  closed?: boolean;
+}
 ⋮----
-// Get order history events
+export interface FuturesGetTriggerEventsParams
+  extends FuturesHistoryBaseParams {
+  opened?: boolean;
+  closed?: boolean;
+}
 ⋮----
-sort: 'desc', // desc = newest first
-opened: true, // Include opened orders
-closed: true, // Include closed orders
+export interface FuturesGetPositionEventsParams
+  extends FuturesHistoryBaseParams {
+  opened?: boolean;
+  closed?: boolean;
+  increased?: boolean;
+  decreased?: boolean;
+  reversed?: boolean;
+  no_change?: boolean;
+  trades?: boolean;
+  funding_realization?: boolean;
+  settlement?: boolean;
+}
 ⋮----
-// Response includes:
-// - elements: Array of order events
-// - Order placed, cancelled, rejected, executed events
-// - continuationToken: For pagination
+export interface FuturesGetAccountLogParams {
+  since?: number; // Timestamp in milliseconds
+  before?: number; // Timestamp in milliseconds
+  from?: number; // ID of the first entry (inclusive)
+  to?: number; // ID of the last entry (inclusive)
+  sort?: 'asc' | 'desc';
+  info?: string[]; // Types of entry to filter by
+  count?: number;
+  conversion_details?: boolean;
+}
 ⋮----
-async function getOrderEventsBySymbol()
+since?: number; // Timestamp in milliseconds
+before?: number; // Timestamp in milliseconds
+from?: number; // ID of the first entry (inclusive)
+to?: number; // ID of the last entry (inclusive)
 ⋮----
-// Filter order events by symbol
+info?: string[]; // Types of entry to filter by
 ⋮----
-async function getExecutionEvents()
+/**
+ * Market History
+ */
 ⋮----
-// Get execution/trade history
+export interface FuturesMarketHistoryBaseParams {
+  tradeable: string; // Symbol of the contract
+  since?: number; // Timestamp in milliseconds
+  before?: number; // Timestamp in milliseconds
+  sort?: 'asc' | 'desc';
+  continuation_token?: string; // base64
+  count?: number;
+}
 ⋮----
-// Response includes for each execution:
-// - execution: Fill details (price, quantity, timestamp)
-// - order: Associated order details
-// - fee: Fee paid
-// - positionSize: Position size after execution
+tradeable: string; // Symbol of the contract
+since?: number; // Timestamp in milliseconds
+before?: number; // Timestamp in milliseconds
 ⋮----
-async function getExecutionEventsBySymbol()
+continuation_token?: string; // base64
 ⋮----
-// Filter executions by symbol
+/**
+ * Charts - Candles
+ */
 ⋮----
-async function getAccountLog()
+export interface FuturesGetCandlesParams {
+  tickType: 'spot' | 'mark' | 'trade';
+  symbol: string;
+  resolution: '1m' | '5m' | '15m' | '30m' | '1h' | '4h' | '12h' | '1d' | '1w';
+  from?: number; // From date in epoch seconds
+  to?: number; // To date in epoch seconds
+  count?: number; // Number of candles to return
+}
 ⋮----
-// Get account log (all account activities)
+from?: number; // From date in epoch seconds
+to?: number; // To date in epoch seconds
+count?: number; // Number of candles to return
 ⋮----
-// Log includes:
-// - futures trade, liquidation, funding rate change
-// - conversions, transfers, settlements
-// - interest payments, fees
+/**
+ * Charts - Analytics
+ */
 ⋮----
-async function getAccountLogFiltered()
+export interface FuturesGetAnalyticsParams {
+  symbol: string;
+  analyticsType: string;
+  since: number; // Epoch time in seconds (required)
+  interval: 60 | 300 | 900 | 1800 | 3600 | 14400 | 43200 | 86400 | 604800; // Resolution in seconds (required)
+  to?: number; // Epoch time in seconds, default now
+}
 ⋮----
-// Filter account log by info types
-⋮----
-async function enableFuturesSubTrading()
-⋮----
-async function getSubaccountTradingStatus()
-⋮----
-async function getSubaccounts()
-// Uncomment the function you want to test:
-⋮----
-// getWallets();
-// getOpenPositions();
-// getFills();
-// getFillsBeforeTime();
-// initiateWalletTransfer();
-// initiateWithdrawalToSpot();
-// getOrderEvents();
-// getOrderEventsBySymbol();
-// getExecutionEvents();
-// getExecutionEventsBySymbol();
-// getAccountLog();
-// getAccountLogFiltered();
-// enableFuturesSubTrading();
-// getSubaccountTradingStatus();
-// getSubaccounts();
+since: number; // Epoch time in seconds (required)
+interval: 60 | 300 | 900 | 1800 | 3600 | 14400 | 43200 | 86400 | 604800; // Resolution in seconds (required)
+to?: number; // Epoch time in seconds, default now
 
 ================
 File: src/types/request/spot.types.ts
@@ -9162,11 +10220,11 @@ export interface SpotExtendedBalance {
 export interface SpotCreditLinesAsset {
   balance: string;
   /** @deprecated 30 Sep 2026. The credit limit field is credit. */
-  credit_limit: string;
+  credit_limit?: string;
   credit?: string;
   credit_used: string;
   /** @deprecated 30 Sep 2026. Not returned. */
-  available_credit: string;
+  available_credit?: string;
   rollover_fees?: string;
   reserve_fees?: string;
 }
@@ -9887,13 +10945,12 @@ export interface WSClientConfigurableOptions {
   apiSecret?: string;
 
   /**
-   * Set to `true` to connect to testnet (Kraken's demo environment). The live environment is used by default.
+   * Kraken retired the Futures demo (testnet) environment on 14 July 2026.
+   * There is no replacement demo host, and Spot never had a testnet.
    *
-   * Note: as of November 2025, only the derivatives environment supports testnet connections. Kraken refer to this as the "Demo" environment, but it is effectively a testnet.
-   * This is a place to test your API integration. It is not a good place to test strategy performance, as the liquidity and orderbook dynamics are very different to the live environment.
+   * Setting this to `true` throws when a connection URL is resolved. The live environment is used when it is omitted or `false`.
    *
-   * Refer to the following for more information:
-   * https://github.com/tiagosiebler/awesome-crypto-examples/wiki/CEX-Testnets
+   * See https://support.kraken.com/articles/360024809011-api-testing-environment-derivatives
    */
   testnet?: boolean;
 
@@ -9940,13 +10997,12 @@ export interface WSClientConfigurableOptions {
 /** Your API secret */
 ⋮----
 /**
-   * Set to `true` to connect to testnet (Kraken's demo environment). The live environment is used by default.
+   * Kraken retired the Futures demo (testnet) environment on 14 July 2026.
+   * There is no replacement demo host, and Spot never had a testnet.
    *
-   * Note: as of November 2025, only the derivatives environment supports testnet connections. Kraken refer to this as the "Demo" environment, but it is effectively a testnet.
-   * This is a place to test your API integration. It is not a good place to test strategy performance, as the liquidity and orderbook dynamics are very different to the live environment.
+   * Setting this to `true` throws when a connection URL is resolved. The live environment is used when it is omitted or `false`.
    *
-   * Refer to the following for more information:
-   * https://github.com/tiagosiebler/awesome-crypto-examples/wiki/CEX-Testnets
+   * See https://support.kraken.com/articles/360024809011-api-testing-environment-derivatives
    */
 ⋮----
 /** Define a recv window when preparing a private websocket signature. This is in milliseconds, so 5000 == 5 seconds */
@@ -10002,751 +11058,6 @@ export interface WebsocketClientOptions extends WSClientConfigurableOptions {
 export type WsMarket = 'spot' | 'futures';
 ⋮----
 export type WsEventInternalSrc = 'event' | 'function' | 'frame';
-
-================
-File: src/PartnerClient.ts
-================
-import { BaseRestClient } from './lib/BaseRestClient.js';
-import { REST_CLIENT_TYPE_ENUM, RestClientType } from './lib/requestUtils.js';
-import {
-  PartnerCancelCustomOrderParams,
-  PartnerCreateCustomOrderParams,
-  PartnerCreateUserParams,
-  PartnerExecuteQuoteParams,
-  PartnerGetAssetParams,
-  PartnerGetCustomOrderParams,
-  PartnerGetEarnSummaryParams,
-  PartnerGetPortfolioHistoryParams,
-  PartnerGetPortfolioSummaryParams,
-  PartnerGetQuoteLimitsParams,
-  PartnerGetQuoteParams,
-  PartnerGetRampCheckoutUrlParams,
-  PartnerGetRampLimitsParams,
-  PartnerGetRampProspectiveQuoteParams,
-  PartnerGetSettlementReportParams,
-  PartnerListAssetRatesParams,
-  PartnerListAssetsParams,
-  PartnerListCustomOrdersParams,
-  PartnerListEarnAssetsParams,
-  PartnerListFundingTransactionsParams,
-  PartnerListPortfolioDetailsParams,
-  PartnerListPortfolioTransactionsParams,
-  PartnerListSettlementReportsParams,
-  PartnerRequestProspectiveQuoteParams,
-  PartnerRequestQuoteParams,
-  PartnerSubmitVerificationParams,
-  PartnerToggleAutoEarnParams,
-  PartnerUpdateUserParams,
-  PartnerWithdrawFundsParams,
-} from './types/request/partner.types.js';
-import {
-  PartnerCancelCustomOrderResponse,
-  PartnerCreateCustomOrderResponse,
-  PartnerCreateUserResponse,
-  PartnerExecuteQuoteResponse,
-  PartnerGetAssetResponse,
-  PartnerGetCustomOrderResponse,
-  PartnerGetEarnSummaryResponse,
-  PartnerGetPortfolioHistoryResponse,
-  PartnerGetPortfolioSummaryResponse,
-  PartnerGetQuoteLimitsResponse,
-  PartnerGetQuoteResponse,
-  PartnerGetRampCheckoutUrlResponse,
-  PartnerGetRampLimitsResponse,
-  PartnerGetRampProspectiveQuoteResponse,
-  PartnerGetSettlementReportResponse,
-  PartnerGetUserResponse,
-  PartnerListAssetRatesResponse,
-  PartnerListAssetsResponse,
-  PartnerListCustomOrdersResponse,
-  PartnerListEarnAssetsResponse,
-  PartnerListFundingTransactionsResponse,
-  PartnerListPortfolioDetailsResponse,
-  PartnerListPortfolioTransactionsResponse,
-  PartnerListRampBuyCryptoAssetsResponse,
-  PartnerListRampCountriesResponse,
-  PartnerListRampFiatCurrenciesResponse,
-  PartnerListRampPaymentMethodsResponse,
-  PartnerListSettlementReportsResponse,
-  PartnerRequestProspectiveQuoteResponse,
-  PartnerRequestQuoteResponse,
-  PartnerSubmitVerificationResponse,
-  PartnerToggleAutoEarnResponse,
-  PartnerUpdateUserResponse,
-  PartnerWithdrawFundsResponse,
-} from './types/response/partner.types.js';
-⋮----
-/**
- * The PartnerClient provides integration to the Kraken Partner API.
- *
- * Docs:
- * - https://docs.kraken.com/api/docs/embed-api
- * - https://docs.kraken.com/api/docs/ramp-api
- */
-export class PartnerClient extends BaseRestClient
-⋮----
-getClientType(): RestClientType
-⋮----
-/**
-   *
-   * Partner REST API - Embed API - Users
-   *
-   */
-⋮----
-/**
-   * Create User
-   *
-   * Create a new user in the Kraken system.
-   */
-createEmbedUser(
-    params: PartnerCreateUserParams,
-): Promise<PartnerCreateUserResponse>
-⋮----
-/**
-   * Get User
-   *
-   * Get a previously created user.
-   */
-getEmbedUser(params:
-⋮----
-/**
-   * Update User
-   *
-   * Update an existing user's profile.
-   */
-updateEmbedUser(
-    params: PartnerUpdateUserParams,
-): Promise<PartnerUpdateUserResponse>
-⋮----
-/**
-   *
-   * Partner REST API - Embed API - Verifications
-   *
-   */
-⋮----
-/**
-   * Submit Verification
-   *
-   * Submit a verification for a user with documents and details.
-   * A verification is defined as a check that has been performed on a user to verify information provided by the user.
-   * Note: This endpoint uses multipart/form-data for file uploads.
-   */
-submitEmbedVerification(
-    params: PartnerSubmitVerificationParams,
-): Promise<PartnerSubmitVerificationResponse>
-⋮----
-/**
-   *
-   * Partner REST API - Embed API - Assets
-   *
-   */
-⋮----
-/**
-   * List Assets
-   *
-   * List all assets available on the platform.
-   * This endpoint returns a list of all assets available on the platform.
-   */
-listEmbedAssets(
-    params?: PartnerListAssetsParams,
-): Promise<PartnerListAssetsResponse>
-⋮----
-/**
-   * Get Asset
-   *
-   * Get information about a specific asset.
-   */
-getEmbedAsset(
-    params: PartnerGetAssetParams,
-): Promise<PartnerGetAssetResponse>
-⋮----
-/**
-   * List Asset Rates
-   *
-   * Returns historical rates for a given asset.
-   * This endpoint returns historical rates for a given asset with timestamp and median price for each period.
-   */
-listEmbedAssetRates(
-    params: PartnerListAssetRatesParams,
-): Promise<PartnerListAssetRatesResponse>
-⋮----
-/**
-   *
-   * Partner REST API - Embed API - Quotes
-   *
-   */
-⋮----
-/**
-   * Request Quote
-   *
-   * Request a price quote for an asset, that may be used to execute a trade later on.
-   */
-requestEmbedQuote(
-    params: PartnerRequestQuoteParams,
-): Promise<PartnerRequestQuoteResponse>
-⋮----
-/**
-   * Get Quote
-   *
-   * Gets the status of a quote that was previously requested.
-   */
-getEmbedQuote(
-    params: PartnerGetQuoteParams,
-): Promise<PartnerGetQuoteResponse>
-⋮----
-/**
-   * Execute Quote
-   *
-   * Executes a quote that was previously requested.
-   */
-executeEmbedQuote(
-    params: PartnerExecuteQuoteParams,
-): Promise<PartnerExecuteQuoteResponse>
-⋮----
-/**
-   * Get Quote Limits (RFQ)
-   *
-   * Request minimum, maximum and precision for trade using a given asset pair.
-   */
-getEmbedQuoteLimits(
-    params: PartnerGetQuoteLimitsParams,
-): Promise<PartnerGetQuoteLimitsResponse>
-⋮----
-/**
-   * Request Prospective Quote (RFQ)
-   *
-   * Request a prospective quote for an asset pair, to receive an indicative price and fee.
-   */
-requestEmbedProspectiveQuote(
-    params: PartnerRequestProspectiveQuoteParams,
-): Promise<PartnerRequestProspectiveQuoteResponse>
-⋮----
-/**
-   *
-   * Partner REST API - Embed API - Custom Orders
-   *
-   */
-⋮----
-/**
-   * Create Custom Order
-   *
-   * Submit a custom order with a specified trigger condition (e.g. price-triggered).
-   */
-createEmbedCustomOrder(
-    params: PartnerCreateCustomOrderParams,
-): Promise<PartnerCreateCustomOrderResponse>
-⋮----
-/**
-   * List Custom Orders
-   *
-   * Get a list of custom orders that were previously submitted.
-   */
-listEmbedCustomOrders(
-    params: PartnerListCustomOrdersParams,
-): Promise<PartnerListCustomOrdersResponse>
-⋮----
-/**
-   * Get Custom Order
-   *
-   * Get a single custom order by ID.
-   */
-getEmbedCustomOrder(
-    params: PartnerGetCustomOrderParams,
-): Promise<PartnerGetCustomOrderResponse>
-⋮----
-/**
-   * Cancel Custom Order
-   *
-   * Cancels a custom order that was previously submitted but not yet completed.
-   */
-cancelEmbedCustomOrder(
-    params: PartnerCancelCustomOrderParams,
-): Promise<PartnerCancelCustomOrderResponse>
-⋮----
-/**
-   *
-   * Partner REST API - Embed API - Portfolios
-   *
-   */
-⋮----
-/**
-   * Get Portfolio Summary
-   *
-   * Get the portfolio summary for a user.
-   */
-getEmbedPortfolioSummary(
-    params: PartnerGetPortfolioSummaryParams,
-): Promise<PartnerGetPortfolioSummaryResponse>
-⋮----
-/**
-   * Get Portfolio History
-   *
-   * Gets a portfolio's historical balances and valuations over time.
-   * Note: Balance for the last day shows up at UTC + 5h due to processing times.
-   */
-getEmbedPortfolioHistory(
-    params: PartnerGetPortfolioHistoryParams,
-): Promise<PartnerGetPortfolioHistoryResponse>
-⋮----
-/**
-   * List Portfolio Details
-   *
-   * Lists owned assets in a user's portfolio.
-   */
-listEmbedPortfolioDetails(
-    params: PartnerListPortfolioDetailsParams,
-): Promise<PartnerListPortfolioDetailsResponse>
-⋮----
-/**
-   * List Portfolio Transactions
-   *
-   * Lists the user's trades and transactions.
-   */
-listEmbedPortfolioTransactions(
-    params: PartnerListPortfolioTransactionsParams,
-): Promise<PartnerListPortfolioTransactionsResponse>
-⋮----
-/**
-   *
-   * Partner REST API - Embed API - Earn
-   *
-   */
-⋮----
-/**
-   * Get Earn Summary
-   *
-   * Get Earn summary of a user.
-   * Response holds total amounts (all-time). For per-asset granularity, use listEarnAssets().
-   */
-getEmbedEarnSummary(
-    params: PartnerGetEarnSummaryParams,
-): Promise<PartnerGetEarnSummaryResponse>
-⋮----
-/**
-   * List Earn Assets
-   *
-   * List Earn Assets.
-   * The user can optionally be passed in the request, which shows active asset allocations of the user in the response.
-   */
-listEmbedEarnAssets(
-    params?: PartnerListEarnAssetsParams,
-): Promise<PartnerListEarnAssetsResponse>
-⋮----
-/**
-   * Toggle Auto-Earn
-   *
-   * Toggle Auto-Earn of a user.
-   * Toggling Auto-Earn is an async operation. The response is empty on success.
-   * To fetch the user's current Auto-Earn status, use getEarnSummary().
-   */
-toggleEmbedAutoEarn(
-    params: PartnerToggleAutoEarnParams,
-): Promise<PartnerToggleAutoEarnResponse>
-⋮----
-/**
-   *
-   * Partner REST API - Embed API - Transfers
-   *
-   */
-⋮----
-/**
-   * Withdraw Funds
-   *
-   * Withdraw funds.
-   * Note: Currently, this is a master-only operation. No User parameter exists.
-   */
-withdrawEmbedFunds(
-    params: PartnerWithdrawFundsParams,
-): Promise<PartnerWithdrawFundsResponse>
-⋮----
-/**
-   * List Funding Transactions
-   *
-   * List Funding transactions.
-   * Funding transactions can be of type withdrawal or deposit.
-   * Note: Currently, this is a master-only operation. No User parameter exists.
-   */
-listEmbedFundingTransactions(
-    params: PartnerListFundingTransactionsParams,
-): Promise<PartnerListFundingTransactionsResponse>
-⋮----
-/**
-   *
-   * Partner REST API - Embed API - Reports
-   *
-   */
-⋮----
-/**
-   * List Settlement Reports
-   *
-   * Retrieves a paginated list of settlement reports available to the authenticated master user,
-   * with optional filters for date range and report type.
-   */
-listEmbedSettlementReports(
-    params?: PartnerListSettlementReportsParams,
-): Promise<PartnerListSettlementReportsResponse>
-⋮----
-/**
-   * Get Settlement Report
-   *
-   * Retrieves a settlement report and provides a secure download URL for the authenticated master user.
-   */
-getEmbedSettlementReport(
-    params: PartnerGetSettlementReportParams,
-): Promise<PartnerGetSettlementReportResponse>
-⋮----
-/**
-   *
-   * Partner REST API - Ramp API - Supported Options
-   *
-   */
-⋮----
-/**
-   * List Buy Crypto Assets
-   *
-   * List cryptocurrency assets available for Ramp buy transactions,
-   * including the networks, withdrawal methods, and provider-specific identifiers.
-   */
-listRampBuyCryptoAssets(): Promise<PartnerListRampBuyCryptoAssetsResponse>
-⋮----
-/**
-   * List Fiat Currencies
-   *
-   * List fiat currencies supported for funding Ramp transactions.
-   */
-listRampFiatCurrencies(): Promise<PartnerListRampFiatCurrenciesResponse>
-⋮----
-/**
-   * List Payment Methods
-   *
-   * List fiat payment methods supported for Ramp deposits,
-   * including optional mapping to provider-specific identifiers.
-   */
-listRampPaymentMethods(): Promise<PartnerListRampPaymentMethodsResponse>
-⋮----
-/**
-   * List Countries
-   *
-   * List countries and regions where Ramp is available.
-   * Depending on regulatory rules, availability may be scoped to specific states, provinces, or regions.
-   */
-listRampCountries(): Promise<PartnerListRampCountriesResponse>
-⋮----
-/**
-   *
-   * Partner REST API - Ramp API - Quotes
-   *
-   */
-⋮----
-/**
-   * Get Limits
-   *
-   * Retrieve combined min/max limits for a Ramp transaction configuration.
-   */
-getRampLimits(
-    params: PartnerGetRampLimitsParams,
-): Promise<PartnerGetRampLimitsResponse>
-⋮----
-/**
-   * Get Prospective Quote
-   *
-   * Retrieve a prospective quote for a Ramp transaction without reserving liquidity.
-   * Use this to preview spend/receive amounts before creating a checkout URL.
-   */
-getRampProspectiveQuote(
-    params: PartnerGetRampProspectiveQuoteParams,
-): Promise<PartnerGetRampProspectiveQuoteResponse>
-⋮----
-/**
-   *
-   * Partner REST API - Ramp API - Checkout
-   *
-   */
-⋮----
-/**
-   * Get Checkout URL
-   *
-   * Generate a hosted Ramp checkout URL for the provided transaction configuration.
-   * The response echoes the request parameters so the Ramp partner can confirm what was submitted.
-   */
-getRampCheckoutUrl(
-    params: PartnerGetRampCheckoutUrlParams,
-): Promise<PartnerGetRampCheckoutUrlResponse>
-
-================
-File: src/types/request/derivatives.types.ts
-================
-/**
- * Order Management
- */
-⋮----
-export interface FuturesBatchOrderSend {
-  order: 'send';
-  order_tag: string;
-  orderType:
-    | 'lmt'
-    | 'post'
-    | 'ioc'
-    | 'mkt'
-    | 'stp'
-    | 'take_profit'
-    | 'trailing_stop'
-    | 'fok';
-  symbol: string;
-  side: 'buy' | 'sell';
-  size: number;
-  limitPrice?: number;
-  stopPrice?: number;
-  cliOrdId?: string;
-  triggerSignal?: 'mark' | 'index' | 'last';
-  reduceOnly?: boolean;
-  trailingStopMaxDeviation?: number;
-  trailingStopDeviationUnit?: 'PERCENT' | 'QUOTE_CURRENCY';
-}
-⋮----
-export interface FuturesBatchOrderEdit {
-  order: 'edit';
-  order_id: string;
-  cliOrdId?: string | null;
-  size?: number;
-  limitPrice?: number;
-  stopPrice?: number;
-  trailingStopMaxDeviation?: number;
-  trailingStopDeviationUnit?: 'PERCENT' | 'QUOTE_CURRENCY';
-  qtyMode?: 'ABSOLUTE' | 'RELATIVE';
-}
-⋮----
-export interface FuturesBatchOrderCancel {
-  order: 'cancel';
-  order_id?: string;
-  cliOrdId?: string;
-}
-⋮----
-export interface FuturesBatchOrderParams {
-  ProcessBefore?: string;
-  json: {
-    batchOrder: (
-      | FuturesBatchOrderSend
-      | FuturesBatchOrderEdit
-      | FuturesBatchOrderCancel
-    )[];
-  };
-}
-⋮----
-export interface FuturesCancelOrderParams {
-  processBefore?: string;
-  order_id?: string;
-  cliOrdId?: string;
-}
-⋮----
-export interface FuturesEditOrderParams {
-  processBefore?: string;
-  orderId?: string;
-  cliOrdId?: string;
-  size?: number;
-  limitPrice?: number;
-  stopPrice?: number;
-  trailingStopMaxDeviation?: number;
-  trailingStopDeviationUnit?: 'PERCENT' | 'QUOTE_CURRENCY';
-  qtyMode?: 'ABSOLUTE' | 'RELATIVE';
-}
-⋮----
-export interface FuturesSendOrderParams {
-  processBefore?: string;
-  orderType:
-    | 'lmt'
-    | 'post'
-    | 'ioc'
-    | 'mkt'
-    | 'stp'
-    | 'take_profit'
-    | 'trailing_stop'
-    | 'fok';
-  symbol: string;
-  side: 'buy' | 'sell';
-  size: number;
-  limitPrice?: number;
-  stopPrice?: number;
-  cliOrdId?: string;
-  triggerSignal?: 'mark' | 'index' | 'last';
-  reduceOnly?: boolean;
-  trailingStopMaxDeviation?: number;
-  trailingStopDeviationUnit?: 'PERCENT' | 'QUOTE_CURRENCY';
-  limitPriceOffsetValue?: number;
-  limitPriceOffsetUnit?: 'QUOTE_CURRENCY' | 'PERCENT';
-  broker?: string;
-}
-⋮----
-/**
- * Assignment Program
- */
-⋮----
-export interface FuturesAddAssignmentPreferenceParams {
-  contractType: string;
-  contract?: string;
-  maxSize?: number;
-  maxPosition?: number;
-  acceptLong: boolean;
-  acceptShort: boolean;
-  timeFrame: 'all' | 'weekdays' | 'weekends';
-  enabled: boolean;
-  minimumProfitabilityPerAssignmentLongBps?: number;
-  minimumProfitabilityPerAssignmentShortBps?: number;
-}
-⋮----
-/**
- * Trading Settings
- */
-⋮----
-export interface FuturesSetRfqAssignmentMaxLeverageParams {
-  maxLeverage: number;
-}
-⋮----
-export interface FuturesUpdateSelfTradeStrategyParams {
-  strategy:
-    | 'REJECT_TAKER'
-    | 'CANCEL_MAKER_SELF'
-    | 'CANCEL_MAKER_CHILD'
-    | 'CANCEL_MAKER_ANY';
-}
-⋮----
-/**
- * Transfers
- */
-⋮----
-export interface FuturesInitiateWalletTransferParams {
-  fromAccount: string;
-  toAccount: string;
-  unit: string;
-  amount: number;
-}
-⋮----
-export interface FuturesInitiateSubaccountTransferParams {
-  fromUser: string;
-  toUser: string;
-  fromAccount: string;
-  toAccount: string;
-  unit: string;
-  amount: string;
-}
-⋮----
-export interface FuturesSubmitToSpotParams {
-  currency: string;
-  amount: string;
-  sourceWallet?: string;
-}
-⋮----
-/**
- * Account History
- */
-⋮----
-export interface FuturesHistoryBaseParams {
-  since?: number; // Timestamp in milliseconds
-  before?: number; // Timestamp in milliseconds
-  sort?: 'asc' | 'desc';
-  continuation_token?: string; // base64
-  count?: number;
-  tradeable?: string;
-}
-⋮----
-since?: number; // Timestamp in milliseconds
-before?: number; // Timestamp in milliseconds
-⋮----
-continuation_token?: string; // base64
-⋮----
-export interface FuturesGetOrderEventsParams extends FuturesHistoryBaseParams {
-  opened?: boolean;
-  closed?: boolean;
-}
-⋮----
-export interface FuturesGetTriggerEventsParams
-  extends FuturesHistoryBaseParams {
-  opened?: boolean;
-  closed?: boolean;
-}
-⋮----
-export interface FuturesGetPositionEventsParams
-  extends FuturesHistoryBaseParams {
-  opened?: boolean;
-  closed?: boolean;
-  increased?: boolean;
-  decreased?: boolean;
-  reversed?: boolean;
-  no_change?: boolean;
-  trades?: boolean;
-  funding_realization?: boolean;
-  settlement?: boolean;
-}
-⋮----
-export interface FuturesGetAccountLogParams {
-  since?: number; // Timestamp in milliseconds
-  before?: number; // Timestamp in milliseconds
-  from?: number; // ID of the first entry (inclusive)
-  to?: number; // ID of the last entry (inclusive)
-  sort?: 'asc' | 'desc';
-  info?: string[]; // Types of entry to filter by
-  count?: number;
-  conversion_details?: boolean;
-}
-⋮----
-since?: number; // Timestamp in milliseconds
-before?: number; // Timestamp in milliseconds
-from?: number; // ID of the first entry (inclusive)
-to?: number; // ID of the last entry (inclusive)
-⋮----
-info?: string[]; // Types of entry to filter by
-⋮----
-/**
- * Market History
- */
-⋮----
-export interface FuturesMarketHistoryBaseParams {
-  tradeable: string; // Symbol of the contract
-  since?: number; // Timestamp in milliseconds
-  before?: number; // Timestamp in milliseconds
-  sort?: 'asc' | 'desc';
-  continuation_token?: string; // base64
-  count?: number;
-}
-⋮----
-tradeable: string; // Symbol of the contract
-since?: number; // Timestamp in milliseconds
-before?: number; // Timestamp in milliseconds
-⋮----
-continuation_token?: string; // base64
-⋮----
-/**
- * Charts - Candles
- */
-⋮----
-export interface FuturesGetCandlesParams {
-  tickType: 'spot' | 'mark' | 'trade';
-  symbol: string;
-  resolution: '1m' | '5m' | '15m' | '30m' | '1h' | '4h' | '12h' | '1d' | '1w';
-  from?: number; // From date in epoch seconds
-  to?: number; // To date in epoch seconds
-  count?: number; // Number of candles to return
-}
-⋮----
-from?: number; // From date in epoch seconds
-to?: number; // To date in epoch seconds
-count?: number; // Number of candles to return
-⋮----
-/**
- * Charts - Analytics
- */
-⋮----
-export interface FuturesGetAnalyticsParams {
-  symbol: string;
-  analyticsType: string;
-  since: number; // Epoch time in seconds (required)
-  interval: 60 | 300 | 900 | 1800 | 3600 | 14400 | 43200 | 86400 | 604800; // Resolution in seconds (required)
-  to?: number; // Epoch time in seconds, default now
-}
-⋮----
-since: number; // Epoch time in seconds (required)
-interval: 60 | 300 | 900 | 1800 | 3600 | 14400 | 43200 | 86400 | 604800; // Resolution in seconds (required)
-to?: number; // Epoch time in seconds, default now
 
 ================
 File: src/SpotClient.ts
@@ -12147,7 +12458,7 @@ import { DerivativesClient } from '@siebly/kraken-api';
 const client = new DerivativesClient({
   apiKey: process.env.API_FUTURES_KEY!,
   apiSecret: process.env.API_FUTURES_SECRET!,
-  // testnet: true, // optional: route Derivatives REST calls to Kraken's demo environment
+  // testnet: true throws. Kraken retired the Futures demo on 14 July 2026.
 });
 
 async function placeFuturesOrder() {
@@ -12570,7 +12881,7 @@ import { DerivativesClient } from '@siebly/kraken-api';
 const client = new DerivativesClient({
   apiKey: process.env.API_FUTURES_KEY!,
   apiSecret: process.env.API_FUTURES_SECRET!,
-  // testnet: true, // optional: route Derivatives REST API calls to Kraken's demo environment
+  // testnet: true throws. Kraken retired the Futures demo on 14 July 2026.
 });
 ```
 
@@ -13160,307 +13471,6 @@ If you want to learn more about integrating with Kraken's APIs & WebSockets:
 - Explore the wider SDK ecosystem: [Siebly.io](https://siebly.io)
 
 ================
-File: src/lib/BaseRestClient.ts
-================
-import axios, { AxiosRequestConfig, AxiosResponse, Method } from 'axios';
-// NOTE: https.Agent is Node.js-only and not available in browser environments
-// Browser builds (via webpack) exclude this module - see webpack.config.js fallback settings
-import https from 'https';
-⋮----
-import { neverGuard } from './misc-util.js';
-import {
-  APIIDMain,
-  APIIDMainKey,
-  getRestBaseUrl,
-  isEmptyObject,
-  REST_CLIENT_TYPE_ENUM,
-  RestClientOptions,
-  RestClientType,
-  serializeParams,
-} from './requestUtils.js';
-import {
-  checkWebCryptoAPISupported,
-  hashMessage,
-  SignAlgorithm,
-  SignEncodeMethod,
-  signMessage,
-  SignMessageOptions,
-} from './webCryptoAPI.js';
-⋮----
-interface SignedRequest<
-  T extends object | undefined = {},
-  TReqData = object,
-  TReqQuery = object,
-> {
-  originalParams: T;
-  paramsWithSign?: T & { sign: string };
-  // all request params intended for request body (e.g. POST)
-  requestData?: TReqData;
-  // all params intended for request query string (e.g. GET)
-  requestQuery?: TReqQuery;
-  serializedParams: string;
-  sign: string;
-  queryParamsWithSign: string;
-  timestamp: number;
-  recvWindow: number;
-  nonce?: string;
-}
-⋮----
-// all request params intended for request body (e.g. POST)
-⋮----
-// all params intended for request query string (e.g. GET)
-⋮----
-interface UnsignedRequest<T extends object | undefined = {}> {
-  originalParams: T;
-  paramsWithSign: T;
-  queryParamsWithSign: undefined;
-}
-⋮----
-type SignMethod = 'kraken';
-⋮----
-/**
- * Some requests require some params to be in the query string and some in the body. Some even support passing params via headers.
- * This type anticipates these are possible in any combination.
- *
- * The request builder will automatically handle where parameters should go.
- */
-type ParamsInQueryBodyOrHeader = {
-  query?: object;
-  body?: object;
-  headers?: object;
-};
-⋮----
-// request: {
-//   url: response.config.url,
-//   method: response.config.method,
-//   data: response.config.data,
-//   headers: response.config.headers,
-// },
-⋮----
-/**
- * Impure, mutates params to remove any values that have a key but are undefined.
- */
-function deleteUndefinedValues(params?: any): void
-⋮----
-export abstract class BaseRestClient
-⋮----
-// A unique incrementing nonce
-⋮----
-/** Defines the client type (affecting how requests & signatures behave) */
-abstract getClientType(): RestClientType;
-⋮----
-/**
-   * Create an instance of the REST client. Pass API credentials in the object in the first parameter.
-   * @param {RestClientOptions} [restClientOptions={}] options to configure REST API connectivity
-   * @param {AxiosRequestConfig} [networkOptions={}] HTTP networking options for axios
-   */
-constructor(
-    restClientOptions: RestClientOptions = {},
-    networkOptions: AxiosRequestConfig = {},
-)
-⋮----
-/** Throw errors if any request params are empty */
-⋮----
-/** in ms == 5 minutes by default */
-⋮----
-/** inject custom request options based on axios specs - see axios docs for more guidance on AxiosRequestConfig: https://github.com/axios/axios#request-config */
-⋮----
-// If enabled, configure a https agent with keepAlive enabled
-// NOTE: This is Node.js-only functionality. In browser environments, this code is skipped
-// as the 'https' module is excluded via webpack fallback configuration.
-// Browser connection pooling is handled automatically by the browser itself.
-⋮----
-// Extract existing https agent parameters, if provided, to prevent the keepAlive flag from overwriting an existing https agent completely
-⋮----
-// For more advanced configuration, raise an issue on GitHub or use the "networkOptions"
-// parameter to define a custom httpsAgent with the desired properties
-⋮----
-// Check Web Crypto API support when credentials are provided
-⋮----
-// Throw if one of the 3 values is missing, but at least one of them is set
-⋮----
-/**
-   * Generates a timestamp for signing API requests.
-   *
-   * This method can be overridden or customized using `customTimestampFn`
-   * to implement a custom timestamp synchronization mechanism.
-   * If no custom function is provided, it defaults to the current system time.
-   */
-private getSignTimestampMs(): number
-⋮----
-private getNextRequestNonce(): string
-⋮----
-private hasValidCredentials()
-⋮----
-setAccessToken(newAccessToken: string)
-⋮----
-hasAccessToken(): boolean
-⋮----
-protected get(endpoint: string, params?: object)
-⋮----
-// GET only supports params in the query string
-⋮----
-protected post(endpoint: string, params?: ParamsInQueryBodyOrHeader)
-⋮----
-protected getPrivate(endpoint: string, params?: object)
-⋮----
-// GET only supports params in the query string
-⋮----
-protected postPrivate(endpoint: string, params?: ParamsInQueryBodyOrHeader)
-⋮----
-protected deletePrivate(
-    endpoint: string,
-    params?: ParamsInQueryBodyOrHeader,
-)
-⋮----
-protected putPrivate(endpoint: string, params?: ParamsInQueryBodyOrHeader)
-⋮----
-// protected patchPrivate(endpoint: string, params?: any) {
-protected patchPrivate(endpoint: string, params?: ParamsInQueryBodyOrHeader)
-⋮----
-/**
-   * @private Make a HTTP request to a specific endpoint. Private endpoint API calls are automatically signed.
-   */
-private async _call(
-    method: Method,
-    endpoint: string,
-    params?: ParamsInQueryBodyOrHeader,
-    isPublicApi?: boolean,
-): Promise<any>
-⋮----
-// Sanity check to make sure it's only ever prefixed by one forward slash
-⋮----
-// Build a request and handle signature process
-⋮----
-// Dispatch request
-⋮----
-// Throw if API returns an error (e.g. insufficient balance)
-⋮----
-// const res = {
-//   result: 'error',
-//   error: 'authenticationError',
-//   serverTime: '2025-10-29T15:02:39.341Z',
-// };
-⋮----
-/**
-   * @private generic handler to parse request exceptions
-   */
-parseException(e: any, requestParams: any): unknown
-⋮----
-// Something happened in setting up the request that triggered an error
-⋮----
-// request made but no response received
-⋮----
-// The request was made and the server responded with a status code
-// that falls out of the range of 2xx
-⋮----
-// console.error('err: ', response?.data);
-⋮----
-// Prevent credentials from leaking into error messages
-⋮----
-private async signMessage(
-    paramsStr: string,
-    secret: string,
-    method: SignEncodeMethod,
-    algorithm: SignAlgorithm,
-    options?: SignMessageOptions,
-): Promise<string>
-⋮----
-/**
-   * @private sign request and set recv window
-   */
-private async signRequest<
-    T extends ParamsInQueryBodyOrHeader | undefined = {},
-  >(
-    data: T,
-    endpoint: string,
-    method: Method,
-    signMethod: SignMethod,
-): Promise<SignedRequest<T>>
-⋮----
-// handle JSON preprocessing for requests, including embedded stringify
-⋮----
-// Don't prefix with ? as part of sign. Prefix after sign
-⋮----
-// Array values are repeated into key value pairs
-// E.g. orderIds:[1,2] becomes orderIds=1&orderIds=2
-⋮----
-// Set default nonce, if not set yet
-⋮----
-// Allow nonce override in reuqest
-// Should never fallback to new nonce, since it's pre-set above with default val
-⋮----
-// for spot, serialise GET params, use JSON for POST
-⋮----
-// Only sign when no access token is provided
-⋮----
-// node:crypto equivalent
-// const sign = createHmac(
-//   'sha512',
-//   Buffer.from(this.apiSecret!, 'base64'),
-// )
-//   .update(signMessage, 'binary')
-//   .digest('base64');
-⋮----
-// Check if this is a base64 decoding error (invalid API credentials)
-⋮----
-// Re-throw other errors as-is
-⋮----
-// ONLY the query params. The rest goes in the body, if there is a body.
-⋮----
-const nonce = ''; //this.getNextRequestNonce();
-⋮----
-// Only sign when no access token is provided
-⋮----
-// node:crypto equivalent
-// const sign = createHmac(
-//   'sha512',
-//   Buffer.from(this.apiSecret!, 'base64'),
-// )
-//   .update(signMessage, 'binary')
-//   .digest('base64');
-⋮----
-// Submitted as query string in form body
-⋮----
-private async prepareSignParams<TParams extends object | undefined>(
-    method: Method,
-    endpoint: string,
-    signMethod: SignMethod,
-    params?: TParams,
-    isPublicApi?: true,
-  ): Promise<UnsignedRequest<TParams>>;
-⋮----
-private async prepareSignParams<TParams extends object | undefined>(
-    method: Method,
-    endpoint: string,
-    signMethod: SignMethod,
-    params?: TParams,
-    isPublicApi?: false | undefined,
-  ): Promise<SignedRequest<TParams>>;
-⋮----
-private async prepareSignParams<TParams extends object | undefined>(
-    method: Method,
-    endpoint: string,
-    signMethod: SignMethod,
-    params?: TParams,
-    isPublicApi?: boolean,
-)
-⋮----
-/** Returns an axios request object. Handles signing process automatically if this is a private API call */
-private async buildRequest(
-    method: Method,
-    endpoint: string,
-    url: string,
-    params?: ParamsInQueryBodyOrHeader,
-    isPublicApi?: boolean,
-): Promise<AxiosRequestConfig>
-⋮----
-// Support for Authorization header, if provided:
-// https://github.com/tiagosiebler/kucoin-api/issues/2
-// Use restClient.setAccessToken(newToken), if you need to store a new access token
-// Not supported for Kraken at this time
-
-================
 File: src/DerivativesClient.ts
 ================
 import { nanoid } from 'nanoid';
@@ -13898,6 +13908,8 @@ getPositionPercentile(): Promise<
    * Retrieve current portfolio margin calculation parameters.
    * Also includes user specific limits related to options trading.
    * Note: This is currently available exclusively in the Kraken Futures DEMO environment.
+   *
+   * @deprecated Kraken retired the Futures demo environment on 14 July 2026, so this endpoint is no longer available. See https://support.kraken.com/articles/360024809011-api-testing-environment-derivatives
    */
 getPortfolioMarginParameters(): Promise<
     DerivativesAPISuccessResponse<FuturesPortfolioMarginParameters>
@@ -13909,6 +13921,8 @@ getPortfolioMarginParameters(): Promise<
    *
    * For a given portfolio of balances and positions (futures and options), calculate the margin requirements, pnl and option greeks.
    * Note: This is currently available exclusively in the Kraken Futures DEMO environment.
+   *
+   * @deprecated Kraken retired the Futures demo environment on 14 July 2026, so this endpoint is no longer available. See https://support.kraken.com/articles/360024809011-api-testing-environment-derivatives
    */
 simulateMarginRequirements(params: {
     json: any; // Complex structure for portfolio simulation
@@ -14157,6 +14171,8 @@ submitTransferToSpot(
    *
    * Retrieve all currently open RFQs.
    * Note: This is currently available exclusively in the Kraken Futures DEMO environment.
+   *
+   * @deprecated Kraken retired the Futures demo environment on 14 July 2026, so this endpoint is no longer available. See https://support.kraken.com/articles/360024809011-api-testing-environment-derivatives
    */
 getOpenRFQs(): Promise<
     DerivativesAPISuccessResponse<{ rfqs: FuturesRfq[] }>
@@ -14168,6 +14184,8 @@ getOpenRFQs(): Promise<
    *
    * Retrieve a specific open RFQ by its unique identifier.
    * Note: This is currently available exclusively in the Kraken Futures DEMO environment.
+   *
+   * @deprecated Kraken retired the Futures demo environment on 14 July 2026, so this endpoint is no longer available. See https://support.kraken.com/articles/360024809011-api-testing-environment-derivatives
    */
 getOpenRFQ(params: {
     rfqUid: string;
@@ -14178,6 +14196,8 @@ getOpenRFQ(params: {
    *
    * Retrieve all open offers for the account on currently open RFQs.
    * Note: This is currently available exclusively in the Kraken Futures DEMO environment.
+   *
+   * @deprecated Kraken retired the Futures demo environment on 14 July 2026, so this endpoint is no longer available. See https://support.kraken.com/articles/360024809011-api-testing-environment-derivatives
    */
 getRFQOpenOffers(): Promise<
     DerivativesAPISuccessResponse<{ openOffers: FuturesOpenOffer[] }>
@@ -14189,6 +14209,8 @@ getRFQOpenOffers(): Promise<
    *
    * Place a new offer for the given amount in USD on the specified open RFQ, bid and ask are optional but at least one must be provided.
    * Note: This is currently available exclusively in the Kraken Futures DEMO environment.
+   *
+   * @deprecated Kraken retired the Futures demo environment on 14 July 2026, so this endpoint is no longer available. See https://support.kraken.com/articles/360024809011-api-testing-environment-derivatives
    */
 submitRFQNewOffer(params: {
     rfqUid: string;
@@ -14201,6 +14223,8 @@ submitRFQNewOffer(params: {
    *
    * Replace the current open offer on the specified open RFQ, bid and ask are optional but at least one must be provided.
    * Note: This is currently available exclusively in the Kraken Futures DEMO environment.
+   *
+   * @deprecated Kraken retired the Futures demo environment on 14 July 2026, so this endpoint is no longer available. See https://support.kraken.com/articles/360024809011-api-testing-environment-derivatives
    */
 updateRFQOpenOffer(params: {
     rfqUid: string;
@@ -14213,6 +14237,8 @@ updateRFQOpenOffer(params: {
    *
    * Cancel the current open offer on the specified open RFQ.
    * Note: This is currently available exclusively in the Kraken Futures DEMO environment.
+   *
+   * @deprecated Kraken retired the Futures demo environment on 14 July 2026, so this endpoint is no longer available. See https://support.kraken.com/articles/360024809011-api-testing-environment-derivatives
    */
 cancelRFQOffer(params: {
     rfqUid: string;
@@ -14754,6 +14780,8 @@ client
   });
 ```
 
+Kraken retired the Futures demo (testnet) environment on 14 July 2026. There is no replacement demo host, and Spot never had a testnet. Setting `testnet: true` on `DerivativesClient` or `WebsocketClient` throws. See the [announcement](https://support.kraken.com/articles/360024809011-api-testing-environment-derivatives).
+
 See [DerivativesClient](./src/DerivativesClient.ts) for further information.
 
 ## WebSockets
@@ -15092,7 +15120,7 @@ File: package.json
 ================
 {
   "name": "@siebly/kraken-api",
-  "version": "1.1.6",
+  "version": "1.1.7",
   "description": "Complete & robust Node.js SDK for Kraken's REST APIs and WebSockets, with TypeScript & strong end to end tests.",
   "scripts": {
     "clean": "rm -rf dist",

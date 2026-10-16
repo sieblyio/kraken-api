@@ -6,8 +6,6 @@ export const REST_CLIENT_TYPE_ENUM = {
   main: 'main',
   /** Futures */
   derivatives: 'derivatives',
-  /** Futures Demo */
-  derivativesDemo: 'derivativesDemo',
   /** Institutional */
   institutional: 'institutional',
   /** Partner */
@@ -22,11 +20,17 @@ export type RestClientType =
 const krakenURLMap = {
   [REST_CLIENT_TYPE_ENUM.main]: 'https://api.kraken.com',
   [REST_CLIENT_TYPE_ENUM.derivatives]: 'https://futures.kraken.com',
-  [REST_CLIENT_TYPE_ENUM.derivativesDemo]: 'https://demo-futures.kraken.com',
   [REST_CLIENT_TYPE_ENUM.institutional]: 'https://api.kraken.com',
   [REST_CLIENT_TYPE_ENUM.partner]: 'https://embed.kraken.com',
   [REST_CLIENT_TYPE_ENUM.affiliate]: 'https://api.kraken.com',
 } as const;
+
+/**
+ * Kraken decommissioned demo-futures.kraken.com at 13:00 UTC on 14 July 2026.
+ * No replacement demo host exists, and Spot never had a testnet.
+ */
+export const KRAKEN_FUTURES_TESTNET_RETIRED_ERROR =
+  'Kraken retired its Futures demo (testnet) environment on 14 July 2026, so testnet is no longer available. See https://support.kraken.com/articles/360024809011-api-testing-environment-derivatives';
 
 export interface RestClientOptions {
   /** Your API key */
@@ -36,13 +40,12 @@ export interface RestClientOptions {
   apiSecret?: string;
 
   /**
-   * Set to `true` to connect to testnet (Kraken's demo environment). The live environment is used by default.
+   * Kraken retired the Futures demo (testnet) environment on 14 July 2026.
+   * There is no replacement demo host, and Spot never had a testnet.
    *
-   * Note: as of November 2025, only the DerivativesClient supports testnet connections. Kraken refer to this as the "Demo" environment, but it is effectively a testnet.
-   * This is a place to test your API integration. It is not a good place to test strategy performance, as the liquidity and orderbook dynamics are very different to the live environment.
+   * Setting this to `true` throws. The live environment is used when it is omitted or `false`.
    *
-   * Refer to the following for more information:
-   * https://github.com/tiagosiebler/awesome-crypto-examples/wiki/CEX-Testnets
+   * See https://support.kraken.com/articles/360024809011-api-testing-environment-derivatives
    */
   testnet?: boolean;
 
@@ -146,18 +149,12 @@ export function getRestBaseUrl(
   restClientOptions: RestClientOptions,
   restClientType: RestClientType,
 ): string {
-  if (restClientOptions.baseUrl) {
-    return restClientOptions.baseUrl;
+  if (restClientOptions.testnet) {
+    throw new Error(KRAKEN_FUTURES_TESTNET_RETIRED_ERROR);
   }
 
-  if (restClientOptions.testnet) {
-    if (restClientType === REST_CLIENT_TYPE_ENUM.derivatives) {
-      return krakenURLMap[REST_CLIENT_TYPE_ENUM.derivativesDemo];
-    }
-
-    throw new Error(
-      `Testnet is not supported for this environment: ${restClientType}. Refer to Kraken's API documentation for more information. If you believe this is incorrect, please open an issue on GitHub.`,
-    );
+  if (restClientOptions.baseUrl) {
+    return restClientOptions.baseUrl;
   }
 
   return krakenURLMap[restClientType];

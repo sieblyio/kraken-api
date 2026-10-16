@@ -151,48 +151,48 @@ This table includes all endpoints from the official Exchange API docs and corres
 | [getAccounts()](https://github.com/sieblyio/kraken-api/blob/main/src/DerivativesClient.ts#L442) | :closed_lock_with_key:  | GET | `derivatives/api/v3/accounts` |
 | [getOpenPositions()](https://github.com/sieblyio/kraken-api/blob/main/src/DerivativesClient.ts#L454) | :closed_lock_with_key:  | GET | `derivatives/api/v3/openpositions` |
 | [getPositionPercentile()](https://github.com/sieblyio/kraken-api/blob/main/src/DerivativesClient.ts#L465) | :closed_lock_with_key:  | GET | `derivatives/api/v3/unwindqueue` |
-| [getPortfolioMarginParameters()](https://github.com/sieblyio/kraken-api/blob/main/src/DerivativesClient.ts#L478) | :closed_lock_with_key:  | GET | `derivatives/api/v3/portfolio-margining/parameters` |
-| [simulateMarginRequirements()](https://github.com/sieblyio/kraken-api/blob/main/src/DerivativesClient.ts#L490) | :closed_lock_with_key:  | POST | `derivatives/api/v3/portfolio-margining/simulate` |
-| [getAssignmentPrograms()](https://github.com/sieblyio/kraken-api/blob/main/src/DerivativesClient.ts#L509) | :closed_lock_with_key:  | GET | `derivatives/api/v3/assignmentprogram/current` |
-| [addAssignmentPreference()](https://github.com/sieblyio/kraken-api/blob/main/src/DerivativesClient.ts#L520) | :closed_lock_with_key:  | POST | `derivatives/api/v3/assignmentprogram/add` |
-| [deleteAssignmentPreference()](https://github.com/sieblyio/kraken-api/blob/main/src/DerivativesClient.ts#L533) | :closed_lock_with_key:  | POST | `derivatives/api/v3/assignmentprogram/delete` |
-| [getAssignmentPreferencesHistory()](https://github.com/sieblyio/kraken-api/blob/main/src/DerivativesClient.ts#L546) | :closed_lock_with_key:  | GET | `derivatives/api/v3/assignmentprogram/history` |
-| [getFeeSchedules()](https://github.com/sieblyio/kraken-api/blob/main/src/DerivativesClient.ts#L567) |  | GET | `derivatives/api/v3/feeschedules` |
-| [getFeeScheduleVolumes()](https://github.com/sieblyio/kraken-api/blob/main/src/DerivativesClient.ts#L580) | :closed_lock_with_key:  | GET | `derivatives/api/v3/feeschedules/volumes` |
-| [getNotifications()](https://github.com/sieblyio/kraken-api/blob/main/src/DerivativesClient.ts#L599) | :closed_lock_with_key:  | GET | `derivatives/api/v3/notifications` |
-| [getFills()](https://github.com/sieblyio/kraken-api/blob/main/src/DerivativesClient.ts#L616) | :closed_lock_with_key:  | GET | `derivatives/api/v3/fills` |
-| [getHistoricalFundingRates()](https://github.com/sieblyio/kraken-api/blob/main/src/DerivativesClient.ts#L633) |  | GET | `derivatives/api/v3/historical-funding-rates` |
-| [getSelfTradeStrategy()](https://github.com/sieblyio/kraken-api/blob/main/src/DerivativesClient.ts#L652) | :closed_lock_with_key:  | GET | `derivatives/api/v3/self-trade-strategy` |
-| [updateSelfTradeStrategy()](https://github.com/sieblyio/kraken-api/blob/main/src/DerivativesClient.ts#L665) | :closed_lock_with_key:  | PUT | `derivatives/api/v3/self-trade-strategy` |
-| [getSubaccountTradingStatus()](https://github.com/sieblyio/kraken-api/blob/main/src/DerivativesClient.ts#L688) | :closed_lock_with_key:  | GET | `derivatives/api/v3/subaccount/{subaccountUid}/trading-enabled` |
-| [updateSubaccountTradingStatus()](https://github.com/sieblyio/kraken-api/blob/main/src/DerivativesClient.ts#L701) | :closed_lock_with_key:  | PUT | `derivatives/api/v3/subaccount/{subaccountUid}/trading-enabled` |
-| [getSubaccounts()](https://github.com/sieblyio/kraken-api/blob/main/src/DerivativesClient.ts#L717) | :closed_lock_with_key:  | GET | `derivatives/api/v3/subaccounts` |
-| [submitWalletTransfer()](https://github.com/sieblyio/kraken-api/blob/main/src/DerivativesClient.ts#L734) | :closed_lock_with_key:  | POST | `derivatives/api/v3/transfer` |
-| [submitSubaccountTransfer()](https://github.com/sieblyio/kraken-api/blob/main/src/DerivativesClient.ts#L747) | :closed_lock_with_key:  | POST | `derivatives/api/v3/transfer/subaccount` |
-| [submitTransferToSpot()](https://github.com/sieblyio/kraken-api/blob/main/src/DerivativesClient.ts#L761) | :closed_lock_with_key:  | POST | `derivatives/api/v3/withdrawal` |
-| [getOpenRFQs()](https://github.com/sieblyio/kraken-api/blob/main/src/DerivativesClient.ts#L781) |  | GET | `derivatives/api/v3/rfqs` |
-| [getOpenRFQ()](https://github.com/sieblyio/kraken-api/blob/main/src/DerivativesClient.ts#L793) |  | GET | `derivatives/api/v3/rfqs/{rfqUid}` |
-| [getRFQOpenOffers()](https://github.com/sieblyio/kraken-api/blob/main/src/DerivativesClient.ts#L805) | :closed_lock_with_key:  | GET | `derivatives/api/v3/rfqs/open-offers` |
-| [submitRFQNewOffer()](https://github.com/sieblyio/kraken-api/blob/main/src/DerivativesClient.ts#L817) | :closed_lock_with_key:  | POST | `derivatives/api/v3/rfqs/{rfqUid}/place-offer` |
-| [updateRFQOpenOffer()](https://github.com/sieblyio/kraken-api/blob/main/src/DerivativesClient.ts#L834) | :closed_lock_with_key:  | PUT | `derivatives/api/v3/rfqs/{rfqUid}/replace-offer` |
-| [cancelRFQOffer()](https://github.com/sieblyio/kraken-api/blob/main/src/DerivativesClient.ts#L851) | :closed_lock_with_key:  | DELETE | `derivatives/api/v3/rfqs/{rfqUid}/cancel-offer` |
-| [getExecutionEvents()](https://github.com/sieblyio/kraken-api/blob/main/src/DerivativesClient.ts#L870) | :closed_lock_with_key:  | GET | `api/history/v3/executions` |
-| [getOrderEvents()](https://github.com/sieblyio/kraken-api/blob/main/src/DerivativesClient.ts#L885) | :closed_lock_with_key:  | GET | `api/history/v3/orders` |
-| [getTriggerEvents()](https://github.com/sieblyio/kraken-api/blob/main/src/DerivativesClient.ts#L900) | :closed_lock_with_key:  | GET | `api/history/v3/triggers` |
-| [getPositionEvents()](https://github.com/sieblyio/kraken-api/blob/main/src/DerivativesClient.ts#L915) | :closed_lock_with_key:  | GET | `api/history/v3/positions` |
-| [getAccountLog()](https://github.com/sieblyio/kraken-api/blob/main/src/DerivativesClient.ts#L931) | :closed_lock_with_key:  | GET | `api/history/v3/account-log` |
-| [getAccountLogCsv()](https://github.com/sieblyio/kraken-api/blob/main/src/DerivativesClient.ts#L942) | :closed_lock_with_key:  | GET | `api/history/v3/accountlogcsv` |
-| [getPublicExecutionEvents()](https://github.com/sieblyio/kraken-api/blob/main/src/DerivativesClient.ts#L957) |  | GET | `api/history/v3/market/{tradeable}/executions` |
-| [getPublicOrderEvents()](https://github.com/sieblyio/kraken-api/blob/main/src/DerivativesClient.ts#L971) |  | GET | `api/history/v3/market/{tradeable}/orders` |
-| [getPublicMarkPriceEvents()](https://github.com/sieblyio/kraken-api/blob/main/src/DerivativesClient.ts#L985) |  | GET | `api/history/v3/market/{tradeable}/price` |
-| [getTickTypes()](https://github.com/sieblyio/kraken-api/blob/main/src/DerivativesClient.ts#L1005) |  | GET | `api/charts/v1/` |
-| [getMarketsForTickType()](https://github.com/sieblyio/kraken-api/blob/main/src/DerivativesClient.ts#L1015) |  | GET | `api/charts/v1/{tickType}` |
-| [getResolutions()](https://github.com/sieblyio/kraken-api/blob/main/src/DerivativesClient.ts#L1028) |  | GET | `api/charts/v1/{tickType}/{symbol}` |
-| [getCandles()](https://github.com/sieblyio/kraken-api/blob/main/src/DerivativesClient.ts#L1043) |  | GET | `api/charts/v1/{tickType}/{symbol}/{resolution}` |
-| [getLiquidityPoolStatistic()](https://github.com/sieblyio/kraken-api/blob/main/src/DerivativesClient.ts#L1061) |  | GET | `api/charts/v1/analytics/liquidity-pool` |
-| [getMarketAnalytics()](https://github.com/sieblyio/kraken-api/blob/main/src/DerivativesClient.ts#L1072) |  | GET | `api/charts/v1/analytics/{symbol}/{analyticsType}` |
-| [checkApiKeyV3()](https://github.com/sieblyio/kraken-api/blob/main/src/DerivativesClient.ts#L1092) | :closed_lock_with_key:  | GET | `api/auth/v1/api-keys/v3/check` |
-| [getAccountMarketShare()](https://github.com/sieblyio/kraken-api/blob/main/src/DerivativesClient.ts#L1108) | :closed_lock_with_key:  | GET | `api/stats/v1/rebates/self-market-share` |
+| [getPortfolioMarginParameters()](https://github.com/sieblyio/kraken-api/blob/main/src/DerivativesClient.ts#L480) | :closed_lock_with_key:  | GET | `derivatives/api/v3/portfolio-margining/parameters` |
+| [simulateMarginRequirements()](https://github.com/sieblyio/kraken-api/blob/main/src/DerivativesClient.ts#L494) | :closed_lock_with_key:  | POST | `derivatives/api/v3/portfolio-margining/simulate` |
+| [getAssignmentPrograms()](https://github.com/sieblyio/kraken-api/blob/main/src/DerivativesClient.ts#L513) | :closed_lock_with_key:  | GET | `derivatives/api/v3/assignmentprogram/current` |
+| [addAssignmentPreference()](https://github.com/sieblyio/kraken-api/blob/main/src/DerivativesClient.ts#L524) | :closed_lock_with_key:  | POST | `derivatives/api/v3/assignmentprogram/add` |
+| [deleteAssignmentPreference()](https://github.com/sieblyio/kraken-api/blob/main/src/DerivativesClient.ts#L537) | :closed_lock_with_key:  | POST | `derivatives/api/v3/assignmentprogram/delete` |
+| [getAssignmentPreferencesHistory()](https://github.com/sieblyio/kraken-api/blob/main/src/DerivativesClient.ts#L550) | :closed_lock_with_key:  | GET | `derivatives/api/v3/assignmentprogram/history` |
+| [getFeeSchedules()](https://github.com/sieblyio/kraken-api/blob/main/src/DerivativesClient.ts#L571) |  | GET | `derivatives/api/v3/feeschedules` |
+| [getFeeScheduleVolumes()](https://github.com/sieblyio/kraken-api/blob/main/src/DerivativesClient.ts#L584) | :closed_lock_with_key:  | GET | `derivatives/api/v3/feeschedules/volumes` |
+| [getNotifications()](https://github.com/sieblyio/kraken-api/blob/main/src/DerivativesClient.ts#L603) | :closed_lock_with_key:  | GET | `derivatives/api/v3/notifications` |
+| [getFills()](https://github.com/sieblyio/kraken-api/blob/main/src/DerivativesClient.ts#L620) | :closed_lock_with_key:  | GET | `derivatives/api/v3/fills` |
+| [getHistoricalFundingRates()](https://github.com/sieblyio/kraken-api/blob/main/src/DerivativesClient.ts#L637) |  | GET | `derivatives/api/v3/historical-funding-rates` |
+| [getSelfTradeStrategy()](https://github.com/sieblyio/kraken-api/blob/main/src/DerivativesClient.ts#L656) | :closed_lock_with_key:  | GET | `derivatives/api/v3/self-trade-strategy` |
+| [updateSelfTradeStrategy()](https://github.com/sieblyio/kraken-api/blob/main/src/DerivativesClient.ts#L669) | :closed_lock_with_key:  | PUT | `derivatives/api/v3/self-trade-strategy` |
+| [getSubaccountTradingStatus()](https://github.com/sieblyio/kraken-api/blob/main/src/DerivativesClient.ts#L692) | :closed_lock_with_key:  | GET | `derivatives/api/v3/subaccount/{subaccountUid}/trading-enabled` |
+| [updateSubaccountTradingStatus()](https://github.com/sieblyio/kraken-api/blob/main/src/DerivativesClient.ts#L705) | :closed_lock_with_key:  | PUT | `derivatives/api/v3/subaccount/{subaccountUid}/trading-enabled` |
+| [getSubaccounts()](https://github.com/sieblyio/kraken-api/blob/main/src/DerivativesClient.ts#L721) | :closed_lock_with_key:  | GET | `derivatives/api/v3/subaccounts` |
+| [submitWalletTransfer()](https://github.com/sieblyio/kraken-api/blob/main/src/DerivativesClient.ts#L738) | :closed_lock_with_key:  | POST | `derivatives/api/v3/transfer` |
+| [submitSubaccountTransfer()](https://github.com/sieblyio/kraken-api/blob/main/src/DerivativesClient.ts#L751) | :closed_lock_with_key:  | POST | `derivatives/api/v3/transfer/subaccount` |
+| [submitTransferToSpot()](https://github.com/sieblyio/kraken-api/blob/main/src/DerivativesClient.ts#L765) | :closed_lock_with_key:  | POST | `derivatives/api/v3/withdrawal` |
+| [getOpenRFQs()](https://github.com/sieblyio/kraken-api/blob/main/src/DerivativesClient.ts#L787) |  | GET | `derivatives/api/v3/rfqs` |
+| [getOpenRFQ()](https://github.com/sieblyio/kraken-api/blob/main/src/DerivativesClient.ts#L801) |  | GET | `derivatives/api/v3/rfqs/{rfqUid}` |
+| [getRFQOpenOffers()](https://github.com/sieblyio/kraken-api/blob/main/src/DerivativesClient.ts#L815) | :closed_lock_with_key:  | GET | `derivatives/api/v3/rfqs/open-offers` |
+| [submitRFQNewOffer()](https://github.com/sieblyio/kraken-api/blob/main/src/DerivativesClient.ts#L829) | :closed_lock_with_key:  | POST | `derivatives/api/v3/rfqs/{rfqUid}/place-offer` |
+| [updateRFQOpenOffer()](https://github.com/sieblyio/kraken-api/blob/main/src/DerivativesClient.ts#L848) | :closed_lock_with_key:  | PUT | `derivatives/api/v3/rfqs/{rfqUid}/replace-offer` |
+| [cancelRFQOffer()](https://github.com/sieblyio/kraken-api/blob/main/src/DerivativesClient.ts#L867) | :closed_lock_with_key:  | DELETE | `derivatives/api/v3/rfqs/{rfqUid}/cancel-offer` |
+| [getExecutionEvents()](https://github.com/sieblyio/kraken-api/blob/main/src/DerivativesClient.ts#L886) | :closed_lock_with_key:  | GET | `api/history/v3/executions` |
+| [getOrderEvents()](https://github.com/sieblyio/kraken-api/blob/main/src/DerivativesClient.ts#L901) | :closed_lock_with_key:  | GET | `api/history/v3/orders` |
+| [getTriggerEvents()](https://github.com/sieblyio/kraken-api/blob/main/src/DerivativesClient.ts#L916) | :closed_lock_with_key:  | GET | `api/history/v3/triggers` |
+| [getPositionEvents()](https://github.com/sieblyio/kraken-api/blob/main/src/DerivativesClient.ts#L931) | :closed_lock_with_key:  | GET | `api/history/v3/positions` |
+| [getAccountLog()](https://github.com/sieblyio/kraken-api/blob/main/src/DerivativesClient.ts#L947) | :closed_lock_with_key:  | GET | `api/history/v3/account-log` |
+| [getAccountLogCsv()](https://github.com/sieblyio/kraken-api/blob/main/src/DerivativesClient.ts#L958) | :closed_lock_with_key:  | GET | `api/history/v3/accountlogcsv` |
+| [getPublicExecutionEvents()](https://github.com/sieblyio/kraken-api/blob/main/src/DerivativesClient.ts#L973) |  | GET | `api/history/v3/market/{tradeable}/executions` |
+| [getPublicOrderEvents()](https://github.com/sieblyio/kraken-api/blob/main/src/DerivativesClient.ts#L987) |  | GET | `api/history/v3/market/{tradeable}/orders` |
+| [getPublicMarkPriceEvents()](https://github.com/sieblyio/kraken-api/blob/main/src/DerivativesClient.ts#L1001) |  | GET | `api/history/v3/market/{tradeable}/price` |
+| [getTickTypes()](https://github.com/sieblyio/kraken-api/blob/main/src/DerivativesClient.ts#L1021) |  | GET | `api/charts/v1/` |
+| [getMarketsForTickType()](https://github.com/sieblyio/kraken-api/blob/main/src/DerivativesClient.ts#L1031) |  | GET | `api/charts/v1/{tickType}` |
+| [getResolutions()](https://github.com/sieblyio/kraken-api/blob/main/src/DerivativesClient.ts#L1044) |  | GET | `api/charts/v1/{tickType}/{symbol}` |
+| [getCandles()](https://github.com/sieblyio/kraken-api/blob/main/src/DerivativesClient.ts#L1059) |  | GET | `api/charts/v1/{tickType}/{symbol}/{resolution}` |
+| [getLiquidityPoolStatistic()](https://github.com/sieblyio/kraken-api/blob/main/src/DerivativesClient.ts#L1077) |  | GET | `api/charts/v1/analytics/liquidity-pool` |
+| [getMarketAnalytics()](https://github.com/sieblyio/kraken-api/blob/main/src/DerivativesClient.ts#L1088) |  | GET | `api/charts/v1/analytics/{symbol}/{analyticsType}` |
+| [checkApiKeyV3()](https://github.com/sieblyio/kraken-api/blob/main/src/DerivativesClient.ts#L1108) | :closed_lock_with_key:  | GET | `api/auth/v1/api-keys/v3/check` |
+| [getAccountMarketShare()](https://github.com/sieblyio/kraken-api/blob/main/src/DerivativesClient.ts#L1124) | :closed_lock_with_key:  | GET | `api/stats/v1/rebates/self-market-share` |
 
 # InstitutionalClient.ts
 

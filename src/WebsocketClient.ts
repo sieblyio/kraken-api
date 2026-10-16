@@ -4,7 +4,10 @@ import {
   MidflightWsRequestEvent,
 } from './lib/BaseWSClient.js';
 import { neverGuard } from './lib/misc-util.js';
-import { RestClientOptions } from './lib/requestUtils.js';
+import {
+  KRAKEN_FUTURES_TESTNET_RETIRED_ERROR,
+  RestClientOptions,
+} from './lib/requestUtils.js';
 import {
   hashMessage,
   SignAlgorithm,
@@ -309,6 +312,10 @@ export class WebsocketClient extends BaseWebsocketClient<WsKey, any> {
   }
 
   protected async getWsUrl(wsKey: WsKey): Promise<string> {
+    if (this.options.testnet) {
+      throw new Error(KRAKEN_FUTURES_TESTNET_RETIRED_ERROR);
+    }
+
     if (this.options.wsUrl) {
       return this.options.wsUrl;
     }
@@ -344,9 +351,6 @@ export class WebsocketClient extends BaseWebsocketClient<WsKey, any> {
       // Uses the same URL, but we maintain separate connections for easier management
       case WS_KEY_MAP.derivativesPublicV1:
       case WS_KEY_MAP.derivativesPrivateV1: {
-        if (this.options.testnet) {
-          return 'wss://demo-futures.kraken.com/ws/v1';
-        }
         return 'wss://futures.kraken.com/ws/v1';
       }
       default: {

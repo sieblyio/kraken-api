@@ -324,6 +324,8 @@ client
   });
 ```
 
+Kraken retired the Futures demo (testnet) environment on 14 July 2026. There is no replacement demo host, and Spot never had a testnet. Setting `testnet: true` on `DerivativesClient` or `WebsocketClient` throws. See the [announcement](https://support.kraken.com/articles/360024809011-api-testing-environment-derivatives).
+
 See [DerivativesClient](./src/DerivativesClient.ts) for further information.
 
 ## WebSockets

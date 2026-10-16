@@ -7,11 +7,11 @@ describe('REST PRIVATE FUTURES READ', () => {
     secret: process.env.API_FUTURES_SECRET,
   };
 
+  // Live only. Kraken retired the Futures demo on 14 July 2026, so testnet is not set.
   const rest = new DerivativesClient(
     {
       apiKey: account.key,
       apiSecret: account.secret,
-      testnet: process.env.API_FUTURES_TESTNET === 'true',
     },
     getTestProxy(),
   );
