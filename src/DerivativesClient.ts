@@ -212,6 +212,8 @@ export class DerivativesClient extends BaseRestClient {
    *
    * This endpoint allows sending limit or stop order(s) and/or cancelling open order(s) and/or editing open order(s) for a currently listed Futures contract in batch.
    * When editing an order, if the trailingStopMaxDeviation and trailingStopDeviationUnit parameters are sent unchanged, the system will recalculate a new stop price upon successful order modification.
+   *
+   * On an edit instruction, `size` follows Kraken `qtyMode` (default `RELATIVE`): it sets the open (remaining) size, not the total quantity including fills. Pass `qtyMode: 'ABSOLUTE'` to set the total size including past fills.
    */
   batchOrderManagement(
     params: FuturesBatchOrderParams,
@@ -278,6 +280,10 @@ export class DerivativesClient extends BaseRestClient {
    *
    * This endpoint allows editing an existing order for a currently listed Futures contract.
    * When editing an order, if the trailingStopMaxDeviation and trailingStopDeviationUnit parameters are sent unchanged, the system will recalculate a new stop price upon successful order modification.
+   *
+   * `size` follows Kraken `qtyMode`, which defaults to `RELATIVE` when omitted. That sets the open (remaining / unfilled) size, not the total quantity including fills. Pass `qtyMode: 'ABSOLUTE'` to set the total order size, including past fills, to `size`.
+   *
+   * @see https://docs.kraken.com/api-reference/order-management/edit-order
    */
   editOrder(
     params: FuturesEditOrderParams,
