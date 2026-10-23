@@ -6,7 +6,7 @@
 [![npm downloads](https://img.shields.io/npm/dt/@siebly/kraken-api)][1]
 [![last commit](https://img.shields.io/github/last-commit/sieblyio/kraken-api)][1]
 [![Telegram](https://img.shields.io/badge/chat-on%20telegram-blue.svg)](https://t.me/nodetraders)
-[![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/sieblyio/kraken-api)
+[![Tutorial](https://img.shields.io/badge/Tutorial-siebly.io-blue)](https://siebly.io/sdk/kraken/javascript/tutorial)
 
 <p align="center">
   <a href="https://www.npmjs.com/package/@siebly/kraken-api">
