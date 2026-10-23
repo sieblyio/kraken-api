@@ -28,39 +28,72 @@ client.on('message', (event: WSUnifiedPublicMessageEvent) => {
 
 // Discover symbols for each asset class through the instrument channel.
 // Use Kraken's returned symbols unchanged, e.g. PF_XBTUSD for derivatives.
-const subscriptions: WSUnifiedPublicTopicRequest[] = [
-  { topic: 'instrument', payload: { asset_class: 'derivatives' } },
-  {
-    topic: 'ticker',
-    payload: { asset_class: 'derivatives', symbol: ['PF_XBTUSD'] },
-  },
-  {
-    topic: 'book',
-    payload: { asset_class: 'derivatives', symbol: ['PF_XBTUSD'], depth: 10 },
-  },
-  {
-    topic: 'ohlc',
-    payload: {
-      asset_class: 'derivatives',
-      symbol: ['PF_XBTUSD'],
-      interval: 1,
-      // Omit tick_type to use the server's default. Some documented types
-      // are not yet available on the unified endpoint.
-    },
-  },
-  {
-    topic: 'trade',
-    payload: {
-      asset_class: 'derivatives',
-      symbol: ['PF_XBTUSD'],
-      snapshot: true,
-    },
-  },
-];
+// const subscriptions: WSUnifiedPublicTopicRequest[] = [
+//   { topic: 'instrument', payload: { asset_class: 'derivatives' } },
+//   {
+//     topic: 'ticker',
+//     payload: { asset_class: 'derivatives', symbol: ['PF_XBTUSD'] },
+//   },
+//   {
+//     topic: 'book',
+//     payload: { asset_class: 'derivatives', symbol: ['PF_XBTUSD'], depth: 10 },
+//   },
+//   {
+//     topic: 'ohlc',
+//     payload: {
+//       asset_class: 'derivatives',
+//       symbol: ['PF_XBTUSD'],
+//       interval: 1,
+//       // Omit tick_type to use the server's default. Some documented types
+//       // are not yet available on the unified endpoint.
+//     },
+//   },
+//   {
+//     topic: 'trade',
+//     payload: {
+//       asset_class: 'derivatives',
+//       symbol: ['PF_XBTUSD'],
+//       snapshot: true,
+//     },
+//   },
+// ];
 
 // Spot uses asset_class: 'spot' with its own instrument symbols.
 // Availability depends on Kraken's unified endpoint rollout.
-client.subscribe(subscriptions, wsKey);
+// client.subscribe(subscriptions, wsKey);
+
+client.subscribe(
+  [
+    { topic: 'instrument', payload: { asset_class: 'derivatives' } },
+    {
+      topic: 'ticker',
+      payload: { asset_class: 'derivatives', symbol: ['PF_XBTUSD'] },
+    },
+    {
+      topic: 'book',
+      payload: { asset_class: 'derivatives', symbol: ['PF_XBTUSD'], depth: 10 },
+    },
+    {
+      topic: 'ohlc',
+      payload: {
+        asset_class: 'derivatives',
+        symbol: ['PF_XBTUSD'],
+        interval: 1,
+        // Omit tick_type to use the server's default. Some documented types
+        // are not yet available on the unified endpoint.
+      },
+    },
+    {
+      topic: 'trade',
+      payload: {
+        asset_class: 'derivatives',
+        symbol: ['PF_XBTUSD'],
+        snapshot: true,
+      },
+    },
+  ],
+  wsKey,
+);
 
 // Reuse the same requests, including optional parameters, to remove cached subscriptions:
 // client.unsubscribe(subscriptions, wsKey);
