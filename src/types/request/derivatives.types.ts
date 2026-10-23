@@ -30,11 +30,23 @@ export interface FuturesBatchOrderEdit {
   order: 'edit';
   order_id: string;
   cliOrdId?: string | null;
+  /**
+   * New size for this batch edit.
+   *
+   * Kraken reads this with `qtyMode`, which defaults to `RELATIVE` when omitted.
+   * `RELATIVE` sets the current open (remaining / unfilled) size to `size`.
+   * Past fills stay on the order and are not part of `size`.
+   * `ABSOLUTE` sets the total order size, including past fills, to `size`.
+   */
   size?: number;
   limitPrice?: number;
   stopPrice?: number;
   trailingStopMaxDeviation?: number;
   trailingStopDeviationUnit?: 'PERCENT' | 'QUOTE_CURRENCY';
+  /**
+   * How `size` is interpreted. Defaults to `RELATIVE` (open / remaining size).
+   * `ABSOLUTE` sets the total order size, including past fills.
+   */
   qtyMode?: 'ABSOLUTE' | 'RELATIVE';
 }
 
@@ -65,11 +77,28 @@ export interface FuturesEditOrderParams {
   processBefore?: string;
   orderId?: string;
   cliOrdId?: string;
+  /**
+   * New size for the order.
+   *
+   * Kraken reads this with `qtyMode`, which defaults to `RELATIVE` when omitted.
+   * `RELATIVE` sets the current open (remaining / unfilled) size to `size`.
+   * Past fills stay on the order and are not part of `size`.
+   * `ABSOLUTE` sets the total order size, including past fills, to `size`.
+   *
+   * A partially filled order edited with the default mode keeps its fills and
+   * rests `size` more. Pass `qtyMode: 'ABSOLUTE'` when `size` is the new total.
+   *
+   * @see https://docs.kraken.com/api-reference/order-management/edit-order
+   */
   size?: number;
   limitPrice?: number;
   stopPrice?: number;
   trailingStopMaxDeviation?: number;
   trailingStopDeviationUnit?: 'PERCENT' | 'QUOTE_CURRENCY';
+  /**
+   * How `size` is interpreted. Defaults to `RELATIVE` (open / remaining size).
+   * `ABSOLUTE` sets the total order size, including past fills.
+   */
   qtyMode?: 'ABSOLUTE' | 'RELATIVE';
 }
 

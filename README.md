@@ -55,6 +55,7 @@ Complete & robust JavaScript & Node.js SDK for the Kraken REST APIs and WebSocke
     - [Spot Trading](#spot-trading)
     - [Derivatives (Futures) Trading](#derivatives-futures-trading)
   - [WebSockets](#websockets)
+    - [Why not raw ws?](#why-not-raw-ws)
     - [Public WebSocket Streams](#public-websocket-streams)
     - [Unified Public WebSocket Streams](#unified-public-websocket-streams)
     - [Private WebSocket Streams](#private-websocket-streams)
@@ -68,7 +69,13 @@ Complete & robust JavaScript & Node.js SDK for the Kraken REST APIs and WebSocke
 
 ## Installation
 
-`npm install --save @siebly/kraken-api`
+Install the scoped package **`@siebly/kraken-api`**:
+
+```bash
+npm install --save @siebly/kraken-api
+```
+
+The unscoped npm package `kraken-api` is a different package. It is not this SDK.
 
 ## Examples
 
@@ -347,6 +354,23 @@ Key WebSocket features:
 - Automatic resubscription after reconnection
 - Support for both Spot and Futures markets
 - Support for both public and private WebSocket streams
+
+### Why not raw ws?
+
+A raw `ws` socket leaves reconnect, liveness, resubscribe, and auth to you. `WebsocketClient` does that work:
+
+- Reconnects a dropped socket, then resubscribes to the topics already requested.
+- Heartbeats (native ping/pong, plus Kraken `heartbeat` / `pong` frames) so a silent socket is treated as dead and reconnected.
+- Private auth: Spot WebSocket tokens are fetched from REST, cached, and refreshed before they expire. Futures private streams use the signed challenge flow, and a reconnect re-authenticates.
+
+Kraken book payloads include a checksum. This SDK does not validate it. Check the checksum yourself on `book` messages if you need that guarantee.
+
+```javascript
+import { WebsocketClient } from '@siebly/kraken-api';
+const ws = new WebsocketClient();
+ws.on('message', (data) => console.log(data));
+ws.subscribe({ topic: 'ticker', payload: { symbol: ['BTC/USD'] } }, 'spotPublicV2');
+```
 
 ### Public WebSocket Streams
 

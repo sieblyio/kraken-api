@@ -2305,6 +2305,328 @@ File: tsconfig.linting.json
 }
 
 ================
+File: examples/Derivatives/Private/account.ts
+================
+/* eslint-disable @typescript-eslint/no-unused-vars */
+import { DerivativesClient } from '../../../src/index.js';
+⋮----
+// This example shows how to call Kraken API endpoint with either node.js,
+// javascript (js) or typescript (ts) with the npm module "@siebly/kraken-api" for Kraken exchange
+// for FUTURES ACCOUNT INFORMATION
+⋮----
+/**
+ * import { DerivativesClient } from '@siebly/kraken-api';
+ */
+⋮----
+// initialise the client
+/**
+ *
+ * Kraken Futures API uses API Key and API Secret
+ *
+ * Example:
+ * {
+ *   apiKey: 'your-api-key',
+ *   apiSecret: 'your-api-secret',
+ * }
+ *
+ * API Key Permissions Required:
+ * - Read access for account information
+ * - Withdrawal permissions for transfers
+ *
+ */
+⋮----
+async function getWallets()
+⋮----
+// Get all wallets (cash and margin accounts)
+⋮----
+// Response includes:
+// - cash: Cash account with balances
+// - flex: Multi-collateral wallet with margin info
+// - Available margin, portfolio value, PnL
+// - Initial/maintenance margin requirements
+// For each margin account:
+//   - balances, auxiliary (pv, pnl, af, funding)
+//   - marginRequirements (im, mm, lt, tt)
+//   - triggerEstimates
+⋮----
+async function getOpenPositions()
+⋮----
+// Get all open Futures positions
+⋮----
+// Response includes for each position:
+// - symbol: Futures symbol
+// - side: long or short
+// - size: Position size
+// - price: Average entry price
+// - fillTime: When position was opened
+// - unrealizedFunding: Unrealized funding
+⋮----
+async function getFills()
+⋮----
+// Get filled orders history (last 100)
+⋮----
+// Response includes for each fill:
+// - fill_id: Unique fill identifier
+// - order_id: Associated order ID
+// - symbol: Futures symbol
+// - side: buy or sell
+// - size: Fill size
+// - price: Fill price
+// - fillTime: Execution time
+// - fillType: maker, taker, liquidation, etc.
+⋮----
+async function getFillsBeforeTime()
+⋮----
+// Get fills before specific time
+⋮----
+lastFillTime: new Date(Date.now() - 86400000).toISOString(), // 24h ago
+⋮----
+// Returns 100 fills before specified time
+⋮----
+async function initiateWalletTransfer()
+⋮----
+// Transfer between margin accounts or to/from cash account
+⋮----
+// Transfers funds between accounts instantly
+⋮----
+async function initiateWithdrawalToSpot()
+⋮----
+// Withdraw from Futures to Spot wallet
+⋮----
+sourceWallet: 'cash', // Default is cash wallet
+⋮----
+// Response includes:
+// - uid: Withdrawal reference ID
+⋮----
+async function getOrderEvents()
+⋮----
+// Get order history events
+⋮----
+sort: 'desc', // desc = newest first
+opened: true, // Include opened orders
+closed: true, // Include closed orders
+⋮----
+// Response includes:
+// - elements: Array of order events
+// - Order placed, cancelled, rejected, executed events
+// - continuationToken: For pagination
+⋮----
+async function getOrderEventsBySymbol()
+⋮----
+// Filter order events by symbol
+⋮----
+async function getExecutionEvents()
+⋮----
+// Get execution/trade history
+⋮----
+// Response includes for each execution:
+// - execution: Fill details (price, quantity, timestamp)
+// - order: Associated order details
+// - fee: Fee paid
+// - positionSize: Position size after execution
+⋮----
+async function getExecutionEventsBySymbol()
+⋮----
+// Filter executions by symbol
+⋮----
+async function getAccountLog()
+⋮----
+// Get account log (all account activities)
+⋮----
+// Log includes:
+// - futures trade, liquidation, funding rate change
+// - conversions, transfers, settlements
+// - interest payments, fees
+⋮----
+async function getAccountLogFiltered()
+⋮----
+// Filter account log by info types
+⋮----
+async function enableFuturesSubTrading()
+⋮----
+async function getSubaccountTradingStatus()
+⋮----
+async function getSubaccounts()
+// Uncomment the function you want to test:
+⋮----
+// getWallets();
+// getOpenPositions();
+// getFills();
+// getFillsBeforeTime();
+// initiateWalletTransfer();
+// initiateWithdrawalToSpot();
+// getOrderEvents();
+// getOrderEventsBySymbol();
+// getExecutionEvents();
+// getExecutionEventsBySymbol();
+// getAccountLog();
+// getAccountLogFiltered();
+// enableFuturesSubTrading();
+// getSubaccountTradingStatus();
+// getSubaccounts();
+
+================
+File: examples/Derivatives/Private/orderManagement.ts
+================
+/* eslint-disable @typescript-eslint/no-unused-vars */
+// This example shows how to call Kraken API endpoint with either node.js,
+// javascript (js) or typescript (ts) with the npm module "@siebly/kraken-api" for Kraken exchange
+// for ORDER MANAGEMENT
+⋮----
+import { DerivativesClient } from '../../../src/index.js';
+⋮----
+/**
+ * import { DerivativesClient } from '@siebly/kraken-api';
+ */
+⋮----
+// initialise the client
+/**
+ *
+ * Kraken Futures API uses API Key and API Secret
+ *
+ * Example:
+ * {
+ *   apiKey: 'your-api-key',
+ *   apiSecret: 'your-api-secret',
+ * }
+ */
+⋮----
+async function editOrder()
+⋮----
+// Edit an existing order
+⋮----
+orderId: 'a04d0f84-36d4-4499-8382-96fcfc3ce7aa', // Or use cliOrdId instead
+limitPrice: 1100, // New limit price
+// or add some other parameters you want to edit
+⋮----
+// Response includes:
+// - status: edited, invalidSize, invalidPrice, etc.
+// - orderEvents: Array of order events
+⋮----
+async function cancelOrder()
+⋮----
+// Cancel a single order
+⋮----
+order_id: 'a04d0f84-36d4-4499-8382-96fcfc3ce7aa', // Or use cliOrdId
+⋮----
+// Response status:
+// - cancelled: Successfully cancelled
+// - filled: Order was already filled
+// - notFound: Order not found
+⋮----
+async function cancelAllOrders()
+⋮----
+// Cancel all open orders
+⋮----
+// Response includes:
+// - status: cancelled or noOrdersToCancel
+// - cancelledOrders: Array of cancelled order IDs
+⋮----
+async function cancelAllOrdersBySymbol()
+⋮----
+// Cancel all orders for specific symbol
+⋮----
+async function batchOrderManagement()
+⋮----
+// Send, edit, and cancel orders in a single batch request
+⋮----
+// Edit existing order
+⋮----
+// Cancel existing order
+⋮----
+// Response includes batchStatus array with results for each order
+// - status: placed, edited, cancelled, or rejection reason
+// - order_tag: Maps back to your request
+⋮----
+// Uncomment the function you want to test:
+⋮----
+// editOrder();
+// cancelOrder();
+// cancelAllOrders();
+// cancelAllOrdersBySymbol();
+// batchOrderManagement();
+
+================
+File: examples/Derivatives/Private/submitOrder.ts
+================
+/* eslint-disable @typescript-eslint/no-unused-vars */
+import { DerivativesClient } from '../../../src/index.js';
+⋮----
+// This example shows how to call Kraken API endpoint with either node.js,
+// javascript (js) or typescript (ts) with the npm module "@siebly/kraken-api" for Kraken exchange
+// for FUTURES ORDER MANAGEMENT
+⋮----
+/**
+ * import { DerivativesClient } from '@siebly/kraken-api';
+ */
+⋮----
+// initialise the client
+/**
+ *
+ * Kraken Futures API uses API Key and API Secret
+ *
+ * Example:
+ * {
+ *   apiKey: 'your-api-key',
+ *   apiSecret: 'your-api-secret',
+ * }
+ *
+ * API Key Permissions Required: Orders and trades - Create & modify orders
+ *
+ */
+⋮----
+async function submitLimitOrder()
+⋮----
+// Submit limit order for Futures
+⋮----
+symbol: 'PF_ETHUSD', // Perpetual ETH/USD
+⋮----
+size: 0.01, // Contract size
+⋮----
+// Response includes:
+// - status: placed, partiallyFilled, filled, or rejection reason
+// - order_id: Unique order identifier
+// - orderEvents: Array of order events (PLACE, EXECUTE, etc.)
+⋮----
+async function submitMarketOrder()
+⋮----
+// Submit market order (IOC with 1% price protection)
+⋮----
+side: 'sell', // or "buy"
+⋮----
+async function submitPostOnlyOrder()
+⋮----
+// Submit post-only order (maker-only)
+⋮----
+async function submitReduceOnlyOrder()
+⋮----
+// Submit reduce-only order (only closes position, won't open new)
+⋮----
+reduceOnly: true, // Only reduce existing position
+⋮----
+async function batchOrderSubmit()
+⋮----
+// Send, edit, and cancel orders in a single batch request
+⋮----
+// Send new order
+⋮----
+order_tag: 'order-1', // Tag to map responses
+⋮----
+// Send another order
+⋮----
+// Response includes batchStatus array with results for each order
+// - status: placed, edited, cancelled, or rejection reason
+// - order_tag: Maps back to your request
+⋮----
+// Uncomment the function you want to test:
+⋮----
+// submitLimitOrder();
+// submitMarketOrder();
+// submitPostOnlyOrder();
+// submitReduceOnlyOrder();
+//batchOrderSubmit();
+
+================
 File: examples/Derivatives/Public/marketData.ts
 ================
 /* eslint-disable @typescript-eslint/no-unused-vars */
@@ -5810,6 +6132,38 @@ getOtcExposures(params?: {
 checkOtcClient(params?:
 
 ================
+File: .gitignore
+================
+!.gitkeep
+.DS_STORE
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
+report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
+pids
+*.pid
+*.seed
+*.pid.lock
+node_modules/
+.npm
+.eslintcache
+.node_repl_history
+*.tgz
+.yarn-integrity
+.env
+.env.test
+.cache
+dist
+bundleReport.html
+.history/
+examples/ignoreme
+localtest.sh
+repomix.sh
+doc
+
+================
 File: .npmrc
 ================
 min-release-age=30
@@ -6009,35 +6363,35 @@ verbose: true, // report individual test
 // watchman: true,
 
 ================
-File: examples/Derivatives/Private/account.ts
+File: examples/Derivatives/Private/testnet.ts
 ================
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { DerivativesClient } from '../../../src/index.js';
 ⋮----
-// This example shows how to call Kraken API endpoint with either node.js,
+// This example shows how to call Kraken API testnet (demo) endpoints with either node.js,
 // javascript (js) or typescript (ts) with the npm module "@siebly/kraken-api" for Kraken exchange
-// for FUTURES ACCOUNT INFORMATION
+//
+// UPDATE: Kraken retired the Futures demo on 14 July 2026. testnet: true throws.
+// There is no replacement demo host. These calls use the live Derivatives REST API.
+// See https://support.kraken.com/articles/360024809011-api-testing-environment-derivatives
 ⋮----
 /**
  * import { DerivativesClient } from '@siebly/kraken-api';
  */
 ⋮----
-// initialise the client
 /**
+ * Kraken Derivatives has a demo environment (testnet) that you can connect to via WebSocket. All you need to do is set the `testnet` option to `true` when creating the WebsocketClient instance, as shown below.
+ * Everything else behaves exactly the same way.
  *
- * Kraken Futures API uses API Key and API Secret
+ * Note: as of November 2025, only the DerivativesClient supports testnet connections. Kraken refer to this as the "Demo" environment, but it is effectively a testnet.
+ * This is a place to test your API integration. It is not a good place to test strategy performance, as the liquidity and orderbook dynamics are very different to the live environment.
  *
- * Example:
- * {
- *   apiKey: 'your-api-key',
- *   apiSecret: 'your-api-secret',
- * }
- *
- * API Key Permissions Required:
- * - Read access for account information
- * - Withdrawal permissions for transfers
- *
+ * Refer to the following for more information:
+ * https://github.com/tiagosiebler/awesome-crypto-examples/wiki/CEX-Testnets
  */
+⋮----
+// https://demo-futures.kraken.com to create demo account
+// Retired 14 July 2026. Do not set testnet: it throws. There is no replacement demo host.
 ⋮----
 async function getWallets()
 ⋮----
@@ -6090,6 +6444,9 @@ lastFillTime: new Date(Date.now() - 86400000).toISOString(), // 24h ago
 async function initiateWalletTransfer()
 ⋮----
 // Transfer between margin accounts or to/from cash account
+⋮----
+fromAccount: 'cash', // or margin account name
+toAccount: 'flex', // or other margin account
 ⋮----
 // Transfers funds between accounts instantly
 ⋮----
@@ -6146,189 +6503,10 @@ async function getAccountLogFiltered()
 ⋮----
 // Filter account log by info types
 ⋮----
-async function enableFuturesSubTrading()
-⋮----
-async function getSubaccountTradingStatus()
-⋮----
-async function getSubaccounts()
 // Uncomment the function you want to test:
 ⋮----
-// getWallets();
-// getOpenPositions();
-// getFills();
-// getFillsBeforeTime();
 // initiateWalletTransfer();
 // initiateWithdrawalToSpot();
-// getOrderEvents();
-// getOrderEventsBySymbol();
-// getExecutionEvents();
-// getExecutionEventsBySymbol();
-// getAccountLog();
-// getAccountLogFiltered();
-// enableFuturesSubTrading();
-// getSubaccountTradingStatus();
-// getSubaccounts();
-
-================
-File: examples/Derivatives/Private/orderManagement.ts
-================
-/* eslint-disable @typescript-eslint/no-unused-vars */
-// This example shows how to call Kraken API endpoint with either node.js,
-// javascript (js) or typescript (ts) with the npm module "@siebly/kraken-api" for Kraken exchange
-// for ORDER MANAGEMENT
-⋮----
-import { DerivativesClient } from '../../../src/index.js';
-⋮----
-/**
- * import { DerivativesClient } from '@siebly/kraken-api';
- */
-⋮----
-// initialise the client
-/**
- *
- * Kraken Futures API uses API Key and API Secret
- *
- * Example:
- * {
- *   apiKey: 'your-api-key',
- *   apiSecret: 'your-api-secret',
- * }
- */
-⋮----
-async function editOrder()
-⋮----
-// Edit an existing order
-⋮----
-orderId: 'a04d0f84-36d4-4499-8382-96fcfc3ce7aa', // Or use cliOrdId instead
-limitPrice: 1100, // New limit price
-// or add some other parameters you want to edit
-⋮----
-// Response includes:
-// - status: edited, invalidSize, invalidPrice, etc.
-// - orderEvents: Array of order events
-⋮----
-async function cancelOrder()
-⋮----
-// Cancel a single order
-⋮----
-order_id: 'a04d0f84-36d4-4499-8382-96fcfc3ce7aa', // Or use cliOrdId
-⋮----
-// Response status:
-// - cancelled: Successfully cancelled
-// - filled: Order was already filled
-// - notFound: Order not found
-⋮----
-async function cancelAllOrders()
-⋮----
-// Cancel all open orders
-⋮----
-// Response includes:
-// - status: cancelled or noOrdersToCancel
-// - cancelledOrders: Array of cancelled order IDs
-⋮----
-async function cancelAllOrdersBySymbol()
-⋮----
-// Cancel all orders for specific symbol
-⋮----
-async function batchOrderManagement()
-⋮----
-// Send, edit, and cancel orders in a single batch request
-⋮----
-// Edit existing order
-⋮----
-// Cancel existing order
-⋮----
-// Response includes batchStatus array with results for each order
-// - status: placed, edited, cancelled, or rejection reason
-// - order_tag: Maps back to your request
-⋮----
-// Uncomment the function you want to test:
-⋮----
-// editOrder();
-// cancelOrder();
-// cancelAllOrders();
-// cancelAllOrdersBySymbol();
-// batchOrderManagement();
-
-================
-File: examples/Derivatives/Private/submitOrder.ts
-================
-/* eslint-disable @typescript-eslint/no-unused-vars */
-import { DerivativesClient } from '../../../src/index.js';
-⋮----
-// This example shows how to call Kraken API endpoint with either node.js,
-// javascript (js) or typescript (ts) with the npm module "@siebly/kraken-api" for Kraken exchange
-// for FUTURES ORDER MANAGEMENT
-⋮----
-/**
- * import { DerivativesClient } from '@siebly/kraken-api';
- */
-⋮----
-// initialise the client
-/**
- *
- * Kraken Futures API uses API Key and API Secret
- *
- * Example:
- * {
- *   apiKey: 'your-api-key',
- *   apiSecret: 'your-api-secret',
- * }
- *
- * API Key Permissions Required: Orders and trades - Create & modify orders
- *
- */
-⋮----
-async function submitLimitOrder()
-⋮----
-// Submit limit order for Futures
-⋮----
-symbol: 'PF_ETHUSD', // Perpetual ETH/USD
-⋮----
-size: 0.01, // Contract size
-⋮----
-// Response includes:
-// - status: placed, partiallyFilled, filled, or rejection reason
-// - order_id: Unique order identifier
-// - orderEvents: Array of order events (PLACE, EXECUTE, etc.)
-⋮----
-async function submitMarketOrder()
-⋮----
-// Submit market order (IOC with 1% price protection)
-⋮----
-side: 'sell', // or "buy"
-⋮----
-async function submitPostOnlyOrder()
-⋮----
-// Submit post-only order (maker-only)
-⋮----
-async function submitReduceOnlyOrder()
-⋮----
-// Submit reduce-only order (only closes position, won't open new)
-⋮----
-reduceOnly: true, // Only reduce existing position
-⋮----
-async function batchOrderSubmit()
-⋮----
-// Send, edit, and cancel orders in a single batch request
-⋮----
-// Send new order
-⋮----
-order_tag: 'order-1', // Tag to map responses
-⋮----
-// Send another order
-⋮----
-// Response includes batchStatus array with results for each order
-// - status: placed, edited, cancelled, or rejection reason
-// - order_tag: Maps back to your request
-⋮----
-// Uncomment the function you want to test:
-⋮----
-// submitLimitOrder();
-// submitMarketOrder();
-// submitPostOnlyOrder();
-// submitReduceOnlyOrder();
-//batchOrderSubmit();
 
 ================
 File: src/lib/websocket/websocket-util.ts
@@ -7874,184 +8052,6 @@ function generateConfig(name)
 // Code is already transpiled from TypeScript, no additional loaders needed
 
 ================
-File: .gitignore
-================
-!.gitkeep
-.DS_STORE
-*.log
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-lerna-debug.log*
-report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
-pids
-*.pid
-*.seed
-*.pid.lock
-node_modules/
-.npm
-.eslintcache
-.node_repl_history
-*.tgz
-.yarn-integrity
-.env
-.env.test
-.cache
-dist
-bundleReport.html
-.history/
-examples/ignoreme
-localtest.sh
-repomix.sh
-doc
-
-================
-File: examples/Derivatives/Private/testnet.ts
-================
-/* eslint-disable @typescript-eslint/no-unused-vars */
-import { DerivativesClient } from '../../../src/index.js';
-⋮----
-// This example shows how to call Kraken API testnet (demo) endpoints with either node.js,
-// javascript (js) or typescript (ts) with the npm module "@siebly/kraken-api" for Kraken exchange
-//
-// UPDATE: Kraken retired the Futures demo on 14 July 2026. testnet: true throws.
-// There is no replacement demo host. These calls use the live Derivatives REST API.
-// See https://support.kraken.com/articles/360024809011-api-testing-environment-derivatives
-⋮----
-/**
- * import { DerivativesClient } from '@siebly/kraken-api';
- */
-⋮----
-/**
- * Kraken Derivatives has a demo environment (testnet) that you can connect to via WebSocket. All you need to do is set the `testnet` option to `true` when creating the WebsocketClient instance, as shown below.
- * Everything else behaves exactly the same way.
- *
- * Note: as of November 2025, only the DerivativesClient supports testnet connections. Kraken refer to this as the "Demo" environment, but it is effectively a testnet.
- * This is a place to test your API integration. It is not a good place to test strategy performance, as the liquidity and orderbook dynamics are very different to the live environment.
- *
- * Refer to the following for more information:
- * https://github.com/tiagosiebler/awesome-crypto-examples/wiki/CEX-Testnets
- */
-⋮----
-// https://demo-futures.kraken.com to create demo account
-// Retired 14 July 2026. Do not set testnet: it throws. There is no replacement demo host.
-⋮----
-async function getWallets()
-⋮----
-// Get all wallets (cash and margin accounts)
-⋮----
-// Response includes:
-// - cash: Cash account with balances
-// - flex: Multi-collateral wallet with margin info
-// - Available margin, portfolio value, PnL
-// - Initial/maintenance margin requirements
-// For each margin account:
-//   - balances, auxiliary (pv, pnl, af, funding)
-//   - marginRequirements (im, mm, lt, tt)
-//   - triggerEstimates
-⋮----
-async function getOpenPositions()
-⋮----
-// Get all open Futures positions
-⋮----
-// Response includes for each position:
-// - symbol: Futures symbol
-// - side: long or short
-// - size: Position size
-// - price: Average entry price
-// - fillTime: When position was opened
-// - unrealizedFunding: Unrealized funding
-⋮----
-async function getFills()
-⋮----
-// Get filled orders history (last 100)
-⋮----
-// Response includes for each fill:
-// - fill_id: Unique fill identifier
-// - order_id: Associated order ID
-// - symbol: Futures symbol
-// - side: buy or sell
-// - size: Fill size
-// - price: Fill price
-// - fillTime: Execution time
-// - fillType: maker, taker, liquidation, etc.
-⋮----
-async function getFillsBeforeTime()
-⋮----
-// Get fills before specific time
-⋮----
-lastFillTime: new Date(Date.now() - 86400000).toISOString(), // 24h ago
-⋮----
-// Returns 100 fills before specified time
-⋮----
-async function initiateWalletTransfer()
-⋮----
-// Transfer between margin accounts or to/from cash account
-⋮----
-fromAccount: 'cash', // or margin account name
-toAccount: 'flex', // or other margin account
-⋮----
-// Transfers funds between accounts instantly
-⋮----
-async function initiateWithdrawalToSpot()
-⋮----
-// Withdraw from Futures to Spot wallet
-⋮----
-sourceWallet: 'cash', // Default is cash wallet
-⋮----
-// Response includes:
-// - uid: Withdrawal reference ID
-⋮----
-async function getOrderEvents()
-⋮----
-// Get order history events
-⋮----
-sort: 'desc', // desc = newest first
-opened: true, // Include opened orders
-closed: true, // Include closed orders
-⋮----
-// Response includes:
-// - elements: Array of order events
-// - Order placed, cancelled, rejected, executed events
-// - continuationToken: For pagination
-⋮----
-async function getOrderEventsBySymbol()
-⋮----
-// Filter order events by symbol
-⋮----
-async function getExecutionEvents()
-⋮----
-// Get execution/trade history
-⋮----
-// Response includes for each execution:
-// - execution: Fill details (price, quantity, timestamp)
-// - order: Associated order details
-// - fee: Fee paid
-// - positionSize: Position size after execution
-⋮----
-async function getExecutionEventsBySymbol()
-⋮----
-// Filter executions by symbol
-⋮----
-async function getAccountLog()
-⋮----
-// Get account log (all account activities)
-⋮----
-// Log includes:
-// - futures trade, liquidation, funding rate change
-// - conversions, transfers, settlements
-// - interest payments, fees
-⋮----
-async function getAccountLogFiltered()
-⋮----
-// Filter account log by info types
-⋮----
-// Uncomment the function you want to test:
-⋮----
-// initiateWalletTransfer();
-// initiateWithdrawalToSpot();
-
-================
 File: src/PartnerClient.ts
 ================
 import { BaseRestClient } from './lib/BaseRestClient.js';
@@ -9211,13 +9211,39 @@ export interface FuturesBatchOrderEdit {
   order: 'edit';
   order_id: string;
   cliOrdId?: string | null;
+  /**
+   * New size for this batch edit.
+   *
+   * Kraken reads this with `qtyMode`, which defaults to `RELATIVE` when omitted.
+   * `RELATIVE` sets the current open (remaining / unfilled) size to `size`.
+   * Past fills stay on the order and are not part of `size`.
+   * `ABSOLUTE` sets the total order size, including past fills, to `size`.
+   */
   size?: number;
   limitPrice?: number;
   stopPrice?: number;
   trailingStopMaxDeviation?: number;
   trailingStopDeviationUnit?: 'PERCENT' | 'QUOTE_CURRENCY';
+  /**
+   * How `size` is interpreted. Defaults to `RELATIVE` (open / remaining size).
+   * `ABSOLUTE` sets the total order size, including past fills.
+   */
   qtyMode?: 'ABSOLUTE' | 'RELATIVE';
 }
+⋮----
+/**
+   * New size for this batch edit.
+   *
+   * Kraken reads this with `qtyMode`, which defaults to `RELATIVE` when omitted.
+   * `RELATIVE` sets the current open (remaining / unfilled) size to `size`.
+   * Past fills stay on the order and are not part of `size`.
+   * `ABSOLUTE` sets the total order size, including past fills, to `size`.
+   */
+⋮----
+/**
+   * How `size` is interpreted. Defaults to `RELATIVE` (open / remaining size).
+   * `ABSOLUTE` sets the total order size, including past fills.
+   */
 ⋮----
 export interface FuturesBatchOrderCancel {
   order: 'cancel';
@@ -9246,13 +9272,49 @@ export interface FuturesEditOrderParams {
   processBefore?: string;
   orderId?: string;
   cliOrdId?: string;
+  /**
+   * New size for the order.
+   *
+   * Kraken reads this with `qtyMode`, which defaults to `RELATIVE` when omitted.
+   * `RELATIVE` sets the current open (remaining / unfilled) size to `size`.
+   * Past fills stay on the order and are not part of `size`.
+   * `ABSOLUTE` sets the total order size, including past fills, to `size`.
+   *
+   * A partially filled order edited with the default mode keeps its fills and
+   * rests `size` more. Pass `qtyMode: 'ABSOLUTE'` when `size` is the new total.
+   *
+   * @see https://docs.kraken.com/api-reference/order-management/edit-order
+   */
   size?: number;
   limitPrice?: number;
   stopPrice?: number;
   trailingStopMaxDeviation?: number;
   trailingStopDeviationUnit?: 'PERCENT' | 'QUOTE_CURRENCY';
+  /**
+   * How `size` is interpreted. Defaults to `RELATIVE` (open / remaining size).
+   * `ABSOLUTE` sets the total order size, including past fills.
+   */
   qtyMode?: 'ABSOLUTE' | 'RELATIVE';
 }
+⋮----
+/**
+   * New size for the order.
+   *
+   * Kraken reads this with `qtyMode`, which defaults to `RELATIVE` when omitted.
+   * `RELATIVE` sets the current open (remaining / unfilled) size to `size`.
+   * Past fills stay on the order and are not part of `size`.
+   * `ABSOLUTE` sets the total order size, including past fills, to `size`.
+   *
+   * A partially filled order edited with the default mode keeps its fills and
+   * rests `size` more. Pass `qtyMode: 'ABSOLUTE'` when `size` is the new total.
+   *
+   * @see https://docs.kraken.com/api-reference/order-management/edit-order
+   */
+⋮----
+/**
+   * How `size` is interpreted. Defaults to `RELATIVE` (open / remaining size).
+   * `ABSOLUTE` sets the total order size, including past fills.
+   */
 ⋮----
 export interface FuturesSendOrderParams {
   processBefore?: string;
@@ -11060,6 +11122,994 @@ export type WsMarket = 'spot' | 'futures';
 export type WsEventInternalSrc = 'event' | 'function' | 'frame';
 
 ================
+File: src/DerivativesClient.ts
+================
+import { nanoid } from 'nanoid';
+⋮----
+import { BaseRestClient } from './lib/BaseRestClient.js';
+import { REST_CLIENT_TYPE_ENUM, RestClientType } from './lib/requestUtils.js';
+import {
+  FuturesAddAssignmentPreferenceParams,
+  FuturesBatchOrderParams,
+  FuturesCancelOrderParams,
+  FuturesEditOrderParams,
+  FuturesGetAccountLogParams,
+  FuturesGetAnalyticsParams,
+  FuturesGetCandlesParams,
+  FuturesGetOrderEventsParams,
+  FuturesGetPositionEventsParams,
+  FuturesGetTriggerEventsParams,
+  FuturesHistoryBaseParams,
+  FuturesInitiateSubaccountTransferParams,
+  FuturesInitiateWalletTransferParams,
+  FuturesMarketHistoryBaseParams,
+  FuturesSendOrderParams,
+  FuturesSetRfqAssignmentMaxLeverageParams,
+  FuturesSubmitToSpotParams,
+  FuturesUpdateSelfTradeStrategyParams,
+} from './types/request/derivatives.types.js';
+import {
+  FuturesAccountLog,
+  FuturesAccounts,
+  FuturesAnalyticsResponse,
+  FuturesApiKeyV3Check,
+  FuturesAssignmentProgram,
+  FuturesAssignmentProgramHistory,
+  FuturesBatchOrderStatus,
+  FuturesCancelAllOrdersStatus,
+  FuturesCancelOrderStatus,
+  FuturesCandles,
+  FuturesDeadMansSwitchStatus,
+  FuturesEditOrderStatus,
+  FuturesFeeSchedule,
+  FuturesFill,
+  FuturesHistoricalFundingRate,
+  FuturesHistoryExecutionEvent,
+  FuturesHistoryOrderEvent,
+  FuturesHistoryResponse,
+  FuturesHistoryTriggerEvent,
+  FuturesInstrument,
+  FuturesInstrumentStatus,
+  FuturesLeveragePreference,
+  FuturesMarketHistoryResponse,
+  FuturesMarketShare,
+  FuturesNotification,
+  FuturesOpenOffer,
+  FuturesOpenOrder,
+  FuturesOpenPosition,
+  FuturesOrderBook,
+  FuturesOrderStatusInfo,
+  FuturesPnlPreference,
+  FuturesPortfolioMarginParameters,
+  FuturesPortfolioSimulation,
+  FuturesPositionUpdateEvent,
+  FuturesPublicExecutionEvent,
+  FuturesPublicMarkPriceEvent,
+  FuturesPublicOrderEvent,
+  FuturesResolution,
+  FuturesRfq,
+  FuturesSelfTradeStrategy,
+  FuturesSendOrderStatus,
+  FuturesSubaccountsInfo,
+  FuturesTicker,
+  FuturesTickType,
+  FuturesTradeHistoryItem,
+  FuturesUnwindQueuePosition,
+} from './types/response/derivatives.types.js';
+import { DerivativesAPISuccessResponse } from './types/response/shared.types.js';
+⋮----
+/**
+ * The DerivativesClient provides integration to the Kraken Derivatives API.
+ *
+ * Docs:
+ * - https://docs.kraken.com/api/docs/guides/futures-introduction
+ * - https://docs.kraken.com/api/docs/guides/futures-rest
+ * - https://docs.kraken.com/api/docs/futures-api/trading/get-history
+ */
+export class DerivativesClient extends BaseRestClient
+⋮----
+getClientType(): RestClientType
+⋮----
+/**
+   *
+   * Misc Utility Methods
+   *
+   */
+⋮----
+generateNewOrderID(): string
+⋮----
+/**
+   *
+   * Futures REST API - Trading - Market Data
+   *
+   */
+⋮----
+/**
+   * Get trade history
+   *
+   * This endpoint returns the most recent 100 trades prior to the specified lastTime value up to past 7 days or recent trading engine restart (whichever is sooner).
+   * If no lastTime specified, it will return 100 most recent trades.
+   */
+getTradeHistory(params: {
+    symbol: string;
+    lastTime?: string;
+  }): Promise<
+    DerivativesAPISuccessResponse<{ history: FuturesTradeHistoryItem[] }>
+  > {
+    return this.get('derivatives/api/v3/history', params);
+⋮----
+/**
+   * Get orderbook
+   *
+   * This endpoint returns the entire non-cumulative order book of currently listed Futures contracts.
+   */
+getOrderbook(params: {
+    symbol: string;
+}): Promise<DerivativesAPISuccessResponse<
+⋮----
+/**
+   * Get tickers
+   *
+   * This endpoint returns current market data for all currently listed Futures contracts and indices.
+   */
+getTickers(): Promise<
+    DerivativesAPISuccessResponse<{ tickers: FuturesTicker[] }>
+  > {
+    return this.get('derivatives/api/v3/tickers');
+⋮----
+/**
+   * Get ticker by symbol
+   *
+   * Get market data for contract or index by symbol.
+   */
+getTicker(params: {
+    symbol: string;
+}): Promise<DerivativesAPISuccessResponse<
+⋮----
+/**
+   *
+   * Futures REST API - Trading - Instrument Details
+   *
+   */
+⋮----
+/**
+   * Get instruments
+   *
+   * Returns specifications for all currently listed markets and indices.
+   */
+getInstruments(): Promise<
+    DerivativesAPISuccessResponse<{ instruments: FuturesInstrument[] }>
+  > {
+    return this.get('derivatives/api/v3/instruments');
+⋮----
+/**
+   * Get trading instruments
+   *
+   * Returns specifications for all currently accessible markets and indices.
+   */
+getTradingInstruments(): Promise<
+    DerivativesAPISuccessResponse<{ instruments: FuturesInstrument[] }>
+  > {
+    return this.getPrivate('derivatives/api/v3/trading/instruments');
+⋮----
+/**
+   * Get instrument status list
+   *
+   * Returns price dislocation and volatility details for all markets.
+   */
+getInstrumentStatusList(): Promise<
+    DerivativesAPISuccessResponse<{
+      instrumentStatus: FuturesInstrumentStatus[];
+    }>
+  > {
+    return this.get('derivatives/api/v3/instruments/status');
+⋮----
+/**
+   * Get instrument status
+   *
+   * Returns price dislocation and volatility details for given market.
+   */
+getInstrumentStatus(params: {
+    symbol: string;
+}): Promise<DerivativesAPISuccessResponse<FuturesInstrumentStatus>>
+⋮----
+/**
+   *
+   * Futures REST API - Trading - Order Management
+   *
+   */
+⋮----
+/**
+   * Batch order management
+   *
+   * This endpoint allows sending limit or stop order(s) and/or cancelling open order(s) and/or editing open order(s) for a currently listed Futures contract in batch.
+   * When editing an order, if the trailingStopMaxDeviation and trailingStopDeviationUnit parameters are sent unchanged, the system will recalculate a new stop price upon successful order modification.
+   *
+   * On an edit instruction, `size` follows Kraken `qtyMode` (default `RELATIVE`): it sets the open (remaining) size, not the total quantity including fills. Pass `qtyMode: 'ABSOLUTE'` to set the total size including past fills.
+   */
+batchOrderManagement(
+    params: FuturesBatchOrderParams,
+  ): Promise<
+    DerivativesAPISuccessResponse<{ batchStatus: FuturesBatchOrderStatus[] }>
+  > {
+    const { ProcessBefore, json } = params;
+    return this.postPrivate('derivatives/api/v3/batchorder', {
+      body: {
+        ProcessBefore: ProcessBefore,
+        json,
+      },
+    });
+⋮----
+/**
+   * Cancel all orders
+   *
+   * This endpoint allows cancelling orders which are associated with a future's contract or a margin account. If no arguments are specified all open orders will be cancelled.
+   */
+cancelAllOrders(params?: { symbol?: string }): Promise<
+    DerivativesAPISuccessResponse<{
+      cancelStatus: FuturesCancelAllOrdersStatus;
+    }>
+  > {
+    return this.postPrivate('derivatives/api/v3/cancelallorders', {
+      body: params,
+    });
+⋮----
+/**
+   * Dead man's switch
+   *
+   * This endpoint provides a Dead Man's Switch mechanism to protect the user from network malfunctions. The user can send a request with a timeout in seconds which will trigger a countdown timer that will cancel all user orders when timeout expires. The user has to keep sending request to push back the timeout expiration or they can deactivate the mechanism by specifying a timeout of zero (0).
+   * The recommended mechanism usage is making a call every 15 to 20 seconds and provide a timeout of 60 seconds. This allows the user to keep the orders in place on a brief network failure, while keeping them safe in case of a network breakdown.
+   */
+cancelAllOrdersAfter(params: {
+    timeout: number;
+  }): Promise<
+    DerivativesAPISuccessResponse<{ status: FuturesDeadMansSwitchStatus }>
+  > {
+    return this.postPrivate('derivatives/api/v3/cancelallordersafter', {
+      body: params,
+    });
+⋮----
+/**
+   * Cancel order
+   *
+   * This endpoint allows cancelling an open order for a Futures contract.
+   */
+cancelOrder(
+    params: FuturesCancelOrderParams,
+  ): Promise<
+    DerivativesAPISuccessResponse<{ cancelStatus: FuturesCancelOrderStatus }>
+  > {
+    return this.postPrivate('derivatives/api/v3/cancelorder', {
+      body: params,
+    });
+⋮----
+/**
+   * Edit order
+   *
+   * This endpoint allows editing an existing order for a currently listed Futures contract.
+   * When editing an order, if the trailingStopMaxDeviation and trailingStopDeviationUnit parameters are sent unchanged, the system will recalculate a new stop price upon successful order modification.
+   *
+   * `size` follows Kraken `qtyMode`, which defaults to `RELATIVE` when omitted. That sets the open (remaining / unfilled) size, not the total quantity including fills. Pass `qtyMode: 'ABSOLUTE'` to set the total order size, including past fills, to `size`.
+   *
+   * @see https://docs.kraken.com/api-reference/order-management/edit-order
+   */
+editOrder(
+    params: FuturesEditOrderParams,
+  ): Promise<
+    DerivativesAPISuccessResponse<{ editStatus: FuturesEditOrderStatus }>
+  > {
+    return this.postPrivate('derivatives/api/v3/editorder', {
+      body: params,
+    });
+⋮----
+/**
+   * Get open orders
+   *
+   * This endpoint returns information on all open orders for all Futures contracts.
+   */
+getOpenOrders(): Promise<
+    DerivativesAPISuccessResponse<{ openOrders: FuturesOpenOrder[] }>
+  > {
+    return this.getPrivate('derivatives/api/v3/openorders');
+⋮----
+/**
+   * Send order
+   *
+   * This endpoint allows sending a limit, stop, take profit or immediate-or-cancel order for a currently listed Futures contract.
+   */
+submitOrder(
+    params: FuturesSendOrderParams,
+  ): Promise<
+    DerivativesAPISuccessResponse<{ sendStatus: FuturesSendOrderStatus }>
+  > {
+    return this.postPrivate('derivatives/api/v3/sendorder', {
+      body: params,
+    });
+⋮----
+/**
+   * Get Specific Orders' Status
+   *
+   * Returns information on specified orders which are open or were filled/cancelled in the last 5 seconds.
+   */
+getOrderStatus(params?: {
+    orderIds?: string[];
+    cliOrdIds?: string[];
+  }): Promise<
+    DerivativesAPISuccessResponse<{ orders: FuturesOrderStatusInfo[] }>
+  > {
+    return this.postPrivate('derivatives/api/v3/orders/status', {
+      body: params,
+    });
+⋮----
+/**
+   *
+   * Futures REST API - Trading - Multi-Collateral
+   *
+   */
+⋮----
+/**
+   * Get PNL currency preferences
+   *
+   * The PNL currency preference is used to determine which currency to pay out when realizing PNL gains.
+   */
+getPnlPreferences(): Promise<
+    DerivativesAPISuccessResponse<{ preferences: FuturesPnlPreference[] }>
+  > {
+    return this.getPrivate('derivatives/api/v3/pnlpreferences');
+⋮----
+/**
+   * Set PNL currency preference
+   *
+   * The PNL currency preference is used to determine which currency to pay out when realizing PNL gains.
+   * Calling this API can result in the following error codes: 87 (Contract does not exist), 88 (Contract not a multi-collateral futures contract), 89 (Currency does not exist), 90 (Currency is not enabled for multi-collateral futures), 41 (Would cause liquidation).
+   */
+setPnlPreference(params: {
+    symbol: string;
+    pnlPreference: string;
+}): Promise<DerivativesAPISuccessResponse<Record<string, never>>>
+⋮----
+/**
+   * Get leverage settings
+   *
+   * Returns list of configured leverage preferences.
+   */
+getLeverageSettings(): Promise<
+    DerivativesAPISuccessResponse<{
+      leveragePreferences: FuturesLeveragePreference[];
+    }>
+  > {
+    return this.getPrivate('derivatives/api/v3/leveragepreferences');
+⋮----
+/**
+   * Set leverage settings
+   *
+   * Sets a contract's margin mode, either "isolated" or "cross" margin.
+   * When specifying a max leverage, the contract's margin mode will be isolated.
+   */
+setLeverageSettings(params: {
+    symbol: string;
+    maxLeverage?: number;
+}): Promise<DerivativesAPISuccessResponse<Record<string, never>>>
+⋮----
+/**
+   * Get the off-book max leverage cap
+   *
+   * Returns the account-level off-book maximum leverage cap, or null when no cap is configured.
+   */
+getRfqAssignmentMaxLeverage(): Promise<
+    DerivativesAPISuccessResponse<{ maxLeverage: number | null }>
+  > {
+    return this.getPrivate('derivatives/api/v3/rfq-assignment/max-leverage');
+⋮----
+/**
+   * Set the off-book max leverage cap
+   *
+   * Sets the account-level off-book maximum leverage cap for the authenticated master account.
+   */
+setRfqAssignmentMaxLeverage(
+    params: FuturesSetRfqAssignmentMaxLeverageParams,
+): Promise<DerivativesAPISuccessResponse<
+⋮----
+/**
+   * Clear the off-book max leverage cap
+   *
+   * Clears the account-level off-book maximum leverage cap for the authenticated master account.
+   */
+deleteRfqAssignmentMaxLeverage(): Promise<
+    DerivativesAPISuccessResponse<{ maxLeverage: number | null }>
+  > {
+    return this.deletePrivate('derivatives/api/v3/rfq-assignment/max-leverage');
+⋮----
+/**
+   *
+   * Futures REST API - Trading - Account Information
+   *
+   */
+⋮----
+/**
+   * Get wallets
+   *
+   * This endpoint returns key information relating to all your accounts which may either be cash accounts or margin accounts.
+   * This includes digital asset balances, instrument balances, margin requirements, margin trigger estimates and
+   * auxiliary information such as available funds, PnL of open positions and portfolio value.
+   */
+getAccounts(): Promise<
+    DerivativesAPISuccessResponse<{ accounts: FuturesAccounts }>
+  > {
+    return this.getPrivate('derivatives/api/v3/accounts');
+⋮----
+/**
+   * Get open positions
+   *
+   * This endpoint returns the size and average entry price of all open positions in Futures contracts.
+   * This includes Futures contracts that have matured but have not yet been settled.
+   */
+getOpenPositions(): Promise<
+    DerivativesAPISuccessResponse<{ openPositions: FuturesOpenPosition[] }>
+  > {
+    return this.getPrivate('derivatives/api/v3/openpositions');
+⋮----
+/**
+   * Get position percentile of unwind queue
+   *
+   * This endpoint returns the percentile of the open position in case of unwinding.
+   */
+getPositionPercentile(): Promise<
+    DerivativesAPISuccessResponse<{ queue: FuturesUnwindQueuePosition[] }>
+  > {
+    return this.getPrivate('derivatives/api/v3/unwindqueue');
+⋮----
+/**
+   * Get portfolio margin parameters
+   *
+   * Retrieve current portfolio margin calculation parameters.
+   * Also includes user specific limits related to options trading.
+   * Note: This is currently available exclusively in the Kraken Futures DEMO environment.
+   *
+   * @deprecated Kraken retired the Futures demo environment on 14 July 2026, so this endpoint is no longer available. See https://support.kraken.com/articles/360024809011-api-testing-environment-derivatives
+   */
+getPortfolioMarginParameters(): Promise<
+    DerivativesAPISuccessResponse<FuturesPortfolioMarginParameters>
+  > {
+    return this.getPrivate('derivatives/api/v3/portfolio-margining/parameters');
+⋮----
+/**
+   * Calculate portfolio margin, pnl and greeks
+   *
+   * For a given portfolio of balances and positions (futures and options), calculate the margin requirements, pnl and option greeks.
+   * Note: This is currently available exclusively in the Kraken Futures DEMO environment.
+   *
+   * @deprecated Kraken retired the Futures demo environment on 14 July 2026, so this endpoint is no longer available. See https://support.kraken.com/articles/360024809011-api-testing-environment-derivatives
+   */
+simulateMarginRequirements(params: {
+    json: any; // Complex structure for portfolio simulation
+}): Promise<DerivativesAPISuccessResponse<FuturesPortfolioSimulation>>
+⋮----
+json: any; // Complex structure for portfolio simulation
+⋮----
+/**
+   *
+   * Futures REST API - Trading - Assignment Program
+   *
+   */
+⋮----
+/**
+   * List assignment programs
+   *
+   * This endpoint returns information on currently active assignment programs.
+   */
+getAssignmentPrograms(): Promise<
+    DerivativesAPISuccessResponse<{ participants: FuturesAssignmentProgram[] }>
+  > {
+    return this.getPrivate('derivatives/api/v3/assignmentprogram/current');
+⋮----
+/**
+   * Add assignment preference
+   *
+   * This endpoint adds an assignment program preference.
+   */
+addAssignmentPreference(
+    params: FuturesAddAssignmentPreferenceParams,
+): Promise<DerivativesAPISuccessResponse<FuturesAssignmentProgram>>
+⋮----
+/**
+   * Delete assignment preference
+   *
+   * This endpoint deletes an assignment program preference.
+   */
+deleteAssignmentPreference(params: {
+    id: number;
+}): Promise<DerivativesAPISuccessResponse<FuturesAssignmentProgram>>
+⋮----
+/**
+   * List assignment preferences history
+   *
+   * This endpoint returns information on assignment program preferences change history.
+   */
+getAssignmentPreferencesHistory(): Promise<
+    DerivativesAPISuccessResponse<{
+      participants: FuturesAssignmentProgramHistory[];
+    }>
+  > {
+    return this.getPrivate('derivatives/api/v3/assignmentprogram/history');
+⋮----
+/**
+   *
+   * Futures REST API - Trading - Fee Schedules
+   *
+   */
+⋮----
+/**
+   * Get fee schedules
+   *
+   * This endpoint lists all fee schedules.
+   *
+   * @deprecated Effective 2026-06-22. Use SpotClient.getTradingVolume() with a Spot API key instead.
+   */
+getFeeSchedules(): Promise<
+    DerivativesAPISuccessResponse<{ feeSchedules: FuturesFeeSchedule[] }>
+  > {
+    return this.get('derivatives/api/v3/feeschedules');
+⋮----
+/**
+   * Get fee schedule volumes
+   *
+   * Returns your fee schedule volumes for each fee schedule.
+   *
+   * @deprecated Effective 2026-06-22. Use SpotClient.getTradingVolume() with a Spot API key instead.
+   */
+getFeeScheduleVolumes(): Promise<
+    DerivativesAPISuccessResponse<{
+      volumesByFeeSchedule: Record<string, number>;
+    }>
+  > {
+    return this.getPrivate('derivatives/api/v3/feeschedules/volumes');
+⋮----
+/**
+   *
+   * Futures REST API - Trading - General
+   *
+   */
+⋮----
+/**
+   * Get notifications
+   *
+   * This endpoint provides the platform's notifications.
+   */
+getNotifications(): Promise<
+    DerivativesAPISuccessResponse<{ notifications: FuturesNotification[] }>
+  > {
+    return this.getPrivate('derivatives/api/v3/notifications');
+⋮----
+/**
+   *
+   * Futures REST API - Trading - Historical Data
+   *
+   */
+⋮----
+/**
+   * Get your fills
+   *
+   * This endpoint returns information on your filled orders for all futures contracts.
+   */
+getFills(params?: {
+    lastFillTime?: string;
+}): Promise<DerivativesAPISuccessResponse<
+⋮----
+/**
+   *
+   * Futures REST API - Trading - Historical Funding Rates
+   *
+   */
+⋮----
+/**
+   * Historical funding rates
+   *
+   * Returns list of historical funding rates for given market.
+   */
+getHistoricalFundingRates(params: {
+    symbol: string;
+  }): Promise<
+    DerivativesAPISuccessResponse<{ rates: FuturesHistoricalFundingRate[] }>
+  > {
+    return this.get('derivatives/api/v3/historical-funding-rates', params);
+⋮----
+/**
+   *
+   * Futures REST API - Trading - Trading Settings
+   *
+   */
+⋮----
+/**
+   * Get self trade strategy
+   *
+   * Returns account-wide self-trade matching strategy.
+   */
+getSelfTradeStrategy(): Promise<
+    DerivativesAPISuccessResponse<{
+      strategy: FuturesSelfTradeStrategy;
+    }>
+  > {
+    return this.getPrivate('derivatives/api/v3/self-trade-strategy');
+⋮----
+/**
+   * Update self trade strategy
+   *
+   * Updates account-wide self-trade matching behavior to given strategy.
+   */
+updateSelfTradeStrategy(
+    params: FuturesUpdateSelfTradeStrategyParams,
+  ): Promise<
+    DerivativesAPISuccessResponse<{
+      strategy: FuturesSelfTradeStrategy;
+    }>
+  > {
+    return this.putPrivate('derivatives/api/v3/self-trade-strategy', {
+      query: params,
+    });
+⋮----
+/**
+   *
+   * Futures REST API - Trading - Subaccounts
+   *
+   */
+⋮----
+/**
+   * Check subaccount trading status
+   *
+   * Returns trading capability info for given subaccount.
+   */
+getSubaccountTradingStatus(params: {
+    subaccountUid: string;
+}): Promise<DerivativesAPISuccessResponse<
+⋮----
+/**
+   * Update subaccount trading status
+   *
+   * Updates trading capabilities for given subaccount.
+   */
+updateSubaccountTradingStatus(params: {
+    subaccountUid: string;
+    tradingEnabled: boolean;
+}): Promise<DerivativesAPISuccessResponse<
+⋮----
+/**
+   * Get subaccounts
+   *
+   * Return information about subaccounts, including balances and UIDs.
+   */
+getSubaccounts(): Promise<
+    DerivativesAPISuccessResponse<FuturesSubaccountsInfo>
+  > {
+    return this.getPrivate('derivatives/api/v3/subaccounts');
+⋮----
+/**
+   *
+   * Futures REST API - Trading - Transfers
+   *
+   */
+⋮----
+/**
+   * Initiate wallet transfer
+   *
+   * This endpoint allows you to transfer funds between two margin accounts with the same collateral currency, or between a margin account and your cash account.
+   */
+submitWalletTransfer(
+    params: FuturesInitiateWalletTransferParams,
+): Promise<DerivativesAPISuccessResponse<Record<string, never>>>
+⋮----
+/**
+   * Initiate sub account transfer
+   *
+   * This endpoint allows you to transfer funds between the current account and a sub account, between two margin accounts with the same collateral currency, or between a margin account and your cash account.
+   */
+submitSubaccountTransfer(
+    params: FuturesInitiateSubaccountTransferParams,
+): Promise<DerivativesAPISuccessResponse<Record<string, never>>>
+⋮----
+/**
+   * Initiate withdrawal to Spot wallet
+   *
+   * This endpoint allows you to request to withdraw digital assets to your Kraken Spot wallet.
+   * Wallet names can be found in the 'accounts' structure in the Get Wallets /accounts response.
+   */
+submitTransferToSpot(
+    params: FuturesSubmitToSpotParams,
+): Promise<DerivativesAPISuccessResponse<
+⋮----
+/**
+   *
+   * Futures REST API - Trading - RFQs
+   *
+   */
+⋮----
+/**
+   * List all open RFQs
+   *
+   * Retrieve all currently open RFQs.
+   * Note: This is currently available exclusively in the Kraken Futures DEMO environment.
+   *
+   * @deprecated Kraken retired the Futures demo environment on 14 July 2026, so this endpoint is no longer available. See https://support.kraken.com/articles/360024809011-api-testing-environment-derivatives
+   */
+getOpenRFQs(): Promise<
+    DerivativesAPISuccessResponse<{ rfqs: FuturesRfq[] }>
+  > {
+    return this.get('derivatives/api/v3/rfqs');
+⋮----
+/**
+   * Retrieve a single open RFQ
+   *
+   * Retrieve a specific open RFQ by its unique identifier.
+   * Note: This is currently available exclusively in the Kraken Futures DEMO environment.
+   *
+   * @deprecated Kraken retired the Futures demo environment on 14 July 2026, so this endpoint is no longer available. See https://support.kraken.com/articles/360024809011-api-testing-environment-derivatives
+   */
+getOpenRFQ(params: {
+    rfqUid: string;
+}): Promise<DerivativesAPISuccessResponse<
+⋮----
+/**
+   * List open offers on open RFQs
+   *
+   * Retrieve all open offers for the account on currently open RFQs.
+   * Note: This is currently available exclusively in the Kraken Futures DEMO environment.
+   *
+   * @deprecated Kraken retired the Futures demo environment on 14 July 2026, so this endpoint is no longer available. See https://support.kraken.com/articles/360024809011-api-testing-environment-derivatives
+   */
+getRFQOpenOffers(): Promise<
+    DerivativesAPISuccessResponse<{ openOffers: FuturesOpenOffer[] }>
+  > {
+    return this.getPrivate('derivatives/api/v3/rfqs/open-offers');
+⋮----
+/**
+   * Place new offer on an open RFQ
+   *
+   * Place a new offer for the given amount in USD on the specified open RFQ, bid and ask are optional but at least one must be provided.
+   * Note: This is currently available exclusively in the Kraken Futures DEMO environment.
+   *
+   * @deprecated Kraken retired the Futures demo environment on 14 July 2026, so this endpoint is no longer available. See https://support.kraken.com/articles/360024809011-api-testing-environment-derivatives
+   */
+submitRFQNewOffer(params: {
+    rfqUid: string;
+    bid?: number;
+    ask?: number;
+}): Promise<DerivativesAPISuccessResponse<
+⋮----
+/**
+   * Replace open offer on open RFQ
+   *
+   * Replace the current open offer on the specified open RFQ, bid and ask are optional but at least one must be provided.
+   * Note: This is currently available exclusively in the Kraken Futures DEMO environment.
+   *
+   * @deprecated Kraken retired the Futures demo environment on 14 July 2026, so this endpoint is no longer available. See https://support.kraken.com/articles/360024809011-api-testing-environment-derivatives
+   */
+updateRFQOpenOffer(params: {
+    rfqUid: string;
+    bid?: number;
+    ask?: number;
+}): Promise<DerivativesAPISuccessResponse<Record<string, never>>>
+⋮----
+/**
+   * Cancel open offer on open RFQ
+   *
+   * Cancel the current open offer on the specified open RFQ.
+   * Note: This is currently available exclusively in the Kraken Futures DEMO environment.
+   *
+   * @deprecated Kraken retired the Futures demo environment on 14 July 2026, so this endpoint is no longer available. See https://support.kraken.com/articles/360024809011-api-testing-environment-derivatives
+   */
+cancelRFQOffer(params: {
+    rfqUid: string;
+}): Promise<DerivativesAPISuccessResponse<Record<string, never>>>
+⋮----
+/**
+   *
+   * Futures REST API - History - Account History
+   *
+   */
+⋮----
+/**
+   * Get execution events
+   *
+   * Lists executions/trades for authenticated account.
+   */
+getExecutionEvents(
+    params?: FuturesHistoryBaseParams,
+  ): Promise<
+    DerivativesAPISuccessResponse<
+      FuturesHistoryResponse<FuturesHistoryExecutionEvent>
+    >
+  > {
+    return this.getPrivate('api/history/v3/executions', params);
+⋮----
+/**
+   * Get order events
+   *
+   * Lists order events for authenticated account.
+   */
+getOrderEvents(
+    params?: FuturesGetOrderEventsParams,
+  ): Promise<
+    DerivativesAPISuccessResponse<
+      FuturesHistoryResponse<FuturesHistoryOrderEvent>
+    >
+  > {
+    return this.getPrivate('api/history/v3/orders', params);
+⋮----
+/**
+   * Get trigger events
+   *
+   * Lists trigger events for authenticated account.
+   */
+getTriggerEvents(
+    params?: FuturesGetTriggerEventsParams,
+  ): Promise<
+    DerivativesAPISuccessResponse<
+      FuturesHistoryResponse<FuturesHistoryTriggerEvent>
+    >
+  > {
+    return this.getPrivate('api/history/v3/triggers', params);
+⋮----
+/**
+   * Get position update events
+   *
+   * Lists position events for authenticated account.
+   */
+getPositionEvents(
+    params?: FuturesGetPositionEventsParams,
+  ): Promise<
+    DerivativesAPISuccessResponse<
+      FuturesHistoryResponse<FuturesPositionUpdateEvent>
+    >
+  > {
+    return this.getPrivate('api/history/v3/positions', params);
+⋮----
+/**
+   * Get account log
+   *
+   * Lists account log entries, paged by timestamp or by ID.
+   * To request entries by time range, use the since and before parameters. To request entries by ID range, use the from and to parameters. Any combination of since, before, from and to can be used to restrict the requested range of entries.
+   */
+getAccountLog(
+    params?: FuturesGetAccountLogParams,
+): Promise<DerivativesAPISuccessResponse<FuturesAccountLog>>
+⋮----
+/**
+   * Account log (CSV)
+   *
+   * Lists recent account log entries in CSV format.
+   */
+getAccountLogCsv(params?:
+⋮----
+/**
+   *
+   * Futures REST API - History - Market History
+   *
+   */
+⋮----
+/**
+   * Get public execution events
+   *
+   * Lists trades for a market.
+   */
+getPublicExecutionEvents(
+    params: FuturesMarketHistoryBaseParams,
+): Promise<FuturesMarketHistoryResponse<FuturesPublicExecutionEvent>>
+⋮----
+/**
+   * Get public order events
+   *
+   * Lists order events for a market.
+   */
+getPublicOrderEvents(
+    params: FuturesMarketHistoryBaseParams,
+): Promise<FuturesMarketHistoryResponse<FuturesPublicOrderEvent>>
+⋮----
+/**
+   * Get public mark price events
+   *
+   * Lists price events for a market.
+   */
+getPublicMarkPriceEvents(
+    params: FuturesMarketHistoryBaseParams,
+): Promise<FuturesMarketHistoryResponse<FuturesPublicMarkPriceEvent>>
+⋮----
+/**
+   *
+   * Futures REST API - Charts - Candles
+   *
+   */
+⋮----
+/**
+   * Tick Types
+   *
+   * Returns all available tick types to use with the getMarketsForTickType() endpoint.
+   */
+getTickTypes(): Promise<FuturesTickType[]>
+⋮----
+/**
+   * Markets
+   *
+   * Markets available for specified tick type.
+   * List of available tick types can be fetched from the getTickTypes() endpoint.
+   */
+getMarketsForTickType(params: {
+    tickType: FuturesTickType;
+}): Promise<string[]>
+⋮----
+/**
+   * Resolutions
+   *
+   * Candle resolutions available for specified tick type and market.
+   * List of available tick types can be fetched from the getTickTypes() endpoint.
+   * List of available markets can be fetched from the getMarketsForTickType() endpoint.
+   */
+getResolutions(params: {
+    tickType: FuturesTickType;
+    symbol: string;
+}): Promise<FuturesResolution[]>
+⋮----
+/**
+   * Market Candles
+   *
+   * Candles for specified tick type, market, and resolution.
+   * List of available tick types can be fetched from the getTickTypes() endpoint.
+   * List of available markets can be fetched from the getMarketsForTickType() endpoint.
+   * List of available resolutions can be fetched from the getResolutions() endpoint.
+   */
+getCandles(params: FuturesGetCandlesParams): Promise<FuturesCandles>
+⋮----
+/**
+   *
+   * Futures REST API - Charts - Analytics
+   *
+   */
+⋮----
+/**
+   * Get liquidity pool statistic
+   *
+   * Get liquidity pool statistic including usd value.
+   */
+getLiquidityPoolStatistic(
+    params: FuturesGetAnalyticsParams,
+): Promise<FuturesAnalyticsResponse>
+⋮----
+/**
+   * Market Analytics
+   *
+   * Analytics data divided into time buckets.
+   */
+getMarketAnalytics(
+    params: FuturesGetAnalyticsParams,
+): Promise<FuturesAnalyticsResponse>
+⋮----
+/**
+   *
+   * Futures REST API - Auth - API Keys
+   *
+   */
+⋮----
+/**
+   * Check v3 API key
+   *
+   * Verify API key access and return the authenticated key's details.
+   */
+checkApiKeyV3(): Promise<FuturesApiKeyV3Check>
+⋮----
+/**
+   *
+   * Futures REST API - Stats - Market Share
+   *
+   */
+⋮----
+/**
+   * Get account's market share
+   *
+   * Get account's market share, volumes, and accrued rebates data in contracts configured for rebates.
+   * The data may not be available immediately. In these cases HTTP 204 is returned.
+   */
+getAccountMarketShare(): Promise<FuturesMarketShare>
+
+================
 File: src/SpotClient.ts
 ================
 import { BaseRestClient } from './lib/BaseRestClient.js';
@@ -12458,7 +13508,6 @@ import { DerivativesClient } from '@siebly/kraken-api';
 const client = new DerivativesClient({
   apiKey: process.env.API_FUTURES_KEY!,
   apiSecret: process.env.API_FUTURES_SECRET!,
-  // testnet: true throws. Kraken retired the Futures demo on 14 July 2026.
 });
 
 async function placeFuturesOrder() {
@@ -12881,7 +13930,6 @@ import { DerivativesClient } from '@siebly/kraken-api';
 const client = new DerivativesClient({
   apiKey: process.env.API_FUTURES_KEY!,
   apiSecret: process.env.API_FUTURES_SECRET!,
-  // testnet: true throws. Kraken retired the Futures demo on 14 July 2026.
 });
 ```
 
@@ -13471,988 +14519,6 @@ If you want to learn more about integrating with Kraken's APIs & WebSockets:
 - Explore the wider SDK ecosystem: [Siebly.io](https://siebly.io)
 
 ================
-File: src/DerivativesClient.ts
-================
-import { nanoid } from 'nanoid';
-⋮----
-import { BaseRestClient } from './lib/BaseRestClient.js';
-import { REST_CLIENT_TYPE_ENUM, RestClientType } from './lib/requestUtils.js';
-import {
-  FuturesAddAssignmentPreferenceParams,
-  FuturesBatchOrderParams,
-  FuturesCancelOrderParams,
-  FuturesEditOrderParams,
-  FuturesGetAccountLogParams,
-  FuturesGetAnalyticsParams,
-  FuturesGetCandlesParams,
-  FuturesGetOrderEventsParams,
-  FuturesGetPositionEventsParams,
-  FuturesGetTriggerEventsParams,
-  FuturesHistoryBaseParams,
-  FuturesInitiateSubaccountTransferParams,
-  FuturesInitiateWalletTransferParams,
-  FuturesMarketHistoryBaseParams,
-  FuturesSendOrderParams,
-  FuturesSetRfqAssignmentMaxLeverageParams,
-  FuturesSubmitToSpotParams,
-  FuturesUpdateSelfTradeStrategyParams,
-} from './types/request/derivatives.types.js';
-import {
-  FuturesAccountLog,
-  FuturesAccounts,
-  FuturesAnalyticsResponse,
-  FuturesApiKeyV3Check,
-  FuturesAssignmentProgram,
-  FuturesAssignmentProgramHistory,
-  FuturesBatchOrderStatus,
-  FuturesCancelAllOrdersStatus,
-  FuturesCancelOrderStatus,
-  FuturesCandles,
-  FuturesDeadMansSwitchStatus,
-  FuturesEditOrderStatus,
-  FuturesFeeSchedule,
-  FuturesFill,
-  FuturesHistoricalFundingRate,
-  FuturesHistoryExecutionEvent,
-  FuturesHistoryOrderEvent,
-  FuturesHistoryResponse,
-  FuturesHistoryTriggerEvent,
-  FuturesInstrument,
-  FuturesInstrumentStatus,
-  FuturesLeveragePreference,
-  FuturesMarketHistoryResponse,
-  FuturesMarketShare,
-  FuturesNotification,
-  FuturesOpenOffer,
-  FuturesOpenOrder,
-  FuturesOpenPosition,
-  FuturesOrderBook,
-  FuturesOrderStatusInfo,
-  FuturesPnlPreference,
-  FuturesPortfolioMarginParameters,
-  FuturesPortfolioSimulation,
-  FuturesPositionUpdateEvent,
-  FuturesPublicExecutionEvent,
-  FuturesPublicMarkPriceEvent,
-  FuturesPublicOrderEvent,
-  FuturesResolution,
-  FuturesRfq,
-  FuturesSelfTradeStrategy,
-  FuturesSendOrderStatus,
-  FuturesSubaccountsInfo,
-  FuturesTicker,
-  FuturesTickType,
-  FuturesTradeHistoryItem,
-  FuturesUnwindQueuePosition,
-} from './types/response/derivatives.types.js';
-import { DerivativesAPISuccessResponse } from './types/response/shared.types.js';
-⋮----
-/**
- * The DerivativesClient provides integration to the Kraken Derivatives API.
- *
- * Docs:
- * - https://docs.kraken.com/api/docs/guides/futures-introduction
- * - https://docs.kraken.com/api/docs/guides/futures-rest
- * - https://docs.kraken.com/api/docs/futures-api/trading/get-history
- */
-export class DerivativesClient extends BaseRestClient
-⋮----
-getClientType(): RestClientType
-⋮----
-/**
-   *
-   * Misc Utility Methods
-   *
-   */
-⋮----
-generateNewOrderID(): string
-⋮----
-/**
-   *
-   * Futures REST API - Trading - Market Data
-   *
-   */
-⋮----
-/**
-   * Get trade history
-   *
-   * This endpoint returns the most recent 100 trades prior to the specified lastTime value up to past 7 days or recent trading engine restart (whichever is sooner).
-   * If no lastTime specified, it will return 100 most recent trades.
-   */
-getTradeHistory(params: {
-    symbol: string;
-    lastTime?: string;
-  }): Promise<
-    DerivativesAPISuccessResponse<{ history: FuturesTradeHistoryItem[] }>
-  > {
-    return this.get('derivatives/api/v3/history', params);
-⋮----
-/**
-   * Get orderbook
-   *
-   * This endpoint returns the entire non-cumulative order book of currently listed Futures contracts.
-   */
-getOrderbook(params: {
-    symbol: string;
-}): Promise<DerivativesAPISuccessResponse<
-⋮----
-/**
-   * Get tickers
-   *
-   * This endpoint returns current market data for all currently listed Futures contracts and indices.
-   */
-getTickers(): Promise<
-    DerivativesAPISuccessResponse<{ tickers: FuturesTicker[] }>
-  > {
-    return this.get('derivatives/api/v3/tickers');
-⋮----
-/**
-   * Get ticker by symbol
-   *
-   * Get market data for contract or index by symbol.
-   */
-getTicker(params: {
-    symbol: string;
-}): Promise<DerivativesAPISuccessResponse<
-⋮----
-/**
-   *
-   * Futures REST API - Trading - Instrument Details
-   *
-   */
-⋮----
-/**
-   * Get instruments
-   *
-   * Returns specifications for all currently listed markets and indices.
-   */
-getInstruments(): Promise<
-    DerivativesAPISuccessResponse<{ instruments: FuturesInstrument[] }>
-  > {
-    return this.get('derivatives/api/v3/instruments');
-⋮----
-/**
-   * Get trading instruments
-   *
-   * Returns specifications for all currently accessible markets and indices.
-   */
-getTradingInstruments(): Promise<
-    DerivativesAPISuccessResponse<{ instruments: FuturesInstrument[] }>
-  > {
-    return this.getPrivate('derivatives/api/v3/trading/instruments');
-⋮----
-/**
-   * Get instrument status list
-   *
-   * Returns price dislocation and volatility details for all markets.
-   */
-getInstrumentStatusList(): Promise<
-    DerivativesAPISuccessResponse<{
-      instrumentStatus: FuturesInstrumentStatus[];
-    }>
-  > {
-    return this.get('derivatives/api/v3/instruments/status');
-⋮----
-/**
-   * Get instrument status
-   *
-   * Returns price dislocation and volatility details for given market.
-   */
-getInstrumentStatus(params: {
-    symbol: string;
-}): Promise<DerivativesAPISuccessResponse<FuturesInstrumentStatus>>
-⋮----
-/**
-   *
-   * Futures REST API - Trading - Order Management
-   *
-   */
-⋮----
-/**
-   * Batch order management
-   *
-   * This endpoint allows sending limit or stop order(s) and/or cancelling open order(s) and/or editing open order(s) for a currently listed Futures contract in batch.
-   * When editing an order, if the trailingStopMaxDeviation and trailingStopDeviationUnit parameters are sent unchanged, the system will recalculate a new stop price upon successful order modification.
-   */
-batchOrderManagement(
-    params: FuturesBatchOrderParams,
-  ): Promise<
-    DerivativesAPISuccessResponse<{ batchStatus: FuturesBatchOrderStatus[] }>
-  > {
-    const { ProcessBefore, json } = params;
-    return this.postPrivate('derivatives/api/v3/batchorder', {
-      body: {
-        ProcessBefore: ProcessBefore,
-        json,
-      },
-    });
-⋮----
-/**
-   * Cancel all orders
-   *
-   * This endpoint allows cancelling orders which are associated with a future's contract or a margin account. If no arguments are specified all open orders will be cancelled.
-   */
-cancelAllOrders(params?: { symbol?: string }): Promise<
-    DerivativesAPISuccessResponse<{
-      cancelStatus: FuturesCancelAllOrdersStatus;
-    }>
-  > {
-    return this.postPrivate('derivatives/api/v3/cancelallorders', {
-      body: params,
-    });
-⋮----
-/**
-   * Dead man's switch
-   *
-   * This endpoint provides a Dead Man's Switch mechanism to protect the user from network malfunctions. The user can send a request with a timeout in seconds which will trigger a countdown timer that will cancel all user orders when timeout expires. The user has to keep sending request to push back the timeout expiration or they can deactivate the mechanism by specifying a timeout of zero (0).
-   * The recommended mechanism usage is making a call every 15 to 20 seconds and provide a timeout of 60 seconds. This allows the user to keep the orders in place on a brief network failure, while keeping them safe in case of a network breakdown.
-   */
-cancelAllOrdersAfter(params: {
-    timeout: number;
-  }): Promise<
-    DerivativesAPISuccessResponse<{ status: FuturesDeadMansSwitchStatus }>
-  > {
-    return this.postPrivate('derivatives/api/v3/cancelallordersafter', {
-      body: params,
-    });
-⋮----
-/**
-   * Cancel order
-   *
-   * This endpoint allows cancelling an open order for a Futures contract.
-   */
-cancelOrder(
-    params: FuturesCancelOrderParams,
-  ): Promise<
-    DerivativesAPISuccessResponse<{ cancelStatus: FuturesCancelOrderStatus }>
-  > {
-    return this.postPrivate('derivatives/api/v3/cancelorder', {
-      body: params,
-    });
-⋮----
-/**
-   * Edit order
-   *
-   * This endpoint allows editing an existing order for a currently listed Futures contract.
-   * When editing an order, if the trailingStopMaxDeviation and trailingStopDeviationUnit parameters are sent unchanged, the system will recalculate a new stop price upon successful order modification.
-   */
-editOrder(
-    params: FuturesEditOrderParams,
-  ): Promise<
-    DerivativesAPISuccessResponse<{ editStatus: FuturesEditOrderStatus }>
-  > {
-    return this.postPrivate('derivatives/api/v3/editorder', {
-      body: params,
-    });
-⋮----
-/**
-   * Get open orders
-   *
-   * This endpoint returns information on all open orders for all Futures contracts.
-   */
-getOpenOrders(): Promise<
-    DerivativesAPISuccessResponse<{ openOrders: FuturesOpenOrder[] }>
-  > {
-    return this.getPrivate('derivatives/api/v3/openorders');
-⋮----
-/**
-   * Send order
-   *
-   * This endpoint allows sending a limit, stop, take profit or immediate-or-cancel order for a currently listed Futures contract.
-   */
-submitOrder(
-    params: FuturesSendOrderParams,
-  ): Promise<
-    DerivativesAPISuccessResponse<{ sendStatus: FuturesSendOrderStatus }>
-  > {
-    return this.postPrivate('derivatives/api/v3/sendorder', {
-      body: params,
-    });
-⋮----
-/**
-   * Get Specific Orders' Status
-   *
-   * Returns information on specified orders which are open or were filled/cancelled in the last 5 seconds.
-   */
-getOrderStatus(params?: {
-    orderIds?: string[];
-    cliOrdIds?: string[];
-  }): Promise<
-    DerivativesAPISuccessResponse<{ orders: FuturesOrderStatusInfo[] }>
-  > {
-    return this.postPrivate('derivatives/api/v3/orders/status', {
-      body: params,
-    });
-⋮----
-/**
-   *
-   * Futures REST API - Trading - Multi-Collateral
-   *
-   */
-⋮----
-/**
-   * Get PNL currency preferences
-   *
-   * The PNL currency preference is used to determine which currency to pay out when realizing PNL gains.
-   */
-getPnlPreferences(): Promise<
-    DerivativesAPISuccessResponse<{ preferences: FuturesPnlPreference[] }>
-  > {
-    return this.getPrivate('derivatives/api/v3/pnlpreferences');
-⋮----
-/**
-   * Set PNL currency preference
-   *
-   * The PNL currency preference is used to determine which currency to pay out when realizing PNL gains.
-   * Calling this API can result in the following error codes: 87 (Contract does not exist), 88 (Contract not a multi-collateral futures contract), 89 (Currency does not exist), 90 (Currency is not enabled for multi-collateral futures), 41 (Would cause liquidation).
-   */
-setPnlPreference(params: {
-    symbol: string;
-    pnlPreference: string;
-}): Promise<DerivativesAPISuccessResponse<Record<string, never>>>
-⋮----
-/**
-   * Get leverage settings
-   *
-   * Returns list of configured leverage preferences.
-   */
-getLeverageSettings(): Promise<
-    DerivativesAPISuccessResponse<{
-      leveragePreferences: FuturesLeveragePreference[];
-    }>
-  > {
-    return this.getPrivate('derivatives/api/v3/leveragepreferences');
-⋮----
-/**
-   * Set leverage settings
-   *
-   * Sets a contract's margin mode, either "isolated" or "cross" margin.
-   * When specifying a max leverage, the contract's margin mode will be isolated.
-   */
-setLeverageSettings(params: {
-    symbol: string;
-    maxLeverage?: number;
-}): Promise<DerivativesAPISuccessResponse<Record<string, never>>>
-⋮----
-/**
-   * Get the off-book max leverage cap
-   *
-   * Returns the account-level off-book maximum leverage cap, or null when no cap is configured.
-   */
-getRfqAssignmentMaxLeverage(): Promise<
-    DerivativesAPISuccessResponse<{ maxLeverage: number | null }>
-  > {
-    return this.getPrivate('derivatives/api/v3/rfq-assignment/max-leverage');
-⋮----
-/**
-   * Set the off-book max leverage cap
-   *
-   * Sets the account-level off-book maximum leverage cap for the authenticated master account.
-   */
-setRfqAssignmentMaxLeverage(
-    params: FuturesSetRfqAssignmentMaxLeverageParams,
-): Promise<DerivativesAPISuccessResponse<
-⋮----
-/**
-   * Clear the off-book max leverage cap
-   *
-   * Clears the account-level off-book maximum leverage cap for the authenticated master account.
-   */
-deleteRfqAssignmentMaxLeverage(): Promise<
-    DerivativesAPISuccessResponse<{ maxLeverage: number | null }>
-  > {
-    return this.deletePrivate('derivatives/api/v3/rfq-assignment/max-leverage');
-⋮----
-/**
-   *
-   * Futures REST API - Trading - Account Information
-   *
-   */
-⋮----
-/**
-   * Get wallets
-   *
-   * This endpoint returns key information relating to all your accounts which may either be cash accounts or margin accounts.
-   * This includes digital asset balances, instrument balances, margin requirements, margin trigger estimates and
-   * auxiliary information such as available funds, PnL of open positions and portfolio value.
-   */
-getAccounts(): Promise<
-    DerivativesAPISuccessResponse<{ accounts: FuturesAccounts }>
-  > {
-    return this.getPrivate('derivatives/api/v3/accounts');
-⋮----
-/**
-   * Get open positions
-   *
-   * This endpoint returns the size and average entry price of all open positions in Futures contracts.
-   * This includes Futures contracts that have matured but have not yet been settled.
-   */
-getOpenPositions(): Promise<
-    DerivativesAPISuccessResponse<{ openPositions: FuturesOpenPosition[] }>
-  > {
-    return this.getPrivate('derivatives/api/v3/openpositions');
-⋮----
-/**
-   * Get position percentile of unwind queue
-   *
-   * This endpoint returns the percentile of the open position in case of unwinding.
-   */
-getPositionPercentile(): Promise<
-    DerivativesAPISuccessResponse<{ queue: FuturesUnwindQueuePosition[] }>
-  > {
-    return this.getPrivate('derivatives/api/v3/unwindqueue');
-⋮----
-/**
-   * Get portfolio margin parameters
-   *
-   * Retrieve current portfolio margin calculation parameters.
-   * Also includes user specific limits related to options trading.
-   * Note: This is currently available exclusively in the Kraken Futures DEMO environment.
-   *
-   * @deprecated Kraken retired the Futures demo environment on 14 July 2026, so this endpoint is no longer available. See https://support.kraken.com/articles/360024809011-api-testing-environment-derivatives
-   */
-getPortfolioMarginParameters(): Promise<
-    DerivativesAPISuccessResponse<FuturesPortfolioMarginParameters>
-  > {
-    return this.getPrivate('derivatives/api/v3/portfolio-margining/parameters');
-⋮----
-/**
-   * Calculate portfolio margin, pnl and greeks
-   *
-   * For a given portfolio of balances and positions (futures and options), calculate the margin requirements, pnl and option greeks.
-   * Note: This is currently available exclusively in the Kraken Futures DEMO environment.
-   *
-   * @deprecated Kraken retired the Futures demo environment on 14 July 2026, so this endpoint is no longer available. See https://support.kraken.com/articles/360024809011-api-testing-environment-derivatives
-   */
-simulateMarginRequirements(params: {
-    json: any; // Complex structure for portfolio simulation
-}): Promise<DerivativesAPISuccessResponse<FuturesPortfolioSimulation>>
-⋮----
-json: any; // Complex structure for portfolio simulation
-⋮----
-/**
-   *
-   * Futures REST API - Trading - Assignment Program
-   *
-   */
-⋮----
-/**
-   * List assignment programs
-   *
-   * This endpoint returns information on currently active assignment programs.
-   */
-getAssignmentPrograms(): Promise<
-    DerivativesAPISuccessResponse<{ participants: FuturesAssignmentProgram[] }>
-  > {
-    return this.getPrivate('derivatives/api/v3/assignmentprogram/current');
-⋮----
-/**
-   * Add assignment preference
-   *
-   * This endpoint adds an assignment program preference.
-   */
-addAssignmentPreference(
-    params: FuturesAddAssignmentPreferenceParams,
-): Promise<DerivativesAPISuccessResponse<FuturesAssignmentProgram>>
-⋮----
-/**
-   * Delete assignment preference
-   *
-   * This endpoint deletes an assignment program preference.
-   */
-deleteAssignmentPreference(params: {
-    id: number;
-}): Promise<DerivativesAPISuccessResponse<FuturesAssignmentProgram>>
-⋮----
-/**
-   * List assignment preferences history
-   *
-   * This endpoint returns information on assignment program preferences change history.
-   */
-getAssignmentPreferencesHistory(): Promise<
-    DerivativesAPISuccessResponse<{
-      participants: FuturesAssignmentProgramHistory[];
-    }>
-  > {
-    return this.getPrivate('derivatives/api/v3/assignmentprogram/history');
-⋮----
-/**
-   *
-   * Futures REST API - Trading - Fee Schedules
-   *
-   */
-⋮----
-/**
-   * Get fee schedules
-   *
-   * This endpoint lists all fee schedules.
-   *
-   * @deprecated Effective 2026-06-22. Use SpotClient.getTradingVolume() with a Spot API key instead.
-   */
-getFeeSchedules(): Promise<
-    DerivativesAPISuccessResponse<{ feeSchedules: FuturesFeeSchedule[] }>
-  > {
-    return this.get('derivatives/api/v3/feeschedules');
-⋮----
-/**
-   * Get fee schedule volumes
-   *
-   * Returns your fee schedule volumes for each fee schedule.
-   *
-   * @deprecated Effective 2026-06-22. Use SpotClient.getTradingVolume() with a Spot API key instead.
-   */
-getFeeScheduleVolumes(): Promise<
-    DerivativesAPISuccessResponse<{
-      volumesByFeeSchedule: Record<string, number>;
-    }>
-  > {
-    return this.getPrivate('derivatives/api/v3/feeschedules/volumes');
-⋮----
-/**
-   *
-   * Futures REST API - Trading - General
-   *
-   */
-⋮----
-/**
-   * Get notifications
-   *
-   * This endpoint provides the platform's notifications.
-   */
-getNotifications(): Promise<
-    DerivativesAPISuccessResponse<{ notifications: FuturesNotification[] }>
-  > {
-    return this.getPrivate('derivatives/api/v3/notifications');
-⋮----
-/**
-   *
-   * Futures REST API - Trading - Historical Data
-   *
-   */
-⋮----
-/**
-   * Get your fills
-   *
-   * This endpoint returns information on your filled orders for all futures contracts.
-   */
-getFills(params?: {
-    lastFillTime?: string;
-}): Promise<DerivativesAPISuccessResponse<
-⋮----
-/**
-   *
-   * Futures REST API - Trading - Historical Funding Rates
-   *
-   */
-⋮----
-/**
-   * Historical funding rates
-   *
-   * Returns list of historical funding rates for given market.
-   */
-getHistoricalFundingRates(params: {
-    symbol: string;
-  }): Promise<
-    DerivativesAPISuccessResponse<{ rates: FuturesHistoricalFundingRate[] }>
-  > {
-    return this.get('derivatives/api/v3/historical-funding-rates', params);
-⋮----
-/**
-   *
-   * Futures REST API - Trading - Trading Settings
-   *
-   */
-⋮----
-/**
-   * Get self trade strategy
-   *
-   * Returns account-wide self-trade matching strategy.
-   */
-getSelfTradeStrategy(): Promise<
-    DerivativesAPISuccessResponse<{
-      strategy: FuturesSelfTradeStrategy;
-    }>
-  > {
-    return this.getPrivate('derivatives/api/v3/self-trade-strategy');
-⋮----
-/**
-   * Update self trade strategy
-   *
-   * Updates account-wide self-trade matching behavior to given strategy.
-   */
-updateSelfTradeStrategy(
-    params: FuturesUpdateSelfTradeStrategyParams,
-  ): Promise<
-    DerivativesAPISuccessResponse<{
-      strategy: FuturesSelfTradeStrategy;
-    }>
-  > {
-    return this.putPrivate('derivatives/api/v3/self-trade-strategy', {
-      query: params,
-    });
-⋮----
-/**
-   *
-   * Futures REST API - Trading - Subaccounts
-   *
-   */
-⋮----
-/**
-   * Check subaccount trading status
-   *
-   * Returns trading capability info for given subaccount.
-   */
-getSubaccountTradingStatus(params: {
-    subaccountUid: string;
-}): Promise<DerivativesAPISuccessResponse<
-⋮----
-/**
-   * Update subaccount trading status
-   *
-   * Updates trading capabilities for given subaccount.
-   */
-updateSubaccountTradingStatus(params: {
-    subaccountUid: string;
-    tradingEnabled: boolean;
-}): Promise<DerivativesAPISuccessResponse<
-⋮----
-/**
-   * Get subaccounts
-   *
-   * Return information about subaccounts, including balances and UIDs.
-   */
-getSubaccounts(): Promise<
-    DerivativesAPISuccessResponse<FuturesSubaccountsInfo>
-  > {
-    return this.getPrivate('derivatives/api/v3/subaccounts');
-⋮----
-/**
-   *
-   * Futures REST API - Trading - Transfers
-   *
-   */
-⋮----
-/**
-   * Initiate wallet transfer
-   *
-   * This endpoint allows you to transfer funds between two margin accounts with the same collateral currency, or between a margin account and your cash account.
-   */
-submitWalletTransfer(
-    params: FuturesInitiateWalletTransferParams,
-): Promise<DerivativesAPISuccessResponse<Record<string, never>>>
-⋮----
-/**
-   * Initiate sub account transfer
-   *
-   * This endpoint allows you to transfer funds between the current account and a sub account, between two margin accounts with the same collateral currency, or between a margin account and your cash account.
-   */
-submitSubaccountTransfer(
-    params: FuturesInitiateSubaccountTransferParams,
-): Promise<DerivativesAPISuccessResponse<Record<string, never>>>
-⋮----
-/**
-   * Initiate withdrawal to Spot wallet
-   *
-   * This endpoint allows you to request to withdraw digital assets to your Kraken Spot wallet.
-   * Wallet names can be found in the 'accounts' structure in the Get Wallets /accounts response.
-   */
-submitTransferToSpot(
-    params: FuturesSubmitToSpotParams,
-): Promise<DerivativesAPISuccessResponse<
-⋮----
-/**
-   *
-   * Futures REST API - Trading - RFQs
-   *
-   */
-⋮----
-/**
-   * List all open RFQs
-   *
-   * Retrieve all currently open RFQs.
-   * Note: This is currently available exclusively in the Kraken Futures DEMO environment.
-   *
-   * @deprecated Kraken retired the Futures demo environment on 14 July 2026, so this endpoint is no longer available. See https://support.kraken.com/articles/360024809011-api-testing-environment-derivatives
-   */
-getOpenRFQs(): Promise<
-    DerivativesAPISuccessResponse<{ rfqs: FuturesRfq[] }>
-  > {
-    return this.get('derivatives/api/v3/rfqs');
-⋮----
-/**
-   * Retrieve a single open RFQ
-   *
-   * Retrieve a specific open RFQ by its unique identifier.
-   * Note: This is currently available exclusively in the Kraken Futures DEMO environment.
-   *
-   * @deprecated Kraken retired the Futures demo environment on 14 July 2026, so this endpoint is no longer available. See https://support.kraken.com/articles/360024809011-api-testing-environment-derivatives
-   */
-getOpenRFQ(params: {
-    rfqUid: string;
-}): Promise<DerivativesAPISuccessResponse<
-⋮----
-/**
-   * List open offers on open RFQs
-   *
-   * Retrieve all open offers for the account on currently open RFQs.
-   * Note: This is currently available exclusively in the Kraken Futures DEMO environment.
-   *
-   * @deprecated Kraken retired the Futures demo environment on 14 July 2026, so this endpoint is no longer available. See https://support.kraken.com/articles/360024809011-api-testing-environment-derivatives
-   */
-getRFQOpenOffers(): Promise<
-    DerivativesAPISuccessResponse<{ openOffers: FuturesOpenOffer[] }>
-  > {
-    return this.getPrivate('derivatives/api/v3/rfqs/open-offers');
-⋮----
-/**
-   * Place new offer on an open RFQ
-   *
-   * Place a new offer for the given amount in USD on the specified open RFQ, bid and ask are optional but at least one must be provided.
-   * Note: This is currently available exclusively in the Kraken Futures DEMO environment.
-   *
-   * @deprecated Kraken retired the Futures demo environment on 14 July 2026, so this endpoint is no longer available. See https://support.kraken.com/articles/360024809011-api-testing-environment-derivatives
-   */
-submitRFQNewOffer(params: {
-    rfqUid: string;
-    bid?: number;
-    ask?: number;
-}): Promise<DerivativesAPISuccessResponse<
-⋮----
-/**
-   * Replace open offer on open RFQ
-   *
-   * Replace the current open offer on the specified open RFQ, bid and ask are optional but at least one must be provided.
-   * Note: This is currently available exclusively in the Kraken Futures DEMO environment.
-   *
-   * @deprecated Kraken retired the Futures demo environment on 14 July 2026, so this endpoint is no longer available. See https://support.kraken.com/articles/360024809011-api-testing-environment-derivatives
-   */
-updateRFQOpenOffer(params: {
-    rfqUid: string;
-    bid?: number;
-    ask?: number;
-}): Promise<DerivativesAPISuccessResponse<Record<string, never>>>
-⋮----
-/**
-   * Cancel open offer on open RFQ
-   *
-   * Cancel the current open offer on the specified open RFQ.
-   * Note: This is currently available exclusively in the Kraken Futures DEMO environment.
-   *
-   * @deprecated Kraken retired the Futures demo environment on 14 July 2026, so this endpoint is no longer available. See https://support.kraken.com/articles/360024809011-api-testing-environment-derivatives
-   */
-cancelRFQOffer(params: {
-    rfqUid: string;
-}): Promise<DerivativesAPISuccessResponse<Record<string, never>>>
-⋮----
-/**
-   *
-   * Futures REST API - History - Account History
-   *
-   */
-⋮----
-/**
-   * Get execution events
-   *
-   * Lists executions/trades for authenticated account.
-   */
-getExecutionEvents(
-    params?: FuturesHistoryBaseParams,
-  ): Promise<
-    DerivativesAPISuccessResponse<
-      FuturesHistoryResponse<FuturesHistoryExecutionEvent>
-    >
-  > {
-    return this.getPrivate('api/history/v3/executions', params);
-⋮----
-/**
-   * Get order events
-   *
-   * Lists order events for authenticated account.
-   */
-getOrderEvents(
-    params?: FuturesGetOrderEventsParams,
-  ): Promise<
-    DerivativesAPISuccessResponse<
-      FuturesHistoryResponse<FuturesHistoryOrderEvent>
-    >
-  > {
-    return this.getPrivate('api/history/v3/orders', params);
-⋮----
-/**
-   * Get trigger events
-   *
-   * Lists trigger events for authenticated account.
-   */
-getTriggerEvents(
-    params?: FuturesGetTriggerEventsParams,
-  ): Promise<
-    DerivativesAPISuccessResponse<
-      FuturesHistoryResponse<FuturesHistoryTriggerEvent>
-    >
-  > {
-    return this.getPrivate('api/history/v3/triggers', params);
-⋮----
-/**
-   * Get position update events
-   *
-   * Lists position events for authenticated account.
-   */
-getPositionEvents(
-    params?: FuturesGetPositionEventsParams,
-  ): Promise<
-    DerivativesAPISuccessResponse<
-      FuturesHistoryResponse<FuturesPositionUpdateEvent>
-    >
-  > {
-    return this.getPrivate('api/history/v3/positions', params);
-⋮----
-/**
-   * Get account log
-   *
-   * Lists account log entries, paged by timestamp or by ID.
-   * To request entries by time range, use the since and before parameters. To request entries by ID range, use the from and to parameters. Any combination of since, before, from and to can be used to restrict the requested range of entries.
-   */
-getAccountLog(
-    params?: FuturesGetAccountLogParams,
-): Promise<DerivativesAPISuccessResponse<FuturesAccountLog>>
-⋮----
-/**
-   * Account log (CSV)
-   *
-   * Lists recent account log entries in CSV format.
-   */
-getAccountLogCsv(params?:
-⋮----
-/**
-   *
-   * Futures REST API - History - Market History
-   *
-   */
-⋮----
-/**
-   * Get public execution events
-   *
-   * Lists trades for a market.
-   */
-getPublicExecutionEvents(
-    params: FuturesMarketHistoryBaseParams,
-): Promise<FuturesMarketHistoryResponse<FuturesPublicExecutionEvent>>
-⋮----
-/**
-   * Get public order events
-   *
-   * Lists order events for a market.
-   */
-getPublicOrderEvents(
-    params: FuturesMarketHistoryBaseParams,
-): Promise<FuturesMarketHistoryResponse<FuturesPublicOrderEvent>>
-⋮----
-/**
-   * Get public mark price events
-   *
-   * Lists price events for a market.
-   */
-getPublicMarkPriceEvents(
-    params: FuturesMarketHistoryBaseParams,
-): Promise<FuturesMarketHistoryResponse<FuturesPublicMarkPriceEvent>>
-⋮----
-/**
-   *
-   * Futures REST API - Charts - Candles
-   *
-   */
-⋮----
-/**
-   * Tick Types
-   *
-   * Returns all available tick types to use with the getMarketsForTickType() endpoint.
-   */
-getTickTypes(): Promise<FuturesTickType[]>
-⋮----
-/**
-   * Markets
-   *
-   * Markets available for specified tick type.
-   * List of available tick types can be fetched from the getTickTypes() endpoint.
-   */
-getMarketsForTickType(params: {
-    tickType: FuturesTickType;
-}): Promise<string[]>
-⋮----
-/**
-   * Resolutions
-   *
-   * Candle resolutions available for specified tick type and market.
-   * List of available tick types can be fetched from the getTickTypes() endpoint.
-   * List of available markets can be fetched from the getMarketsForTickType() endpoint.
-   */
-getResolutions(params: {
-    tickType: FuturesTickType;
-    symbol: string;
-}): Promise<FuturesResolution[]>
-⋮----
-/**
-   * Market Candles
-   *
-   * Candles for specified tick type, market, and resolution.
-   * List of available tick types can be fetched from the getTickTypes() endpoint.
-   * List of available markets can be fetched from the getMarketsForTickType() endpoint.
-   * List of available resolutions can be fetched from the getResolutions() endpoint.
-   */
-getCandles(params: FuturesGetCandlesParams): Promise<FuturesCandles>
-⋮----
-/**
-   *
-   * Futures REST API - Charts - Analytics
-   *
-   */
-⋮----
-/**
-   * Get liquidity pool statistic
-   *
-   * Get liquidity pool statistic including usd value.
-   */
-getLiquidityPoolStatistic(
-    params: FuturesGetAnalyticsParams,
-): Promise<FuturesAnalyticsResponse>
-⋮----
-/**
-   * Market Analytics
-   *
-   * Analytics data divided into time buckets.
-   */
-getMarketAnalytics(
-    params: FuturesGetAnalyticsParams,
-): Promise<FuturesAnalyticsResponse>
-⋮----
-/**
-   *
-   * Futures REST API - Auth - API Keys
-   *
-   */
-⋮----
-/**
-   * Check v3 API key
-   *
-   * Verify API key access and return the authenticated key's details.
-   */
-checkApiKeyV3(): Promise<FuturesApiKeyV3Check>
-⋮----
-/**
-   *
-   * Futures REST API - Stats - Market Share
-   *
-   */
-⋮----
-/**
-   * Get account's market share
-   *
-   * Get account's market share, volumes, and accrued rebates data in contracts configured for rebates.
-   * The data may not be available immediately. In these cases HTTP 204 is returned.
-   */
-getAccountMarketShare(): Promise<FuturesMarketShare>
-
-================
 File: README.md
 ================
 # Node.js & JavaScript SDK for Kraken REST APIs & WebSockets
@@ -14512,6 +14578,7 @@ Complete & robust JavaScript & Node.js SDK for the Kraken REST APIs and WebSocke
     - [Spot Trading](#spot-trading)
     - [Derivatives (Futures) Trading](#derivatives-futures-trading)
   - [WebSockets](#websockets)
+    - [Why not raw ws?](#why-not-raw-ws)
     - [Public WebSocket Streams](#public-websocket-streams)
     - [Private WebSocket Streams](#private-websocket-streams)
     - [WebSocket API (WebsocketAPIClient)](#websocket-api-websocketapiclient)
@@ -14524,7 +14591,13 @@ Complete & robust JavaScript & Node.js SDK for the Kraken REST APIs and WebSocke
 
 ## Installation
 
-`npm install --save @siebly/kraken-api`
+Install the scoped package **`@siebly/kraken-api`**:
+
+```bash
+npm install --save @siebly/kraken-api
+```
+
+The unscoped npm package `kraken-api` is a different package. It is not this SDK.
 
 ## Examples
 
@@ -14803,6 +14876,23 @@ Key WebSocket features:
 - Automatic resubscription after reconnection
 - Support for both Spot and Futures markets
 - Support for both public and private WebSocket streams
+
+### Why not raw ws?
+
+A raw `ws` socket leaves reconnect, liveness, resubscribe, and auth to you. `WebsocketClient` does that work:
+
+- Reconnects a dropped socket, then resubscribes to the topics already requested.
+- Heartbeats (native ping/pong, plus Kraken `heartbeat` / `pong` frames) so a silent socket is treated as dead and reconnected.
+- Private auth: Spot WebSocket tokens are fetched from REST, cached, and refreshed before they expire. Futures private streams use the signed challenge flow, and a reconnect re-authenticates.
+
+Kraken book payloads include a checksum. This SDK does not validate it. Check the checksum yourself on `book` messages if you need that guarantee.
+
+```javascript
+import { WebsocketClient } from '@siebly/kraken-api';
+const ws = new WebsocketClient();
+ws.on('message', (data) => console.log(data));
+ws.subscribe({ topic: 'ticker', payload: { symbol: ['BTC/USD'] } }, 'spotPublicV2');
+```
 
 ### Public WebSocket Streams
 
@@ -15120,7 +15210,7 @@ File: package.json
 ================
 {
   "name": "@siebly/kraken-api",
-  "version": "1.1.7",
+  "version": "1.1.8",
   "description": "Complete & robust Node.js SDK for Kraken's REST APIs and WebSockets, with TypeScript & strong end to end tests.",
   "scripts": {
     "clean": "rm -rf dist",
