@@ -72,6 +72,7 @@ examples/
     Public/
       marketData.ts
     WebSockets/
+      orderbookLocalWs.ts
       privateWs.ts
       publicWs.ts
       wsAPI.RAW.ts
@@ -2188,6 +2189,194 @@ File: .prettierrc
 }
 
 ================
+File: jest.config.ts
+================
+/**
+ * For a detailed explanation regarding each configuration property, visit:
+ * https://jestjs.io/docs/configuration
+ */
+⋮----
+import type { Config } from 'jest';
+⋮----
+// All imported modules in your tests should be mocked automatically
+// automock: false,
+⋮----
+// Stop running tests after `n` failures
+// bail: 0,
+bail: false, // enable to stop test when an error occur,
+⋮----
+// The directory where Jest should store its cached dependency information
+// cacheDirectory: "/private/var/folders/kf/2k3sz4px6c9cbyzj1h_b192h0000gn/T/jest_dx",
+⋮----
+// Automatically clear mock calls, instances, contexts and results before every test
+⋮----
+// Indicates whether the coverage information should be collected while executing the test
+⋮----
+// An array of glob patterns indicating a set of files for which coverage information should be collected
+⋮----
+// The directory where Jest should output its coverage files
+⋮----
+// An array of regexp pattern strings used to skip coverage collection
+// coveragePathIgnorePatterns: [
+//   "/node_modules/"
+// ],
+⋮----
+// Indicates which provider should be used to instrument code for coverage
+⋮----
+// A list of reporter names that Jest uses when writing coverage reports
+// coverageReporters: [
+//   "json",
+//   "text",
+//   "lcov",
+//   "clover"
+// ],
+⋮----
+// An object that configures minimum threshold enforcement for coverage results
+// coverageThreshold: undefined,
+⋮----
+// A path to a custom dependency extractor
+// dependencyExtractor: undefined,
+⋮----
+// Make calling deprecated APIs throw helpful error messages
+// errorOnDeprecated: false,
+⋮----
+// The default configuration for fake timers
+// fakeTimers: {
+//   "enableGlobally": false
+// },
+⋮----
+// Force coverage collection from ignored files using an array of glob patterns
+// forceCoverageMatch: [],
+⋮----
+// A path to a module which exports an async function that is triggered once before all test suites
+// globalSetup: undefined,
+⋮----
+// A path to a module which exports an async function that is triggered once after all test suites
+// globalTeardown: undefined,
+⋮----
+// A set of global variables that need to be available in all test environments
+// globals: {},
+⋮----
+// The maximum amount of workers used to run your tests. Can be specified as % or a number. E.g. maxWorkers: 10% will use 10% of your CPU amount + 1 as the maximum worker number. maxWorkers: 2 will use a maximum of 2 workers.
+maxWorkers: '1', // run tests sequentially to avoid nonce issues
+⋮----
+// An array of directory names to be searched recursively up from the requiring module's location
+// moduleDirectories: [
+//   "node_modules"
+// ],
+⋮----
+// An array of file extensions your modules use
+⋮----
+// modulePaths: ['src'],
+⋮----
+// A map from regular expressions to module names or to arrays of module names that allow to stub out resources with a single module
+// moduleNameMapper: {},
+⋮----
+// An array of regexp pattern strings, matched against all module paths before considered 'visible' to the module loader
+// modulePathIgnorePatterns: [],
+⋮----
+// Activates notifications for test results
+// notify: false,
+⋮----
+// An enum that specifies notification mode. Requires { notify: true }
+// notifyMode: "failure-change",
+⋮----
+// A preset that is used as a base for Jest's configuration
+// preset: undefined,
+⋮----
+// Run tests from one or more projects
+// projects: undefined,
+⋮----
+// Use this configuration option to add custom reporters to Jest
+// reporters: undefined,
+⋮----
+// Automatically reset mock state before every test
+// resetMocks: false,
+⋮----
+// Reset the module registry before running each individual test
+// resetModules: false,
+⋮----
+// A path to a custom resolver
+// resolver: undefined,
+⋮----
+// Automatically restore mock state and implementation before every test
+// restoreMocks: false,
+⋮----
+// The root directory that Jest should scan for tests and modules within
+// rootDir: undefined,
+⋮----
+// A list of paths to directories that Jest should use to search for files in
+// roots: [
+//   "<rootDir>"
+// ],
+⋮----
+// Allows you to use a custom runner instead of Jest's default test runner
+// runner: "jest-runner",
+⋮----
+// The paths to modules that run some code to configure or set up the testing environment before each test
+// setupFiles: [],
+⋮----
+// A list of paths to modules that run some code to configure or set up the testing framework before each test
+// setupFilesAfterEnv: [],
+⋮----
+// The number of seconds after which a test is considered as slow and reported as such in the results.
+// slowTestThreshold: 5,
+⋮----
+// A list of paths to snapshot serializer modules Jest should use for snapshot testing
+// snapshotSerializers: [],
+⋮----
+// The test environment that will be used for testing
+// testEnvironment: "jest-environment-node",
+⋮----
+// Options that will be passed to the testEnvironment
+// testEnvironmentOptions: {},
+⋮----
+// Adds a location field to test results
+// testLocationInResults: false,
+⋮----
+// The glob patterns Jest uses to detect test files
+⋮----
+// "**/__tests__/**/*.[jt]s?(x)",
+⋮----
+// An array of regexp pattern strings that are matched against all test paths, matched tests are skipped
+// testPathIgnorePatterns: [
+//   "/node_modules/"
+// ],
+⋮----
+// The regexp pattern or array of patterns that Jest uses to detect test files
+// testRegex: [],
+⋮----
+// This option allows the use of a custom results processor
+// testResultsProcessor: undefined,
+⋮----
+// This option allows use of a custom test runner
+// testRunner: "jest-circus/runner",
+⋮----
+// A map from regular expressions to paths to transformers
+// transform: undefined,
+⋮----
+// An array of regexp pattern strings that are matched against all source file paths, matched files will skip transformation
+// transformIgnorePatterns: [
+//   "/node_modules/",
+//   "\\.pnp\\.[^\\/]+$"
+// ],
+⋮----
+// Prevents import esm module error from v1 axios release, issue #5026
+⋮----
+// An array of regexp pattern strings that are matched against all modules before the module loader will automatically return a mock for them
+// unmockedModulePathPatterns: undefined,
+⋮----
+// Indicates whether each individual test should be reported during the run
+// verbose: undefined,
+verbose: true, // report individual test
+⋮----
+// An array of regexp patterns that are matched against all source file paths before re-running tests in watch mode
+// watchPathIgnorePatterns: [],
+⋮----
+// Whether to use watchman for file crawling
+// watchman: true,
+
+================
 File: LICENSE.md
 ================
 Copyright 2025 Tiago Siebler
@@ -3333,6 +3522,70 @@ validate: true, // Only validate, don't submit
 // submitLimitOrderWithFlags();
 // submitBatchOrders();
 // submitBatchOrdersValidateOnly();
+
+================
+File: examples/Spot/WebSockets/orderbookLocalWs.ts
+================
+/**
+ * Maintain a local BTC/USD Spot book, validate CRC32 checksums, resubscribe on
+ * mismatch, and log the best bid and ask after each valid snapshot or update.
+ * From the repo root, install dependencies with `npm ci`, then run:
+ * TS_NODE_COMPILER_OPTIONS='{"module":"ESNext"}' node --loader ts-node/esm examples/Spot/WebSockets/orderbookLocalWs.ts
+ * No API credentials are required.
+ */
+import { WebsocketClient, WSTopicRequest } from '../../../src/index.js';
+// Installed SDK: import { WebsocketClient, WSTopicRequest } from '@siebly/kraken-api';
+⋮----
+interface Level {
+  price: number | string;
+  qty: number | string;
+}
+⋮----
+interface Book {
+  asks: Map<string, Level>;
+  bids: Map<string, Level>;
+}
+⋮----
+type BookMessage = {
+  channel: 'book';
+  type: 'snapshot' | 'update';
+  data?: {
+    symbol: string;
+    asks?: Level[];
+    bids?: Level[];
+    checksum: number;
+  }[];
+};
+⋮----
+type InstrumentMessage = {
+  channel: 'instrument';
+  data?: {
+    pairs?: {
+      symbol: string;
+      price_precision: number;
+      qty_precision: number;
+    }[];
+  };
+};
+⋮----
+// instrument: price_precision / qty_precision. REST AssetPairs: pair_decimals / lot_decimals.
+⋮----
+// JSON.parse drops trailing zeros. Restore pair precision before removing the
+// decimal point and leading zeros (0.1 at qty precision 8 becomes 10000000).
+function token(value: number | string, decimals: number)
+⋮----
+function crc32(text: string)
+⋮----
+function sorted(side: Map<string, Level>, highFirst: boolean)
+⋮----
+// WebsocketClient handles reconnects, heartbeats and resubscription after a
+// reconnect; this example maintains the local book and handles checksum resync.
+⋮----
+// CRC32 of the top 10 asks (low to high), then bids (high to low).
+// https://docs.kraken.com/exchange/guides/websockets/book-checksum-v2
+const sideText = (levels: Level[])
+⋮----
+// Drop the mismatched book and subscribe again for a fresh snapshot.
 
 ================
 File: examples/Spot/WebSockets/privateWs.ts
@@ -5777,46 +6030,6 @@ export interface WSSpotV1SystemStatus {
 }
 
 ================
-File: src/types/websockets/ws-subscriptions.ts
-================
-] as const; // Note: Admin topics (Status, Heartbeat & Ping are automatically used internally and can't be subscribed to manually).
-⋮----
-export type WSSpotPublicTopic = (typeof WS_SPOT_PUBLIC_TOPICS)[number];
-⋮----
-export type WSSpotPrivateTopic = (typeof WS_SPOT_PRIVATE_TOPICS)[number];
-⋮----
-export type WSSpotTopic = WSSpotPublicTopic | WSSpotPrivateTopic;
-⋮----
-export type WSDerivativesPublicTopic =
-  (typeof WS_DERIVATIVES_PUBLIC_TOPICS)[number];
-⋮----
-export type WSDerivativesPrivateTopic =
-  (typeof WS_DERIVATIVES_PRIVATE_TOPICS)[number];
-⋮----
-export type WSDerivativesTopic =
-  | WSDerivativesPublicTopic
-  | WSDerivativesPrivateTopic;
-⋮----
-export type WSTopic = WSSpotTopic | WSDerivativesTopic;
-⋮----
-export interface WSSpotInstrumentSubscribeParams {
-  execution_venue?: 'international' | 'bitnomial-exchange';
-  snapshot?: boolean;
-}
-⋮----
-export interface WSSpotExecutionsSubscribeParams {
-  symbol?: string[];
-  snap_trades?: boolean;
-  snapshot?: boolean;
-  rebased?: boolean;
-}
-⋮----
-export interface WSSpotBalancesSubscribeParams {
-  snapshot?: boolean;
-  rebased?: boolean;
-}
-
-================
 File: src/AffiliateClient.ts
 ================
 import { BaseRestClient } from './lib/BaseRestClient.js';
@@ -6175,194 +6388,6 @@ File: .nvmrc
 v24.18.0
 
 ================
-File: jest.config.ts
-================
-/**
- * For a detailed explanation regarding each configuration property, visit:
- * https://jestjs.io/docs/configuration
- */
-⋮----
-import type { Config } from 'jest';
-⋮----
-// All imported modules in your tests should be mocked automatically
-// automock: false,
-⋮----
-// Stop running tests after `n` failures
-// bail: 0,
-bail: false, // enable to stop test when an error occur,
-⋮----
-// The directory where Jest should store its cached dependency information
-// cacheDirectory: "/private/var/folders/kf/2k3sz4px6c9cbyzj1h_b192h0000gn/T/jest_dx",
-⋮----
-// Automatically clear mock calls, instances, contexts and results before every test
-⋮----
-// Indicates whether the coverage information should be collected while executing the test
-⋮----
-// An array of glob patterns indicating a set of files for which coverage information should be collected
-⋮----
-// The directory where Jest should output its coverage files
-⋮----
-// An array of regexp pattern strings used to skip coverage collection
-// coveragePathIgnorePatterns: [
-//   "/node_modules/"
-// ],
-⋮----
-// Indicates which provider should be used to instrument code for coverage
-⋮----
-// A list of reporter names that Jest uses when writing coverage reports
-// coverageReporters: [
-//   "json",
-//   "text",
-//   "lcov",
-//   "clover"
-// ],
-⋮----
-// An object that configures minimum threshold enforcement for coverage results
-// coverageThreshold: undefined,
-⋮----
-// A path to a custom dependency extractor
-// dependencyExtractor: undefined,
-⋮----
-// Make calling deprecated APIs throw helpful error messages
-// errorOnDeprecated: false,
-⋮----
-// The default configuration for fake timers
-// fakeTimers: {
-//   "enableGlobally": false
-// },
-⋮----
-// Force coverage collection from ignored files using an array of glob patterns
-// forceCoverageMatch: [],
-⋮----
-// A path to a module which exports an async function that is triggered once before all test suites
-// globalSetup: undefined,
-⋮----
-// A path to a module which exports an async function that is triggered once after all test suites
-// globalTeardown: undefined,
-⋮----
-// A set of global variables that need to be available in all test environments
-// globals: {},
-⋮----
-// The maximum amount of workers used to run your tests. Can be specified as % or a number. E.g. maxWorkers: 10% will use 10% of your CPU amount + 1 as the maximum worker number. maxWorkers: 2 will use a maximum of 2 workers.
-maxWorkers: '1', // run tests sequentially to avoid nonce issues
-⋮----
-// An array of directory names to be searched recursively up from the requiring module's location
-// moduleDirectories: [
-//   "node_modules"
-// ],
-⋮----
-// An array of file extensions your modules use
-⋮----
-// modulePaths: ['src'],
-⋮----
-// A map from regular expressions to module names or to arrays of module names that allow to stub out resources with a single module
-// moduleNameMapper: {},
-⋮----
-// An array of regexp pattern strings, matched against all module paths before considered 'visible' to the module loader
-// modulePathIgnorePatterns: [],
-⋮----
-// Activates notifications for test results
-// notify: false,
-⋮----
-// An enum that specifies notification mode. Requires { notify: true }
-// notifyMode: "failure-change",
-⋮----
-// A preset that is used as a base for Jest's configuration
-// preset: undefined,
-⋮----
-// Run tests from one or more projects
-// projects: undefined,
-⋮----
-// Use this configuration option to add custom reporters to Jest
-// reporters: undefined,
-⋮----
-// Automatically reset mock state before every test
-// resetMocks: false,
-⋮----
-// Reset the module registry before running each individual test
-// resetModules: false,
-⋮----
-// A path to a custom resolver
-// resolver: undefined,
-⋮----
-// Automatically restore mock state and implementation before every test
-// restoreMocks: false,
-⋮----
-// The root directory that Jest should scan for tests and modules within
-// rootDir: undefined,
-⋮----
-// A list of paths to directories that Jest should use to search for files in
-// roots: [
-//   "<rootDir>"
-// ],
-⋮----
-// Allows you to use a custom runner instead of Jest's default test runner
-// runner: "jest-runner",
-⋮----
-// The paths to modules that run some code to configure or set up the testing environment before each test
-// setupFiles: [],
-⋮----
-// A list of paths to modules that run some code to configure or set up the testing framework before each test
-// setupFilesAfterEnv: [],
-⋮----
-// The number of seconds after which a test is considered as slow and reported as such in the results.
-// slowTestThreshold: 5,
-⋮----
-// A list of paths to snapshot serializer modules Jest should use for snapshot testing
-// snapshotSerializers: [],
-⋮----
-// The test environment that will be used for testing
-// testEnvironment: "jest-environment-node",
-⋮----
-// Options that will be passed to the testEnvironment
-// testEnvironmentOptions: {},
-⋮----
-// Adds a location field to test results
-// testLocationInResults: false,
-⋮----
-// The glob patterns Jest uses to detect test files
-⋮----
-// "**/__tests__/**/*.[jt]s?(x)",
-⋮----
-// An array of regexp pattern strings that are matched against all test paths, matched tests are skipped
-// testPathIgnorePatterns: [
-//   "/node_modules/"
-// ],
-⋮----
-// The regexp pattern or array of patterns that Jest uses to detect test files
-// testRegex: [],
-⋮----
-// This option allows the use of a custom results processor
-// testResultsProcessor: undefined,
-⋮----
-// This option allows use of a custom test runner
-// testRunner: "jest-circus/runner",
-⋮----
-// A map from regular expressions to paths to transformers
-// transform: undefined,
-⋮----
-// An array of regexp pattern strings that are matched against all source file paths, matched files will skip transformation
-// transformIgnorePatterns: [
-//   "/node_modules/",
-//   "\\.pnp\\.[^\\/]+$"
-// ],
-⋮----
-// Prevents import esm module error from v1 axios release, issue #5026
-⋮----
-// An array of regexp pattern strings that are matched against all modules before the module loader will automatically return a mock for them
-// unmockedModulePathPatterns: undefined,
-⋮----
-// Indicates whether each individual test should be reported during the run
-// verbose: undefined,
-verbose: true, // report individual test
-⋮----
-// An array of regexp patterns that are matched against all source file paths before re-running tests in watch mode
-// watchPathIgnorePatterns: [],
-⋮----
-// Whether to use watchman for file crawling
-// watchman: true,
-
-================
 File: examples/Derivatives/Private/testnet.ts
 ================
 /* eslint-disable @typescript-eslint/no-unused-vars */
@@ -6507,129 +6532,6 @@ async function getAccountLogFiltered()
 ⋮----
 // initiateWalletTransfer();
 // initiateWithdrawalToSpot();
-
-================
-File: src/lib/websocket/websocket-util.ts
-================
-import WebSocket from 'isomorphic-ws';
-⋮----
-import { WSAPIRequestOperationKrakenSpot } from '../../types/websockets/ws-api.js';
-import { WSTopic } from '../../types/websockets/ws-subscriptions.js';
-⋮----
-/** Should be one WS key per unique URL */
-⋮----
-/**
-   * Public WebSocket subscriptions for Kraken Spot products, via the V2 API
-   *
-   * - Ref: https://docs.kraken.com/api/docs/guides/spot-ws-intro
-   * - Channels: https://docs.kraken.com/api/docs/websocket-v2/add_order
-   *
-   * Note: Use spotPrivateV2 for private channels (requires API keys).
-   */
-⋮----
-/**
-   * Public WebSocket subscriptions for Kraken Derivatives products, via the V1 API:
-   *
-   * - Ref: https://docs.kraken.com/api/docs/guides/futures-websockets
-   * - Channels: https://docs.kraken.com/api/docs/futures-api/websocket/open_orders
-   *
-   * Note: While both Public and Private channels use the same WebSocket URL, we will actually maintain separate connections for easier management. Private channels require authentication and the connection is authenticated automatically.
-   */
-⋮----
-/** This is used to differentiate between each of the available websocket streams */
-export type WsKey = (typeof WS_KEY_MAP)[keyof typeof WS_KEY_MAP];
-⋮----
-export type WSOperation = 'subscribe' | 'unsubscribe';
-⋮----
-/**
- * Normalised internal format for a request (subscribe/unsubscribe/etc) on a topic, with optional parameters.
- *
- * - Topic: the topic this event is for
- * - Payload: the parameters to include, optional. E.g. auth requires key + sign. Some topics allow configurable parameters.
- */
-export interface WSTopicRequest<
-  TWSTopic extends WSTopic = WSTopic,
-  TWSPayload = any,
-> {
-  topic: TWSTopic;
-  payload?: TWSPayload;
-}
-⋮----
-/**
- * Conveniently allow users to request a topic either as string topics or objects (containing string topic + params)
- */
-export type WSTopicRequestOrStringTopic<
-  TWSTopic extends WSTopic,
-  TWSPayload = any,
-> = WSTopicRequest<TWSTopic, TWSPayload> | string;
-⋮----
-export interface WSRequestOperationKraken<
-  TWSTopic extends string,
-  TWSParams extends object = any,
-> {
-  // spot only
-  method?: WSOperation;
-  // futures only
-  event?: WSOperation;
-  params:
-    | {
-        channel: (TWSTopic | string | number)[];
-        symbol?: string[];
-        event_trigger?: string;
-        snapshot?: boolean;
-      }
-    | TWSParams;
-  req_id: number;
-  /**
-   * The following are needed for futures/derivatives requests
-   */
-  feed?: TWSTopic;
-  api_key?: string;
-  original_challenge?: string;
-  signed_challenge?: string;
-}
-⋮----
-// spot only
-⋮----
-// futures only
-⋮----
-/**
-   * The following are needed for futures/derivatives requests
-   */
-⋮----
-/**
- * #305: ws.terminate() is undefined in browsers.
- * This only works in node.js, not in browsers.
- * Does nothing if `ws` is undefined. Does nothing in browsers.
- */
-export function safeTerminateWs(
-  ws?: WebSocket | any,
-  fallbackToClose?: boolean,
-): boolean
-⋮----
-/**
- * WS API promises are stored using a primary key. This key is constructed using
- * properties found in every request & reply.
- *
- * The counterpart to this is in resolveEmittableEvents
- */
-export function getPromiseRefForWSAPIRequest(
-  wsKey: WsKey,
-  requestEvent: WSAPIRequestOperationKrakenSpot,
-): string
-⋮----
-/**
- * Users can conveniently pass topics as strings or objects (object has topic name + optional params).
- *
- * This method normalises topics into objects (object has topic name + optional params).
- */
-export function getNormalisedTopicRequests(
-  wsTopicRequests: WSTopicRequestOrStringTopic<WSTopic>[],
-): WSTopicRequest<WSTopic>[]
-⋮----
-// passed as string, convert to object
-⋮----
-// already a normalised object, thanks to user
 
 ================
 File: src/lib/websocket/WsStore.ts
@@ -6955,6 +6857,507 @@ export function getRestBaseUrl(
 ): string
 
 ================
+File: src/types/websockets/ws-subscriptions.ts
+================
+] as const; // Note: Admin topics (Status, Heartbeat & Ping are automatically used internally and can't be subscribed to manually).
+⋮----
+export type WSSpotPublicTopic = (typeof WS_SPOT_PUBLIC_TOPICS)[number];
+⋮----
+export type WSSpotPrivateTopic = (typeof WS_SPOT_PRIVATE_TOPICS)[number];
+⋮----
+export type WSSpotTopic = WSSpotPublicTopic | WSSpotPrivateTopic;
+⋮----
+export type WSDerivativesPublicTopic =
+  (typeof WS_DERIVATIVES_PUBLIC_TOPICS)[number];
+⋮----
+export type WSDerivativesPrivateTopic =
+  (typeof WS_DERIVATIVES_PRIVATE_TOPICS)[number];
+⋮----
+export type WSDerivativesTopic =
+  | WSDerivativesPublicTopic
+  | WSDerivativesPrivateTopic;
+⋮----
+export type WSTopic = WSSpotTopic | WSDerivativesTopic;
+⋮----
+export interface WSSpotInstrumentSubscribeParams {
+  execution_venue?: 'international' | 'bitnomial-exchange';
+  snapshot?: boolean;
+}
+⋮----
+export interface WSSpotExecutionsSubscribeParams {
+  symbol?: string[];
+  snap_trades?: boolean;
+  snapshot?: boolean;
+  rebased?: boolean;
+}
+⋮----
+export interface WSSpotBalancesSubscribeParams {
+  snapshot?: boolean;
+  rebased?: boolean;
+}
+⋮----
+/** Spot public v2 `book` subscribe payload. Spread into `params` beside `channel`. */
+export interface WSSpotPublicBookParams {
+  symbol: string[];
+  /** 10, 25, 100, 500, or 1000. Default 10. */
+  depth?: 10 | 25 | 100 | 500 | 1000;
+  /** Default true. */
+  snapshot?: boolean;
+}
+⋮----
+/** 10, 25, 100, 500, or 1000. Default 10. */
+⋮----
+/** Default true. */
+⋮----
+/** Derivatives public v1 `book` subscribe payload. Spread beside `feed`. */
+export interface WSDerivativesPublicBookParams {
+  product_ids: string[];
+}
+⋮----
+export type WSPublicBookParams =
+  | WSSpotPublicBookParams
+  | WSDerivativesPublicBookParams;
+
+================
+File: webpack/webpack.config.cjs
+================
+function generateConfig(name)
+⋮----
+// Add '.ts' and '.tsx' as resolvable extensions.
+⋮----
+// Node.js core modules not available in browsers
+// The REST client's https.Agent (for keepAlive) is Node.js-only and won't work in browsers
+⋮----
+// Code is already transpiled from TypeScript, no additional loaders needed
+
+================
+File: src/lib/websocket/websocket-util.ts
+================
+import WebSocket from 'isomorphic-ws';
+⋮----
+import { WSAPIRequestOperationKrakenSpot } from '../../types/websockets/ws-api.js';
+import {
+  WSPublicBookParams,
+  WSTopic,
+} from '../../types/websockets/ws-subscriptions.js';
+⋮----
+/** Should be one WS key per unique URL */
+⋮----
+/**
+   * Public WebSocket subscriptions for Kraken Spot products, via the V2 API
+   *
+   * - Ref: https://docs.kraken.com/api/docs/guides/spot-ws-intro
+   * - Channels: https://docs.kraken.com/api/docs/websocket-v2/add_order
+   *
+   * Note: Use spotPrivateV2 for private channels (requires API keys).
+   */
+⋮----
+/**
+   * Public WebSocket subscriptions for Kraken Derivatives products, via the V1 API:
+   *
+   * - Ref: https://docs.kraken.com/api/docs/guides/futures-websockets
+   * - Channels: https://docs.kraken.com/api/docs/futures-api/websocket/open_orders
+   *
+   * Note: While both Public and Private channels use the same WebSocket URL, we will actually maintain separate connections for easier management. Private channels require authentication and the connection is authenticated automatically.
+   */
+⋮----
+/** This is used to differentiate between each of the available websocket streams */
+export type WsKey = (typeof WS_KEY_MAP)[keyof typeof WS_KEY_MAP];
+⋮----
+export type WSOperation = 'subscribe' | 'unsubscribe';
+⋮----
+/**
+ * Normalised internal format for a request (subscribe/unsubscribe/etc) on a topic, with optional parameters.
+ *
+ * - Topic: the topic this event is for
+ * - Payload: the parameters to include, optional. E.g. auth requires key + sign. Some topics allow configurable parameters.
+ */
+export interface WSTopicRequest<
+  TWSTopic extends WSTopic = WSTopic,
+  TWSPayload = [TWSTopic] extends ['book'] ? WSPublicBookParams : any,
+> {
+  topic: TWSTopic;
+  payload?: TWSPayload;
+}
+⋮----
+/**
+ * Conveniently allow users to request a topic either as string topics or objects (containing string topic + params)
+ */
+export type WSTopicRequestOrStringTopic<
+  TWSTopic extends WSTopic,
+  TWSPayload = any,
+> = WSTopicRequest<TWSTopic, TWSPayload> | string;
+⋮----
+export interface WSRequestOperationKraken<
+  TWSTopic extends string,
+  TWSParams extends object = any,
+> {
+  // spot only
+  method?: WSOperation;
+  // futures only
+  event?: WSOperation;
+  params:
+    | {
+        channel: (TWSTopic | string | number)[];
+        symbol?: string[];
+        event_trigger?: string;
+        snapshot?: boolean;
+      }
+    | TWSParams;
+  req_id: number;
+  /**
+   * The following are needed for futures/derivatives requests
+   */
+  feed?: TWSTopic;
+  api_key?: string;
+  original_challenge?: string;
+  signed_challenge?: string;
+}
+⋮----
+// spot only
+⋮----
+// futures only
+⋮----
+/**
+   * The following are needed for futures/derivatives requests
+   */
+⋮----
+/**
+ * #305: ws.terminate() is undefined in browsers.
+ * This only works in node.js, not in browsers.
+ * Does nothing if `ws` is undefined. Does nothing in browsers.
+ */
+export function safeTerminateWs(
+  ws?: WebSocket | any,
+  fallbackToClose?: boolean,
+): boolean
+⋮----
+/**
+ * WS API promises are stored using a primary key. This key is constructed using
+ * properties found in every request & reply.
+ *
+ * The counterpart to this is in resolveEmittableEvents
+ */
+export function getPromiseRefForWSAPIRequest(
+  wsKey: WsKey,
+  requestEvent: WSAPIRequestOperationKrakenSpot,
+): string
+⋮----
+/**
+ * Users can conveniently pass topics as strings or objects (object has topic name + optional params).
+ *
+ * This method normalises topics into objects (object has topic name + optional params).
+ */
+export function getNormalisedTopicRequests(
+  wsTopicRequests: WSTopicRequestOrStringTopic<WSTopic>[],
+): WSTopicRequest<WSTopic>[]
+⋮----
+// passed as string, convert to object
+⋮----
+// already a normalised object, thanks to user
+
+================
+File: src/lib/BaseRestClient.ts
+================
+import axios, { AxiosRequestConfig, AxiosResponse, Method } from 'axios';
+// NOTE: https.Agent is Node.js-only and not available in browser environments
+// Browser builds (via webpack) exclude this module - see webpack.config.js fallback settings
+import https from 'https';
+⋮----
+import { neverGuard } from './misc-util.js';
+import {
+  APIIDMain,
+  APIIDMainKey,
+  getRestBaseUrl,
+  isEmptyObject,
+  REST_CLIENT_TYPE_ENUM,
+  RestClientOptions,
+  RestClientType,
+  serializeParams,
+} from './requestUtils.js';
+import {
+  checkWebCryptoAPISupported,
+  hashMessage,
+  SignAlgorithm,
+  SignEncodeMethod,
+  signMessage,
+  SignMessageOptions,
+} from './webCryptoAPI.js';
+⋮----
+interface SignedRequest<
+  T extends object | undefined = {},
+  TReqData = object,
+  TReqQuery = object,
+> {
+  originalParams: T;
+  paramsWithSign?: T & { sign: string };
+  // all request params intended for request body (e.g. POST)
+  requestData?: TReqData;
+  // all params intended for request query string (e.g. GET)
+  requestQuery?: TReqQuery;
+  serializedParams: string;
+  sign: string;
+  queryParamsWithSign: string;
+  timestamp: number;
+  recvWindow: number;
+  nonce?: string;
+}
+⋮----
+// all request params intended for request body (e.g. POST)
+⋮----
+// all params intended for request query string (e.g. GET)
+⋮----
+interface UnsignedRequest<T extends object | undefined = {}> {
+  originalParams: T;
+  paramsWithSign: T;
+  queryParamsWithSign: undefined;
+}
+⋮----
+type SignMethod = 'kraken';
+⋮----
+/**
+ * Some requests require some params to be in the query string and some in the body. Some even support passing params via headers.
+ * This type anticipates these are possible in any combination.
+ *
+ * The request builder will automatically handle where parameters should go.
+ */
+type ParamsInQueryBodyOrHeader = {
+  query?: object;
+  body?: object;
+  headers?: object;
+};
+⋮----
+// request: {
+//   url: response.config.url,
+//   method: response.config.method,
+//   data: response.config.data,
+//   headers: response.config.headers,
+// },
+⋮----
+/**
+ * Impure, mutates params to remove any values that have a key but are undefined.
+ */
+function deleteUndefinedValues(params?: any): void
+⋮----
+export abstract class BaseRestClient
+⋮----
+// A unique incrementing nonce
+⋮----
+/** Defines the client type (affecting how requests & signatures behave) */
+abstract getClientType(): RestClientType;
+⋮----
+/**
+   * Create an instance of the REST client. Pass API credentials in the object in the first parameter.
+   * @param {RestClientOptions} [restClientOptions={}] options to configure REST API connectivity
+   * @param {AxiosRequestConfig} [networkOptions={}] HTTP networking options for axios
+   */
+constructor(
+    restClientOptions: RestClientOptions = {},
+    networkOptions: AxiosRequestConfig = {},
+)
+⋮----
+/** Throw errors if any request params are empty */
+⋮----
+/** in ms == 5 minutes by default */
+⋮----
+/** inject custom request options based on axios specs - see axios docs for more guidance on AxiosRequestConfig: https://github.com/axios/axios#request-config */
+⋮----
+// If enabled, configure a https agent with keepAlive enabled
+// NOTE: This is Node.js-only functionality. In browser environments, this code is skipped
+// as the 'https' module is excluded via webpack fallback configuration.
+// Browser connection pooling is handled automatically by the browser itself.
+⋮----
+// Extract existing https agent parameters, if provided, to prevent the keepAlive flag from overwriting an existing https agent completely
+⋮----
+// For more advanced configuration, raise an issue on GitHub or use the "networkOptions"
+// parameter to define a custom httpsAgent with the desired properties
+⋮----
+// Check Web Crypto API support when credentials are provided
+⋮----
+// Throw if one of the 3 values is missing, but at least one of them is set
+⋮----
+/**
+   * Generates a timestamp for signing API requests.
+   *
+   * This method can be overridden or customized using `customTimestampFn`
+   * to implement a custom timestamp synchronization mechanism.
+   * If no custom function is provided, it defaults to the current system time.
+   */
+private getSignTimestampMs(): number
+⋮----
+private getNextRequestNonce(): string
+⋮----
+private hasValidCredentials()
+⋮----
+setAccessToken(newAccessToken: string)
+⋮----
+hasAccessToken(): boolean
+⋮----
+protected get(endpoint: string, params?: object)
+⋮----
+// GET only supports params in the query string
+⋮----
+protected post(endpoint: string, params?: ParamsInQueryBodyOrHeader)
+⋮----
+protected getPrivate(endpoint: string, params?: object)
+⋮----
+// GET only supports params in the query string
+⋮----
+protected postPrivate(endpoint: string, params?: ParamsInQueryBodyOrHeader)
+⋮----
+protected deletePrivate(
+    endpoint: string,
+    params?: ParamsInQueryBodyOrHeader,
+)
+⋮----
+protected putPrivate(endpoint: string, params?: ParamsInQueryBodyOrHeader)
+⋮----
+// protected patchPrivate(endpoint: string, params?: any) {
+protected patchPrivate(endpoint: string, params?: ParamsInQueryBodyOrHeader)
+⋮----
+/**
+   * @private Make a HTTP request to a specific endpoint. Private endpoint API calls are automatically signed.
+   */
+private async _call(
+    method: Method,
+    endpoint: string,
+    params?: ParamsInQueryBodyOrHeader,
+    isPublicApi?: boolean,
+): Promise<any>
+⋮----
+// Sanity check to make sure it's only ever prefixed by one forward slash
+⋮----
+// Build a request and handle signature process
+⋮----
+// Dispatch request
+⋮----
+// Throw if API returns an error (e.g. insufficient balance)
+⋮----
+// const res = {
+//   result: 'error',
+//   error: 'authenticationError',
+//   serverTime: '2025-10-29T15:02:39.341Z',
+// };
+⋮----
+/**
+   * @private generic handler to parse request exceptions
+   */
+parseException(e: any, requestParams: any): unknown
+⋮----
+// Something happened in setting up the request that triggered an error
+⋮----
+// request made but no response received
+⋮----
+// The request was made and the server responded with a status code
+// that falls out of the range of 2xx
+⋮----
+// console.error('err: ', response?.data);
+⋮----
+// Prevent credentials from leaking into error messages
+⋮----
+private async signMessage(
+    paramsStr: string,
+    secret: string,
+    method: SignEncodeMethod,
+    algorithm: SignAlgorithm,
+    options?: SignMessageOptions,
+): Promise<string>
+⋮----
+/**
+   * @private sign request and set recv window
+   */
+private async signRequest<
+    T extends ParamsInQueryBodyOrHeader | undefined = {},
+  >(
+    data: T,
+    endpoint: string,
+    method: Method,
+    signMethod: SignMethod,
+): Promise<SignedRequest<T>>
+⋮----
+// handle JSON preprocessing for requests, including embedded stringify
+⋮----
+// Don't prefix with ? as part of sign. Prefix after sign
+⋮----
+// Array values are repeated into key value pairs
+// E.g. orderIds:[1,2] becomes orderIds=1&orderIds=2
+⋮----
+// Set default nonce, if not set yet
+⋮----
+// Allow nonce override in reuqest
+// Should never fallback to new nonce, since it's pre-set above with default val
+⋮----
+// for spot, serialise GET params, use JSON for POST
+⋮----
+// Only sign when no access token is provided
+⋮----
+// node:crypto equivalent
+// const sign = createHmac(
+//   'sha512',
+//   Buffer.from(this.apiSecret!, 'base64'),
+// )
+//   .update(signMessage, 'binary')
+//   .digest('base64');
+⋮----
+// Check if this is a base64 decoding error (invalid API credentials)
+⋮----
+// Re-throw other errors as-is
+⋮----
+// ONLY the query params. The rest goes in the body, if there is a body.
+⋮----
+const nonce = ''; //this.getNextRequestNonce();
+⋮----
+// Only sign when no access token is provided
+⋮----
+// node:crypto equivalent
+// const sign = createHmac(
+//   'sha512',
+//   Buffer.from(this.apiSecret!, 'base64'),
+// )
+//   .update(signMessage, 'binary')
+//   .digest('base64');
+⋮----
+// Submitted as query string in form body
+⋮----
+private async prepareSignParams<TParams extends object | undefined>(
+    method: Method,
+    endpoint: string,
+    signMethod: SignMethod,
+    params?: TParams,
+    isPublicApi?: true,
+  ): Promise<UnsignedRequest<TParams>>;
+⋮----
+private async prepareSignParams<TParams extends object | undefined>(
+    method: Method,
+    endpoint: string,
+    signMethod: SignMethod,
+    params?: TParams,
+    isPublicApi?: false | undefined,
+  ): Promise<SignedRequest<TParams>>;
+⋮----
+private async prepareSignParams<TParams extends object | undefined>(
+    method: Method,
+    endpoint: string,
+    signMethod: SignMethod,
+    params?: TParams,
+    isPublicApi?: boolean,
+)
+⋮----
+/** Returns an axios request object. Handles signing process automatically if this is a private API call */
+private async buildRequest(
+    method: Method,
+    endpoint: string,
+    url: string,
+    params?: ParamsInQueryBodyOrHeader,
+    isPublicApi?: boolean,
+): Promise<AxiosRequestConfig>
+⋮----
+// Support for Authorization header, if provided:
+// https://github.com/tiagosiebler/kucoin-api/issues/2
+// Use restClient.setAccessToken(newToken), if you need to store a new access token
+// Not supported for Kraken at this time
+
+================
 File: src/types/response/derivatives.types.ts
 ================
 /**
@@ -7221,6 +7624,8 @@ export interface FuturesRejectTriggerEvent {
     | 'EDIT_HAS_NO_EFFECT'
     | 'ORDER_FOR_CANCELLATION_NOT_FOUND'
     | 'ORDER_FOR_EDIT_NOT_FOUND'
+    // REST v4 edit status. v3 reports the same case as editAlreadyHeld. Market data still uses EDIT_HAS_NO_EFFECT.
+    | 'EDIT_ALREADY_HELD'
     | 'ORDER_CANNOT_HAVE_TRIGGER_PRICE'
     | 'POST_WOULD_EXECUTE'
     | 'IOC_WOULD_NOT_EXECUTE'
@@ -7249,6 +7654,8 @@ export interface FuturesRejectTriggerEvent {
     | 'LIMIT_PRICE_OFFSET_TOO_HIGH'
     | 'LIMIT_PRICE_OFFSET_TOO_LOW';
 }
+⋮----
+// REST v4 edit status. v3 reports the same case as editAlreadyHeld. Market data still uses EDIT_HAS_NO_EFFECT.
 ⋮----
 export type FuturesOrderEvent =
   | FuturesPlaceEvent
@@ -7283,7 +7690,9 @@ export interface FuturesBatchOrderStatus {
     | 'clientOrderIdTooLong'
     | 'outsidePriceCollar'
     | 'postWouldExecute'
-    | 'iocWouldNotExecute';
+    | 'iocWouldNotExecute'
+    | 'orderForEditNotFound'
+    | 'editAlreadyHeld';
 }
 ⋮----
 export interface FuturesCancelledOrder {
@@ -7328,6 +7737,7 @@ export interface FuturesEditOrderStatus {
     | 'postWouldExecute'
     | 'wouldNotReducePosition'
     | 'orderForEditNotFound'
+    | 'editAlreadyHeld'
     | 'orderForEditNotAStop';
 }
 ⋮----
@@ -7374,6 +7784,7 @@ export interface FuturesSendOrderStatus {
     | 'notFound'
     | 'orderForEditNotAStop'
     | 'orderForEditNotFound'
+    | 'editAlreadyHeld'
     | 'postWouldExecute'
     | 'iocWouldNotExecute'
     | 'selfFill'
@@ -8040,18 +8451,6 @@ export type FuturesSelfTradeStrategy =
   | 'CANCEL_MAKER_ANY';
 
 ================
-File: webpack/webpack.config.cjs
-================
-function generateConfig(name)
-⋮----
-// Add '.ts' and '.tsx' as resolvable extensions.
-⋮----
-// Node.js core modules not available in browsers
-// The REST client's https.Agent (for keepAlive) is Node.js-only and won't work in browsers
-⋮----
-// Code is already transpiled from TypeScript, no additional loaders needed
-
-================
 File: src/PartnerClient.ts
 ================
 import { BaseRestClient } from './lib/BaseRestClient.js';
@@ -8520,661 +8919,6 @@ getRampProspectiveQuote(
 getRampCheckoutUrl(
     params: PartnerGetRampCheckoutUrlParams,
 ): Promise<PartnerGetRampCheckoutUrlResponse>
-
-================
-File: src/WebsocketClient.ts
-================
-import {
-  BaseWebsocketClient,
-  EmittableEvent,
-  MidflightWsRequestEvent,
-} from './lib/BaseWSClient.js';
-import { neverGuard } from './lib/misc-util.js';
-import {
-  KRAKEN_FUTURES_TESTNET_RETIRED_ERROR,
-  RestClientOptions,
-} from './lib/requestUtils.js';
-import {
-  hashMessage,
-  SignAlgorithm,
-  SignEncodeMethod,
-  signMessage,
-  SignMessageOptions,
-} from './lib/webCryptoAPI.js';
-import { DefaultLogger } from './lib/websocket/logger.js';
-import { RestClientCache } from './lib/websocket/rest-client-cache.js';
-import {
-  getPromiseRefForWSAPIRequest,
-  WS_KEY_MAP,
-  WsKey,
-  WSOperation,
-  WSRequestOperationKraken,
-  WSTopicRequest,
-} from './lib/websocket/websocket-util.js';
-import { WSConnectedResult } from './lib/websocket/WsStore.types.js';
-import {
-  Exact,
-  WS_API_Operations,
-  WSAPIAuthenticationRequestFromServer,
-  WSAPIRequestOperationKrakenSpot,
-  WSAPITopicRequestParamMap,
-  WSAPITopicResponseMap,
-  WSAPIWsKey,
-  WSAPIWsKeyTopicMap,
-} from './types/websockets/ws-api.js';
-import { MessageEventLike } from './types/websockets/ws-events.js';
-import {
-  WSClientConfigurableOptions,
-  WsMarket,
-} from './types/websockets/ws-general.js';
-import {
-  WS_DERIVATIVES_PRIVATE_TOPICS,
-  WS_SPOT_PRIVATE_TOPICS,
-  WSTopic,
-} from './types/websockets/ws-subscriptions.js';
-⋮----
-export interface WSAPIRequestFlags {
-  /** If true, will skip auth requirement for WS API connection */
-  authIsOptional?: boolean | undefined;
-}
-⋮----
-/** If true, will skip auth requirement for WS API connection */
-⋮----
-export class WebsocketClient extends BaseWebsocketClient<WsKey, any>
-⋮----
-constructor(options?: WSClientConfigurableOptions, logger?: DefaultLogger)
-⋮----
-/**
-   * Request connection of all dependent (public & private) websockets, instead of waiting for automatic connection by library.
-   *
-   * Returns array of promises that individually resolve when each connection is successfully opened.
-   */
-public connectAll(): Promise<WSConnectedResult | undefined>[]
-⋮----
-/**
-   * Ensures the WS API connection is active and ready.
-   *
-   * You do not need to call this, but if you call this before making any WS API requests,
-   * it can accelerate the first request (by preparing the connection in advance).
-   */
-public connectWSAPI(wsKey: WSAPIWsKey, skipAuth?: boolean): Promise<unknown>
-⋮----
-/** This call automatically ensures the connection is active AND authenticated before resolving */
-⋮----
-/**
-   * Request subscription to one or more topics. Pass topics as either an array of strings, or array of objects (if the topic has parameters).
-   * Objects should be formatted as {topic: string, params: object}.
-   *
-   * - Subscriptions are automatically routed to the correct websocket connection.
-   * - Authentication/connection is automatic.
-   * - Resubscribe after network issues is automatic.
-   *
-   * Call `unsubscribe(topics)` to remove topics
-   */
-public subscribe(
-    requests:
-      | (WSTopicRequest<WSTopic> | WSTopic)
-      | (WSTopicRequest<WSTopic> | WSTopic)[],
-    wsKey: WsKey,
-)
-⋮----
-/**
-   * Unsubscribe from one or more topics. Similar to subscribe() but in reverse.
-   *
-   * - Requests are automatically routed to the correct websocket connection.
-   * - These topics will be removed from the topic cache, so they won't be subscribed to again.
-   */
-public unsubscribe(
-    requests:
-      | (WSTopicRequest<WSTopic> | WSTopic)
-      | (WSTopicRequest<WSTopic> | WSTopic)[],
-    wsKey: WsKey,
-)
-⋮----
-/**
-   * WS API Methods - similar to the REST API, but via WebSockets
-   */
-⋮----
-/**
-   * Send a Websocket API event on a connection. Returns a promise that resolves on reply.
-   *
-   * Returned promise is rejected if an exception is detected in the reply OR the connection disconnects for any reason (even if automatic reconnect will happen).
-   *
-   * After a fresh connection, you should always send a login request first.
-   *
-   * If you authenticated once and you're reconnected later (e.g. connection temporarily lost), the SDK will by default automatically:
-   * - Detect you were authenticated to the WS API before
-   * - Try to re-authenticate (up to 5 times, in case something (bad timestamp) goes wrong)
-   * - If it succeeds, it will emit the 'authenticated' event.
-   * - If it fails and gives up, it will emit an 'exception' event (type: 'wsapi.auth', reason: detailed text).
-   *
-   * You can turn off the automatic re-auth WS API logic using `reauthWSAPIOnReconnect: false` in the WSClient config.
-   *
-   * @param wsKey - The connection this event is for (e.g. "spotV4" | "perpFuturesUSDTV4" | "perpFuturesBTCV4" | "deliveryFuturesUSDTV4" | "deliveryFuturesBTCV4" | "optionsV4")
-   * @param channel - The channel this event is for (e.g. "spot.login" to authenticate)
-   * @param params - Any request parameters for the payload (contents of req_param in the docs). Signature generation is automatic, only send parameters such as order ID as per the docs.
-   * @returns Promise - tries to resolve with async WS API response. Rejects if disconnected or exception is seen in async WS API response
-   */
-⋮----
-// This overload allows the caller to omit the 3rd param, if it isn't required (e.g. for the login call)
-async sendWSAPIRequest<
-    TWSKey extends keyof WSAPIWsKeyTopicMap,
-    TWSOperation extends WSAPIWsKeyTopicMap[TWSKey],
-    TWSParams extends Exact<WSAPITopicRequestParamMap[TWSOperation]>,
-    TWSAPIResponse extends
-      | WSAPITopicResponseMap[TWSOperation]
-      | object = WSAPITopicResponseMap[TWSOperation],
-  >(
-    wsKey: TWSKey,
-    operation: TWSOperation,
-    params?: TWSParams extends void | never ? undefined : TWSParams,
-    requestFlags?: WSAPIRequestFlags,
-  ): Promise<TWSAPIResponse>;
-⋮----
-async sendWSAPIRequest<
-    TWSKey extends keyof WSAPIWsKeyTopicMap,
-    TWSOperation extends WSAPIWsKeyTopicMap[TWSKey],
-    // if this throws a type error, probably forgot to add a new operation to WsAPITopicRequestParamMap
-    TWSParams extends Exact<WSAPITopicRequestParamMap[TWSOperation]>,
-    TWSAPIResponse extends
-      | WSAPITopicResponseMap[TWSOperation]
-      | object = WSAPITopicResponseMap[TWSOperation],
-  >(
-    wsKey: TWSKey,
-    operation: TWSOperation,
-    params: TWSParams & { signRequest?: boolean },
-    requestFlags?: WSAPIRequestFlags,
-): Promise<TWSAPIResponse | any>
-⋮----
-// if this throws a type error, probably forgot to add a new operation to WsAPITopicRequestParamMap
-⋮----
-/**
-     * Base Info:
-     * - https://docs.kraken.com/api/docs/websocket-v2/add_order
-     *
-     * Currently only supported for Spot markets
-     */
-⋮----
-// Some commands don't require authentication.
-⋮----
-// Sign request
-⋮----
-// Store deferred promise
-⋮----
-// Enrich returned promise with request context for easier debugging
-⋮----
-// Send event
-⋮----
-// Return deferred promise, so caller can await this call
-⋮----
-/**
-   *
-   * Internal methods - not intended for public use
-   *
-   */
-⋮----
-private getRestClientOptions(): RestClientOptions
-⋮----
-/**
-   * Note: implementing this method will wipe the WsStore state for this WsKey, once this method returns
-   */
-protected isCustomReconnectionNeeded(): boolean
-⋮----
-protected async triggerCustomReconnectionWorkflow(): Promise<void>
-⋮----
-protected async getWsUrl(wsKey: WsKey): Promise<string>
-⋮----
-/**
-       * https://docs.kraken.com/api/docs/guides/spot-ws-intro/
-       *
-       * Note: Kraken's v2 WebSockets clean up a number idiosyncrasies and ambiguities from v1 with the overall aim to enable easier integration with applications. It is intended that v1 will be maintained but future enhancements will be developed in v2.
-       *
-       * Given the above, we are only integrating with V2 for now.
-       *
-       * V2 SpotWebSocket Reference: https://docs.kraken.com/api/docs/websocket-v2/add_order/
-       */
-⋮----
-// Uses the same URL, but we maintain separate connections for easier management
-⋮----
-protected sendPingEvent(wsKey: WsKey)
-⋮----
-// let pingChannel: WsRequestPing['channel'];
-⋮----
-// Spot: https://docs.kraken.com/api/docs/websocket-v2/ping
-⋮----
-protected sendPongEvent(wsKey: WsKey)
-⋮----
-// Send a protocol layer pong
-⋮----
-// NOT IN USE for kraken
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-protected isWsPing(_msg: any): boolean
-⋮----
-protected isWsPong(msg: any): boolean
-⋮----
-// Pre-parsed in resolveEmittableEvents into "pong" eventType:
-⋮----
-/**
-   * Parse incoming events into categories, before emitting to the user
-   */
-protected resolveEmittableEvents(
-    wsKey: WsKey,
-    event: MessageEventLike,
-): EmittableEvent[]
-⋮----
-// derivatives sends 'challenge' on successful auth-init (used for sign during subscribe)
-⋮----
-// spot confirmation for subscription success
-⋮----
-// derivatives confirmation for subscription success
-⋮----
-// WS API
-⋮----
-// WS API Exception
-⋮----
-// WS API Success
-⋮----
-} // end of WS API response processing
-⋮----
-// exceptions with derivatives v1 WS. E.g. { event: 'alert', message: 'Bad websocket message' }
-⋮----
-// Most events use event: "update" or "snapshot" for topic updates
-⋮----
-// These are request/reply pattern events (e.g. after subscribing to topics or authenticating)
-// e.g. "method":"subscribe"
-⋮----
-// derivatives events include the "feed" property to identify the channel name
-⋮----
-// Request/reply pattern for authentication success
-⋮----
-/**
-   * Determines if a topic is for a private channel, using a hardcoded list of strings
-   */
-protected isPrivateTopicRequest(request: WSTopicRequest<any>): boolean
-⋮----
-/**
-   * Not in use for Kraken
-   */
-⋮----
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-protected getWsMarketForWsKey(_wsKey: WsKey): WsMarket
-⋮----
-/**
-   * Whether key represents a private connection. Feeds into automatic auth on connect.
-   */
-protected getPrivateWSKeys(): WsKey[]
-⋮----
-protected isAuthOnConnectWsKey(wsKey: WsKey): boolean
-⋮----
-/** Force subscription requests to be sent in smaller batches, if a number is returned */
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-protected getMaxTopicsPerSubscribeEvent(_wsKey: WsKey): number | null
-⋮----
-protected authPrivateConnectionsOnConnect(wsKey: WsKey): boolean
-⋮----
-// derivatives require you to send a challenge on connect
-⋮----
-/**
-   * @returns one or more correctly structured request events for performing a operations over WS. This can vary per exchange spec.
-   */
-protected async getWsRequestEvents(
-    wsKey: WsKey,
-    operation: WSOperation,
-    requests: WSTopicRequest<WSTopic>[],
-): Promise<MidflightWsRequestEvent<WSRequestOperationKraken<string>>[]>
-⋮----
-// Previously used to track topics in a request. Keeping this for subscribe/unsubscribe requests, no need for incremental values
-⋮----
-// Get token from REST client cache
-⋮----
-// Cache midflight subs on the req ID
-// Enrich response with subs for that req ID
-⋮----
-// No auth needed, it's public topics only here
-⋮----
-// Cache midflight subs on the req ID
-// Enrich response with subs for that req ID
-⋮----
-// https://docs.kraken.com/api/docs/guides/futures-websockets
-// Authenticated requests must include both the original challenge message (original_challenge) and the signed (signed_challenge) in JSON format.
-⋮----
-// Cache midflight subs on the req ID
-// Enrich response with subs for that req ID
-⋮----
-private async signMessage(
-    paramsStr: string,
-    secret: string,
-    method: SignEncodeMethod,
-    algorithm: SignAlgorithm,
-    options?: SignMessageOptions,
-): Promise<string>
-⋮----
-protected async getWsAuthRequestEvent(
-    wsKey: WsKey,
-    eventToAuth?: WSAPIAuthenticationRequestFromServer,
-): Promise<object | string | 'waitForEvent' | void>
-⋮----
-// Not needed here, handled automatically with request during subscribe
-⋮----
-// Public WS - no auth
-⋮----
-// cleanup old challenge key (in case we were reconnected)
-⋮----
-// https://docs.kraken.com/api/docs/futures-api/websocket/challenge/
-⋮----
-/**
-   *
-   * @param requestEvent
-   * @returns A signed updated WS API request object, ready to be sent
-   */
-private async signWSAPIRequest(
-    requestEvent: WSAPIRequestOperationKrakenSpot,
-): Promise<WSAPIRequestOperationKrakenSpot>
-⋮----
-// Get token from REST client cache
-⋮----
-// authParams.broker = APIIDMain;
-
-================
-File: src/lib/BaseRestClient.ts
-================
-import axios, { AxiosRequestConfig, AxiosResponse, Method } from 'axios';
-// NOTE: https.Agent is Node.js-only and not available in browser environments
-// Browser builds (via webpack) exclude this module - see webpack.config.js fallback settings
-import https from 'https';
-⋮----
-import { neverGuard } from './misc-util.js';
-import {
-  APIIDMain,
-  APIIDMainKey,
-  getRestBaseUrl,
-  isEmptyObject,
-  REST_CLIENT_TYPE_ENUM,
-  RestClientOptions,
-  RestClientType,
-  serializeParams,
-} from './requestUtils.js';
-import {
-  checkWebCryptoAPISupported,
-  hashMessage,
-  SignAlgorithm,
-  SignEncodeMethod,
-  signMessage,
-  SignMessageOptions,
-} from './webCryptoAPI.js';
-⋮----
-interface SignedRequest<
-  T extends object | undefined = {},
-  TReqData = object,
-  TReqQuery = object,
-> {
-  originalParams: T;
-  paramsWithSign?: T & { sign: string };
-  // all request params intended for request body (e.g. POST)
-  requestData?: TReqData;
-  // all params intended for request query string (e.g. GET)
-  requestQuery?: TReqQuery;
-  serializedParams: string;
-  sign: string;
-  queryParamsWithSign: string;
-  timestamp: number;
-  recvWindow: number;
-  nonce?: string;
-}
-⋮----
-// all request params intended for request body (e.g. POST)
-⋮----
-// all params intended for request query string (e.g. GET)
-⋮----
-interface UnsignedRequest<T extends object | undefined = {}> {
-  originalParams: T;
-  paramsWithSign: T;
-  queryParamsWithSign: undefined;
-}
-⋮----
-type SignMethod = 'kraken';
-⋮----
-/**
- * Some requests require some params to be in the query string and some in the body. Some even support passing params via headers.
- * This type anticipates these are possible in any combination.
- *
- * The request builder will automatically handle where parameters should go.
- */
-type ParamsInQueryBodyOrHeader = {
-  query?: object;
-  body?: object;
-  headers?: object;
-};
-⋮----
-// request: {
-//   url: response.config.url,
-//   method: response.config.method,
-//   data: response.config.data,
-//   headers: response.config.headers,
-// },
-⋮----
-/**
- * Impure, mutates params to remove any values that have a key but are undefined.
- */
-function deleteUndefinedValues(params?: any): void
-⋮----
-export abstract class BaseRestClient
-⋮----
-// A unique incrementing nonce
-⋮----
-/** Defines the client type (affecting how requests & signatures behave) */
-abstract getClientType(): RestClientType;
-⋮----
-/**
-   * Create an instance of the REST client. Pass API credentials in the object in the first parameter.
-   * @param {RestClientOptions} [restClientOptions={}] options to configure REST API connectivity
-   * @param {AxiosRequestConfig} [networkOptions={}] HTTP networking options for axios
-   */
-constructor(
-    restClientOptions: RestClientOptions = {},
-    networkOptions: AxiosRequestConfig = {},
-)
-⋮----
-/** Throw errors if any request params are empty */
-⋮----
-/** in ms == 5 minutes by default */
-⋮----
-/** inject custom request options based on axios specs - see axios docs for more guidance on AxiosRequestConfig: https://github.com/axios/axios#request-config */
-⋮----
-// If enabled, configure a https agent with keepAlive enabled
-// NOTE: This is Node.js-only functionality. In browser environments, this code is skipped
-// as the 'https' module is excluded via webpack fallback configuration.
-// Browser connection pooling is handled automatically by the browser itself.
-⋮----
-// Extract existing https agent parameters, if provided, to prevent the keepAlive flag from overwriting an existing https agent completely
-⋮----
-// For more advanced configuration, raise an issue on GitHub or use the "networkOptions"
-// parameter to define a custom httpsAgent with the desired properties
-⋮----
-// Check Web Crypto API support when credentials are provided
-⋮----
-// Throw if one of the 3 values is missing, but at least one of them is set
-⋮----
-/**
-   * Generates a timestamp for signing API requests.
-   *
-   * This method can be overridden or customized using `customTimestampFn`
-   * to implement a custom timestamp synchronization mechanism.
-   * If no custom function is provided, it defaults to the current system time.
-   */
-private getSignTimestampMs(): number
-⋮----
-private getNextRequestNonce(): string
-⋮----
-private hasValidCredentials()
-⋮----
-setAccessToken(newAccessToken: string)
-⋮----
-hasAccessToken(): boolean
-⋮----
-protected get(endpoint: string, params?: object)
-⋮----
-// GET only supports params in the query string
-⋮----
-protected post(endpoint: string, params?: ParamsInQueryBodyOrHeader)
-⋮----
-protected getPrivate(endpoint: string, params?: object)
-⋮----
-// GET only supports params in the query string
-⋮----
-protected postPrivate(endpoint: string, params?: ParamsInQueryBodyOrHeader)
-⋮----
-protected deletePrivate(
-    endpoint: string,
-    params?: ParamsInQueryBodyOrHeader,
-)
-⋮----
-protected putPrivate(endpoint: string, params?: ParamsInQueryBodyOrHeader)
-⋮----
-// protected patchPrivate(endpoint: string, params?: any) {
-protected patchPrivate(endpoint: string, params?: ParamsInQueryBodyOrHeader)
-⋮----
-/**
-   * @private Make a HTTP request to a specific endpoint. Private endpoint API calls are automatically signed.
-   */
-private async _call(
-    method: Method,
-    endpoint: string,
-    params?: ParamsInQueryBodyOrHeader,
-    isPublicApi?: boolean,
-): Promise<any>
-⋮----
-// Sanity check to make sure it's only ever prefixed by one forward slash
-⋮----
-// Build a request and handle signature process
-⋮----
-// Dispatch request
-⋮----
-// Throw if API returns an error (e.g. insufficient balance)
-⋮----
-// const res = {
-//   result: 'error',
-//   error: 'authenticationError',
-//   serverTime: '2025-10-29T15:02:39.341Z',
-// };
-⋮----
-/**
-   * @private generic handler to parse request exceptions
-   */
-parseException(e: any, requestParams: any): unknown
-⋮----
-// Something happened in setting up the request that triggered an error
-⋮----
-// request made but no response received
-⋮----
-// The request was made and the server responded with a status code
-// that falls out of the range of 2xx
-⋮----
-// console.error('err: ', response?.data);
-⋮----
-// Prevent credentials from leaking into error messages
-⋮----
-private async signMessage(
-    paramsStr: string,
-    secret: string,
-    method: SignEncodeMethod,
-    algorithm: SignAlgorithm,
-    options?: SignMessageOptions,
-): Promise<string>
-⋮----
-/**
-   * @private sign request and set recv window
-   */
-private async signRequest<
-    T extends ParamsInQueryBodyOrHeader | undefined = {},
-  >(
-    data: T,
-    endpoint: string,
-    method: Method,
-    signMethod: SignMethod,
-): Promise<SignedRequest<T>>
-⋮----
-// handle JSON preprocessing for requests, including embedded stringify
-⋮----
-// Don't prefix with ? as part of sign. Prefix after sign
-⋮----
-// Array values are repeated into key value pairs
-// E.g. orderIds:[1,2] becomes orderIds=1&orderIds=2
-⋮----
-// Set default nonce, if not set yet
-⋮----
-// Allow nonce override in reuqest
-// Should never fallback to new nonce, since it's pre-set above with default val
-⋮----
-// for spot, serialise GET params, use JSON for POST
-⋮----
-// Only sign when no access token is provided
-⋮----
-// node:crypto equivalent
-// const sign = createHmac(
-//   'sha512',
-//   Buffer.from(this.apiSecret!, 'base64'),
-// )
-//   .update(signMessage, 'binary')
-//   .digest('base64');
-⋮----
-// Check if this is a base64 decoding error (invalid API credentials)
-⋮----
-// Re-throw other errors as-is
-⋮----
-// ONLY the query params. The rest goes in the body, if there is a body.
-⋮----
-const nonce = ''; //this.getNextRequestNonce();
-⋮----
-// Only sign when no access token is provided
-⋮----
-// node:crypto equivalent
-// const sign = createHmac(
-//   'sha512',
-//   Buffer.from(this.apiSecret!, 'base64'),
-// )
-//   .update(signMessage, 'binary')
-//   .digest('base64');
-⋮----
-// Submitted as query string in form body
-⋮----
-private async prepareSignParams<TParams extends object | undefined>(
-    method: Method,
-    endpoint: string,
-    signMethod: SignMethod,
-    params?: TParams,
-    isPublicApi?: true,
-  ): Promise<UnsignedRequest<TParams>>;
-⋮----
-private async prepareSignParams<TParams extends object | undefined>(
-    method: Method,
-    endpoint: string,
-    signMethod: SignMethod,
-    params?: TParams,
-    isPublicApi?: false | undefined,
-  ): Promise<SignedRequest<TParams>>;
-⋮----
-private async prepareSignParams<TParams extends object | undefined>(
-    method: Method,
-    endpoint: string,
-    signMethod: SignMethod,
-    params?: TParams,
-    isPublicApi?: boolean,
-)
-⋮----
-/** Returns an axios request object. Handles signing process automatically if this is a private API call */
-private async buildRequest(
-    method: Method,
-    endpoint: string,
-    url: string,
-    params?: ParamsInQueryBodyOrHeader,
-    isPublicApi?: boolean,
-): Promise<AxiosRequestConfig>
-⋮----
-// Support for Authorization header, if provided:
-// https://github.com/tiagosiebler/kucoin-api/issues/2
-// Use restClient.setAccessToken(newToken), if you need to store a new access token
-// Not supported for Kraken at this time
 
 ================
 File: src/types/request/derivatives.types.ts
@@ -11122,992 +10866,358 @@ export type WsMarket = 'spot' | 'futures';
 export type WsEventInternalSrc = 'event' | 'function' | 'frame';
 
 ================
-File: src/DerivativesClient.ts
+File: src/WebsocketClient.ts
 ================
-import { nanoid } from 'nanoid';
-⋮----
-import { BaseRestClient } from './lib/BaseRestClient.js';
-import { REST_CLIENT_TYPE_ENUM, RestClientType } from './lib/requestUtils.js';
 import {
-  FuturesAddAssignmentPreferenceParams,
-  FuturesBatchOrderParams,
-  FuturesCancelOrderParams,
-  FuturesEditOrderParams,
-  FuturesGetAccountLogParams,
-  FuturesGetAnalyticsParams,
-  FuturesGetCandlesParams,
-  FuturesGetOrderEventsParams,
-  FuturesGetPositionEventsParams,
-  FuturesGetTriggerEventsParams,
-  FuturesHistoryBaseParams,
-  FuturesInitiateSubaccountTransferParams,
-  FuturesInitiateWalletTransferParams,
-  FuturesMarketHistoryBaseParams,
-  FuturesSendOrderParams,
-  FuturesSetRfqAssignmentMaxLeverageParams,
-  FuturesSubmitToSpotParams,
-  FuturesUpdateSelfTradeStrategyParams,
-} from './types/request/derivatives.types.js';
+  BaseWebsocketClient,
+  EmittableEvent,
+  MidflightWsRequestEvent,
+} from './lib/BaseWSClient.js';
+import { neverGuard } from './lib/misc-util.js';
 import {
-  FuturesAccountLog,
-  FuturesAccounts,
-  FuturesAnalyticsResponse,
-  FuturesApiKeyV3Check,
-  FuturesAssignmentProgram,
-  FuturesAssignmentProgramHistory,
-  FuturesBatchOrderStatus,
-  FuturesCancelAllOrdersStatus,
-  FuturesCancelOrderStatus,
-  FuturesCandles,
-  FuturesDeadMansSwitchStatus,
-  FuturesEditOrderStatus,
-  FuturesFeeSchedule,
-  FuturesFill,
-  FuturesHistoricalFundingRate,
-  FuturesHistoryExecutionEvent,
-  FuturesHistoryOrderEvent,
-  FuturesHistoryResponse,
-  FuturesHistoryTriggerEvent,
-  FuturesInstrument,
-  FuturesInstrumentStatus,
-  FuturesLeveragePreference,
-  FuturesMarketHistoryResponse,
-  FuturesMarketShare,
-  FuturesNotification,
-  FuturesOpenOffer,
-  FuturesOpenOrder,
-  FuturesOpenPosition,
-  FuturesOrderBook,
-  FuturesOrderStatusInfo,
-  FuturesPnlPreference,
-  FuturesPortfolioMarginParameters,
-  FuturesPortfolioSimulation,
-  FuturesPositionUpdateEvent,
-  FuturesPublicExecutionEvent,
-  FuturesPublicMarkPriceEvent,
-  FuturesPublicOrderEvent,
-  FuturesResolution,
-  FuturesRfq,
-  FuturesSelfTradeStrategy,
-  FuturesSendOrderStatus,
-  FuturesSubaccountsInfo,
-  FuturesTicker,
-  FuturesTickType,
-  FuturesTradeHistoryItem,
-  FuturesUnwindQueuePosition,
-} from './types/response/derivatives.types.js';
-import { DerivativesAPISuccessResponse } from './types/response/shared.types.js';
-⋮----
-/**
- * The DerivativesClient provides integration to the Kraken Derivatives API.
- *
- * Docs:
- * - https://docs.kraken.com/api/docs/guides/futures-introduction
- * - https://docs.kraken.com/api/docs/guides/futures-rest
- * - https://docs.kraken.com/api/docs/futures-api/trading/get-history
- */
-export class DerivativesClient extends BaseRestClient
-⋮----
-getClientType(): RestClientType
-⋮----
-/**
-   *
-   * Misc Utility Methods
-   *
-   */
-⋮----
-generateNewOrderID(): string
-⋮----
-/**
-   *
-   * Futures REST API - Trading - Market Data
-   *
-   */
-⋮----
-/**
-   * Get trade history
-   *
-   * This endpoint returns the most recent 100 trades prior to the specified lastTime value up to past 7 days or recent trading engine restart (whichever is sooner).
-   * If no lastTime specified, it will return 100 most recent trades.
-   */
-getTradeHistory(params: {
-    symbol: string;
-    lastTime?: string;
-  }): Promise<
-    DerivativesAPISuccessResponse<{ history: FuturesTradeHistoryItem[] }>
-  > {
-    return this.get('derivatives/api/v3/history', params);
-⋮----
-/**
-   * Get orderbook
-   *
-   * This endpoint returns the entire non-cumulative order book of currently listed Futures contracts.
-   */
-getOrderbook(params: {
-    symbol: string;
-}): Promise<DerivativesAPISuccessResponse<
-⋮----
-/**
-   * Get tickers
-   *
-   * This endpoint returns current market data for all currently listed Futures contracts and indices.
-   */
-getTickers(): Promise<
-    DerivativesAPISuccessResponse<{ tickers: FuturesTicker[] }>
-  > {
-    return this.get('derivatives/api/v3/tickers');
-⋮----
-/**
-   * Get ticker by symbol
-   *
-   * Get market data for contract or index by symbol.
-   */
-getTicker(params: {
-    symbol: string;
-}): Promise<DerivativesAPISuccessResponse<
-⋮----
-/**
-   *
-   * Futures REST API - Trading - Instrument Details
-   *
-   */
-⋮----
-/**
-   * Get instruments
-   *
-   * Returns specifications for all currently listed markets and indices.
-   */
-getInstruments(): Promise<
-    DerivativesAPISuccessResponse<{ instruments: FuturesInstrument[] }>
-  > {
-    return this.get('derivatives/api/v3/instruments');
-⋮----
-/**
-   * Get trading instruments
-   *
-   * Returns specifications for all currently accessible markets and indices.
-   */
-getTradingInstruments(): Promise<
-    DerivativesAPISuccessResponse<{ instruments: FuturesInstrument[] }>
-  > {
-    return this.getPrivate('derivatives/api/v3/trading/instruments');
-⋮----
-/**
-   * Get instrument status list
-   *
-   * Returns price dislocation and volatility details for all markets.
-   */
-getInstrumentStatusList(): Promise<
-    DerivativesAPISuccessResponse<{
-      instrumentStatus: FuturesInstrumentStatus[];
-    }>
-  > {
-    return this.get('derivatives/api/v3/instruments/status');
-⋮----
-/**
-   * Get instrument status
-   *
-   * Returns price dislocation and volatility details for given market.
-   */
-getInstrumentStatus(params: {
-    symbol: string;
-}): Promise<DerivativesAPISuccessResponse<FuturesInstrumentStatus>>
-⋮----
-/**
-   *
-   * Futures REST API - Trading - Order Management
-   *
-   */
-⋮----
-/**
-   * Batch order management
-   *
-   * This endpoint allows sending limit or stop order(s) and/or cancelling open order(s) and/or editing open order(s) for a currently listed Futures contract in batch.
-   * When editing an order, if the trailingStopMaxDeviation and trailingStopDeviationUnit parameters are sent unchanged, the system will recalculate a new stop price upon successful order modification.
-   *
-   * On an edit instruction, `size` follows Kraken `qtyMode` (default `RELATIVE`): it sets the open (remaining) size, not the total quantity including fills. Pass `qtyMode: 'ABSOLUTE'` to set the total size including past fills.
-   */
-batchOrderManagement(
-    params: FuturesBatchOrderParams,
-  ): Promise<
-    DerivativesAPISuccessResponse<{ batchStatus: FuturesBatchOrderStatus[] }>
-  > {
-    const { ProcessBefore, json } = params;
-    return this.postPrivate('derivatives/api/v3/batchorder', {
-      body: {
-        ProcessBefore: ProcessBefore,
-        json,
-      },
-    });
-⋮----
-/**
-   * Cancel all orders
-   *
-   * This endpoint allows cancelling orders which are associated with a future's contract or a margin account. If no arguments are specified all open orders will be cancelled.
-   */
-cancelAllOrders(params?: { symbol?: string }): Promise<
-    DerivativesAPISuccessResponse<{
-      cancelStatus: FuturesCancelAllOrdersStatus;
-    }>
-  > {
-    return this.postPrivate('derivatives/api/v3/cancelallorders', {
-      body: params,
-    });
-⋮----
-/**
-   * Dead man's switch
-   *
-   * This endpoint provides a Dead Man's Switch mechanism to protect the user from network malfunctions. The user can send a request with a timeout in seconds which will trigger a countdown timer that will cancel all user orders when timeout expires. The user has to keep sending request to push back the timeout expiration or they can deactivate the mechanism by specifying a timeout of zero (0).
-   * The recommended mechanism usage is making a call every 15 to 20 seconds and provide a timeout of 60 seconds. This allows the user to keep the orders in place on a brief network failure, while keeping them safe in case of a network breakdown.
-   */
-cancelAllOrdersAfter(params: {
-    timeout: number;
-  }): Promise<
-    DerivativesAPISuccessResponse<{ status: FuturesDeadMansSwitchStatus }>
-  > {
-    return this.postPrivate('derivatives/api/v3/cancelallordersafter', {
-      body: params,
-    });
-⋮----
-/**
-   * Cancel order
-   *
-   * This endpoint allows cancelling an open order for a Futures contract.
-   */
-cancelOrder(
-    params: FuturesCancelOrderParams,
-  ): Promise<
-    DerivativesAPISuccessResponse<{ cancelStatus: FuturesCancelOrderStatus }>
-  > {
-    return this.postPrivate('derivatives/api/v3/cancelorder', {
-      body: params,
-    });
-⋮----
-/**
-   * Edit order
-   *
-   * This endpoint allows editing an existing order for a currently listed Futures contract.
-   * When editing an order, if the trailingStopMaxDeviation and trailingStopDeviationUnit parameters are sent unchanged, the system will recalculate a new stop price upon successful order modification.
-   *
-   * `size` follows Kraken `qtyMode`, which defaults to `RELATIVE` when omitted. That sets the open (remaining / unfilled) size, not the total quantity including fills. Pass `qtyMode: 'ABSOLUTE'` to set the total order size, including past fills, to `size`.
-   *
-   * @see https://docs.kraken.com/api-reference/order-management/edit-order
-   */
-editOrder(
-    params: FuturesEditOrderParams,
-  ): Promise<
-    DerivativesAPISuccessResponse<{ editStatus: FuturesEditOrderStatus }>
-  > {
-    return this.postPrivate('derivatives/api/v3/editorder', {
-      body: params,
-    });
-⋮----
-/**
-   * Get open orders
-   *
-   * This endpoint returns information on all open orders for all Futures contracts.
-   */
-getOpenOrders(): Promise<
-    DerivativesAPISuccessResponse<{ openOrders: FuturesOpenOrder[] }>
-  > {
-    return this.getPrivate('derivatives/api/v3/openorders');
-⋮----
-/**
-   * Send order
+  KRAKEN_FUTURES_TESTNET_RETIRED_ERROR,
+  RestClientOptions,
+} from './lib/requestUtils.js';
+import {
+  hashMessage,
+  SignAlgorithm,
+  SignEncodeMethod,
+  signMessage,
+  SignMessageOptions,
+} from './lib/webCryptoAPI.js';
+import { DefaultLogger } from './lib/websocket/logger.js';
+import { RestClientCache } from './lib/websocket/rest-client-cache.js';
+import {
+  getPromiseRefForWSAPIRequest,
+  WS_KEY_MAP,
+  WsKey,
+  WSOperation,
+  WSRequestOperationKraken,
+  WSTopicRequest,
+} from './lib/websocket/websocket-util.js';
+import { WSConnectedResult } from './lib/websocket/WsStore.types.js';
+import {
+  Exact,
+  WS_API_Operations,
+  WSAPIAuthenticationRequestFromServer,
+  WSAPIRequestOperationKrakenSpot,
+  WSAPITopicRequestParamMap,
+  WSAPITopicResponseMap,
+  WSAPIWsKey,
+  WSAPIWsKeyTopicMap,
+} from './types/websockets/ws-api.js';
+import { MessageEventLike } from './types/websockets/ws-events.js';
+import {
+  WSClientConfigurableOptions,
+  WsMarket,
+} from './types/websockets/ws-general.js';
+import {
+  WS_DERIVATIVES_PRIVATE_TOPICS,
+  WS_SPOT_PRIVATE_TOPICS,
+  WSTopic,
+} from './types/websockets/ws-subscriptions.js';
+⋮----
+export interface WSAPIRequestFlags {
+  /** If true, will skip auth requirement for WS API connection */
+  authIsOptional?: boolean | undefined;
+}
+⋮----
+/** If true, will skip auth requirement for WS API connection */
+⋮----
+export class WebsocketClient extends BaseWebsocketClient<WsKey, any>
+⋮----
+constructor(options?: WSClientConfigurableOptions, logger?: DefaultLogger)
+⋮----
+/**
+   * Request connection of all dependent (public & private) websockets, instead of waiting for automatic connection by library.
+   *
+   * Returns array of promises that individually resolve when each connection is successfully opened.
+   */
+public connectAll(): Promise<WSConnectedResult | undefined>[]
+⋮----
+/**
+   * Ensures the WS API connection is active and ready.
+   *
+   * You do not need to call this, but if you call this before making any WS API requests,
+   * it can accelerate the first request (by preparing the connection in advance).
+   */
+public connectWSAPI(wsKey: WSAPIWsKey, skipAuth?: boolean): Promise<unknown>
+⋮----
+/** This call automatically ensures the connection is active AND authenticated before resolving */
+⋮----
+/**
+   * Request subscription to one or more topics. Pass topics as either an array of strings, or array of objects (if the topic has parameters).
+   * Objects should be formatted as {topic: string, params: object}.
+   *
+   * - Subscriptions are automatically routed to the correct websocket connection.
+   * - Authentication/connection is automatic.
+   * - Resubscribe after network issues is automatic.
    *
-   * This endpoint allows sending a limit, stop, take profit or immediate-or-cancel order for a currently listed Futures contract.
+   * Call `unsubscribe(topics)` to remove topics
    */
-submitOrder(
-    params: FuturesSendOrderParams,
-  ): Promise<
-    DerivativesAPISuccessResponse<{ sendStatus: FuturesSendOrderStatus }>
-  > {
-    return this.postPrivate('derivatives/api/v3/sendorder', {
-      body: params,
-    });
+public subscribe<TTopic extends WSTopic>(
+    requests:
+      | (WSTopicRequest<TTopic> | TTopic)
+      | (WSTopicRequest<TTopic> | TTopic)[],
+    wsKey: WsKey,
+)
 ⋮----
 /**
-   * Get Specific Orders' Status
+   * Unsubscribe from one or more topics. Similar to subscribe() but in reverse.
    *
-   * Returns information on specified orders which are open or were filled/cancelled in the last 5 seconds.
+   * - Requests are automatically routed to the correct websocket connection.
+   * - These topics will be removed from the topic cache, so they won't be subscribed to again.
    */
-getOrderStatus(params?: {
-    orderIds?: string[];
-    cliOrdIds?: string[];
-  }): Promise<
-    DerivativesAPISuccessResponse<{ orders: FuturesOrderStatusInfo[] }>
-  > {
-    return this.postPrivate('derivatives/api/v3/orders/status', {
-      body: params,
-    });
+public unsubscribe<TTopic extends WSTopic>(
+    requests:
+      | (WSTopicRequest<TTopic> | TTopic)
+      | (WSTopicRequest<TTopic> | TTopic)[],
+    wsKey: WsKey,
+)
 ⋮----
 /**
-   *
-   * Futures REST API - Trading - Multi-Collateral
-   *
+   * WS API Methods - similar to the REST API, but via WebSockets
    */
 ⋮----
 /**
-   * Get PNL currency preferences
+   * Send a Websocket API event on a connection. Returns a promise that resolves on reply.
    *
-   * The PNL currency preference is used to determine which currency to pay out when realizing PNL gains.
-   */
-getPnlPreferences(): Promise<
-    DerivativesAPISuccessResponse<{ preferences: FuturesPnlPreference[] }>
-  > {
-    return this.getPrivate('derivatives/api/v3/pnlpreferences');
-⋮----
-/**
-   * Set PNL currency preference
+   * Returned promise is rejected if an exception is detected in the reply OR the connection disconnects for any reason (even if automatic reconnect will happen).
    *
-   * The PNL currency preference is used to determine which currency to pay out when realizing PNL gains.
-   * Calling this API can result in the following error codes: 87 (Contract does not exist), 88 (Contract not a multi-collateral futures contract), 89 (Currency does not exist), 90 (Currency is not enabled for multi-collateral futures), 41 (Would cause liquidation).
-   */
-setPnlPreference(params: {
-    symbol: string;
-    pnlPreference: string;
-}): Promise<DerivativesAPISuccessResponse<Record<string, never>>>
-⋮----
-/**
-   * Get leverage settings
+   * After a fresh connection, you should always send a login request first.
    *
-   * Returns list of configured leverage preferences.
-   */
-getLeverageSettings(): Promise<
-    DerivativesAPISuccessResponse<{
-      leveragePreferences: FuturesLeveragePreference[];
-    }>
-  > {
-    return this.getPrivate('derivatives/api/v3/leveragepreferences');
-⋮----
-/**
-   * Set leverage settings
+   * If you authenticated once and you're reconnected later (e.g. connection temporarily lost), the SDK will by default automatically:
+   * - Detect you were authenticated to the WS API before
+   * - Try to re-authenticate (up to 5 times, in case something (bad timestamp) goes wrong)
+   * - If it succeeds, it will emit the 'authenticated' event.
+   * - If it fails and gives up, it will emit an 'exception' event (type: 'wsapi.auth', reason: detailed text).
    *
-   * Sets a contract's margin mode, either "isolated" or "cross" margin.
-   * When specifying a max leverage, the contract's margin mode will be isolated.
-   */
-setLeverageSettings(params: {
-    symbol: string;
-    maxLeverage?: number;
-}): Promise<DerivativesAPISuccessResponse<Record<string, never>>>
-⋮----
-/**
-   * Get the off-book max leverage cap
+   * You can turn off the automatic re-auth WS API logic using `reauthWSAPIOnReconnect: false` in the WSClient config.
    *
-   * Returns the account-level off-book maximum leverage cap, or null when no cap is configured.
+   * @param wsKey - The connection this event is for (e.g. "spotV4" | "perpFuturesUSDTV4" | "perpFuturesBTCV4" | "deliveryFuturesUSDTV4" | "deliveryFuturesBTCV4" | "optionsV4")
+   * @param channel - The channel this event is for (e.g. "spot.login" to authenticate)
+   * @param params - Any request parameters for the payload (contents of req_param in the docs). Signature generation is automatic, only send parameters such as order ID as per the docs.
+   * @returns Promise - tries to resolve with async WS API response. Rejects if disconnected or exception is seen in async WS API response
    */
-getRfqAssignmentMaxLeverage(): Promise<
-    DerivativesAPISuccessResponse<{ maxLeverage: number | null }>
-  > {
-    return this.getPrivate('derivatives/api/v3/rfq-assignment/max-leverage');
 ⋮----
-/**
-   * Set the off-book max leverage cap
-   *
-   * Sets the account-level off-book maximum leverage cap for the authenticated master account.
-   */
-setRfqAssignmentMaxLeverage(
-    params: FuturesSetRfqAssignmentMaxLeverageParams,
-): Promise<DerivativesAPISuccessResponse<
+// This overload allows the caller to omit the 3rd param, if it isn't required (e.g. for the login call)
+async sendWSAPIRequest<
+    TWSKey extends keyof WSAPIWsKeyTopicMap,
+    TWSOperation extends WSAPIWsKeyTopicMap[TWSKey],
+    TWSParams extends Exact<WSAPITopicRequestParamMap[TWSOperation]>,
+    TWSAPIResponse extends
+      | WSAPITopicResponseMap[TWSOperation]
+      | object = WSAPITopicResponseMap[TWSOperation],
+  >(
+    wsKey: TWSKey,
+    operation: TWSOperation,
+    params?: TWSParams extends void | never ? undefined : TWSParams,
+    requestFlags?: WSAPIRequestFlags,
+  ): Promise<TWSAPIResponse>;
 ⋮----
-/**
-   * Clear the off-book max leverage cap
-   *
-   * Clears the account-level off-book maximum leverage cap for the authenticated master account.
-   */
-deleteRfqAssignmentMaxLeverage(): Promise<
-    DerivativesAPISuccessResponse<{ maxLeverage: number | null }>
-  > {
-    return this.deletePrivate('derivatives/api/v3/rfq-assignment/max-leverage');
+async sendWSAPIRequest<
+    TWSKey extends keyof WSAPIWsKeyTopicMap,
+    TWSOperation extends WSAPIWsKeyTopicMap[TWSKey],
+    // if this throws a type error, probably forgot to add a new operation to WsAPITopicRequestParamMap
+    TWSParams extends Exact<WSAPITopicRequestParamMap[TWSOperation]>,
+    TWSAPIResponse extends
+      | WSAPITopicResponseMap[TWSOperation]
+      | object = WSAPITopicResponseMap[TWSOperation],
+  >(
+    wsKey: TWSKey,
+    operation: TWSOperation,
+    params: TWSParams & { signRequest?: boolean },
+    requestFlags?: WSAPIRequestFlags,
+): Promise<TWSAPIResponse | any>
 ⋮----
-/**
-   *
-   * Futures REST API - Trading - Account Information
-   *
-   */
+// if this throws a type error, probably forgot to add a new operation to WsAPITopicRequestParamMap
 ⋮----
 /**
-   * Get wallets
-   *
-   * This endpoint returns key information relating to all your accounts which may either be cash accounts or margin accounts.
-   * This includes digital asset balances, instrument balances, margin requirements, margin trigger estimates and
-   * auxiliary information such as available funds, PnL of open positions and portfolio value.
-   */
-getAccounts(): Promise<
-    DerivativesAPISuccessResponse<{ accounts: FuturesAccounts }>
-  > {
-    return this.getPrivate('derivatives/api/v3/accounts');
+     * Base Info:
+     * - https://docs.kraken.com/api/docs/websocket-v2/add_order
+     *
+     * Currently only supported for Spot markets
+     */
 ⋮----
-/**
-   * Get open positions
-   *
-   * This endpoint returns the size and average entry price of all open positions in Futures contracts.
-   * This includes Futures contracts that have matured but have not yet been settled.
-   */
-getOpenPositions(): Promise<
-    DerivativesAPISuccessResponse<{ openPositions: FuturesOpenPosition[] }>
-  > {
-    return this.getPrivate('derivatives/api/v3/openpositions');
+// Some commands don't require authentication.
 ⋮----
-/**
-   * Get position percentile of unwind queue
-   *
-   * This endpoint returns the percentile of the open position in case of unwinding.
-   */
-getPositionPercentile(): Promise<
-    DerivativesAPISuccessResponse<{ queue: FuturesUnwindQueuePosition[] }>
-  > {
-    return this.getPrivate('derivatives/api/v3/unwindqueue');
+// Sign request
 ⋮----
-/**
-   * Get portfolio margin parameters
-   *
-   * Retrieve current portfolio margin calculation parameters.
-   * Also includes user specific limits related to options trading.
-   * Note: This is currently available exclusively in the Kraken Futures DEMO environment.
-   *
-   * @deprecated Kraken retired the Futures demo environment on 14 July 2026, so this endpoint is no longer available. See https://support.kraken.com/articles/360024809011-api-testing-environment-derivatives
-   */
-getPortfolioMarginParameters(): Promise<
-    DerivativesAPISuccessResponse<FuturesPortfolioMarginParameters>
-  > {
-    return this.getPrivate('derivatives/api/v3/portfolio-margining/parameters');
+// Store deferred promise
 ⋮----
-/**
-   * Calculate portfolio margin, pnl and greeks
-   *
-   * For a given portfolio of balances and positions (futures and options), calculate the margin requirements, pnl and option greeks.
-   * Note: This is currently available exclusively in the Kraken Futures DEMO environment.
-   *
-   * @deprecated Kraken retired the Futures demo environment on 14 July 2026, so this endpoint is no longer available. See https://support.kraken.com/articles/360024809011-api-testing-environment-derivatives
-   */
-simulateMarginRequirements(params: {
-    json: any; // Complex structure for portfolio simulation
-}): Promise<DerivativesAPISuccessResponse<FuturesPortfolioSimulation>>
+// Enrich returned promise with request context for easier debugging
 ⋮----
-json: any; // Complex structure for portfolio simulation
+// Send event
 ⋮----
-/**
-   *
-   * Futures REST API - Trading - Assignment Program
-   *
-   */
+// Return deferred promise, so caller can await this call
 ⋮----
 /**
-   * List assignment programs
    *
-   * This endpoint returns information on currently active assignment programs.
-   */
-getAssignmentPrograms(): Promise<
-    DerivativesAPISuccessResponse<{ participants: FuturesAssignmentProgram[] }>
-  > {
-    return this.getPrivate('derivatives/api/v3/assignmentprogram/current');
-⋮----
-/**
-   * Add assignment preference
+   * Internal methods - not intended for public use
    *
-   * This endpoint adds an assignment program preference.
    */
-addAssignmentPreference(
-    params: FuturesAddAssignmentPreferenceParams,
-): Promise<DerivativesAPISuccessResponse<FuturesAssignmentProgram>>
 ⋮----
-/**
-   * Delete assignment preference
-   *
-   * This endpoint deletes an assignment program preference.
-   */
-deleteAssignmentPreference(params: {
-    id: number;
-}): Promise<DerivativesAPISuccessResponse<FuturesAssignmentProgram>>
+private getRestClientOptions(): RestClientOptions
 ⋮----
 /**
-   * List assignment preferences history
-   *
-   * This endpoint returns information on assignment program preferences change history.
+   * Note: implementing this method will wipe the WsStore state for this WsKey, once this method returns
    */
-getAssignmentPreferencesHistory(): Promise<
-    DerivativesAPISuccessResponse<{
-      participants: FuturesAssignmentProgramHistory[];
-    }>
-  > {
-    return this.getPrivate('derivatives/api/v3/assignmentprogram/history');
+protected isCustomReconnectionNeeded(): boolean
 ⋮----
-/**
-   *
-   * Futures REST API - Trading - Fee Schedules
-   *
-   */
+protected async triggerCustomReconnectionWorkflow(): Promise<void>
 ⋮----
-/**
-   * Get fee schedules
-   *
-   * This endpoint lists all fee schedules.
-   *
-   * @deprecated Effective 2026-06-22. Use SpotClient.getTradingVolume() with a Spot API key instead.
-   */
-getFeeSchedules(): Promise<
-    DerivativesAPISuccessResponse<{ feeSchedules: FuturesFeeSchedule[] }>
-  > {
-    return this.get('derivatives/api/v3/feeschedules');
+protected async getWsUrl(wsKey: WsKey): Promise<string>
 ⋮----
 /**
-   * Get fee schedule volumes
-   *
-   * Returns your fee schedule volumes for each fee schedule.
-   *
-   * @deprecated Effective 2026-06-22. Use SpotClient.getTradingVolume() with a Spot API key instead.
-   */
-getFeeScheduleVolumes(): Promise<
-    DerivativesAPISuccessResponse<{
-      volumesByFeeSchedule: Record<string, number>;
-    }>
-  > {
-    return this.getPrivate('derivatives/api/v3/feeschedules/volumes');
+       * https://docs.kraken.com/api/docs/guides/spot-ws-intro/
+       *
+       * Note: Kraken's v2 WebSockets clean up a number idiosyncrasies and ambiguities from v1 with the overall aim to enable easier integration with applications. It is intended that v1 will be maintained but future enhancements will be developed in v2.
+       *
+       * Given the above, we are only integrating with V2 for now.
+       *
+       * V2 SpotWebSocket Reference: https://docs.kraken.com/api/docs/websocket-v2/add_order/
+       */
 ⋮----
-/**
-   *
-   * Futures REST API - Trading - General
-   *
-   */
+// Uses the same URL, but we maintain separate connections for easier management
 ⋮----
-/**
-   * Get notifications
-   *
-   * This endpoint provides the platform's notifications.
-   */
-getNotifications(): Promise<
-    DerivativesAPISuccessResponse<{ notifications: FuturesNotification[] }>
-  > {
-    return this.getPrivate('derivatives/api/v3/notifications');
+protected sendPingEvent(wsKey: WsKey)
 ⋮----
-/**
-   *
-   * Futures REST API - Trading - Historical Data
-   *
-   */
+// let pingChannel: WsRequestPing['channel'];
 ⋮----
-/**
-   * Get your fills
-   *
-   * This endpoint returns information on your filled orders for all futures contracts.
-   */
-getFills(params?: {
-    lastFillTime?: string;
-}): Promise<DerivativesAPISuccessResponse<
+// Spot: https://docs.kraken.com/api/docs/websocket-v2/ping
 ⋮----
-/**
-   *
-   * Futures REST API - Trading - Historical Funding Rates
-   *
-   */
+protected sendPongEvent(wsKey: WsKey)
 ⋮----
-/**
-   * Historical funding rates
-   *
-   * Returns list of historical funding rates for given market.
-   */
-getHistoricalFundingRates(params: {
-    symbol: string;
-  }): Promise<
-    DerivativesAPISuccessResponse<{ rates: FuturesHistoricalFundingRate[] }>
-  > {
-    return this.get('derivatives/api/v3/historical-funding-rates', params);
+// Send a protocol layer pong
 ⋮----
-/**
-   *
-   * Futures REST API - Trading - Trading Settings
-   *
-   */
+// NOT IN USE for kraken
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+protected isWsPing(_msg: any): boolean
 ⋮----
-/**
-   * Get self trade strategy
-   *
-   * Returns account-wide self-trade matching strategy.
-   */
-getSelfTradeStrategy(): Promise<
-    DerivativesAPISuccessResponse<{
-      strategy: FuturesSelfTradeStrategy;
-    }>
-  > {
-    return this.getPrivate('derivatives/api/v3/self-trade-strategy');
+protected isWsPong(msg: any): boolean
 ⋮----
-/**
-   * Update self trade strategy
-   *
-   * Updates account-wide self-trade matching behavior to given strategy.
-   */
-updateSelfTradeStrategy(
-    params: FuturesUpdateSelfTradeStrategyParams,
-  ): Promise<
-    DerivativesAPISuccessResponse<{
-      strategy: FuturesSelfTradeStrategy;
-    }>
-  > {
-    return this.putPrivate('derivatives/api/v3/self-trade-strategy', {
-      query: params,
-    });
+// Pre-parsed in resolveEmittableEvents into "pong" eventType:
 ⋮----
 /**
-   *
-   * Futures REST API - Trading - Subaccounts
-   *
+   * Parse incoming events into categories, before emitting to the user
    */
+protected resolveEmittableEvents(
+    wsKey: WsKey,
+    event: MessageEventLike,
+): EmittableEvent[]
 ⋮----
-/**
-   * Check subaccount trading status
-   *
-   * Returns trading capability info for given subaccount.
-   */
-getSubaccountTradingStatus(params: {
-    subaccountUid: string;
-}): Promise<DerivativesAPISuccessResponse<
+// derivatives sends 'challenge' on successful auth-init (used for sign during subscribe)
 ⋮----
-/**
-   * Update subaccount trading status
-   *
-   * Updates trading capabilities for given subaccount.
-   */
-updateSubaccountTradingStatus(params: {
-    subaccountUid: string;
-    tradingEnabled: boolean;
-}): Promise<DerivativesAPISuccessResponse<
+// spot confirmation for subscription success
 ⋮----
-/**
-   * Get subaccounts
-   *
-   * Return information about subaccounts, including balances and UIDs.
-   */
-getSubaccounts(): Promise<
-    DerivativesAPISuccessResponse<FuturesSubaccountsInfo>
-  > {
-    return this.getPrivate('derivatives/api/v3/subaccounts');
+// derivatives confirmation for subscription success
 ⋮----
-/**
-   *
-   * Futures REST API - Trading - Transfers
-   *
-   */
+// WS API
 ⋮----
-/**
-   * Initiate wallet transfer
-   *
-   * This endpoint allows you to transfer funds between two margin accounts with the same collateral currency, or between a margin account and your cash account.
-   */
-submitWalletTransfer(
-    params: FuturesInitiateWalletTransferParams,
-): Promise<DerivativesAPISuccessResponse<Record<string, never>>>
+// WS API Exception
 ⋮----
-/**
-   * Initiate sub account transfer
-   *
-   * This endpoint allows you to transfer funds between the current account and a sub account, between two margin accounts with the same collateral currency, or between a margin account and your cash account.
-   */
-submitSubaccountTransfer(
-    params: FuturesInitiateSubaccountTransferParams,
-): Promise<DerivativesAPISuccessResponse<Record<string, never>>>
+// WS API Success
 ⋮----
-/**
-   * Initiate withdrawal to Spot wallet
-   *
-   * This endpoint allows you to request to withdraw digital assets to your Kraken Spot wallet.
-   * Wallet names can be found in the 'accounts' structure in the Get Wallets /accounts response.
-   */
-submitTransferToSpot(
-    params: FuturesSubmitToSpotParams,
-): Promise<DerivativesAPISuccessResponse<
+} // end of WS API response processing
 ⋮----
-/**
-   *
-   * Futures REST API - Trading - RFQs
-   *
-   */
+// exceptions with derivatives v1 WS. E.g. { event: 'alert', message: 'Bad websocket message' }
 ⋮----
-/**
-   * List all open RFQs
-   *
-   * Retrieve all currently open RFQs.
-   * Note: This is currently available exclusively in the Kraken Futures DEMO environment.
-   *
-   * @deprecated Kraken retired the Futures demo environment on 14 July 2026, so this endpoint is no longer available. See https://support.kraken.com/articles/360024809011-api-testing-environment-derivatives
-   */
-getOpenRFQs(): Promise<
-    DerivativesAPISuccessResponse<{ rfqs: FuturesRfq[] }>
-  > {
-    return this.get('derivatives/api/v3/rfqs');
+// Most events use event: "update" or "snapshot" for topic updates
 ⋮----
-/**
-   * Retrieve a single open RFQ
-   *
-   * Retrieve a specific open RFQ by its unique identifier.
-   * Note: This is currently available exclusively in the Kraken Futures DEMO environment.
-   *
-   * @deprecated Kraken retired the Futures demo environment on 14 July 2026, so this endpoint is no longer available. See https://support.kraken.com/articles/360024809011-api-testing-environment-derivatives
-   */
-getOpenRFQ(params: {
-    rfqUid: string;
-}): Promise<DerivativesAPISuccessResponse<
+// These are request/reply pattern events (e.g. after subscribing to topics or authenticating)
+// e.g. "method":"subscribe"
 ⋮----
-/**
-   * List open offers on open RFQs
-   *
-   * Retrieve all open offers for the account on currently open RFQs.
-   * Note: This is currently available exclusively in the Kraken Futures DEMO environment.
-   *
-   * @deprecated Kraken retired the Futures demo environment on 14 July 2026, so this endpoint is no longer available. See https://support.kraken.com/articles/360024809011-api-testing-environment-derivatives
-   */
-getRFQOpenOffers(): Promise<
-    DerivativesAPISuccessResponse<{ openOffers: FuturesOpenOffer[] }>
-  > {
-    return this.getPrivate('derivatives/api/v3/rfqs/open-offers');
+// derivatives events include the "feed" property to identify the channel name
 ⋮----
-/**
-   * Place new offer on an open RFQ
-   *
-   * Place a new offer for the given amount in USD on the specified open RFQ, bid and ask are optional but at least one must be provided.
-   * Note: This is currently available exclusively in the Kraken Futures DEMO environment.
-   *
-   * @deprecated Kraken retired the Futures demo environment on 14 July 2026, so this endpoint is no longer available. See https://support.kraken.com/articles/360024809011-api-testing-environment-derivatives
-   */
-submitRFQNewOffer(params: {
-    rfqUid: string;
-    bid?: number;
-    ask?: number;
-}): Promise<DerivativesAPISuccessResponse<
+// Request/reply pattern for authentication success
 ⋮----
 /**
-   * Replace open offer on open RFQ
-   *
-   * Replace the current open offer on the specified open RFQ, bid and ask are optional but at least one must be provided.
-   * Note: This is currently available exclusively in the Kraken Futures DEMO environment.
-   *
-   * @deprecated Kraken retired the Futures demo environment on 14 July 2026, so this endpoint is no longer available. See https://support.kraken.com/articles/360024809011-api-testing-environment-derivatives
+   * Determines if a topic is for a private channel, using a hardcoded list of strings
    */
-updateRFQOpenOffer(params: {
-    rfqUid: string;
-    bid?: number;
-    ask?: number;
-}): Promise<DerivativesAPISuccessResponse<Record<string, never>>>
+protected isPrivateTopicRequest(request: WSTopicRequest<any>): boolean
 ⋮----
 /**
-   * Cancel open offer on open RFQ
-   *
-   * Cancel the current open offer on the specified open RFQ.
-   * Note: This is currently available exclusively in the Kraken Futures DEMO environment.
-   *
-   * @deprecated Kraken retired the Futures demo environment on 14 July 2026, so this endpoint is no longer available. See https://support.kraken.com/articles/360024809011-api-testing-environment-derivatives
+   * Not in use for Kraken
    */
-cancelRFQOffer(params: {
-    rfqUid: string;
-}): Promise<DerivativesAPISuccessResponse<Record<string, never>>>
 ⋮----
-/**
-   *
-   * Futures REST API - History - Account History
-   *
-   */
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+protected getWsMarketForWsKey(_wsKey: WsKey): WsMarket
 ⋮----
 /**
-   * Get execution events
-   *
-   * Lists executions/trades for authenticated account.
+   * Whether key represents a private connection. Feeds into automatic auth on connect.
    */
-getExecutionEvents(
-    params?: FuturesHistoryBaseParams,
-  ): Promise<
-    DerivativesAPISuccessResponse<
-      FuturesHistoryResponse<FuturesHistoryExecutionEvent>
-    >
-  > {
-    return this.getPrivate('api/history/v3/executions', params);
+protected getPrivateWSKeys(): WsKey[]
 ⋮----
-/**
-   * Get order events
-   *
-   * Lists order events for authenticated account.
-   */
-getOrderEvents(
-    params?: FuturesGetOrderEventsParams,
-  ): Promise<
-    DerivativesAPISuccessResponse<
-      FuturesHistoryResponse<FuturesHistoryOrderEvent>
-    >
-  > {
-    return this.getPrivate('api/history/v3/orders', params);
+protected isAuthOnConnectWsKey(wsKey: WsKey): boolean
 ⋮----
-/**
-   * Get trigger events
-   *
-   * Lists trigger events for authenticated account.
-   */
-getTriggerEvents(
-    params?: FuturesGetTriggerEventsParams,
-  ): Promise<
-    DerivativesAPISuccessResponse<
-      FuturesHistoryResponse<FuturesHistoryTriggerEvent>
-    >
-  > {
-    return this.getPrivate('api/history/v3/triggers', params);
+/** Force subscription requests to be sent in smaller batches, if a number is returned */
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+protected getMaxTopicsPerSubscribeEvent(_wsKey: WsKey): number | null
 ⋮----
-/**
-   * Get position update events
-   *
-   * Lists position events for authenticated account.
-   */
-getPositionEvents(
-    params?: FuturesGetPositionEventsParams,
-  ): Promise<
-    DerivativesAPISuccessResponse<
-      FuturesHistoryResponse<FuturesPositionUpdateEvent>
-    >
-  > {
-    return this.getPrivate('api/history/v3/positions', params);
+protected authPrivateConnectionsOnConnect(wsKey: WsKey): boolean
 ⋮----
-/**
-   * Get account log
-   *
-   * Lists account log entries, paged by timestamp or by ID.
-   * To request entries by time range, use the since and before parameters. To request entries by ID range, use the from and to parameters. Any combination of since, before, from and to can be used to restrict the requested range of entries.
-   */
-getAccountLog(
-    params?: FuturesGetAccountLogParams,
-): Promise<DerivativesAPISuccessResponse<FuturesAccountLog>>
+// derivatives require you to send a challenge on connect
 ⋮----
 /**
-   * Account log (CSV)
-   *
-   * Lists recent account log entries in CSV format.
+   * @returns one or more correctly structured request events for performing a operations over WS. This can vary per exchange spec.
    */
-getAccountLogCsv(params?:
+protected async getWsRequestEvents(
+    wsKey: WsKey,
+    operation: WSOperation,
+    requests: WSTopicRequest<WSTopic>[],
+): Promise<MidflightWsRequestEvent<WSRequestOperationKraken<string>>[]>
 ⋮----
-/**
-   *
-   * Futures REST API - History - Market History
-   *
-   */
+// Previously used to track topics in a request. Keeping this for subscribe/unsubscribe requests, no need for incremental values
 ⋮----
-/**
-   * Get public execution events
-   *
-   * Lists trades for a market.
-   */
-getPublicExecutionEvents(
-    params: FuturesMarketHistoryBaseParams,
-): Promise<FuturesMarketHistoryResponse<FuturesPublicExecutionEvent>>
+// Get token from REST client cache
 ⋮----
-/**
-   * Get public order events
-   *
-   * Lists order events for a market.
-   */
-getPublicOrderEvents(
-    params: FuturesMarketHistoryBaseParams,
-): Promise<FuturesMarketHistoryResponse<FuturesPublicOrderEvent>>
+// Cache midflight subs on the req ID
+// Enrich response with subs for that req ID
 ⋮----
-/**
-   * Get public mark price events
-   *
-   * Lists price events for a market.
-   */
-getPublicMarkPriceEvents(
-    params: FuturesMarketHistoryBaseParams,
-): Promise<FuturesMarketHistoryResponse<FuturesPublicMarkPriceEvent>>
+// No auth needed, it's public topics only here
 ⋮----
-/**
-   *
-   * Futures REST API - Charts - Candles
-   *
-   */
+// Cache midflight subs on the req ID
+// Enrich response with subs for that req ID
 ⋮----
-/**
-   * Tick Types
-   *
-   * Returns all available tick types to use with the getMarketsForTickType() endpoint.
-   */
-getTickTypes(): Promise<FuturesTickType[]>
+// https://docs.kraken.com/api/docs/guides/futures-websockets
+// Authenticated requests must include both the original challenge message (original_challenge) and the signed (signed_challenge) in JSON format.
 ⋮----
-/**
-   * Markets
-   *
-   * Markets available for specified tick type.
-   * List of available tick types can be fetched from the getTickTypes() endpoint.
-   */
-getMarketsForTickType(params: {
-    tickType: FuturesTickType;
-}): Promise<string[]>
+// Cache midflight subs on the req ID
+// Enrich response with subs for that req ID
 ⋮----
-/**
-   * Resolutions
-   *
-   * Candle resolutions available for specified tick type and market.
-   * List of available tick types can be fetched from the getTickTypes() endpoint.
-   * List of available markets can be fetched from the getMarketsForTickType() endpoint.
-   */
-getResolutions(params: {
-    tickType: FuturesTickType;
-    symbol: string;
-}): Promise<FuturesResolution[]>
+private async signMessage(
+    paramsStr: string,
+    secret: string,
+    method: SignEncodeMethod,
+    algorithm: SignAlgorithm,
+    options?: SignMessageOptions,
+): Promise<string>
 ⋮----
-/**
-   * Market Candles
-   *
-   * Candles for specified tick type, market, and resolution.
-   * List of available tick types can be fetched from the getTickTypes() endpoint.
-   * List of available markets can be fetched from the getMarketsForTickType() endpoint.
-   * List of available resolutions can be fetched from the getResolutions() endpoint.
-   */
-getCandles(params: FuturesGetCandlesParams): Promise<FuturesCandles>
+protected async getWsAuthRequestEvent(
+    wsKey: WsKey,
+    eventToAuth?: WSAPIAuthenticationRequestFromServer,
+): Promise<object | string | 'waitForEvent' | void>
 ⋮----
-/**
-   *
-   * Futures REST API - Charts - Analytics
-   *
-   */
+// Not needed here, handled automatically with request during subscribe
 ⋮----
-/**
-   * Get liquidity pool statistic
-   *
-   * Get liquidity pool statistic including usd value.
-   */
-getLiquidityPoolStatistic(
-    params: FuturesGetAnalyticsParams,
-): Promise<FuturesAnalyticsResponse>
+// Public WS - no auth
 ⋮----
-/**
-   * Market Analytics
-   *
-   * Analytics data divided into time buckets.
-   */
-getMarketAnalytics(
-    params: FuturesGetAnalyticsParams,
-): Promise<FuturesAnalyticsResponse>
+// cleanup old challenge key (in case we were reconnected)
 ⋮----
-/**
-   *
-   * Futures REST API - Auth - API Keys
-   *
-   */
+// https://docs.kraken.com/api/docs/futures-api/websocket/challenge/
 ⋮----
 /**
-   * Check v3 API key
    *
-   * Verify API key access and return the authenticated key's details.
+   * @param requestEvent
+   * @returns A signed updated WS API request object, ready to be sent
    */
-checkApiKeyV3(): Promise<FuturesApiKeyV3Check>
+private async signWSAPIRequest(
+    requestEvent: WSAPIRequestOperationKrakenSpot,
+): Promise<WSAPIRequestOperationKrakenSpot>
 ⋮----
-/**
-   *
-   * Futures REST API - Stats - Market Share
-   *
-   */
+// Get token from REST client cache
 ⋮----
-/**
-   * Get account's market share
-   *
-   * Get account's market share, volumes, and accrued rebates data in contracts configured for rebates.
-   * The data may not be available immediately. In these cases HTTP 204 is returned.
-   */
-getAccountMarketShare(): Promise<FuturesMarketShare>
+// authParams.broker = APIIDMain;
 
 ================
 File: src/SpotClient.ts
@@ -12968,6 +12078,998 @@ updateOAuthFastApiKey(params: OauthUpdateFastApiKeyParams): Promise<
    * Note: Requires OAuth2 Bearer token. Scopes required: account.fast-api-key:read
    */
 listOAuthFastApiKeys(): Promise<
+
+================
+File: src/DerivativesClient.ts
+================
+import { nanoid } from 'nanoid';
+⋮----
+import { BaseRestClient } from './lib/BaseRestClient.js';
+import { REST_CLIENT_TYPE_ENUM, RestClientType } from './lib/requestUtils.js';
+import {
+  FuturesAddAssignmentPreferenceParams,
+  FuturesBatchOrderParams,
+  FuturesCancelOrderParams,
+  FuturesEditOrderParams,
+  FuturesGetAccountLogParams,
+  FuturesGetAnalyticsParams,
+  FuturesGetCandlesParams,
+  FuturesGetOrderEventsParams,
+  FuturesGetPositionEventsParams,
+  FuturesGetTriggerEventsParams,
+  FuturesHistoryBaseParams,
+  FuturesInitiateSubaccountTransferParams,
+  FuturesInitiateWalletTransferParams,
+  FuturesMarketHistoryBaseParams,
+  FuturesSendOrderParams,
+  FuturesSetRfqAssignmentMaxLeverageParams,
+  FuturesSubmitToSpotParams,
+  FuturesUpdateSelfTradeStrategyParams,
+} from './types/request/derivatives.types.js';
+import {
+  FuturesAccountLog,
+  FuturesAccounts,
+  FuturesAnalyticsResponse,
+  FuturesApiKeyV3Check,
+  FuturesAssignmentProgram,
+  FuturesAssignmentProgramHistory,
+  FuturesBatchOrderStatus,
+  FuturesCancelAllOrdersStatus,
+  FuturesCancelOrderStatus,
+  FuturesCandles,
+  FuturesDeadMansSwitchStatus,
+  FuturesEditOrderStatus,
+  FuturesFeeSchedule,
+  FuturesFill,
+  FuturesHistoricalFundingRate,
+  FuturesHistoryExecutionEvent,
+  FuturesHistoryOrderEvent,
+  FuturesHistoryResponse,
+  FuturesHistoryTriggerEvent,
+  FuturesInstrument,
+  FuturesInstrumentStatus,
+  FuturesLeveragePreference,
+  FuturesMarketHistoryResponse,
+  FuturesMarketShare,
+  FuturesNotification,
+  FuturesOpenOffer,
+  FuturesOpenOrder,
+  FuturesOpenPosition,
+  FuturesOrderBook,
+  FuturesOrderStatusInfo,
+  FuturesPnlPreference,
+  FuturesPortfolioMarginParameters,
+  FuturesPortfolioSimulation,
+  FuturesPositionUpdateEvent,
+  FuturesPublicExecutionEvent,
+  FuturesPublicMarkPriceEvent,
+  FuturesPublicOrderEvent,
+  FuturesResolution,
+  FuturesRfq,
+  FuturesSelfTradeStrategy,
+  FuturesSendOrderStatus,
+  FuturesSubaccountsInfo,
+  FuturesTicker,
+  FuturesTickType,
+  FuturesTradeHistoryItem,
+  FuturesUnwindQueuePosition,
+} from './types/response/derivatives.types.js';
+import { DerivativesAPISuccessResponse } from './types/response/shared.types.js';
+⋮----
+/**
+ * The DerivativesClient provides integration to the Kraken Derivatives API.
+ *
+ * Docs:
+ * - https://docs.kraken.com/api/docs/guides/futures-introduction
+ * - https://docs.kraken.com/api/docs/guides/futures-rest
+ * - https://docs.kraken.com/api/docs/futures-api/trading/get-history
+ */
+export class DerivativesClient extends BaseRestClient
+⋮----
+getClientType(): RestClientType
+⋮----
+/**
+   *
+   * Misc Utility Methods
+   *
+   */
+⋮----
+generateNewOrderID(): string
+⋮----
+/**
+   *
+   * Futures REST API - Trading - Market Data
+   *
+   */
+⋮----
+/**
+   * Get trade history
+   *
+   * This endpoint returns the most recent 100 trades prior to the specified lastTime value up to past 7 days or recent trading engine restart (whichever is sooner).
+   * If no lastTime specified, it will return 100 most recent trades.
+   */
+getTradeHistory(params: {
+    symbol: string;
+    lastTime?: string;
+  }): Promise<
+    DerivativesAPISuccessResponse<{ history: FuturesTradeHistoryItem[] }>
+  > {
+    return this.get('derivatives/api/v3/history', params);
+⋮----
+/**
+   * Get orderbook
+   *
+   * This endpoint returns the entire non-cumulative order book of currently listed Futures contracts.
+   */
+getOrderbook(params: {
+    symbol: string;
+}): Promise<DerivativesAPISuccessResponse<
+⋮----
+/**
+   * Get tickers
+   *
+   * This endpoint returns current market data for all currently listed Futures contracts and indices.
+   */
+getTickers(): Promise<
+    DerivativesAPISuccessResponse<{ tickers: FuturesTicker[] }>
+  > {
+    return this.get('derivatives/api/v3/tickers');
+⋮----
+/**
+   * Get ticker by symbol
+   *
+   * Get market data for contract or index by symbol.
+   */
+getTicker(params: {
+    symbol: string;
+}): Promise<DerivativesAPISuccessResponse<
+⋮----
+/**
+   *
+   * Futures REST API - Trading - Instrument Details
+   *
+   */
+⋮----
+/**
+   * Get instruments
+   *
+   * Returns specifications for all currently listed markets and indices.
+   */
+getInstruments(): Promise<
+    DerivativesAPISuccessResponse<{ instruments: FuturesInstrument[] }>
+  > {
+    return this.get('derivatives/api/v3/instruments');
+⋮----
+/**
+   * Get trading instruments
+   *
+   * Returns specifications for all currently accessible markets and indices.
+   */
+getTradingInstruments(): Promise<
+    DerivativesAPISuccessResponse<{ instruments: FuturesInstrument[] }>
+  > {
+    return this.getPrivate('derivatives/api/v3/trading/instruments');
+⋮----
+/**
+   * Get instrument status list
+   *
+   * Returns price dislocation and volatility details for all markets.
+   */
+getInstrumentStatusList(): Promise<
+    DerivativesAPISuccessResponse<{
+      instrumentStatus: FuturesInstrumentStatus[];
+    }>
+  > {
+    return this.get('derivatives/api/v3/instruments/status');
+⋮----
+/**
+   * Get instrument status
+   *
+   * Returns price dislocation and volatility details for given market.
+   */
+getInstrumentStatus(params: {
+    symbol: string;
+}): Promise<DerivativesAPISuccessResponse<FuturesInstrumentStatus>>
+⋮----
+/**
+   *
+   * Futures REST API - Trading - Order Management
+   *
+   */
+⋮----
+/**
+   * Batch order management
+   *
+   * This endpoint allows sending limit or stop order(s) and/or cancelling open order(s) and/or editing open order(s) for a currently listed Futures contract in batch.
+   * When editing an order, if the trailingStopMaxDeviation and trailingStopDeviationUnit parameters are sent unchanged, the system will recalculate a new stop price upon successful order modification.
+   *
+   * On an edit instruction, `size` follows Kraken `qtyMode` (default `RELATIVE`): it sets the open (remaining) size, not the total quantity including fills. Pass `qtyMode: 'ABSOLUTE'` to set the total size including past fills.
+   */
+batchOrderManagement(
+    params: FuturesBatchOrderParams,
+  ): Promise<
+    DerivativesAPISuccessResponse<{ batchStatus: FuturesBatchOrderStatus[] }>
+  > {
+    const { ProcessBefore, json } = params;
+    return this.postPrivate('derivatives/api/v3/batchorder', {
+      body: {
+        ProcessBefore: ProcessBefore,
+        json,
+      },
+    });
+⋮----
+/**
+   * Cancel all orders
+   *
+   * This endpoint allows cancelling orders which are associated with a future's contract or a margin account. If no arguments are specified all open orders will be cancelled.
+   */
+cancelAllOrders(params?: { symbol?: string }): Promise<
+    DerivativesAPISuccessResponse<{
+      cancelStatus: FuturesCancelAllOrdersStatus;
+    }>
+  > {
+    return this.postPrivate('derivatives/api/v3/cancelallorders', {
+      body: params,
+    });
+⋮----
+/**
+   * Dead man's switch
+   *
+   * This endpoint provides a Dead Man's Switch mechanism to protect the user from network malfunctions. The user can send a request with a timeout in seconds which will trigger a countdown timer that will cancel all user orders when timeout expires. The user has to keep sending request to push back the timeout expiration or they can deactivate the mechanism by specifying a timeout of zero (0).
+   * The recommended mechanism usage is making a call every 15 to 20 seconds and provide a timeout of 60 seconds. This allows the user to keep the orders in place on a brief network failure, while keeping them safe in case of a network breakdown.
+   */
+cancelAllOrdersAfter(params: {
+    timeout: number;
+  }): Promise<
+    DerivativesAPISuccessResponse<{ status: FuturesDeadMansSwitchStatus }>
+  > {
+    return this.postPrivate('derivatives/api/v3/cancelallordersafter', {
+      body: params,
+    });
+⋮----
+/**
+   * Cancel order
+   *
+   * This endpoint allows cancelling an open order for a Futures contract.
+   */
+cancelOrder(
+    params: FuturesCancelOrderParams,
+  ): Promise<
+    DerivativesAPISuccessResponse<{ cancelStatus: FuturesCancelOrderStatus }>
+  > {
+    return this.postPrivate('derivatives/api/v3/cancelorder', {
+      body: params,
+    });
+⋮----
+/**
+   * Edit order
+   *
+   * This endpoint allows editing an existing order for a currently listed Futures contract.
+   * When editing an order, if the trailingStopMaxDeviation and trailingStopDeviationUnit parameters are sent unchanged, the system will recalculate a new stop price upon successful order modification.
+   *
+   * `size` follows Kraken `qtyMode`, which defaults to `RELATIVE` when omitted. That sets the open (remaining / unfilled) size, not the total quantity including fills. Pass `qtyMode: 'ABSOLUTE'` to set the total order size, including past fills, to `size`.
+   *
+   * From 29 October 2026 08:00 UTC, Maker Protection holds an edit that would take liquidity. A second edit while that edit is still held returns status `editAlreadyHeld` (REST v4 `EDIT_ALREADY_HELD`). The resting order is left unchanged. Send the edit again after the held edit releases.
+   * An edit of an order whose placement is still held returns `orderForEditNotFound`. Wait for the placement response before editing. The same status is returned when the order is no longer resting.
+   *
+   * @see https://docs.kraken.com/api-reference/order-management/edit-order
+   * @see https://docs.kraken.com/exchange/changelog
+   */
+editOrder(
+    params: FuturesEditOrderParams,
+  ): Promise<
+    DerivativesAPISuccessResponse<{ editStatus: FuturesEditOrderStatus }>
+  > {
+    return this.postPrivate('derivatives/api/v3/editorder', {
+      body: params,
+    });
+⋮----
+/**
+   * Get open orders
+   *
+   * This endpoint returns information on all open orders for all Futures contracts.
+   */
+getOpenOrders(): Promise<
+    DerivativesAPISuccessResponse<{ openOrders: FuturesOpenOrder[] }>
+  > {
+    return this.getPrivate('derivatives/api/v3/openorders');
+⋮----
+/**
+   * Send order
+   *
+   * This endpoint allows sending a limit, stop, take profit or immediate-or-cancel order for a currently listed Futures contract.
+   */
+submitOrder(
+    params: FuturesSendOrderParams,
+  ): Promise<
+    DerivativesAPISuccessResponse<{ sendStatus: FuturesSendOrderStatus }>
+  > {
+    return this.postPrivate('derivatives/api/v3/sendorder', {
+      body: params,
+    });
+⋮----
+/**
+   * Get Specific Orders' Status
+   *
+   * Returns information on specified orders which are open or were filled/cancelled in the last 5 seconds.
+   */
+getOrderStatus(params?: {
+    orderIds?: string[];
+    cliOrdIds?: string[];
+  }): Promise<
+    DerivativesAPISuccessResponse<{ orders: FuturesOrderStatusInfo[] }>
+  > {
+    return this.postPrivate('derivatives/api/v3/orders/status', {
+      body: params,
+    });
+⋮----
+/**
+   *
+   * Futures REST API - Trading - Multi-Collateral
+   *
+   */
+⋮----
+/**
+   * Get PNL currency preferences
+   *
+   * The PNL currency preference is used to determine which currency to pay out when realizing PNL gains.
+   */
+getPnlPreferences(): Promise<
+    DerivativesAPISuccessResponse<{ preferences: FuturesPnlPreference[] }>
+  > {
+    return this.getPrivate('derivatives/api/v3/pnlpreferences');
+⋮----
+/**
+   * Set PNL currency preference
+   *
+   * The PNL currency preference is used to determine which currency to pay out when realizing PNL gains.
+   * Calling this API can result in the following error codes: 87 (Contract does not exist), 88 (Contract not a multi-collateral futures contract), 89 (Currency does not exist), 90 (Currency is not enabled for multi-collateral futures), 41 (Would cause liquidation).
+   */
+setPnlPreference(params: {
+    symbol: string;
+    pnlPreference: string;
+}): Promise<DerivativesAPISuccessResponse<Record<string, never>>>
+⋮----
+/**
+   * Get leverage settings
+   *
+   * Returns list of configured leverage preferences.
+   */
+getLeverageSettings(): Promise<
+    DerivativesAPISuccessResponse<{
+      leveragePreferences: FuturesLeveragePreference[];
+    }>
+  > {
+    return this.getPrivate('derivatives/api/v3/leveragepreferences');
+⋮----
+/**
+   * Set leverage settings
+   *
+   * Sets a contract's margin mode, either "isolated" or "cross" margin.
+   * When specifying a max leverage, the contract's margin mode will be isolated.
+   */
+setLeverageSettings(params: {
+    symbol: string;
+    maxLeverage?: number;
+}): Promise<DerivativesAPISuccessResponse<Record<string, never>>>
+⋮----
+/**
+   * Get the off-book max leverage cap
+   *
+   * Returns the account-level off-book maximum leverage cap, or null when no cap is configured.
+   */
+getRfqAssignmentMaxLeverage(): Promise<
+    DerivativesAPISuccessResponse<{ maxLeverage: number | null }>
+  > {
+    return this.getPrivate('derivatives/api/v3/rfq-assignment/max-leverage');
+⋮----
+/**
+   * Set the off-book max leverage cap
+   *
+   * Sets the account-level off-book maximum leverage cap for the authenticated master account.
+   */
+setRfqAssignmentMaxLeverage(
+    params: FuturesSetRfqAssignmentMaxLeverageParams,
+): Promise<DerivativesAPISuccessResponse<
+⋮----
+/**
+   * Clear the off-book max leverage cap
+   *
+   * Clears the account-level off-book maximum leverage cap for the authenticated master account.
+   */
+deleteRfqAssignmentMaxLeverage(): Promise<
+    DerivativesAPISuccessResponse<{ maxLeverage: number | null }>
+  > {
+    return this.deletePrivate('derivatives/api/v3/rfq-assignment/max-leverage');
+⋮----
+/**
+   *
+   * Futures REST API - Trading - Account Information
+   *
+   */
+⋮----
+/**
+   * Get wallets
+   *
+   * This endpoint returns key information relating to all your accounts which may either be cash accounts or margin accounts.
+   * This includes digital asset balances, instrument balances, margin requirements, margin trigger estimates and
+   * auxiliary information such as available funds, PnL of open positions and portfolio value.
+   */
+getAccounts(): Promise<
+    DerivativesAPISuccessResponse<{ accounts: FuturesAccounts }>
+  > {
+    return this.getPrivate('derivatives/api/v3/accounts');
+⋮----
+/**
+   * Get open positions
+   *
+   * This endpoint returns the size and average entry price of all open positions in Futures contracts.
+   * This includes Futures contracts that have matured but have not yet been settled.
+   */
+getOpenPositions(): Promise<
+    DerivativesAPISuccessResponse<{ openPositions: FuturesOpenPosition[] }>
+  > {
+    return this.getPrivate('derivatives/api/v3/openpositions');
+⋮----
+/**
+   * Get position percentile of unwind queue
+   *
+   * This endpoint returns the percentile of the open position in case of unwinding.
+   */
+getPositionPercentile(): Promise<
+    DerivativesAPISuccessResponse<{ queue: FuturesUnwindQueuePosition[] }>
+  > {
+    return this.getPrivate('derivatives/api/v3/unwindqueue');
+⋮----
+/**
+   * Get portfolio margin parameters
+   *
+   * Retrieve current portfolio margin calculation parameters.
+   * Also includes user specific limits related to options trading.
+   * Note: This is currently available exclusively in the Kraken Futures DEMO environment.
+   *
+   * @deprecated Kraken retired the Futures demo environment on 14 July 2026, so this endpoint is no longer available. See https://support.kraken.com/articles/360024809011-api-testing-environment-derivatives
+   */
+getPortfolioMarginParameters(): Promise<
+    DerivativesAPISuccessResponse<FuturesPortfolioMarginParameters>
+  > {
+    return this.getPrivate('derivatives/api/v3/portfolio-margining/parameters');
+⋮----
+/**
+   * Calculate portfolio margin, pnl and greeks
+   *
+   * For a given portfolio of balances and positions (futures and options), calculate the margin requirements, pnl and option greeks.
+   * Note: This is currently available exclusively in the Kraken Futures DEMO environment.
+   *
+   * @deprecated Kraken retired the Futures demo environment on 14 July 2026, so this endpoint is no longer available. See https://support.kraken.com/articles/360024809011-api-testing-environment-derivatives
+   */
+simulateMarginRequirements(params: {
+    json: any; // Complex structure for portfolio simulation
+}): Promise<DerivativesAPISuccessResponse<FuturesPortfolioSimulation>>
+⋮----
+json: any; // Complex structure for portfolio simulation
+⋮----
+/**
+   *
+   * Futures REST API - Trading - Assignment Program
+   *
+   */
+⋮----
+/**
+   * List assignment programs
+   *
+   * This endpoint returns information on currently active assignment programs.
+   */
+getAssignmentPrograms(): Promise<
+    DerivativesAPISuccessResponse<{ participants: FuturesAssignmentProgram[] }>
+  > {
+    return this.getPrivate('derivatives/api/v3/assignmentprogram/current');
+⋮----
+/**
+   * Add assignment preference
+   *
+   * This endpoint adds an assignment program preference.
+   */
+addAssignmentPreference(
+    params: FuturesAddAssignmentPreferenceParams,
+): Promise<DerivativesAPISuccessResponse<FuturesAssignmentProgram>>
+⋮----
+/**
+   * Delete assignment preference
+   *
+   * This endpoint deletes an assignment program preference.
+   */
+deleteAssignmentPreference(params: {
+    id: number;
+}): Promise<DerivativesAPISuccessResponse<FuturesAssignmentProgram>>
+⋮----
+/**
+   * List assignment preferences history
+   *
+   * This endpoint returns information on assignment program preferences change history.
+   */
+getAssignmentPreferencesHistory(): Promise<
+    DerivativesAPISuccessResponse<{
+      participants: FuturesAssignmentProgramHistory[];
+    }>
+  > {
+    return this.getPrivate('derivatives/api/v3/assignmentprogram/history');
+⋮----
+/**
+   *
+   * Futures REST API - Trading - Fee Schedules
+   *
+   */
+⋮----
+/**
+   * Get fee schedules
+   *
+   * This endpoint lists all fee schedules.
+   *
+   * @deprecated Effective 2026-06-22. Use SpotClient.getTradingVolume() with a Spot API key instead.
+   */
+getFeeSchedules(): Promise<
+    DerivativesAPISuccessResponse<{ feeSchedules: FuturesFeeSchedule[] }>
+  > {
+    return this.get('derivatives/api/v3/feeschedules');
+⋮----
+/**
+   * Get fee schedule volumes
+   *
+   * Returns your fee schedule volumes for each fee schedule.
+   *
+   * @deprecated Effective 2026-06-22. Use SpotClient.getTradingVolume() with a Spot API key instead.
+   */
+getFeeScheduleVolumes(): Promise<
+    DerivativesAPISuccessResponse<{
+      volumesByFeeSchedule: Record<string, number>;
+    }>
+  > {
+    return this.getPrivate('derivatives/api/v3/feeschedules/volumes');
+⋮----
+/**
+   *
+   * Futures REST API - Trading - General
+   *
+   */
+⋮----
+/**
+   * Get notifications
+   *
+   * This endpoint provides the platform's notifications.
+   */
+getNotifications(): Promise<
+    DerivativesAPISuccessResponse<{ notifications: FuturesNotification[] }>
+  > {
+    return this.getPrivate('derivatives/api/v3/notifications');
+⋮----
+/**
+   *
+   * Futures REST API - Trading - Historical Data
+   *
+   */
+⋮----
+/**
+   * Get your fills
+   *
+   * This endpoint returns information on your filled orders for all futures contracts.
+   */
+getFills(params?: {
+    lastFillTime?: string;
+}): Promise<DerivativesAPISuccessResponse<
+⋮----
+/**
+   *
+   * Futures REST API - Trading - Historical Funding Rates
+   *
+   */
+⋮----
+/**
+   * Historical funding rates
+   *
+   * Returns list of historical funding rates for given market.
+   */
+getHistoricalFundingRates(params: {
+    symbol: string;
+  }): Promise<
+    DerivativesAPISuccessResponse<{ rates: FuturesHistoricalFundingRate[] }>
+  > {
+    return this.get('derivatives/api/v3/historical-funding-rates', params);
+⋮----
+/**
+   *
+   * Futures REST API - Trading - Trading Settings
+   *
+   */
+⋮----
+/**
+   * Get self trade strategy
+   *
+   * Returns account-wide self-trade matching strategy.
+   */
+getSelfTradeStrategy(): Promise<
+    DerivativesAPISuccessResponse<{
+      strategy: FuturesSelfTradeStrategy;
+    }>
+  > {
+    return this.getPrivate('derivatives/api/v3/self-trade-strategy');
+⋮----
+/**
+   * Update self trade strategy
+   *
+   * Updates account-wide self-trade matching behavior to given strategy.
+   */
+updateSelfTradeStrategy(
+    params: FuturesUpdateSelfTradeStrategyParams,
+  ): Promise<
+    DerivativesAPISuccessResponse<{
+      strategy: FuturesSelfTradeStrategy;
+    }>
+  > {
+    return this.putPrivate('derivatives/api/v3/self-trade-strategy', {
+      query: params,
+    });
+⋮----
+/**
+   *
+   * Futures REST API - Trading - Subaccounts
+   *
+   */
+⋮----
+/**
+   * Check subaccount trading status
+   *
+   * Returns trading capability info for given subaccount.
+   */
+getSubaccountTradingStatus(params: {
+    subaccountUid: string;
+}): Promise<DerivativesAPISuccessResponse<
+⋮----
+/**
+   * Update subaccount trading status
+   *
+   * Updates trading capabilities for given subaccount.
+   */
+updateSubaccountTradingStatus(params: {
+    subaccountUid: string;
+    tradingEnabled: boolean;
+}): Promise<DerivativesAPISuccessResponse<
+⋮----
+/**
+   * Get subaccounts
+   *
+   * Return information about subaccounts, including balances and UIDs.
+   */
+getSubaccounts(): Promise<
+    DerivativesAPISuccessResponse<FuturesSubaccountsInfo>
+  > {
+    return this.getPrivate('derivatives/api/v3/subaccounts');
+⋮----
+/**
+   *
+   * Futures REST API - Trading - Transfers
+   *
+   */
+⋮----
+/**
+   * Initiate wallet transfer
+   *
+   * This endpoint allows you to transfer funds between two margin accounts with the same collateral currency, or between a margin account and your cash account.
+   */
+submitWalletTransfer(
+    params: FuturesInitiateWalletTransferParams,
+): Promise<DerivativesAPISuccessResponse<Record<string, never>>>
+⋮----
+/**
+   * Initiate sub account transfer
+   *
+   * This endpoint allows you to transfer funds between the current account and a sub account, between two margin accounts with the same collateral currency, or between a margin account and your cash account.
+   */
+submitSubaccountTransfer(
+    params: FuturesInitiateSubaccountTransferParams,
+): Promise<DerivativesAPISuccessResponse<Record<string, never>>>
+⋮----
+/**
+   * Initiate withdrawal to Spot wallet
+   *
+   * This endpoint allows you to request to withdraw digital assets to your Kraken Spot wallet.
+   * Wallet names can be found in the 'accounts' structure in the Get Wallets /accounts response.
+   */
+submitTransferToSpot(
+    params: FuturesSubmitToSpotParams,
+): Promise<DerivativesAPISuccessResponse<
+⋮----
+/**
+   *
+   * Futures REST API - Trading - RFQs
+   *
+   */
+⋮----
+/**
+   * List all open RFQs
+   *
+   * Retrieve all currently open RFQs.
+   * Note: This is currently available exclusively in the Kraken Futures DEMO environment.
+   *
+   * @deprecated Kraken retired the Futures demo environment on 14 July 2026, so this endpoint is no longer available. See https://support.kraken.com/articles/360024809011-api-testing-environment-derivatives
+   */
+getOpenRFQs(): Promise<
+    DerivativesAPISuccessResponse<{ rfqs: FuturesRfq[] }>
+  > {
+    return this.get('derivatives/api/v3/rfqs');
+⋮----
+/**
+   * Retrieve a single open RFQ
+   *
+   * Retrieve a specific open RFQ by its unique identifier.
+   * Note: This is currently available exclusively in the Kraken Futures DEMO environment.
+   *
+   * @deprecated Kraken retired the Futures demo environment on 14 July 2026, so this endpoint is no longer available. See https://support.kraken.com/articles/360024809011-api-testing-environment-derivatives
+   */
+getOpenRFQ(params: {
+    rfqUid: string;
+}): Promise<DerivativesAPISuccessResponse<
+⋮----
+/**
+   * List open offers on open RFQs
+   *
+   * Retrieve all open offers for the account on currently open RFQs.
+   * Note: This is currently available exclusively in the Kraken Futures DEMO environment.
+   *
+   * @deprecated Kraken retired the Futures demo environment on 14 July 2026, so this endpoint is no longer available. See https://support.kraken.com/articles/360024809011-api-testing-environment-derivatives
+   */
+getRFQOpenOffers(): Promise<
+    DerivativesAPISuccessResponse<{ openOffers: FuturesOpenOffer[] }>
+  > {
+    return this.getPrivate('derivatives/api/v3/rfqs/open-offers');
+⋮----
+/**
+   * Place new offer on an open RFQ
+   *
+   * Place a new offer for the given amount in USD on the specified open RFQ, bid and ask are optional but at least one must be provided.
+   * Note: This is currently available exclusively in the Kraken Futures DEMO environment.
+   *
+   * @deprecated Kraken retired the Futures demo environment on 14 July 2026, so this endpoint is no longer available. See https://support.kraken.com/articles/360024809011-api-testing-environment-derivatives
+   */
+submitRFQNewOffer(params: {
+    rfqUid: string;
+    bid?: number;
+    ask?: number;
+}): Promise<DerivativesAPISuccessResponse<
+⋮----
+/**
+   * Replace open offer on open RFQ
+   *
+   * Replace the current open offer on the specified open RFQ, bid and ask are optional but at least one must be provided.
+   * Note: This is currently available exclusively in the Kraken Futures DEMO environment.
+   *
+   * @deprecated Kraken retired the Futures demo environment on 14 July 2026, so this endpoint is no longer available. See https://support.kraken.com/articles/360024809011-api-testing-environment-derivatives
+   */
+updateRFQOpenOffer(params: {
+    rfqUid: string;
+    bid?: number;
+    ask?: number;
+}): Promise<DerivativesAPISuccessResponse<Record<string, never>>>
+⋮----
+/**
+   * Cancel open offer on open RFQ
+   *
+   * Cancel the current open offer on the specified open RFQ.
+   * Note: This is currently available exclusively in the Kraken Futures DEMO environment.
+   *
+   * @deprecated Kraken retired the Futures demo environment on 14 July 2026, so this endpoint is no longer available. See https://support.kraken.com/articles/360024809011-api-testing-environment-derivatives
+   */
+cancelRFQOffer(params: {
+    rfqUid: string;
+}): Promise<DerivativesAPISuccessResponse<Record<string, never>>>
+⋮----
+/**
+   *
+   * Futures REST API - History - Account History
+   *
+   */
+⋮----
+/**
+   * Get execution events
+   *
+   * Lists executions/trades for authenticated account.
+   */
+getExecutionEvents(
+    params?: FuturesHistoryBaseParams,
+  ): Promise<
+    DerivativesAPISuccessResponse<
+      FuturesHistoryResponse<FuturesHistoryExecutionEvent>
+    >
+  > {
+    return this.getPrivate('api/history/v3/executions', params);
+⋮----
+/**
+   * Get order events
+   *
+   * Lists order events for authenticated account.
+   */
+getOrderEvents(
+    params?: FuturesGetOrderEventsParams,
+  ): Promise<
+    DerivativesAPISuccessResponse<
+      FuturesHistoryResponse<FuturesHistoryOrderEvent>
+    >
+  > {
+    return this.getPrivate('api/history/v3/orders', params);
+⋮----
+/**
+   * Get trigger events
+   *
+   * Lists trigger events for authenticated account.
+   */
+getTriggerEvents(
+    params?: FuturesGetTriggerEventsParams,
+  ): Promise<
+    DerivativesAPISuccessResponse<
+      FuturesHistoryResponse<FuturesHistoryTriggerEvent>
+    >
+  > {
+    return this.getPrivate('api/history/v3/triggers', params);
+⋮----
+/**
+   * Get position update events
+   *
+   * Lists position events for authenticated account.
+   */
+getPositionEvents(
+    params?: FuturesGetPositionEventsParams,
+  ): Promise<
+    DerivativesAPISuccessResponse<
+      FuturesHistoryResponse<FuturesPositionUpdateEvent>
+    >
+  > {
+    return this.getPrivate('api/history/v3/positions', params);
+⋮----
+/**
+   * Get account log
+   *
+   * Lists account log entries, paged by timestamp or by ID.
+   * To request entries by time range, use the since and before parameters. To request entries by ID range, use the from and to parameters. Any combination of since, before, from and to can be used to restrict the requested range of entries.
+   */
+getAccountLog(
+    params?: FuturesGetAccountLogParams,
+): Promise<DerivativesAPISuccessResponse<FuturesAccountLog>>
+⋮----
+/**
+   * Account log (CSV)
+   *
+   * Lists recent account log entries in CSV format.
+   */
+getAccountLogCsv(params?:
+⋮----
+/**
+   *
+   * Futures REST API - History - Market History
+   *
+   */
+⋮----
+/**
+   * Get public execution events
+   *
+   * Lists trades for a market.
+   */
+getPublicExecutionEvents(
+    params: FuturesMarketHistoryBaseParams,
+): Promise<FuturesMarketHistoryResponse<FuturesPublicExecutionEvent>>
+⋮----
+/**
+   * Get public order events
+   *
+   * Lists order events for a market.
+   */
+getPublicOrderEvents(
+    params: FuturesMarketHistoryBaseParams,
+): Promise<FuturesMarketHistoryResponse<FuturesPublicOrderEvent>>
+⋮----
+/**
+   * Get public mark price events
+   *
+   * Lists price events for a market.
+   */
+getPublicMarkPriceEvents(
+    params: FuturesMarketHistoryBaseParams,
+): Promise<FuturesMarketHistoryResponse<FuturesPublicMarkPriceEvent>>
+⋮----
+/**
+   *
+   * Futures REST API - Charts - Candles
+   *
+   */
+⋮----
+/**
+   * Tick Types
+   *
+   * Returns all available tick types to use with the getMarketsForTickType() endpoint.
+   */
+getTickTypes(): Promise<FuturesTickType[]>
+⋮----
+/**
+   * Markets
+   *
+   * Markets available for specified tick type.
+   * List of available tick types can be fetched from the getTickTypes() endpoint.
+   */
+getMarketsForTickType(params: {
+    tickType: FuturesTickType;
+}): Promise<string[]>
+⋮----
+/**
+   * Resolutions
+   *
+   * Candle resolutions available for specified tick type and market.
+   * List of available tick types can be fetched from the getTickTypes() endpoint.
+   * List of available markets can be fetched from the getMarketsForTickType() endpoint.
+   */
+getResolutions(params: {
+    tickType: FuturesTickType;
+    symbol: string;
+}): Promise<FuturesResolution[]>
+⋮----
+/**
+   * Market Candles
+   *
+   * Candles for specified tick type, market, and resolution.
+   * List of available tick types can be fetched from the getTickTypes() endpoint.
+   * List of available markets can be fetched from the getMarketsForTickType() endpoint.
+   * List of available resolutions can be fetched from the getResolutions() endpoint.
+   */
+getCandles(params: FuturesGetCandlesParams): Promise<FuturesCandles>
+⋮----
+/**
+   *
+   * Futures REST API - Charts - Analytics
+   *
+   */
+⋮----
+/**
+   * Get liquidity pool statistic
+   *
+   * Get liquidity pool statistic including usd value.
+   */
+getLiquidityPoolStatistic(
+    params: FuturesGetAnalyticsParams,
+): Promise<FuturesAnalyticsResponse>
+⋮----
+/**
+   * Market Analytics
+   *
+   * Analytics data divided into time buckets.
+   */
+getMarketAnalytics(
+    params: FuturesGetAnalyticsParams,
+): Promise<FuturesAnalyticsResponse>
+⋮----
+/**
+   *
+   * Futures REST API - Auth - API Keys
+   *
+   */
+⋮----
+/**
+   * Check v3 API key
+   *
+   * Verify API key access and return the authenticated key's details.
+   */
+checkApiKeyV3(): Promise<FuturesApiKeyV3Check>
+⋮----
+/**
+   *
+   * Futures REST API - Stats - Market Share
+   *
+   */
+⋮----
+/**
+   * Get account's market share
+   *
+   * Get account's market share, volumes, and accrued rebates data in contracts configured for rebates.
+   * The data may not be available immediately. In these cases HTTP 204 is returned.
+   */
+getAccountMarketShare(): Promise<FuturesMarketShare>
 
 ================
 File: docs/KRAKEN_SDK_QUICKSTART_GUIDE.md
@@ -14579,6 +14681,7 @@ Complete & robust JavaScript & Node.js SDK for the Kraken REST APIs and WebSocke
     - [Derivatives (Futures) Trading](#derivatives-futures-trading)
   - [WebSockets](#websockets)
     - [Why not raw ws?](#why-not-raw-ws)
+    - [Spot orderbook over WebSocket](#spot-orderbook-over-websocket)
     - [Public WebSocket Streams](#public-websocket-streams)
     - [Private WebSocket Streams](#private-websocket-streams)
     - [WebSocket API (WebsocketAPIClient)](#websocket-api-websocketapiclient)
@@ -14885,7 +14988,7 @@ A raw `ws` socket leaves reconnect, liveness, resubscribe, and auth to you. `Web
 - Heartbeats (native ping/pong, plus Kraken `heartbeat` / `pong` frames) so a silent socket is treated as dead and reconnected.
 - Private auth: Spot WebSocket tokens are fetched from REST, cached, and refreshed before they expire. Futures private streams use the signed challenge flow, and a reconnect re-authenticates.
 
-Kraken book payloads include a checksum. This SDK does not validate it. Check the checksum yourself on `book` messages if you need that guarantee.
+Kraken book payloads include a checksum. This SDK does not validate it. [Spot orderbook over WebSocket](#spot-orderbook-over-websocket) keeps a local book and checks that checksum.
 
 ```javascript
 import { WebsocketClient } from '@siebly/kraken-api';
@@ -14893,6 +14996,10 @@ const ws = new WebsocketClient();
 ws.on('message', (data) => console.log(data));
 ws.subscribe({ topic: 'ticker', payload: { symbol: ['BTC/USD'] } }, 'spotPublicV2');
 ```
+
+### Spot orderbook over WebSocket
+
+Use `WebsocketClient` to maintain a Spot orderbook over WebSocket with checksum validation, as shown in the runnable [local orderbook example](./examples/Spot/WebSockets/orderbookLocalWs.ts). The example applies snapshots and updates, restores pair precision for CRC32 validation, resubscribes on checksum mismatch, and logs the best bid and ask. The SDK handles reconnects, heartbeats, and resubscription after reconnect; the example supplies the local book and checksum resync logic that a raw `ws` socket leaves to you.
 
 ### Public WebSocket Streams
 
@@ -15210,7 +15317,7 @@ File: package.json
 ================
 {
   "name": "@siebly/kraken-api",
-  "version": "1.1.8",
+  "version": "1.1.9",
   "description": "Complete & robust Node.js SDK for Kraken's REST APIs and WebSockets, with TypeScript & strong end to end tests.",
   "scripts": {
     "clean": "rm -rf dist",

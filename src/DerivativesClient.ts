@@ -283,7 +283,11 @@ export class DerivativesClient extends BaseRestClient {
    *
    * `size` follows Kraken `qtyMode`, which defaults to `RELATIVE` when omitted. That sets the open (remaining / unfilled) size, not the total quantity including fills. Pass `qtyMode: 'ABSOLUTE'` to set the total order size, including past fills, to `size`.
    *
+   * From 29 October 2026 08:00 UTC, Maker Protection holds an edit that would take liquidity. A second edit while that edit is still held returns status `editAlreadyHeld` (REST v4 `EDIT_ALREADY_HELD`). The resting order is left unchanged. Send the edit again after the held edit releases.
+   * An edit of an order whose placement is still held returns `orderForEditNotFound`. Wait for the placement response before editing. The same status is returned when the order is no longer resting.
+   *
    * @see https://docs.kraken.com/api-reference/order-management/edit-order
+   * @see https://docs.kraken.com/exchange/changelog
    */
   editOrder(
     params: FuturesEditOrderParams,

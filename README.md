@@ -56,6 +56,7 @@ Complete & robust JavaScript & Node.js SDK for the Kraken REST APIs and WebSocke
     - [Derivatives (Futures) Trading](#derivatives-futures-trading)
   - [WebSockets](#websockets)
     - [Why not raw ws?](#why-not-raw-ws)
+    - [Spot orderbook over WebSocket](#spot-orderbook-over-websocket)
     - [Public WebSocket Streams](#public-websocket-streams)
     - [Private WebSocket Streams](#private-websocket-streams)
     - [WebSocket API (WebsocketAPIClient)](#websocket-api-websocketapiclient)
@@ -362,7 +363,7 @@ A raw `ws` socket leaves reconnect, liveness, resubscribe, and auth to you. `Web
 - Heartbeats (native ping/pong, plus Kraken `heartbeat` / `pong` frames) so a silent socket is treated as dead and reconnected.
 - Private auth: Spot WebSocket tokens are fetched from REST, cached, and refreshed before they expire. Futures private streams use the signed challenge flow, and a reconnect re-authenticates.
 
-Kraken book payloads include a checksum. This SDK does not validate it. Check the checksum yourself on `book` messages if you need that guarantee.
+Kraken book payloads include a checksum. This SDK does not validate it. [Spot orderbook over WebSocket](#spot-orderbook-over-websocket) keeps a local book and checks that checksum.
 
 ```javascript
 import { WebsocketClient } from '@siebly/kraken-api';
@@ -370,6 +371,10 @@ const ws = new WebsocketClient();
 ws.on('message', (data) => console.log(data));
 ws.subscribe({ topic: 'ticker', payload: { symbol: ['BTC/USD'] } }, 'spotPublicV2');
 ```
+
+### Spot orderbook over WebSocket
+
+Use `WebsocketClient` to maintain a Spot orderbook over WebSocket with checksum validation, as shown in the runnable [local orderbook example](./examples/Spot/WebSockets/orderbookLocalWs.ts). The example applies snapshots and updates, restores pair precision for CRC32 validation, resubscribes on checksum mismatch, and logs the best bid and ask. The SDK handles reconnects, heartbeats, and resubscription after reconnect; the example supplies the local book and checksum resync logic that a raw `ws` socket leaves to you.
 
 ### Public WebSocket Streams
 

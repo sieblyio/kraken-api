@@ -63,3 +63,21 @@ export interface WSSpotBalancesSubscribeParams {
   snapshot?: boolean;
   rebased?: boolean;
 }
+
+/** Spot public v2 `book` subscribe payload. Spread into `params` beside `channel`. */
+export interface WSSpotPublicBookParams {
+  symbol: string[];
+  /** 10, 25, 100, 500, or 1000. Default 10. */
+  depth?: 10 | 25 | 100 | 500 | 1000;
+  /** Default true. */
+  snapshot?: boolean;
+}
+
+/** Derivatives public v1 `book` subscribe payload. Spread beside `feed`. */
+export interface WSDerivativesPublicBookParams {
+  product_ids: string[];
+}
+
+export type WSPublicBookParams =
+  | WSSpotPublicBookParams
+  | WSDerivativesPublicBookParams;

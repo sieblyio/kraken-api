@@ -1,7 +1,10 @@
 import WebSocket from 'isomorphic-ws';
 
 import { WSAPIRequestOperationKrakenSpot } from '../../types/websockets/ws-api.js';
-import { WSTopic } from '../../types/websockets/ws-subscriptions.js';
+import {
+  WSPublicBookParams,
+  WSTopic,
+} from '../../types/websockets/ws-subscriptions.js';
 
 /** Should be one WS key per unique URL */
 export const WS_KEY_MAP = {
@@ -43,7 +46,7 @@ export type WSOperation = 'subscribe' | 'unsubscribe';
  */
 export interface WSTopicRequest<
   TWSTopic extends WSTopic = WSTopic,
-  TWSPayload = any,
+  TWSPayload = [TWSTopic] extends ['book'] ? WSPublicBookParams : any,
 > {
   topic: TWSTopic;
   payload?: TWSPayload;

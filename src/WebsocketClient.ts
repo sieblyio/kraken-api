@@ -102,10 +102,10 @@ export class WebsocketClient extends BaseWebsocketClient<WsKey, any> {
    *
    * Call `unsubscribe(topics)` to remove topics
    */
-  public subscribe(
+  public subscribe<TTopic extends WSTopic>(
     requests:
-      | (WSTopicRequest<WSTopic> | WSTopic)
-      | (WSTopicRequest<WSTopic> | WSTopic)[],
+      | (WSTopicRequest<TTopic> | TTopic)
+      | (WSTopicRequest<TTopic> | TTopic)[],
     wsKey: WsKey,
   ) {
     if (!Array.isArray(requests)) {
@@ -124,10 +124,10 @@ export class WebsocketClient extends BaseWebsocketClient<WsKey, any> {
    * - Requests are automatically routed to the correct websocket connection.
    * - These topics will be removed from the topic cache, so they won't be subscribed to again.
    */
-  public unsubscribe(
+  public unsubscribe<TTopic extends WSTopic>(
     requests:
-      | (WSTopicRequest<WSTopic> | WSTopic)
-      | (WSTopicRequest<WSTopic> | WSTopic)[],
+      | (WSTopicRequest<TTopic> | TTopic)
+      | (WSTopicRequest<TTopic> | TTopic)[],
     wsKey: WsKey,
   ) {
     if (!Array.isArray(requests)) {
