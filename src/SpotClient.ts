@@ -10,6 +10,7 @@ import {
   SpotGetApiKeyInfoParams,
   SpotGetAssetPairsParams,
   SpotGetClosedOrdersParams,
+  SpotGetClosedStrategiesParams,
   SpotGetDepositAddressesParams,
   SpotGetDepositMethodsParams,
   SpotGetDepositStatusParams,
@@ -37,6 +38,7 @@ import {
   SpotRequestExportReportParams,
   SpotSubmitOrderBatchParams,
   SpotSubmitOrderParams,
+  SpotSubmitStrategyParams,
   SpotWalletTransferParams,
   SpotWithdrawFundsParams,
 } from './types/request/spot.types.js';
@@ -48,12 +50,14 @@ import {
   OauthGetUserInfoResponse,
   SpotAccountBalance,
   SpotAccountTransferResponse,
+  SpotAlgoStrategy,
   SpotApiKeyInfo,
   SpotAssetInfo,
   SpotAssetPair,
   SpotAssetTickerInfo,
   SpotBatchOrderResult,
   SpotClosedOrdersResponse,
+  SpotClosedStrategiesResponse,
   SpotCreditLines,
   SpotDeleteExportReportResponse,
   SpotDepositAddress,
@@ -686,6 +690,77 @@ export class SpotClient extends BaseRestClient {
     return this.postPrivate('0/private/CancelOrderBatch', {
       body: params,
     });
+  }
+
+  /**
+   *
+   * Spot REST API - Algo Trading
+   *
+   */
+
+  /**
+   * Add Strategy
+   *
+   * Submit a TWAP strategy with a time horizon of at least 60 seconds.
+   * Returns an AS-prefixed strategy ID, or an empty string when validate is true.
+   */
+  submitStrategy(params: SpotSubmitStrategyParams): Promise<
+    SpotAPISuccessResponse<{
+      strategy_id: string;
+    }>
+  > {
+    return this.postPrivate('0/private/AddStrategy', { body: params });
+  }
+
+  /**
+   * Cancel Strategy
+   *
+   * Cancel a pending or open strategy. Use queryStrategies() for the final status and fills.
+   */
+  cancelStrategy(params: { strategy_id: string }): Promise<
+    SpotAPISuccessResponse<{
+      strategy_id: string;
+    }>
+  > {
+    return this.postPrivate('0/private/CancelStrategy', { body: params });
+  }
+
+  /**
+   * Get Open Strategies
+   *
+   * Get pending and open strategies keyed by strategy ID.
+   */
+  getOpenStrategies(params?: { strategy_type?: 'twap' }): Promise<
+    SpotAPISuccessResponse<{
+      open: Record<string, SpotAlgoStrategy>;
+    }>
+  > {
+    return this.postPrivate('0/private/GetOpenStrategies', { body: params });
+  }
+
+  /**
+   * Query Strategies
+   *
+   * Query up to 20 comma-delimited strategy IDs. Unmatched IDs are omitted.
+   */
+  queryStrategies(params: { strategy_ids: string }): Promise<
+    SpotAPISuccessResponse<{
+      strategies: Record<string, SpotAlgoStrategy>;
+    }>
+  > {
+    return this.postPrivate('0/private/QueryStrategies', { body: params });
+  }
+
+  /**
+   * Get Closed Strategies
+   *
+   * Get terminal strategies with cursor pagination (limit 1-100, default 100).
+   * Repeat the original filters with next_cursor as cursor. No ofs or count is supported.
+   */
+  getClosedStrategies(
+    params?: SpotGetClosedStrategiesParams,
+  ): Promise<SpotAPISuccessResponse<SpotClosedStrategiesResponse>> {
+    return this.postPrivate('0/private/GetClosedStrategies', { body: params });
   }
 
   /**

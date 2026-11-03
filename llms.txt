@@ -1986,6 +1986,271 @@ export interface WSAPITopicResponseMap {
 }
 
 ================
+File: src/InstitutionalClient.ts
+================
+import { nanoid } from 'nanoid';
+⋮----
+import { BaseRestClient } from './lib/BaseRestClient.js';
+import { REST_CLIENT_TYPE_ENUM, RestClientType } from './lib/requestUtils.js';
+import {
+  CustodyDepositAddressesParams,
+  CustodyDepositMethodsParams,
+  CustodyGetTransactionParams,
+  CustodyListActivitiesParams,
+  CustodyListTasksParams,
+  CustodyListTransactionsParams,
+  CustodyListVaultsParams,
+  CustodyWithdrawAddressesParams,
+  CustodyWithdrawMethodsParams,
+  OTCCreateQuoteRequestParams,
+  OTCUpdateQuoteParams,
+} from './types/request/institutional.types.js';
+import {
+  CustodyDepositAddressesResponse,
+  CustodyDepositMethodsResponse,
+  CustodyGetActivityResponse,
+  CustodyGetTaskResponse,
+  CustodyGetTransactionResponse,
+  CustodyGetVaultResponse,
+  CustodyListActivitiesResponse,
+  CustodyListTasksResponse,
+  CustodyListTransactionsResponse,
+  CustodyListVaultsResponse,
+  CustodyWithdrawAddressesResponse,
+  CustodyWithdrawMethodsResponse,
+  OTCCheckClientResponse,
+  OTCCreateQuoteResponse,
+  OTCGetActiveQuotesResponse,
+  OTCGetExposuresResponse,
+  OTCGetHistoricalQuotesResponse,
+  OTCGetPairsResponse,
+  OTCUpdateQuoteResponse,
+} from './types/response/institutional.types.js';
+⋮----
+/**
+ * The InstitutionalClient provides integration to the Kraken Institutional API.
+ *
+ * Docs:
+ * - https://docs.kraken.com/api/docs/custody-api
+ * - https://docs.kraken.com/api/docs/otc-api
+ */
+export class InstitutionalClient extends BaseRestClient
+⋮----
+getClientType(): RestClientType
+⋮----
+/**
+   *
+   * Misc Utility Methods
+   *
+   */
+⋮----
+generateNewOrderID(): string
+⋮----
+/**
+   *
+   * Custody REST API - Portfolios
+   *
+   */
+⋮----
+/**
+   * List vaults
+   *
+   * Retrieve all vaults within the custody domain.
+   */
+listCustodyVaults(
+    params: CustodyListVaultsParams,
+): Promise<CustodyListVaultsResponse>
+⋮----
+/**
+   * Get vault information by id
+   *
+   * Retrieve information and balances for a specific vault.
+   */
+getCustodyVaultbyId(params: {
+    id: string;
+    nonce?: number;
+}): Promise<CustodyGetVaultResponse>
+⋮----
+/**
+   * Get deposit methods
+   *
+   * Retrieve the available deposit funding methods for depositing a specific asset.
+   * The deposit method is required to retrieve deposit addresses using the Get Deposit Addresses API.
+   */
+getCustodyDepositMethods(
+    params: CustodyDepositMethodsParams,
+): Promise<CustodyDepositMethodsResponse>
+⋮----
+/**
+   * Get deposit addresses
+   *
+   * Retrieve (or generate a new) deposit addresses for a particular asset and funding method.
+   * Use the Get Deposit Methods API to identify the appropriate deposit method.
+   */
+getCustodyDepositAddresses(
+    params: CustodyDepositAddressesParams,
+): Promise<CustodyDepositAddressesResponse>
+⋮----
+/**
+   * List custody transactions
+   *
+   * Retrieve the transaction history for a specified vault.
+   */
+listCustodyTransactions(
+    params: CustodyListTransactionsParams,
+): Promise<CustodyListTransactionsResponse>
+⋮----
+/**
+   * Get transaction by id
+   *
+   * Get transaction by id
+   */
+getCustodyTransactionbyId(
+    params: CustodyGetTransactionParams,
+): Promise<CustodyGetTransactionResponse>
+⋮----
+/**
+   *
+   * Custody REST API - Transfers
+   *
+   */
+⋮----
+/**
+   * Get withdraw methods
+   *
+   * Retrieve a list of withdrawal methods available for a specified vault.
+   */
+getCustodyWithdrawMethods(
+    params: CustodyWithdrawMethodsParams,
+): Promise<CustodyWithdrawMethodsResponse>
+⋮----
+/**
+   * Get withdraw addresses
+   *
+   * Retrieve a list of withdrawal addresses for a specified vault.
+   */
+getCustodyWithdrawAddresses(
+    params: CustodyWithdrawAddressesParams,
+): Promise<CustodyWithdrawAddressesResponse>
+⋮----
+/**
+   *
+   * Custody REST API - Tasks
+   *
+   */
+⋮----
+/**
+   * List tasks
+   *
+   * Retrieve review tasks that match the specified filter criteria.
+   */
+listCustodyTasks(
+    params: CustodyListTasksParams,
+): Promise<CustodyListTasksResponse>
+⋮----
+/**
+   * Get task by id
+   *
+   * Retrieve details for a specific task.
+   */
+getCustodyTaskbyId(params: {
+    id: string;
+    nonce?: number;
+}): Promise<CustodyGetTaskResponse>
+⋮----
+/**
+   * List activities
+   *
+   * Retrieve all activities that match the specified filter criteria.
+   */
+listCustodyActivities(
+    params: CustodyListActivitiesParams,
+): Promise<CustodyListActivitiesResponse>
+⋮----
+/**
+   * Get activity by id
+   *
+   * Retrieve details for a specific task activity.
+   */
+getCustodyActivitybyId(params: {
+    id: string;
+    nonce?: number;
+}): Promise<CustodyGetActivityResponse>
+⋮----
+/**
+   *
+   * OTC REST API - Quotes
+   *
+   */
+⋮----
+/**
+   * Create OTC Quote
+   *
+   * Creates a new OTC request for quote.
+   * API Key Permissions Required: Orders and trades - Create & modify orders
+   */
+createOtcQuoteRequest(
+    params: OTCCreateQuoteRequestParams,
+): Promise<OTCCreateQuoteResponse>
+⋮----
+/**
+   * Update OTC Quote
+   *
+   * Accepts or rejects an OTC quote.
+   * API Key Permissions Required: Orders and trades - Create & modify orders
+   */
+updateOtcQuote(
+    params: OTCUpdateQuoteParams,
+): Promise<OTCUpdateQuoteResponse>
+⋮----
+/**
+   * Get OTC Pairs
+   *
+   * Retrieves the list of OTC trading pairs.
+   * API Key Permissions Required: Funds permissions - Query and Funds permissions - Deposit
+   */
+getOtcPairs(params?:
+⋮----
+/**
+   * Get OTC Active Quotes
+   *
+   * Retrieves a list of active OTC quotes.
+   * API Key Permissions Required: Orders and trades - Query open orders & trades
+   */
+getOtcActiveQuotes(params?: {
+    nonce?: number;
+    vault_id?: string;
+}): Promise<OTCGetActiveQuotesResponse>
+⋮----
+/**
+   * Get OTC Historical Quotes
+   *
+   * Retrieves OTC quotes history.
+   * API Key Permissions Required: Orders and trades - Query open orders & trades
+   */
+getOtcHistoricalQuotes(params?: {
+    nonce?: number;
+}): Promise<OTCGetHistoricalQuotesResponse>
+⋮----
+/**
+   * Get OTC Exposures
+   *
+   * Retrieves the max and used OTC exposures.
+   * API Key Permissions Required: Orders and trades - Query open orders & trades
+   */
+getOtcExposures(params?: {
+    nonce?: number;
+}): Promise<OTCGetExposuresResponse>
+⋮----
+/**
+   * Check OTC Eligibility
+   *
+   * Retrieves the client permissions for the OTC Portal.
+   * API Key Permissions Required: Funds permissions - Query and Funds permissions - Deposit
+   */
+checkOtcClient(params?:
+
+================
 File: src/WebsocketAPIClient.ts
 ================
 import { DefaultLogger } from './lib/websocket/logger.js';
@@ -6080,269 +6345,474 @@ File: src/index.ts
 
 
 ================
-File: src/InstitutionalClient.ts
+File: src/PartnerClient.ts
 ================
-import { nanoid } from 'nanoid';
-⋮----
 import { BaseRestClient } from './lib/BaseRestClient.js';
 import { REST_CLIENT_TYPE_ENUM, RestClientType } from './lib/requestUtils.js';
 import {
-  CustodyDepositAddressesParams,
-  CustodyDepositMethodsParams,
-  CustodyGetTransactionParams,
-  CustodyListActivitiesParams,
-  CustodyListTasksParams,
-  CustodyListTransactionsParams,
-  CustodyListVaultsParams,
-  CustodyWithdrawAddressesParams,
-  CustodyWithdrawMethodsParams,
-  OTCCreateQuoteRequestParams,
-  OTCUpdateQuoteParams,
-} from './types/request/institutional.types.js';
+  PartnerCancelCustomOrderParams,
+  PartnerCreateCustomOrderParams,
+  PartnerCreateUserParams,
+  PartnerExecuteQuoteParams,
+  PartnerGetAssetParams,
+  PartnerGetCustomOrderParams,
+  PartnerGetEarnSummaryParams,
+  PartnerGetPortfolioHistoryParams,
+  PartnerGetPortfolioSummaryParams,
+  PartnerGetQuoteLimitsParams,
+  PartnerGetQuoteParams,
+  PartnerGetRampCheckoutUrlParams,
+  PartnerGetRampLimitsParams,
+  PartnerGetRampProspectiveQuoteParams,
+  PartnerGetSettlementReportParams,
+  PartnerListAssetRatesParams,
+  PartnerListAssetsParams,
+  PartnerListCustomOrdersParams,
+  PartnerListEarnAssetsParams,
+  PartnerListFundingTransactionsParams,
+  PartnerListPortfolioDetailsParams,
+  PartnerListPortfolioTransactionsParams,
+  PartnerListSettlementReportsParams,
+  PartnerRequestProspectiveQuoteParams,
+  PartnerRequestQuoteParams,
+  PartnerSubmitVerificationParams,
+  PartnerToggleAutoEarnParams,
+  PartnerUpdateUserParams,
+  PartnerWithdrawFundsParams,
+} from './types/request/partner.types.js';
 import {
-  CustodyDepositAddressesResponse,
-  CustodyDepositMethodsResponse,
-  CustodyGetActivityResponse,
-  CustodyGetTaskResponse,
-  CustodyGetTransactionResponse,
-  CustodyGetVaultResponse,
-  CustodyListActivitiesResponse,
-  CustodyListTasksResponse,
-  CustodyListTransactionsResponse,
-  CustodyListVaultsResponse,
-  CustodyWithdrawAddressesResponse,
-  CustodyWithdrawMethodsResponse,
-  OTCCheckClientResponse,
-  OTCCreateQuoteResponse,
-  OTCGetActiveQuotesResponse,
-  OTCGetExposuresResponse,
-  OTCGetHistoricalQuotesResponse,
-  OTCGetPairsResponse,
-  OTCUpdateQuoteResponse,
-} from './types/response/institutional.types.js';
+  PartnerCancelCustomOrderResponse,
+  PartnerCreateCustomOrderResponse,
+  PartnerCreateUserResponse,
+  PartnerExecuteQuoteResponse,
+  PartnerGetAssetResponse,
+  PartnerGetCustomOrderResponse,
+  PartnerGetEarnSummaryResponse,
+  PartnerGetPortfolioHistoryResponse,
+  PartnerGetPortfolioSummaryResponse,
+  PartnerGetQuoteLimitsResponse,
+  PartnerGetQuoteResponse,
+  PartnerGetRampCheckoutUrlResponse,
+  PartnerGetRampLimitsResponse,
+  PartnerGetRampProspectiveQuoteResponse,
+  PartnerGetSettlementReportResponse,
+  PartnerGetUserResponse,
+  PartnerListAssetRatesResponse,
+  PartnerListAssetsResponse,
+  PartnerListCustomOrdersResponse,
+  PartnerListEarnAssetsResponse,
+  PartnerListFundingTransactionsResponse,
+  PartnerListPortfolioDetailsResponse,
+  PartnerListPortfolioTransactionsResponse,
+  PartnerListRampBuyCryptoAssetsResponse,
+  PartnerListRampCountriesResponse,
+  PartnerListRampFiatCurrenciesResponse,
+  PartnerListRampPaymentMethodsResponse,
+  PartnerListSettlementReportsResponse,
+  PartnerRequestProspectiveQuoteResponse,
+  PartnerRequestQuoteResponse,
+  PartnerSubmitVerificationResponse,
+  PartnerToggleAutoEarnResponse,
+  PartnerUpdateUserResponse,
+  PartnerWithdrawFundsResponse,
+} from './types/response/partner.types.js';
 ⋮----
 /**
- * The InstitutionalClient provides integration to the Kraken Institutional API.
+ * The PartnerClient provides integration to the Kraken Partner API.
  *
  * Docs:
- * - https://docs.kraken.com/api/docs/custody-api
- * - https://docs.kraken.com/api/docs/otc-api
+ * - https://docs.kraken.com/api/docs/embed-api
+ * - https://docs.kraken.com/api/docs/ramp-api
  */
-export class InstitutionalClient extends BaseRestClient
+export class PartnerClient extends BaseRestClient
 ⋮----
 getClientType(): RestClientType
 ⋮----
 /**
    *
-   * Misc Utility Methods
-   *
-   */
-⋮----
-generateNewOrderID(): string
-⋮----
-/**
-   *
-   * Custody REST API - Portfolios
+   * Partner REST API - Embed API - Users
    *
    */
 ⋮----
 /**
-   * List vaults
+   * Create User
    *
-   * Retrieve all vaults within the custody domain.
+   * Create a new user in the Kraken system.
    */
-listCustodyVaults(
-    params: CustodyListVaultsParams,
-): Promise<CustodyListVaultsResponse>
+createEmbedUser(
+    params: PartnerCreateUserParams,
+): Promise<PartnerCreateUserResponse>
 ⋮----
 /**
-   * Get vault information by id
+   * Get User
    *
-   * Retrieve information and balances for a specific vault.
+   * Get a previously created user.
    */
-getCustodyVaultbyId(params: {
-    id: string;
-    nonce?: number;
-}): Promise<CustodyGetVaultResponse>
+getEmbedUser(params:
 ⋮----
 /**
-   * Get deposit methods
+   * Update User
    *
-   * Retrieve the available deposit funding methods for depositing a specific asset.
-   * The deposit method is required to retrieve deposit addresses using the Get Deposit Addresses API.
+   * Update an existing user's profile.
    */
-getCustodyDepositMethods(
-    params: CustodyDepositMethodsParams,
-): Promise<CustodyDepositMethodsResponse>
-⋮----
-/**
-   * Get deposit addresses
-   *
-   * Retrieve (or generate a new) deposit addresses for a particular asset and funding method.
-   * Use the Get Deposit Methods API to identify the appropriate deposit method.
-   */
-getCustodyDepositAddresses(
-    params: CustodyDepositAddressesParams,
-): Promise<CustodyDepositAddressesResponse>
-⋮----
-/**
-   * List custody transactions
-   *
-   * Retrieve the transaction history for a specified vault.
-   */
-listCustodyTransactions(
-    params: CustodyListTransactionsParams,
-): Promise<CustodyListTransactionsResponse>
-⋮----
-/**
-   * Get transaction by id
-   *
-   * Get transaction by id
-   */
-getCustodyTransactionbyId(
-    params: CustodyGetTransactionParams,
-): Promise<CustodyGetTransactionResponse>
+updateEmbedUser(
+    params: PartnerUpdateUserParams,
+): Promise<PartnerUpdateUserResponse>
 ⋮----
 /**
    *
-   * Custody REST API - Transfers
+   * Partner REST API - Embed API - Verifications
    *
    */
 ⋮----
 /**
-   * Get withdraw methods
+   * Submit Verification
    *
-   * Retrieve a list of withdrawal methods available for a specified vault.
+   * Submit a verification for a user with documents and details.
+   * A verification is defined as a check that has been performed on a user to verify information provided by the user.
+   * Note: This endpoint uses multipart/form-data for file uploads.
    */
-getCustodyWithdrawMethods(
-    params: CustodyWithdrawMethodsParams,
-): Promise<CustodyWithdrawMethodsResponse>
-⋮----
-/**
-   * Get withdraw addresses
-   *
-   * Retrieve a list of withdrawal addresses for a specified vault.
-   */
-getCustodyWithdrawAddresses(
-    params: CustodyWithdrawAddressesParams,
-): Promise<CustodyWithdrawAddressesResponse>
+submitEmbedVerification(
+    params: PartnerSubmitVerificationParams,
+): Promise<PartnerSubmitVerificationResponse>
 ⋮----
 /**
    *
-   * Custody REST API - Tasks
+   * Partner REST API - Embed API - Assets
    *
    */
 ⋮----
 /**
-   * List tasks
+   * List Assets
    *
-   * Retrieve review tasks that match the specified filter criteria.
+   * List all assets available on the platform.
+   * This endpoint returns a list of all assets available on the platform.
    */
-listCustodyTasks(
-    params: CustodyListTasksParams,
-): Promise<CustodyListTasksResponse>
+listEmbedAssets(
+    params?: PartnerListAssetsParams,
+): Promise<PartnerListAssetsResponse>
 ⋮----
 /**
-   * Get task by id
+   * Get Asset
    *
-   * Retrieve details for a specific task.
+   * Get information about a specific asset.
    */
-getCustodyTaskbyId(params: {
-    id: string;
-    nonce?: number;
-}): Promise<CustodyGetTaskResponse>
+getEmbedAsset(
+    params: PartnerGetAssetParams,
+): Promise<PartnerGetAssetResponse>
 ⋮----
 /**
-   * List activities
+   * List Asset Rates
    *
-   * Retrieve all activities that match the specified filter criteria.
+   * Returns historical rates for a given asset.
+   * This endpoint returns historical rates for a given asset with timestamp and median price for each period.
    */
-listCustodyActivities(
-    params: CustodyListActivitiesParams,
-): Promise<CustodyListActivitiesResponse>
-⋮----
-/**
-   * Get activity by id
-   *
-   * Retrieve details for a specific task activity.
-   */
-getCustodyActivitybyId(params: {
-    id: string;
-    nonce?: number;
-}): Promise<CustodyGetActivityResponse>
+listEmbedAssetRates(
+    params: PartnerListAssetRatesParams,
+): Promise<PartnerListAssetRatesResponse>
 ⋮----
 /**
    *
-   * OTC REST API - Quotes
+   * Partner REST API - Embed API - Quotes
    *
    */
 ⋮----
 /**
-   * Create OTC Quote
+   * Request Quote
    *
-   * Creates a new OTC request for quote.
-   * API Key Permissions Required: Orders and trades - Create & modify orders
+   * Request a price quote for an asset, that may be used to execute a trade later on.
    */
-createOtcQuoteRequest(
-    params: OTCCreateQuoteRequestParams,
-): Promise<OTCCreateQuoteResponse>
+requestEmbedQuote(
+    params: PartnerRequestQuoteParams,
+): Promise<PartnerRequestQuoteResponse>
 ⋮----
 /**
-   * Update OTC Quote
+   * Get Quote
    *
-   * Accepts or rejects an OTC quote.
-   * API Key Permissions Required: Orders and trades - Create & modify orders
+   * Gets the status of a quote that was previously requested.
    */
-updateOtcQuote(
-    params: OTCUpdateQuoteParams,
-): Promise<OTCUpdateQuoteResponse>
+getEmbedQuote(
+    params: PartnerGetQuoteParams,
+): Promise<PartnerGetQuoteResponse>
 ⋮----
 /**
-   * Get OTC Pairs
+   * Execute Quote
    *
-   * Retrieves the list of OTC trading pairs.
-   * API Key Permissions Required: Funds permissions - Query and Funds permissions - Deposit
+   * Executes a quote that was previously requested.
    */
-getOtcPairs(params?:
+executeEmbedQuote(
+    params: PartnerExecuteQuoteParams,
+): Promise<PartnerExecuteQuoteResponse>
 ⋮----
 /**
-   * Get OTC Active Quotes
+   * Get Quote Limits (RFQ)
    *
-   * Retrieves a list of active OTC quotes.
-   * API Key Permissions Required: Orders and trades - Query open orders & trades
+   * Request minimum, maximum and precision for trade using a given asset pair.
    */
-getOtcActiveQuotes(params?: {
-    nonce?: number;
-    vault_id?: string;
-}): Promise<OTCGetActiveQuotesResponse>
+getEmbedQuoteLimits(
+    params: PartnerGetQuoteLimitsParams,
+): Promise<PartnerGetQuoteLimitsResponse>
 ⋮----
 /**
-   * Get OTC Historical Quotes
+   * Request Prospective Quote (RFQ)
    *
-   * Retrieves OTC quotes history.
-   * API Key Permissions Required: Orders and trades - Query open orders & trades
+   * Request a prospective quote for an asset pair, to receive an indicative price and fee.
    */
-getOtcHistoricalQuotes(params?: {
-    nonce?: number;
-}): Promise<OTCGetHistoricalQuotesResponse>
+requestEmbedProspectiveQuote(
+    params: PartnerRequestProspectiveQuoteParams,
+): Promise<PartnerRequestProspectiveQuoteResponse>
 ⋮----
 /**
-   * Get OTC Exposures
    *
-   * Retrieves the max and used OTC exposures.
-   * API Key Permissions Required: Orders and trades - Query open orders & trades
+   * Partner REST API - Embed API - Custom Orders
+   *
    */
-getOtcExposures(params?: {
-    nonce?: number;
-}): Promise<OTCGetExposuresResponse>
 ⋮----
 /**
-   * Check OTC Eligibility
+   * Create Custom Order
    *
-   * Retrieves the client permissions for the OTC Portal.
-   * API Key Permissions Required: Funds permissions - Query and Funds permissions - Deposit
+   * Submit a custom order with a specified trigger condition (e.g. price-triggered).
    */
-checkOtcClient(params?:
+createEmbedCustomOrder(
+    params: PartnerCreateCustomOrderParams,
+): Promise<PartnerCreateCustomOrderResponse>
+⋮----
+/**
+   * List Custom Orders
+   *
+   * Get a list of custom orders that were previously submitted.
+   */
+listEmbedCustomOrders(
+    params: PartnerListCustomOrdersParams,
+): Promise<PartnerListCustomOrdersResponse>
+⋮----
+/**
+   * Get Custom Order
+   *
+   * Get a single custom order by ID.
+   */
+getEmbedCustomOrder(
+    params: PartnerGetCustomOrderParams,
+): Promise<PartnerGetCustomOrderResponse>
+⋮----
+/**
+   * Cancel Custom Order
+   *
+   * Cancels a custom order that was previously submitted but not yet completed.
+   */
+cancelEmbedCustomOrder(
+    params: PartnerCancelCustomOrderParams,
+): Promise<PartnerCancelCustomOrderResponse>
+⋮----
+/**
+   *
+   * Partner REST API - Embed API - Portfolios
+   *
+   */
+⋮----
+/**
+   * Get Portfolio Summary
+   *
+   * Get the portfolio summary for a user.
+   */
+getEmbedPortfolioSummary(
+    params: PartnerGetPortfolioSummaryParams,
+): Promise<PartnerGetPortfolioSummaryResponse>
+⋮----
+/**
+   * Get Portfolio History
+   *
+   * Gets a portfolio's historical balances and valuations over time.
+   * Note: Balance for the last day shows up at UTC + 5h due to processing times.
+   */
+getEmbedPortfolioHistory(
+    params: PartnerGetPortfolioHistoryParams,
+): Promise<PartnerGetPortfolioHistoryResponse>
+⋮----
+/**
+   * List Portfolio Details
+   *
+   * Lists owned assets in a user's portfolio.
+   */
+listEmbedPortfolioDetails(
+    params: PartnerListPortfolioDetailsParams,
+): Promise<PartnerListPortfolioDetailsResponse>
+⋮----
+/**
+   * List Portfolio Transactions
+   *
+   * Lists the user's trades and transactions.
+   */
+listEmbedPortfolioTransactions(
+    params: PartnerListPortfolioTransactionsParams,
+): Promise<PartnerListPortfolioTransactionsResponse>
+⋮----
+/**
+   *
+   * Partner REST API - Embed API - Earn
+   *
+   */
+⋮----
+/**
+   * Get Earn Summary
+   *
+   * Get Earn summary of a user.
+   * Response holds total amounts (all-time). For per-asset granularity, use listEarnAssets().
+   */
+getEmbedEarnSummary(
+    params: PartnerGetEarnSummaryParams,
+): Promise<PartnerGetEarnSummaryResponse>
+⋮----
+/**
+   * List Earn Assets
+   *
+   * List Earn Assets.
+   * The user can optionally be passed in the request, which shows active asset allocations of the user in the response.
+   */
+listEmbedEarnAssets(
+    params?: PartnerListEarnAssetsParams,
+): Promise<PartnerListEarnAssetsResponse>
+⋮----
+/**
+   * Toggle Auto-Earn
+   *
+   * Toggle Auto-Earn of a user.
+   * Toggling Auto-Earn is an async operation. The response is empty on success.
+   * To fetch the user's current Auto-Earn status, use getEarnSummary().
+   */
+toggleEmbedAutoEarn(
+    params: PartnerToggleAutoEarnParams,
+): Promise<PartnerToggleAutoEarnResponse>
+⋮----
+/**
+   *
+   * Partner REST API - Embed API - Transfers
+   *
+   */
+⋮----
+/**
+   * Withdraw Funds
+   *
+   * Withdraw funds.
+   * Note: Currently, this is a master-only operation. No User parameter exists.
+   */
+withdrawEmbedFunds(
+    params: PartnerWithdrawFundsParams,
+): Promise<PartnerWithdrawFundsResponse>
+⋮----
+/**
+   * List Funding Transactions
+   *
+   * List Funding transactions.
+   * Funding transactions can be of type withdrawal or deposit.
+   * Note: Currently, this is a master-only operation. No User parameter exists.
+   */
+listEmbedFundingTransactions(
+    params: PartnerListFundingTransactionsParams,
+): Promise<PartnerListFundingTransactionsResponse>
+⋮----
+/**
+   *
+   * Partner REST API - Embed API - Reports
+   *
+   */
+⋮----
+/**
+   * List Settlement Reports
+   *
+   * Retrieves a paginated list of settlement reports available to the authenticated master user,
+   * with optional filters for date range and report type.
+   */
+listEmbedSettlementReports(
+    params?: PartnerListSettlementReportsParams,
+): Promise<PartnerListSettlementReportsResponse>
+⋮----
+/**
+   * Get Settlement Report
+   *
+   * Retrieves a settlement report and provides a secure download URL for the authenticated master user.
+   */
+getEmbedSettlementReport(
+    params: PartnerGetSettlementReportParams,
+): Promise<PartnerGetSettlementReportResponse>
+⋮----
+/**
+   *
+   * Partner REST API - Ramp API - Supported Options
+   *
+   */
+⋮----
+/**
+   * List Buy Crypto Assets
+   *
+   * List cryptocurrency assets available for Ramp buy transactions,
+   * including the networks, withdrawal methods, and provider-specific identifiers.
+   */
+listRampBuyCryptoAssets(): Promise<PartnerListRampBuyCryptoAssetsResponse>
+⋮----
+/**
+   * List Fiat Currencies
+   *
+   * List fiat currencies supported for funding Ramp transactions.
+   */
+listRampFiatCurrencies(): Promise<PartnerListRampFiatCurrenciesResponse>
+⋮----
+/**
+   * List Payment Methods
+   *
+   * List fiat payment methods supported for Ramp deposits,
+   * including optional mapping to provider-specific identifiers.
+   */
+listRampPaymentMethods(): Promise<PartnerListRampPaymentMethodsResponse>
+⋮----
+/**
+   * List Countries
+   *
+   * List countries and regions where Ramp is available.
+   * Depending on regulatory rules, availability may be scoped to specific states, provinces, or regions.
+   */
+listRampCountries(): Promise<PartnerListRampCountriesResponse>
+⋮----
+/**
+   *
+   * Partner REST API - Ramp API - Quotes
+   *
+   */
+⋮----
+/**
+   * Get Limits
+   *
+   * Retrieve combined min/max limits for a Ramp transaction configuration.
+   */
+getRampLimits(
+    params: PartnerGetRampLimitsParams,
+): Promise<PartnerGetRampLimitsResponse>
+⋮----
+/**
+   * Get Prospective Quote
+   *
+   * Retrieve a prospective quote for a Ramp transaction without reserving liquidity.
+   * Use this to preview spend/receive amounts before creating a checkout URL.
+   */
+getRampProspectiveQuote(
+    params: PartnerGetRampProspectiveQuoteParams,
+): Promise<PartnerGetRampProspectiveQuoteResponse>
+⋮----
+/**
+   *
+   * Partner REST API - Ramp API - Checkout
+   *
+   */
+⋮----
+/**
+   * Get Checkout URL
+   *
+   * Generate a hosted Ramp checkout URL for the provided transaction configuration.
+   * The response echoes the request parameters so the Ramp partner can confirm what was submitted.
+   */
+getRampCheckoutUrl(
+    params: PartnerGetRampCheckoutUrlParams,
+): Promise<PartnerGetRampCheckoutUrlResponse>
 
 ================
 File: .gitignore
@@ -8451,476 +8921,6 @@ export type FuturesSelfTradeStrategy =
   | 'CANCEL_MAKER_ANY';
 
 ================
-File: src/PartnerClient.ts
-================
-import { BaseRestClient } from './lib/BaseRestClient.js';
-import { REST_CLIENT_TYPE_ENUM, RestClientType } from './lib/requestUtils.js';
-import {
-  PartnerCancelCustomOrderParams,
-  PartnerCreateCustomOrderParams,
-  PartnerCreateUserParams,
-  PartnerExecuteQuoteParams,
-  PartnerGetAssetParams,
-  PartnerGetCustomOrderParams,
-  PartnerGetEarnSummaryParams,
-  PartnerGetPortfolioHistoryParams,
-  PartnerGetPortfolioSummaryParams,
-  PartnerGetQuoteLimitsParams,
-  PartnerGetQuoteParams,
-  PartnerGetRampCheckoutUrlParams,
-  PartnerGetRampLimitsParams,
-  PartnerGetRampProspectiveQuoteParams,
-  PartnerGetSettlementReportParams,
-  PartnerListAssetRatesParams,
-  PartnerListAssetsParams,
-  PartnerListCustomOrdersParams,
-  PartnerListEarnAssetsParams,
-  PartnerListFundingTransactionsParams,
-  PartnerListPortfolioDetailsParams,
-  PartnerListPortfolioTransactionsParams,
-  PartnerListSettlementReportsParams,
-  PartnerRequestProspectiveQuoteParams,
-  PartnerRequestQuoteParams,
-  PartnerSubmitVerificationParams,
-  PartnerToggleAutoEarnParams,
-  PartnerUpdateUserParams,
-  PartnerWithdrawFundsParams,
-} from './types/request/partner.types.js';
-import {
-  PartnerCancelCustomOrderResponse,
-  PartnerCreateCustomOrderResponse,
-  PartnerCreateUserResponse,
-  PartnerExecuteQuoteResponse,
-  PartnerGetAssetResponse,
-  PartnerGetCustomOrderResponse,
-  PartnerGetEarnSummaryResponse,
-  PartnerGetPortfolioHistoryResponse,
-  PartnerGetPortfolioSummaryResponse,
-  PartnerGetQuoteLimitsResponse,
-  PartnerGetQuoteResponse,
-  PartnerGetRampCheckoutUrlResponse,
-  PartnerGetRampLimitsResponse,
-  PartnerGetRampProspectiveQuoteResponse,
-  PartnerGetSettlementReportResponse,
-  PartnerGetUserResponse,
-  PartnerListAssetRatesResponse,
-  PartnerListAssetsResponse,
-  PartnerListCustomOrdersResponse,
-  PartnerListEarnAssetsResponse,
-  PartnerListFundingTransactionsResponse,
-  PartnerListPortfolioDetailsResponse,
-  PartnerListPortfolioTransactionsResponse,
-  PartnerListRampBuyCryptoAssetsResponse,
-  PartnerListRampCountriesResponse,
-  PartnerListRampFiatCurrenciesResponse,
-  PartnerListRampPaymentMethodsResponse,
-  PartnerListSettlementReportsResponse,
-  PartnerRequestProspectiveQuoteResponse,
-  PartnerRequestQuoteResponse,
-  PartnerSubmitVerificationResponse,
-  PartnerToggleAutoEarnResponse,
-  PartnerUpdateUserResponse,
-  PartnerWithdrawFundsResponse,
-} from './types/response/partner.types.js';
-⋮----
-/**
- * The PartnerClient provides integration to the Kraken Partner API.
- *
- * Docs:
- * - https://docs.kraken.com/api/docs/embed-api
- * - https://docs.kraken.com/api/docs/ramp-api
- */
-export class PartnerClient extends BaseRestClient
-⋮----
-getClientType(): RestClientType
-⋮----
-/**
-   *
-   * Partner REST API - Embed API - Users
-   *
-   */
-⋮----
-/**
-   * Create User
-   *
-   * Create a new user in the Kraken system.
-   */
-createEmbedUser(
-    params: PartnerCreateUserParams,
-): Promise<PartnerCreateUserResponse>
-⋮----
-/**
-   * Get User
-   *
-   * Get a previously created user.
-   */
-getEmbedUser(params:
-⋮----
-/**
-   * Update User
-   *
-   * Update an existing user's profile.
-   */
-updateEmbedUser(
-    params: PartnerUpdateUserParams,
-): Promise<PartnerUpdateUserResponse>
-⋮----
-/**
-   *
-   * Partner REST API - Embed API - Verifications
-   *
-   */
-⋮----
-/**
-   * Submit Verification
-   *
-   * Submit a verification for a user with documents and details.
-   * A verification is defined as a check that has been performed on a user to verify information provided by the user.
-   * Note: This endpoint uses multipart/form-data for file uploads.
-   */
-submitEmbedVerification(
-    params: PartnerSubmitVerificationParams,
-): Promise<PartnerSubmitVerificationResponse>
-⋮----
-/**
-   *
-   * Partner REST API - Embed API - Assets
-   *
-   */
-⋮----
-/**
-   * List Assets
-   *
-   * List all assets available on the platform.
-   * This endpoint returns a list of all assets available on the platform.
-   */
-listEmbedAssets(
-    params?: PartnerListAssetsParams,
-): Promise<PartnerListAssetsResponse>
-⋮----
-/**
-   * Get Asset
-   *
-   * Get information about a specific asset.
-   */
-getEmbedAsset(
-    params: PartnerGetAssetParams,
-): Promise<PartnerGetAssetResponse>
-⋮----
-/**
-   * List Asset Rates
-   *
-   * Returns historical rates for a given asset.
-   * This endpoint returns historical rates for a given asset with timestamp and median price for each period.
-   */
-listEmbedAssetRates(
-    params: PartnerListAssetRatesParams,
-): Promise<PartnerListAssetRatesResponse>
-⋮----
-/**
-   *
-   * Partner REST API - Embed API - Quotes
-   *
-   */
-⋮----
-/**
-   * Request Quote
-   *
-   * Request a price quote for an asset, that may be used to execute a trade later on.
-   */
-requestEmbedQuote(
-    params: PartnerRequestQuoteParams,
-): Promise<PartnerRequestQuoteResponse>
-⋮----
-/**
-   * Get Quote
-   *
-   * Gets the status of a quote that was previously requested.
-   */
-getEmbedQuote(
-    params: PartnerGetQuoteParams,
-): Promise<PartnerGetQuoteResponse>
-⋮----
-/**
-   * Execute Quote
-   *
-   * Executes a quote that was previously requested.
-   */
-executeEmbedQuote(
-    params: PartnerExecuteQuoteParams,
-): Promise<PartnerExecuteQuoteResponse>
-⋮----
-/**
-   * Get Quote Limits (RFQ)
-   *
-   * Request minimum, maximum and precision for trade using a given asset pair.
-   */
-getEmbedQuoteLimits(
-    params: PartnerGetQuoteLimitsParams,
-): Promise<PartnerGetQuoteLimitsResponse>
-⋮----
-/**
-   * Request Prospective Quote (RFQ)
-   *
-   * Request a prospective quote for an asset pair, to receive an indicative price and fee.
-   */
-requestEmbedProspectiveQuote(
-    params: PartnerRequestProspectiveQuoteParams,
-): Promise<PartnerRequestProspectiveQuoteResponse>
-⋮----
-/**
-   *
-   * Partner REST API - Embed API - Custom Orders
-   *
-   */
-⋮----
-/**
-   * Create Custom Order
-   *
-   * Submit a custom order with a specified trigger condition (e.g. price-triggered).
-   */
-createEmbedCustomOrder(
-    params: PartnerCreateCustomOrderParams,
-): Promise<PartnerCreateCustomOrderResponse>
-⋮----
-/**
-   * List Custom Orders
-   *
-   * Get a list of custom orders that were previously submitted.
-   */
-listEmbedCustomOrders(
-    params: PartnerListCustomOrdersParams,
-): Promise<PartnerListCustomOrdersResponse>
-⋮----
-/**
-   * Get Custom Order
-   *
-   * Get a single custom order by ID.
-   */
-getEmbedCustomOrder(
-    params: PartnerGetCustomOrderParams,
-): Promise<PartnerGetCustomOrderResponse>
-⋮----
-/**
-   * Cancel Custom Order
-   *
-   * Cancels a custom order that was previously submitted but not yet completed.
-   */
-cancelEmbedCustomOrder(
-    params: PartnerCancelCustomOrderParams,
-): Promise<PartnerCancelCustomOrderResponse>
-⋮----
-/**
-   *
-   * Partner REST API - Embed API - Portfolios
-   *
-   */
-⋮----
-/**
-   * Get Portfolio Summary
-   *
-   * Get the portfolio summary for a user.
-   */
-getEmbedPortfolioSummary(
-    params: PartnerGetPortfolioSummaryParams,
-): Promise<PartnerGetPortfolioSummaryResponse>
-⋮----
-/**
-   * Get Portfolio History
-   *
-   * Gets a portfolio's historical balances and valuations over time.
-   * Note: Balance for the last day shows up at UTC + 5h due to processing times.
-   */
-getEmbedPortfolioHistory(
-    params: PartnerGetPortfolioHistoryParams,
-): Promise<PartnerGetPortfolioHistoryResponse>
-⋮----
-/**
-   * List Portfolio Details
-   *
-   * Lists owned assets in a user's portfolio.
-   */
-listEmbedPortfolioDetails(
-    params: PartnerListPortfolioDetailsParams,
-): Promise<PartnerListPortfolioDetailsResponse>
-⋮----
-/**
-   * List Portfolio Transactions
-   *
-   * Lists the user's trades and transactions.
-   */
-listEmbedPortfolioTransactions(
-    params: PartnerListPortfolioTransactionsParams,
-): Promise<PartnerListPortfolioTransactionsResponse>
-⋮----
-/**
-   *
-   * Partner REST API - Embed API - Earn
-   *
-   */
-⋮----
-/**
-   * Get Earn Summary
-   *
-   * Get Earn summary of a user.
-   * Response holds total amounts (all-time). For per-asset granularity, use listEarnAssets().
-   */
-getEmbedEarnSummary(
-    params: PartnerGetEarnSummaryParams,
-): Promise<PartnerGetEarnSummaryResponse>
-⋮----
-/**
-   * List Earn Assets
-   *
-   * List Earn Assets.
-   * The user can optionally be passed in the request, which shows active asset allocations of the user in the response.
-   */
-listEmbedEarnAssets(
-    params?: PartnerListEarnAssetsParams,
-): Promise<PartnerListEarnAssetsResponse>
-⋮----
-/**
-   * Toggle Auto-Earn
-   *
-   * Toggle Auto-Earn of a user.
-   * Toggling Auto-Earn is an async operation. The response is empty on success.
-   * To fetch the user's current Auto-Earn status, use getEarnSummary().
-   */
-toggleEmbedAutoEarn(
-    params: PartnerToggleAutoEarnParams,
-): Promise<PartnerToggleAutoEarnResponse>
-⋮----
-/**
-   *
-   * Partner REST API - Embed API - Transfers
-   *
-   */
-⋮----
-/**
-   * Withdraw Funds
-   *
-   * Withdraw funds.
-   * Note: Currently, this is a master-only operation. No User parameter exists.
-   */
-withdrawEmbedFunds(
-    params: PartnerWithdrawFundsParams,
-): Promise<PartnerWithdrawFundsResponse>
-⋮----
-/**
-   * List Funding Transactions
-   *
-   * List Funding transactions.
-   * Funding transactions can be of type withdrawal or deposit.
-   * Note: Currently, this is a master-only operation. No User parameter exists.
-   */
-listEmbedFundingTransactions(
-    params: PartnerListFundingTransactionsParams,
-): Promise<PartnerListFundingTransactionsResponse>
-⋮----
-/**
-   *
-   * Partner REST API - Embed API - Reports
-   *
-   */
-⋮----
-/**
-   * List Settlement Reports
-   *
-   * Retrieves a paginated list of settlement reports available to the authenticated master user,
-   * with optional filters for date range and report type.
-   */
-listEmbedSettlementReports(
-    params?: PartnerListSettlementReportsParams,
-): Promise<PartnerListSettlementReportsResponse>
-⋮----
-/**
-   * Get Settlement Report
-   *
-   * Retrieves a settlement report and provides a secure download URL for the authenticated master user.
-   */
-getEmbedSettlementReport(
-    params: PartnerGetSettlementReportParams,
-): Promise<PartnerGetSettlementReportResponse>
-⋮----
-/**
-   *
-   * Partner REST API - Ramp API - Supported Options
-   *
-   */
-⋮----
-/**
-   * List Buy Crypto Assets
-   *
-   * List cryptocurrency assets available for Ramp buy transactions,
-   * including the networks, withdrawal methods, and provider-specific identifiers.
-   */
-listRampBuyCryptoAssets(): Promise<PartnerListRampBuyCryptoAssetsResponse>
-⋮----
-/**
-   * List Fiat Currencies
-   *
-   * List fiat currencies supported for funding Ramp transactions.
-   */
-listRampFiatCurrencies(): Promise<PartnerListRampFiatCurrenciesResponse>
-⋮----
-/**
-   * List Payment Methods
-   *
-   * List fiat payment methods supported for Ramp deposits,
-   * including optional mapping to provider-specific identifiers.
-   */
-listRampPaymentMethods(): Promise<PartnerListRampPaymentMethodsResponse>
-⋮----
-/**
-   * List Countries
-   *
-   * List countries and regions where Ramp is available.
-   * Depending on regulatory rules, availability may be scoped to specific states, provinces, or regions.
-   */
-listRampCountries(): Promise<PartnerListRampCountriesResponse>
-⋮----
-/**
-   *
-   * Partner REST API - Ramp API - Quotes
-   *
-   */
-⋮----
-/**
-   * Get Limits
-   *
-   * Retrieve combined min/max limits for a Ramp transaction configuration.
-   */
-getRampLimits(
-    params: PartnerGetRampLimitsParams,
-): Promise<PartnerGetRampLimitsResponse>
-⋮----
-/**
-   * Get Prospective Quote
-   *
-   * Retrieve a prospective quote for a Ramp transaction without reserving liquidity.
-   * Use this to preview spend/receive amounts before creating a checkout URL.
-   */
-getRampProspectiveQuote(
-    params: PartnerGetRampProspectiveQuoteParams,
-): Promise<PartnerGetRampProspectiveQuoteResponse>
-⋮----
-/**
-   *
-   * Partner REST API - Ramp API - Checkout
-   *
-   */
-⋮----
-/**
-   * Get Checkout URL
-   *
-   * Generate a hosted Ramp checkout URL for the provided transaction configuration.
-   * The response echoes the request parameters so the Ramp partner can confirm what was submitted.
-   */
-getRampCheckoutUrl(
-    params: PartnerGetRampCheckoutUrlParams,
-): Promise<PartnerGetRampCheckoutUrlResponse>
-
-================
 File: src/types/request/derivatives.types.ts
 ================
 /**
@@ -9258,6 +9258,492 @@ interval: 60 | 300 | 900 | 1800 | 3600 | 14400 | 43200 | 86400 | 604800; // Reso
 to?: number; // Epoch time in seconds, default now
 
 ================
+File: src/types/websockets/ws-general.ts
+================
+import { AxiosRequestConfig } from 'axios';
+import type { ClientRequestArgs } from 'http';
+import WebSocket from 'isomorphic-ws';
+⋮----
+import { RestClientOptions } from '../../lib/requestUtils.js';
+⋮----
+/** General configuration for the WebsocketClient */
+export interface WSClientConfigurableOptions {
+  /** Your API key */
+  apiKey?: string;
+
+  /** Your API secret */
+  apiSecret?: string;
+
+  /**
+   * Kraken retired the Futures demo (testnet) environment on 14 July 2026.
+   * There is no replacement demo host, and Spot never had a testnet.
+   *
+   * Setting this to `true` throws when a connection URL is resolved. The live environment is used when it is omitted or `false`.
+   *
+   * See https://support.kraken.com/articles/360024809011-api-testing-environment-derivatives
+   */
+  testnet?: boolean;
+
+  /** Define a recv window when preparing a private websocket signature. This is in milliseconds, so 5000 == 5 seconds */
+  recvWindow?: number;
+
+  /** How often to check if the connection is alive */
+  pingInterval?: number;
+
+  /** How long to wait for a pong (heartbeat reply) before assuming the connection is dead */
+  pongTimeout?: number;
+
+  /** Delay in milliseconds before respawning the connection */
+  reconnectTimeout?: number;
+
+  restOptions?: RestClientOptions;
+  requestOptions?: AxiosRequestConfig;
+
+  wsOptions?: {
+    protocols?: string[];
+    agent?: any;
+  } & (
+    | Omit<Partial<WebSocket.ClientOptions>, 'agent'>
+    | Omit<Partial<ClientRequestArgs>, 'agent'>
+  );
+
+  wsUrl?: string;
+
+  /**
+   * Allows you to provide a custom "signMessage" function, e.g. to use node's much faster createHmac method
+   *
+   * Look in the examples folder for a demonstration on using node's createHmac instead.
+   */
+  customSignMessageFn?: (message: string, secret: string) => Promise<string>;
+
+  /**
+   * If you authenticated the WS API before, automatically try to re-authenticate the WS API if you're disconnected/reconnected for any reason.
+   */
+  reauthWSAPIOnReconnect?: boolean;
+}
+⋮----
+/** Your API key */
+⋮----
+/** Your API secret */
+⋮----
+/**
+   * Kraken retired the Futures demo (testnet) environment on 14 July 2026.
+   * There is no replacement demo host, and Spot never had a testnet.
+   *
+   * Setting this to `true` throws when a connection URL is resolved. The live environment is used when it is omitted or `false`.
+   *
+   * See https://support.kraken.com/articles/360024809011-api-testing-environment-derivatives
+   */
+⋮----
+/** Define a recv window when preparing a private websocket signature. This is in milliseconds, so 5000 == 5 seconds */
+⋮----
+/** How often to check if the connection is alive */
+⋮----
+/** How long to wait for a pong (heartbeat reply) before assuming the connection is dead */
+⋮----
+/** Delay in milliseconds before respawning the connection */
+⋮----
+/**
+   * Allows you to provide a custom "signMessage" function, e.g. to use node's much faster createHmac method
+   *
+   * Look in the examples folder for a demonstration on using node's createHmac instead.
+   */
+⋮----
+/**
+   * If you authenticated the WS API before, automatically try to re-authenticate the WS API if you're disconnected/reconnected for any reason.
+   */
+⋮----
+/**
+ * WS configuration that's always defined, regardless of user configuration
+ * (usually comes from defaults if there's no user-provided values)
+ */
+export interface WebsocketClientOptions extends WSClientConfigurableOptions {
+  pingInterval: number;
+  pongTimeout: number;
+  reconnectTimeout: number;
+  recvWindow: number;
+
+  /**
+   * If true, require a "receipt" that the connection is ready for use (e.g. a specific event type)
+   */
+  requireConnectionReadyConfirmation: boolean;
+  authPrivateConnectionsOnConnect: boolean;
+  authPrivateRequests: boolean;
+  reauthWSAPIOnReconnect: boolean;
+
+  /**
+   * Whether to use native WebSocket ping/pong frames for heartbeats
+   */
+  useNativeHeartbeats: boolean;
+}
+⋮----
+/**
+   * If true, require a "receipt" that the connection is ready for use (e.g. a specific event type)
+   */
+⋮----
+/**
+   * Whether to use native WebSocket ping/pong frames for heartbeats
+   */
+⋮----
+export type WsMarket = 'spot' | 'futures';
+⋮----
+export type WsEventInternalSrc = 'event' | 'function' | 'frame';
+
+================
+File: src/WebsocketClient.ts
+================
+import {
+  BaseWebsocketClient,
+  EmittableEvent,
+  MidflightWsRequestEvent,
+} from './lib/BaseWSClient.js';
+import { neverGuard } from './lib/misc-util.js';
+import {
+  KRAKEN_FUTURES_TESTNET_RETIRED_ERROR,
+  RestClientOptions,
+} from './lib/requestUtils.js';
+import {
+  hashMessage,
+  SignAlgorithm,
+  SignEncodeMethod,
+  signMessage,
+  SignMessageOptions,
+} from './lib/webCryptoAPI.js';
+import { DefaultLogger } from './lib/websocket/logger.js';
+import { RestClientCache } from './lib/websocket/rest-client-cache.js';
+import {
+  getPromiseRefForWSAPIRequest,
+  WS_KEY_MAP,
+  WsKey,
+  WSOperation,
+  WSRequestOperationKraken,
+  WSTopicRequest,
+} from './lib/websocket/websocket-util.js';
+import { WSConnectedResult } from './lib/websocket/WsStore.types.js';
+import {
+  Exact,
+  WS_API_Operations,
+  WSAPIAuthenticationRequestFromServer,
+  WSAPIRequestOperationKrakenSpot,
+  WSAPITopicRequestParamMap,
+  WSAPITopicResponseMap,
+  WSAPIWsKey,
+  WSAPIWsKeyTopicMap,
+} from './types/websockets/ws-api.js';
+import { MessageEventLike } from './types/websockets/ws-events.js';
+import {
+  WSClientConfigurableOptions,
+  WsMarket,
+} from './types/websockets/ws-general.js';
+import {
+  WS_DERIVATIVES_PRIVATE_TOPICS,
+  WS_SPOT_PRIVATE_TOPICS,
+  WSTopic,
+} from './types/websockets/ws-subscriptions.js';
+⋮----
+export interface WSAPIRequestFlags {
+  /** If true, will skip auth requirement for WS API connection */
+  authIsOptional?: boolean | undefined;
+}
+⋮----
+/** If true, will skip auth requirement for WS API connection */
+⋮----
+export class WebsocketClient extends BaseWebsocketClient<WsKey, any>
+⋮----
+constructor(options?: WSClientConfigurableOptions, logger?: DefaultLogger)
+⋮----
+/**
+   * Request connection of all dependent (public & private) websockets, instead of waiting for automatic connection by library.
+   *
+   * Returns array of promises that individually resolve when each connection is successfully opened.
+   */
+public connectAll(): Promise<WSConnectedResult | undefined>[]
+⋮----
+/**
+   * Ensures the WS API connection is active and ready.
+   *
+   * You do not need to call this, but if you call this before making any WS API requests,
+   * it can accelerate the first request (by preparing the connection in advance).
+   */
+public connectWSAPI(wsKey: WSAPIWsKey, skipAuth?: boolean): Promise<unknown>
+⋮----
+/** This call automatically ensures the connection is active AND authenticated before resolving */
+⋮----
+/**
+   * Request subscription to one or more topics. Pass topics as either an array of strings, or array of objects (if the topic has parameters).
+   * Objects should be formatted as {topic: string, params: object}.
+   *
+   * - Subscriptions are automatically routed to the correct websocket connection.
+   * - Authentication/connection is automatic.
+   * - Resubscribe after network issues is automatic.
+   *
+   * Call `unsubscribe(topics)` to remove topics
+   */
+public subscribe<TTopic extends WSTopic>(
+    requests:
+      | (WSTopicRequest<TTopic> | TTopic)
+      | (WSTopicRequest<TTopic> | TTopic)[],
+    wsKey: WsKey,
+)
+⋮----
+/**
+   * Unsubscribe from one or more topics. Similar to subscribe() but in reverse.
+   *
+   * - Requests are automatically routed to the correct websocket connection.
+   * - These topics will be removed from the topic cache, so they won't be subscribed to again.
+   */
+public unsubscribe<TTopic extends WSTopic>(
+    requests:
+      | (WSTopicRequest<TTopic> | TTopic)
+      | (WSTopicRequest<TTopic> | TTopic)[],
+    wsKey: WsKey,
+)
+⋮----
+/**
+   * WS API Methods - similar to the REST API, but via WebSockets
+   */
+⋮----
+/**
+   * Send a Websocket API event on a connection. Returns a promise that resolves on reply.
+   *
+   * Returned promise is rejected if an exception is detected in the reply OR the connection disconnects for any reason (even if automatic reconnect will happen).
+   *
+   * After a fresh connection, you should always send a login request first.
+   *
+   * If you authenticated once and you're reconnected later (e.g. connection temporarily lost), the SDK will by default automatically:
+   * - Detect you were authenticated to the WS API before
+   * - Try to re-authenticate (up to 5 times, in case something (bad timestamp) goes wrong)
+   * - If it succeeds, it will emit the 'authenticated' event.
+   * - If it fails and gives up, it will emit an 'exception' event (type: 'wsapi.auth', reason: detailed text).
+   *
+   * You can turn off the automatic re-auth WS API logic using `reauthWSAPIOnReconnect: false` in the WSClient config.
+   *
+   * @param wsKey - The connection this event is for (e.g. "spotV4" | "perpFuturesUSDTV4" | "perpFuturesBTCV4" | "deliveryFuturesUSDTV4" | "deliveryFuturesBTCV4" | "optionsV4")
+   * @param channel - The channel this event is for (e.g. "spot.login" to authenticate)
+   * @param params - Any request parameters for the payload (contents of req_param in the docs). Signature generation is automatic, only send parameters such as order ID as per the docs.
+   * @returns Promise - tries to resolve with async WS API response. Rejects if disconnected or exception is seen in async WS API response
+   */
+⋮----
+// This overload allows the caller to omit the 3rd param, if it isn't required (e.g. for the login call)
+async sendWSAPIRequest<
+    TWSKey extends keyof WSAPIWsKeyTopicMap,
+    TWSOperation extends WSAPIWsKeyTopicMap[TWSKey],
+    TWSParams extends Exact<WSAPITopicRequestParamMap[TWSOperation]>,
+    TWSAPIResponse extends
+      | WSAPITopicResponseMap[TWSOperation]
+      | object = WSAPITopicResponseMap[TWSOperation],
+  >(
+    wsKey: TWSKey,
+    operation: TWSOperation,
+    params?: TWSParams extends void | never ? undefined : TWSParams,
+    requestFlags?: WSAPIRequestFlags,
+  ): Promise<TWSAPIResponse>;
+⋮----
+async sendWSAPIRequest<
+    TWSKey extends keyof WSAPIWsKeyTopicMap,
+    TWSOperation extends WSAPIWsKeyTopicMap[TWSKey],
+    // if this throws a type error, probably forgot to add a new operation to WsAPITopicRequestParamMap
+    TWSParams extends Exact<WSAPITopicRequestParamMap[TWSOperation]>,
+    TWSAPIResponse extends
+      | WSAPITopicResponseMap[TWSOperation]
+      | object = WSAPITopicResponseMap[TWSOperation],
+  >(
+    wsKey: TWSKey,
+    operation: TWSOperation,
+    params: TWSParams & { signRequest?: boolean },
+    requestFlags?: WSAPIRequestFlags,
+): Promise<TWSAPIResponse | any>
+⋮----
+// if this throws a type error, probably forgot to add a new operation to WsAPITopicRequestParamMap
+⋮----
+/**
+     * Base Info:
+     * - https://docs.kraken.com/api/docs/websocket-v2/add_order
+     *
+     * Currently only supported for Spot markets
+     */
+⋮----
+// Some commands don't require authentication.
+⋮----
+// Sign request
+⋮----
+// Store deferred promise
+⋮----
+// Enrich returned promise with request context for easier debugging
+⋮----
+// Send event
+⋮----
+// Return deferred promise, so caller can await this call
+⋮----
+/**
+   *
+   * Internal methods - not intended for public use
+   *
+   */
+⋮----
+private getRestClientOptions(): RestClientOptions
+⋮----
+/**
+   * Note: implementing this method will wipe the WsStore state for this WsKey, once this method returns
+   */
+protected isCustomReconnectionNeeded(): boolean
+⋮----
+protected async triggerCustomReconnectionWorkflow(): Promise<void>
+⋮----
+protected async getWsUrl(wsKey: WsKey): Promise<string>
+⋮----
+/**
+       * https://docs.kraken.com/api/docs/guides/spot-ws-intro/
+       *
+       * Note: Kraken's v2 WebSockets clean up a number idiosyncrasies and ambiguities from v1 with the overall aim to enable easier integration with applications. It is intended that v1 will be maintained but future enhancements will be developed in v2.
+       *
+       * Given the above, we are only integrating with V2 for now.
+       *
+       * V2 SpotWebSocket Reference: https://docs.kraken.com/api/docs/websocket-v2/add_order/
+       */
+⋮----
+// Uses the same URL, but we maintain separate connections for easier management
+⋮----
+protected sendPingEvent(wsKey: WsKey)
+⋮----
+// let pingChannel: WsRequestPing['channel'];
+⋮----
+// Spot: https://docs.kraken.com/api/docs/websocket-v2/ping
+⋮----
+protected sendPongEvent(wsKey: WsKey)
+⋮----
+// Send a protocol layer pong
+⋮----
+// NOT IN USE for kraken
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+protected isWsPing(_msg: any): boolean
+⋮----
+protected isWsPong(msg: any): boolean
+⋮----
+// Pre-parsed in resolveEmittableEvents into "pong" eventType:
+⋮----
+/**
+   * Parse incoming events into categories, before emitting to the user
+   */
+protected resolveEmittableEvents(
+    wsKey: WsKey,
+    event: MessageEventLike,
+): EmittableEvent[]
+⋮----
+// derivatives sends 'challenge' on successful auth-init (used for sign during subscribe)
+⋮----
+// spot confirmation for subscription success
+⋮----
+// derivatives confirmation for subscription success
+⋮----
+// WS API
+⋮----
+// WS API Exception
+⋮----
+// WS API Success
+⋮----
+} // end of WS API response processing
+⋮----
+// exceptions with derivatives v1 WS. E.g. { event: 'alert', message: 'Bad websocket message' }
+⋮----
+// Most events use event: "update" or "snapshot" for topic updates
+⋮----
+// These are request/reply pattern events (e.g. after subscribing to topics or authenticating)
+// e.g. "method":"subscribe"
+⋮----
+// derivatives events include the "feed" property to identify the channel name
+⋮----
+// Request/reply pattern for authentication success
+⋮----
+/**
+   * Determines if a topic is for a private channel, using a hardcoded list of strings
+   */
+protected isPrivateTopicRequest(request: WSTopicRequest<any>): boolean
+⋮----
+/**
+   * Not in use for Kraken
+   */
+⋮----
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+protected getWsMarketForWsKey(_wsKey: WsKey): WsMarket
+⋮----
+/**
+   * Whether key represents a private connection. Feeds into automatic auth on connect.
+   */
+protected getPrivateWSKeys(): WsKey[]
+⋮----
+protected isAuthOnConnectWsKey(wsKey: WsKey): boolean
+⋮----
+/** Force subscription requests to be sent in smaller batches, if a number is returned */
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+protected getMaxTopicsPerSubscribeEvent(_wsKey: WsKey): number | null
+⋮----
+protected authPrivateConnectionsOnConnect(wsKey: WsKey): boolean
+⋮----
+// derivatives require you to send a challenge on connect
+⋮----
+/**
+   * @returns one or more correctly structured request events for performing a operations over WS. This can vary per exchange spec.
+   */
+protected async getWsRequestEvents(
+    wsKey: WsKey,
+    operation: WSOperation,
+    requests: WSTopicRequest<WSTopic>[],
+): Promise<MidflightWsRequestEvent<WSRequestOperationKraken<string>>[]>
+⋮----
+// Previously used to track topics in a request. Keeping this for subscribe/unsubscribe requests, no need for incremental values
+⋮----
+// Get token from REST client cache
+⋮----
+// Cache midflight subs on the req ID
+// Enrich response with subs for that req ID
+⋮----
+// No auth needed, it's public topics only here
+⋮----
+// Cache midflight subs on the req ID
+// Enrich response with subs for that req ID
+⋮----
+// https://docs.kraken.com/api/docs/guides/futures-websockets
+// Authenticated requests must include both the original challenge message (original_challenge) and the signed (signed_challenge) in JSON format.
+⋮----
+// Cache midflight subs on the req ID
+// Enrich response with subs for that req ID
+⋮----
+private async signMessage(
+    paramsStr: string,
+    secret: string,
+    method: SignEncodeMethod,
+    algorithm: SignAlgorithm,
+    options?: SignMessageOptions,
+): Promise<string>
+⋮----
+protected async getWsAuthRequestEvent(
+    wsKey: WsKey,
+    eventToAuth?: WSAPIAuthenticationRequestFromServer,
+): Promise<object | string | 'waitForEvent' | void>
+⋮----
+// Not needed here, handled automatically with request during subscribe
+⋮----
+// Public WS - no auth
+⋮----
+// cleanup old challenge key (in case we were reconnected)
+⋮----
+// https://docs.kraken.com/api/docs/futures-api/websocket/challenge/
+⋮----
+/**
+   *
+   * @param requestEvent
+   * @returns A signed updated WS API request object, ready to be sent
+   */
+private async signWSAPIRequest(
+    requestEvent: WSAPIRequestOperationKrakenSpot,
+): Promise<WSAPIRequestOperationKrakenSpot>
+⋮----
+// Get token from REST client cache
+⋮----
+// authParams.broker = APIIDMain;
+
+================
 File: src/types/request/spot.types.ts
 ================
 /**
@@ -9575,6 +10061,36 @@ export interface SpotSubmitOrderBatchParams {
   broker?: string;
   deadline?: string;
   validate?: boolean;
+}
+⋮----
+/**
+ * Algo Trading
+ */
+⋮----
+export interface SpotSubmitStrategyParams {
+  strategy_type: 'twap';
+  symbol: string;
+  asset_class: 'forex';
+  side: 'buy' | 'sell';
+  volume: string;
+  ordertype: 'market' | 'limit';
+  price?: string; // Required for limit; must be omitted for market.
+  starttm?: string;
+  expiretm: string;
+  validate?: boolean;
+}
+⋮----
+price?: string; // Required for limit; must be omitted for market.
+⋮----
+export interface SpotGetClosedStrategiesParams {
+  asset_class?: 'forex' | 'tokenized_asset' | 'synthetic_pair';
+  strategy_type?: 'twap';
+  status?: 'closed' | 'expired' | 'cancelled';
+  start?: number;
+  end?: number;
+  query_time_mode?: 'open' | 'close' | 'both';
+  limit?: number;
+  cursor?: string;
 }
 ⋮----
 /**
@@ -10453,6 +10969,40 @@ export interface SpotBatchOrderResult {
 }
 ⋮----
 /**
+ * Algo Trading
+ */
+⋮----
+export interface SpotTwapStrategyInfo {
+  strategy_type: 'twap';
+  side: 'buy' | 'sell';
+  volume: string;
+  filled_volume: string;
+  avg_price: string;
+  total_cost: string;
+  total_fee: string;
+  starttm: string;
+  expiretm: string;
+  symbol: string;
+  asset_class: 'forex' | 'tokenized_asset' | 'synthetic_pair';
+  ordertype: 'market' | 'limit';
+  price?: string;
+}
+⋮----
+export interface SpotAlgoStrategy {
+  strategy_id: string; // Kraken-assigned identifier with the AS prefix.
+  status: 'pending' | 'open' | 'closed' | 'expired' | 'cancelled';
+  reason?: string;
+  details: SpotTwapStrategyInfo;
+}
+⋮----
+strategy_id: string; // Kraken-assigned identifier with the AS prefix.
+⋮----
+export interface SpotClosedStrategiesResponse {
+  closed: SpotAlgoStrategy[];
+  next_cursor?: string;
+}
+⋮----
+/**
  * Funding
  */
 ⋮----
@@ -10732,1352 +11282,6 @@ export interface OauthCreateFastApiKeyResponse {
 }
 ⋮----
 secret: string; // Only returned on creation
-
-================
-File: src/types/websockets/ws-general.ts
-================
-import { AxiosRequestConfig } from 'axios';
-import type { ClientRequestArgs } from 'http';
-import WebSocket from 'isomorphic-ws';
-⋮----
-import { RestClientOptions } from '../../lib/requestUtils.js';
-⋮----
-/** General configuration for the WebsocketClient */
-export interface WSClientConfigurableOptions {
-  /** Your API key */
-  apiKey?: string;
-
-  /** Your API secret */
-  apiSecret?: string;
-
-  /**
-   * Kraken retired the Futures demo (testnet) environment on 14 July 2026.
-   * There is no replacement demo host, and Spot never had a testnet.
-   *
-   * Setting this to `true` throws when a connection URL is resolved. The live environment is used when it is omitted or `false`.
-   *
-   * See https://support.kraken.com/articles/360024809011-api-testing-environment-derivatives
-   */
-  testnet?: boolean;
-
-  /** Define a recv window when preparing a private websocket signature. This is in milliseconds, so 5000 == 5 seconds */
-  recvWindow?: number;
-
-  /** How often to check if the connection is alive */
-  pingInterval?: number;
-
-  /** How long to wait for a pong (heartbeat reply) before assuming the connection is dead */
-  pongTimeout?: number;
-
-  /** Delay in milliseconds before respawning the connection */
-  reconnectTimeout?: number;
-
-  restOptions?: RestClientOptions;
-  requestOptions?: AxiosRequestConfig;
-
-  wsOptions?: {
-    protocols?: string[];
-    agent?: any;
-  } & (
-    | Omit<Partial<WebSocket.ClientOptions>, 'agent'>
-    | Omit<Partial<ClientRequestArgs>, 'agent'>
-  );
-
-  wsUrl?: string;
-
-  /**
-   * Allows you to provide a custom "signMessage" function, e.g. to use node's much faster createHmac method
-   *
-   * Look in the examples folder for a demonstration on using node's createHmac instead.
-   */
-  customSignMessageFn?: (message: string, secret: string) => Promise<string>;
-
-  /**
-   * If you authenticated the WS API before, automatically try to re-authenticate the WS API if you're disconnected/reconnected for any reason.
-   */
-  reauthWSAPIOnReconnect?: boolean;
-}
-⋮----
-/** Your API key */
-⋮----
-/** Your API secret */
-⋮----
-/**
-   * Kraken retired the Futures demo (testnet) environment on 14 July 2026.
-   * There is no replacement demo host, and Spot never had a testnet.
-   *
-   * Setting this to `true` throws when a connection URL is resolved. The live environment is used when it is omitted or `false`.
-   *
-   * See https://support.kraken.com/articles/360024809011-api-testing-environment-derivatives
-   */
-⋮----
-/** Define a recv window when preparing a private websocket signature. This is in milliseconds, so 5000 == 5 seconds */
-⋮----
-/** How often to check if the connection is alive */
-⋮----
-/** How long to wait for a pong (heartbeat reply) before assuming the connection is dead */
-⋮----
-/** Delay in milliseconds before respawning the connection */
-⋮----
-/**
-   * Allows you to provide a custom "signMessage" function, e.g. to use node's much faster createHmac method
-   *
-   * Look in the examples folder for a demonstration on using node's createHmac instead.
-   */
-⋮----
-/**
-   * If you authenticated the WS API before, automatically try to re-authenticate the WS API if you're disconnected/reconnected for any reason.
-   */
-⋮----
-/**
- * WS configuration that's always defined, regardless of user configuration
- * (usually comes from defaults if there's no user-provided values)
- */
-export interface WebsocketClientOptions extends WSClientConfigurableOptions {
-  pingInterval: number;
-  pongTimeout: number;
-  reconnectTimeout: number;
-  recvWindow: number;
-
-  /**
-   * If true, require a "receipt" that the connection is ready for use (e.g. a specific event type)
-   */
-  requireConnectionReadyConfirmation: boolean;
-  authPrivateConnectionsOnConnect: boolean;
-  authPrivateRequests: boolean;
-  reauthWSAPIOnReconnect: boolean;
-
-  /**
-   * Whether to use native WebSocket ping/pong frames for heartbeats
-   */
-  useNativeHeartbeats: boolean;
-}
-⋮----
-/**
-   * If true, require a "receipt" that the connection is ready for use (e.g. a specific event type)
-   */
-⋮----
-/**
-   * Whether to use native WebSocket ping/pong frames for heartbeats
-   */
-⋮----
-export type WsMarket = 'spot' | 'futures';
-⋮----
-export type WsEventInternalSrc = 'event' | 'function' | 'frame';
-
-================
-File: src/WebsocketClient.ts
-================
-import {
-  BaseWebsocketClient,
-  EmittableEvent,
-  MidflightWsRequestEvent,
-} from './lib/BaseWSClient.js';
-import { neverGuard } from './lib/misc-util.js';
-import {
-  KRAKEN_FUTURES_TESTNET_RETIRED_ERROR,
-  RestClientOptions,
-} from './lib/requestUtils.js';
-import {
-  hashMessage,
-  SignAlgorithm,
-  SignEncodeMethod,
-  signMessage,
-  SignMessageOptions,
-} from './lib/webCryptoAPI.js';
-import { DefaultLogger } from './lib/websocket/logger.js';
-import { RestClientCache } from './lib/websocket/rest-client-cache.js';
-import {
-  getPromiseRefForWSAPIRequest,
-  WS_KEY_MAP,
-  WsKey,
-  WSOperation,
-  WSRequestOperationKraken,
-  WSTopicRequest,
-} from './lib/websocket/websocket-util.js';
-import { WSConnectedResult } from './lib/websocket/WsStore.types.js';
-import {
-  Exact,
-  WS_API_Operations,
-  WSAPIAuthenticationRequestFromServer,
-  WSAPIRequestOperationKrakenSpot,
-  WSAPITopicRequestParamMap,
-  WSAPITopicResponseMap,
-  WSAPIWsKey,
-  WSAPIWsKeyTopicMap,
-} from './types/websockets/ws-api.js';
-import { MessageEventLike } from './types/websockets/ws-events.js';
-import {
-  WSClientConfigurableOptions,
-  WsMarket,
-} from './types/websockets/ws-general.js';
-import {
-  WS_DERIVATIVES_PRIVATE_TOPICS,
-  WS_SPOT_PRIVATE_TOPICS,
-  WSTopic,
-} from './types/websockets/ws-subscriptions.js';
-⋮----
-export interface WSAPIRequestFlags {
-  /** If true, will skip auth requirement for WS API connection */
-  authIsOptional?: boolean | undefined;
-}
-⋮----
-/** If true, will skip auth requirement for WS API connection */
-⋮----
-export class WebsocketClient extends BaseWebsocketClient<WsKey, any>
-⋮----
-constructor(options?: WSClientConfigurableOptions, logger?: DefaultLogger)
-⋮----
-/**
-   * Request connection of all dependent (public & private) websockets, instead of waiting for automatic connection by library.
-   *
-   * Returns array of promises that individually resolve when each connection is successfully opened.
-   */
-public connectAll(): Promise<WSConnectedResult | undefined>[]
-⋮----
-/**
-   * Ensures the WS API connection is active and ready.
-   *
-   * You do not need to call this, but if you call this before making any WS API requests,
-   * it can accelerate the first request (by preparing the connection in advance).
-   */
-public connectWSAPI(wsKey: WSAPIWsKey, skipAuth?: boolean): Promise<unknown>
-⋮----
-/** This call automatically ensures the connection is active AND authenticated before resolving */
-⋮----
-/**
-   * Request subscription to one or more topics. Pass topics as either an array of strings, or array of objects (if the topic has parameters).
-   * Objects should be formatted as {topic: string, params: object}.
-   *
-   * - Subscriptions are automatically routed to the correct websocket connection.
-   * - Authentication/connection is automatic.
-   * - Resubscribe after network issues is automatic.
-   *
-   * Call `unsubscribe(topics)` to remove topics
-   */
-public subscribe<TTopic extends WSTopic>(
-    requests:
-      | (WSTopicRequest<TTopic> | TTopic)
-      | (WSTopicRequest<TTopic> | TTopic)[],
-    wsKey: WsKey,
-)
-⋮----
-/**
-   * Unsubscribe from one or more topics. Similar to subscribe() but in reverse.
-   *
-   * - Requests are automatically routed to the correct websocket connection.
-   * - These topics will be removed from the topic cache, so they won't be subscribed to again.
-   */
-public unsubscribe<TTopic extends WSTopic>(
-    requests:
-      | (WSTopicRequest<TTopic> | TTopic)
-      | (WSTopicRequest<TTopic> | TTopic)[],
-    wsKey: WsKey,
-)
-⋮----
-/**
-   * WS API Methods - similar to the REST API, but via WebSockets
-   */
-⋮----
-/**
-   * Send a Websocket API event on a connection. Returns a promise that resolves on reply.
-   *
-   * Returned promise is rejected if an exception is detected in the reply OR the connection disconnects for any reason (even if automatic reconnect will happen).
-   *
-   * After a fresh connection, you should always send a login request first.
-   *
-   * If you authenticated once and you're reconnected later (e.g. connection temporarily lost), the SDK will by default automatically:
-   * - Detect you were authenticated to the WS API before
-   * - Try to re-authenticate (up to 5 times, in case something (bad timestamp) goes wrong)
-   * - If it succeeds, it will emit the 'authenticated' event.
-   * - If it fails and gives up, it will emit an 'exception' event (type: 'wsapi.auth', reason: detailed text).
-   *
-   * You can turn off the automatic re-auth WS API logic using `reauthWSAPIOnReconnect: false` in the WSClient config.
-   *
-   * @param wsKey - The connection this event is for (e.g. "spotV4" | "perpFuturesUSDTV4" | "perpFuturesBTCV4" | "deliveryFuturesUSDTV4" | "deliveryFuturesBTCV4" | "optionsV4")
-   * @param channel - The channel this event is for (e.g. "spot.login" to authenticate)
-   * @param params - Any request parameters for the payload (contents of req_param in the docs). Signature generation is automatic, only send parameters such as order ID as per the docs.
-   * @returns Promise - tries to resolve with async WS API response. Rejects if disconnected or exception is seen in async WS API response
-   */
-⋮----
-// This overload allows the caller to omit the 3rd param, if it isn't required (e.g. for the login call)
-async sendWSAPIRequest<
-    TWSKey extends keyof WSAPIWsKeyTopicMap,
-    TWSOperation extends WSAPIWsKeyTopicMap[TWSKey],
-    TWSParams extends Exact<WSAPITopicRequestParamMap[TWSOperation]>,
-    TWSAPIResponse extends
-      | WSAPITopicResponseMap[TWSOperation]
-      | object = WSAPITopicResponseMap[TWSOperation],
-  >(
-    wsKey: TWSKey,
-    operation: TWSOperation,
-    params?: TWSParams extends void | never ? undefined : TWSParams,
-    requestFlags?: WSAPIRequestFlags,
-  ): Promise<TWSAPIResponse>;
-⋮----
-async sendWSAPIRequest<
-    TWSKey extends keyof WSAPIWsKeyTopicMap,
-    TWSOperation extends WSAPIWsKeyTopicMap[TWSKey],
-    // if this throws a type error, probably forgot to add a new operation to WsAPITopicRequestParamMap
-    TWSParams extends Exact<WSAPITopicRequestParamMap[TWSOperation]>,
-    TWSAPIResponse extends
-      | WSAPITopicResponseMap[TWSOperation]
-      | object = WSAPITopicResponseMap[TWSOperation],
-  >(
-    wsKey: TWSKey,
-    operation: TWSOperation,
-    params: TWSParams & { signRequest?: boolean },
-    requestFlags?: WSAPIRequestFlags,
-): Promise<TWSAPIResponse | any>
-⋮----
-// if this throws a type error, probably forgot to add a new operation to WsAPITopicRequestParamMap
-⋮----
-/**
-     * Base Info:
-     * - https://docs.kraken.com/api/docs/websocket-v2/add_order
-     *
-     * Currently only supported for Spot markets
-     */
-⋮----
-// Some commands don't require authentication.
-⋮----
-// Sign request
-⋮----
-// Store deferred promise
-⋮----
-// Enrich returned promise with request context for easier debugging
-⋮----
-// Send event
-⋮----
-// Return deferred promise, so caller can await this call
-⋮----
-/**
-   *
-   * Internal methods - not intended for public use
-   *
-   */
-⋮----
-private getRestClientOptions(): RestClientOptions
-⋮----
-/**
-   * Note: implementing this method will wipe the WsStore state for this WsKey, once this method returns
-   */
-protected isCustomReconnectionNeeded(): boolean
-⋮----
-protected async triggerCustomReconnectionWorkflow(): Promise<void>
-⋮----
-protected async getWsUrl(wsKey: WsKey): Promise<string>
-⋮----
-/**
-       * https://docs.kraken.com/api/docs/guides/spot-ws-intro/
-       *
-       * Note: Kraken's v2 WebSockets clean up a number idiosyncrasies and ambiguities from v1 with the overall aim to enable easier integration with applications. It is intended that v1 will be maintained but future enhancements will be developed in v2.
-       *
-       * Given the above, we are only integrating with V2 for now.
-       *
-       * V2 SpotWebSocket Reference: https://docs.kraken.com/api/docs/websocket-v2/add_order/
-       */
-⋮----
-// Uses the same URL, but we maintain separate connections for easier management
-⋮----
-protected sendPingEvent(wsKey: WsKey)
-⋮----
-// let pingChannel: WsRequestPing['channel'];
-⋮----
-// Spot: https://docs.kraken.com/api/docs/websocket-v2/ping
-⋮----
-protected sendPongEvent(wsKey: WsKey)
-⋮----
-// Send a protocol layer pong
-⋮----
-// NOT IN USE for kraken
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-protected isWsPing(_msg: any): boolean
-⋮----
-protected isWsPong(msg: any): boolean
-⋮----
-// Pre-parsed in resolveEmittableEvents into "pong" eventType:
-⋮----
-/**
-   * Parse incoming events into categories, before emitting to the user
-   */
-protected resolveEmittableEvents(
-    wsKey: WsKey,
-    event: MessageEventLike,
-): EmittableEvent[]
-⋮----
-// derivatives sends 'challenge' on successful auth-init (used for sign during subscribe)
-⋮----
-// spot confirmation for subscription success
-⋮----
-// derivatives confirmation for subscription success
-⋮----
-// WS API
-⋮----
-// WS API Exception
-⋮----
-// WS API Success
-⋮----
-} // end of WS API response processing
-⋮----
-// exceptions with derivatives v1 WS. E.g. { event: 'alert', message: 'Bad websocket message' }
-⋮----
-// Most events use event: "update" or "snapshot" for topic updates
-⋮----
-// These are request/reply pattern events (e.g. after subscribing to topics or authenticating)
-// e.g. "method":"subscribe"
-⋮----
-// derivatives events include the "feed" property to identify the channel name
-⋮----
-// Request/reply pattern for authentication success
-⋮----
-/**
-   * Determines if a topic is for a private channel, using a hardcoded list of strings
-   */
-protected isPrivateTopicRequest(request: WSTopicRequest<any>): boolean
-⋮----
-/**
-   * Not in use for Kraken
-   */
-⋮----
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-protected getWsMarketForWsKey(_wsKey: WsKey): WsMarket
-⋮----
-/**
-   * Whether key represents a private connection. Feeds into automatic auth on connect.
-   */
-protected getPrivateWSKeys(): WsKey[]
-⋮----
-protected isAuthOnConnectWsKey(wsKey: WsKey): boolean
-⋮----
-/** Force subscription requests to be sent in smaller batches, if a number is returned */
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-protected getMaxTopicsPerSubscribeEvent(_wsKey: WsKey): number | null
-⋮----
-protected authPrivateConnectionsOnConnect(wsKey: WsKey): boolean
-⋮----
-// derivatives require you to send a challenge on connect
-⋮----
-/**
-   * @returns one or more correctly structured request events for performing a operations over WS. This can vary per exchange spec.
-   */
-protected async getWsRequestEvents(
-    wsKey: WsKey,
-    operation: WSOperation,
-    requests: WSTopicRequest<WSTopic>[],
-): Promise<MidflightWsRequestEvent<WSRequestOperationKraken<string>>[]>
-⋮----
-// Previously used to track topics in a request. Keeping this for subscribe/unsubscribe requests, no need for incremental values
-⋮----
-// Get token from REST client cache
-⋮----
-// Cache midflight subs on the req ID
-// Enrich response with subs for that req ID
-⋮----
-// No auth needed, it's public topics only here
-⋮----
-// Cache midflight subs on the req ID
-// Enrich response with subs for that req ID
-⋮----
-// https://docs.kraken.com/api/docs/guides/futures-websockets
-// Authenticated requests must include both the original challenge message (original_challenge) and the signed (signed_challenge) in JSON format.
-⋮----
-// Cache midflight subs on the req ID
-// Enrich response with subs for that req ID
-⋮----
-private async signMessage(
-    paramsStr: string,
-    secret: string,
-    method: SignEncodeMethod,
-    algorithm: SignAlgorithm,
-    options?: SignMessageOptions,
-): Promise<string>
-⋮----
-protected async getWsAuthRequestEvent(
-    wsKey: WsKey,
-    eventToAuth?: WSAPIAuthenticationRequestFromServer,
-): Promise<object | string | 'waitForEvent' | void>
-⋮----
-// Not needed here, handled automatically with request during subscribe
-⋮----
-// Public WS - no auth
-⋮----
-// cleanup old challenge key (in case we were reconnected)
-⋮----
-// https://docs.kraken.com/api/docs/futures-api/websocket/challenge/
-⋮----
-/**
-   *
-   * @param requestEvent
-   * @returns A signed updated WS API request object, ready to be sent
-   */
-private async signWSAPIRequest(
-    requestEvent: WSAPIRequestOperationKrakenSpot,
-): Promise<WSAPIRequestOperationKrakenSpot>
-⋮----
-// Get token from REST client cache
-⋮----
-// authParams.broker = APIIDMain;
-
-================
-File: src/SpotClient.ts
-================
-import { BaseRestClient } from './lib/BaseRestClient.js';
-import { REST_CLIENT_TYPE_ENUM, RestClientType } from './lib/requestUtils.js';
-import {
-  OauthCreateFastApiKeyParams,
-  OauthGetAccessTokenParams,
-  OauthUpdateFastApiKeyParams,
-  SpotAccountTransferParams,
-  SpotAmendOrderParams,
-  SpotGetAccountBalanceParams,
-  SpotGetApiKeyInfoParams,
-  SpotGetAssetPairsParams,
-  SpotGetClosedOrdersParams,
-  SpotGetDepositAddressesParams,
-  SpotGetDepositMethodsParams,
-  SpotGetDepositStatusParams,
-  SpotGetGroupedBookParams,
-  SpotGetLedgersInfoParams,
-  SpotGetLevel3Params,
-  SpotGetOHLCParams,
-  SpotGetOpenOrdersParams,
-  SpotGetOpenPositionsParams,
-  SpotGetOrderBookParams,
-  SpotGetPostTradeDataParams,
-  SpotGetRecentSpreadsParams,
-  SpotGetRecentTradesParams,
-  SpotGetTradesHistoryParams,
-  SpotGetTradingVolumeParams,
-  SpotGetWithdrawalAddressesParams,
-  SpotGetWithdrawalInfoParams,
-  SpotGetWithdrawalMethodsParams,
-  SpotGetWithdrawalsStatusParams,
-  SpotListEarnAllocationsParams,
-  SpotListEarnStrategiesParams,
-  SpotQueryLedgersParams,
-  SpotQueryOrdersParams,
-  SpotQueryTradesParams,
-  SpotRequestExportReportParams,
-  SpotSubmitOrderBatchParams,
-  SpotSubmitOrderParams,
-  SpotWalletTransferParams,
-  SpotWithdrawFundsParams,
-} from './types/request/spot.types.js';
-import { SpotAPISuccessResponse } from './types/response/shared.types.js';
-import {
-  OauthCreateFastApiKeyResponse,
-  OauthFastApiKey,
-  OauthGetAccessTokenResponse,
-  OauthGetUserInfoResponse,
-  SpotAccountBalance,
-  SpotAccountTransferResponse,
-  SpotApiKeyInfo,
-  SpotAssetInfo,
-  SpotAssetPair,
-  SpotAssetTickerInfo,
-  SpotBatchOrderResult,
-  SpotClosedOrdersResponse,
-  SpotCreditLines,
-  SpotDeleteExportReportResponse,
-  SpotDepositAddress,
-  SpotDepositMethod,
-  SpotDepositStatusResponse,
-  SpotEarnStrategy,
-  SpotExportReportStatus,
-  SpotExtendedBalance,
-  SpotGroupedBookResponse,
-  SpotLedgersInfoResponse,
-  SpotLevel3OrderBookResponse,
-  SpotListEarnAllocationsResponse,
-  SpotListWalletAccountsResponse,
-  SpotMaintenanceSchedule,
-  SpotOHLCResponse,
-  SpotOpenOrdersResponse,
-  SpotOpenPositionsResult,
-  SpotOrderAmendsResponse,
-  SpotOrderBookResponse,
-  SpotPostTradeDataResponse,
-  SpotPreTradeData,
-  SpotQueryLedgersResponse,
-  SpotQueryOrdersResponse,
-  SpotQueryTradesResponse,
-  SpotRecentSpreadsResponse,
-  SpotRecentTradesResponse,
-  SpotRequestExportReportResponse,
-  SpotSubmitOrderResponse,
-  SpotSystemStatus,
-  SpotTradeBalance,
-  SpotTradesHistoryResponse,
-  SpotTradeVolume,
-  SpotWebSocketsTokenResponse,
-  SpotWithdrawalAddress,
-  SpotWithdrawalInfo,
-  SpotWithdrawalMethod,
-  SpotWithdrawalStatus,
-} from './types/response/spot.types.js';
-⋮----
-/**
- * The SpotClient provides integration to the Kraken Spot API.
- *
- * Docs:
- * - https://docs.kraken.com/api/docs/guides/spot-rest-intro/
- * - https://docs.kraken.com/api/docs/rest-api/get-server-time
- */
-export class SpotClient extends BaseRestClient
-⋮----
-getClientType(): RestClientType
-⋮----
-// Points to api.kraken.com
-⋮----
-/**
-   *
-   * Misc Utility Methods
-   *
-   */
-⋮----
-generateNewOrderID(): string
-⋮----
-// Generate a short UUID format (32 hex characters without dashes)
-// Compatible with Kraken's cl_ord_id parameter
-⋮----
-/**
-   *
-   * Spot REST API - Market Data
-   *
-   */
-⋮----
-/**
-   * Get Server Time
-   *
-   * Get the server's time.
-   */
-getServerTime(): Promise<
-    SpotAPISuccessResponse<{
-      unixtime: number;
-      rfc1123: string;
-    }>
-  > {
-    return this.get('0/public/Time');
-⋮----
-/**
-   * Get System Status
-   *
-   * Get the current system status or trading mode.
-   */
-getSystemStatus(): Promise<SpotAPISuccessResponse<SpotSystemStatus>>
-⋮----
-/**
-   * Get Maintenance Schedule
-   *
-   * Get all scheduled maintenance events in the next 7-day window.
-   */
-getMaintenanceSchedule(): Promise<
-    SpotAPISuccessResponse<SpotMaintenanceSchedule>
-  > {
-    return this.get('0/public/MaintenanceSchedule');
-⋮----
-/**
-   * Get Asset Info
-   *
-   * Get information about the assets that are available for deposit, withdrawal, trading and earn.
-   */
-getAssetInfo(params?: {
-    asset?: string;
-    aclass?: 'currency' | 'tokenized_asset';
-}): Promise<SpotAPISuccessResponse<Record<string, SpotAssetInfo>>>
-⋮----
-/**
-   * Get Tradable Asset Pairs
-   *
-   * Get tradable asset pairs
-   */
-getAssetPairs(
-    params?: SpotGetAssetPairsParams,
-): Promise<SpotAPISuccessResponse<Record<string, SpotAssetPair>>>
-⋮----
-/**
-   * Get Ticker Information
-   *
-   * Get ticker information for all or requested markets.
-   * Note: Today's prices start at midnight UTC.
-   * Leaving the pair parameter blank will return tickers for all tradeable assets on Kraken.
-   */
-getTicker(params?: {
-    pair?: string;
-    asset_class?: 'tokenized_asset' | 'forex';
-}): Promise<SpotAPISuccessResponse<Record<string, SpotAssetTickerInfo>>>
-⋮----
-/**
-   * Get OHLC Data
-   *
-   * Retrieve OHLC market data. The last entry in the OHLC array is for the current, not-yet-committed timeframe,
-   * and will always be present, regardless of the value of since. Returns up to 720 of the most recent entries
-   * (older data cannot be retrieved, regardless of the value of since).
-   */
-getCandles(
-    params: SpotGetOHLCParams,
-): Promise<SpotAPISuccessResponse<SpotOHLCResponse>>
-⋮----
-/**
-   * Get Order Book
-   *
-   * Returns level 2 (L2) order book, which describes the individual price levels in the book with aggregated
-   * order quantities at each level.
-   */
-getOrderBook(
-    params: SpotGetOrderBookParams,
-): Promise<SpotAPISuccessResponse<SpotOrderBookResponse>>
-⋮----
-/**
-   * Get Grouped Order Book
-   *
-   * Aggregates order book volume over a configurable tick grouping.
-   */
-getGroupedBook(
-    params: SpotGetGroupedBookParams,
-): Promise<SpotAPISuccessResponse<SpotGroupedBookResponse>>
-⋮----
-/**
-   * Get Level 3 Order Book
-   *
-   * Individual order-level book data. Requires authentication.
-   */
-getLevel3OrderBook(
-    params: SpotGetLevel3Params,
-): Promise<SpotAPISuccessResponse<SpotLevel3OrderBookResponse>>
-⋮----
-/**
-   * Get Recent Trades
-   *
-   * Returns the last 1000 trades by default
-   */
-getRecentTrades(
-    params: SpotGetRecentTradesParams,
-): Promise<SpotAPISuccessResponse<SpotRecentTradesResponse>>
-⋮----
-/**
-   * Get Recent Spreads
-   *
-   * Returns the last ~200 top-of-book spreads for a given pair
-   */
-getRecentSpreads(
-    params: SpotGetRecentSpreadsParams,
-): Promise<SpotAPISuccessResponse<SpotRecentSpreadsResponse>>
-⋮----
-/**
-   *
-   * Spot REST API - Account Data
-   *
-   */
-⋮----
-/**
-   * Get Account Balance
-   *
-   * Retrieve all cash balances, net of pending withdrawals.
-   * Pass account_id to retrieve balances for a specific wallet.
-   */
-getAccountBalance(
-    params?: SpotGetAccountBalanceParams,
-): Promise<SpotAPISuccessResponse<SpotAccountBalance>>
-⋮----
-/**
-   * Get API Key Info
-   *
-   * Retrieve configuration and usage details for the API key used in the request.
-   */
-getApiKeyInfo(
-    params?: SpotGetApiKeyInfoParams,
-): Promise<SpotAPISuccessResponse<SpotApiKeyInfo>>
-⋮----
-/**
-   * List Wallet Accounts
-   *
-   * Retrieve the wallet accounts associated with the authenticated user.
-   */
-getWalletAccounts(): Promise<
-    SpotAPISuccessResponse<SpotListWalletAccountsResponse>
-  > {
-return this.postPrivate('0/private/ListWalletAccounts',
-⋮----
-/**
-   * Get Extended Balance
-   *
-   * Retrieve all extended account balances, including credits and held amounts.
-   * Balance available for trading is calculated as: available balance = balance + credit - credit_used - hold_trade
-   */
-getExtendedBalance(params?: {
-    rebase_multiplier?: 'rebased' | 'base';
-    account_id?: string;
-}): Promise<SpotAPISuccessResponse<SpotExtendedBalance>>
-⋮----
-/**
-   * Get Credit Lines
-   *
-   * Retrieve all credit line details for VIPs with this functionality.
-   */
-getCreditLines(params?: {
-    rebase_multiplier?: 'rebased' | 'base';
-    account_id?: string;
-}): Promise<SpotAPISuccessResponse<SpotCreditLines | null>>
-⋮----
-/**
-   * Get Trade Balance
-   *
-   * Retrieve a summary of collateral balances, margin position valuations, equity and margin level.
-   */
-getTradeBalance(params?: {
-    rebase_multiplier?: 'rebased' | 'base';
-    account_id?: string;
-}): Promise<SpotAPISuccessResponse<SpotTradeBalance>>
-⋮----
-/**
-   * Get Open Orders
-   *
-   * Retrieve information about currently open orders.
-   */
-getOpenOrders(
-    params?: SpotGetOpenOrdersParams,
-): Promise<SpotAPISuccessResponse<SpotOpenOrdersResponse>>
-⋮----
-/**
-   * Get Closed Orders
-   *
-   * Retrieve information about orders that have been closed (filled or cancelled).
-   * 50 results are returned at a time, the most recent by default.
-   */
-getClosedOrders(
-    params?: SpotGetClosedOrdersParams,
-): Promise<SpotAPISuccessResponse<SpotClosedOrdersResponse>>
-⋮----
-/**
-   * Query Orders Info
-   *
-   * Retrieve information about specific orders.
-   */
-getOrders(
-    params: SpotQueryOrdersParams,
-): Promise<SpotAPISuccessResponse<SpotQueryOrdersResponse>>
-⋮----
-/**
-   * Get Order Amends
-   *
-   * Retrieves an audit trail of amend transactions on the specified order.
-   * The list is ordered by ascending amend timestamp.
-   */
-getOrderAmends(params: {
-    order_id: string;
-    rebase_multiplier?: 'rebased' | 'base';
-    account_id?: string;
-}): Promise<SpotAPISuccessResponse<SpotOrderAmendsResponse>>
-⋮----
-/**
-   * Get Trades History
-   *
-   * Retrieve information about trades/fills. 50 results are returned at a time, the most recent by default.
-   */
-getTradesHistory(
-    params?: SpotGetTradesHistoryParams,
-): Promise<SpotAPISuccessResponse<SpotTradesHistoryResponse>>
-⋮----
-/**
-   * Query Trades Info
-   *
-   * Retrieve information about specific trades/fills.
-   */
-getTrades(
-    params: SpotQueryTradesParams,
-): Promise<SpotAPISuccessResponse<SpotQueryTradesResponse>>
-⋮----
-/**
-   * Get Open Positions
-   *
-   * Get information about open margin positions.
-   */
-getOpenPositions(
-    params?: SpotGetOpenPositionsParams,
-): Promise<SpotAPISuccessResponse<SpotOpenPositionsResult>>
-⋮----
-/**
-   * Get Ledgers Info
-   *
-   * Retrieve information about ledger entries. 50 results are returned at a time, the most recent by default.
-   * Pass account_id to retrieve ledger entries for a specific wallet.
-   */
-getLedgersInfo(
-    params?: SpotGetLedgersInfoParams,
-): Promise<SpotAPISuccessResponse<SpotLedgersInfoResponse>>
-⋮----
-/**
-   * Query Ledgers
-   *
-   * Retrieve information about specific ledger entries.
-   */
-getLedgers(
-    params: SpotQueryLedgersParams,
-): Promise<SpotAPISuccessResponse<SpotQueryLedgersResponse>>
-⋮----
-/**
-   * Get Trade Volume
-   *
-   * Returns 30 day USD trading volume and resulting fee schedule for any asset pair(s) provided.
-   * Also use this endpoint (with a Spot API key) to determine Futures fee rates as of 2026-06-22.
-   */
-getTradingVolume(
-    params?: SpotGetTradingVolumeParams,
-): Promise<SpotAPISuccessResponse<SpotTradeVolume>>
-⋮----
-/**
-   * Request Export Report
-   *
-   * Request export of trades or ledgers.
-   */
-requestLedgersExport(
-    params: SpotRequestExportReportParams,
-): Promise<SpotAPISuccessResponse<SpotRequestExportReportResponse>>
-⋮----
-/**
-   * Get Export Report Status
-   *
-   * Get status of requested data exports.
-   */
-getLedgersExportStatus(params: {
-    report: 'trades' | 'ledgers';
-}): Promise<SpotAPISuccessResponse<SpotExportReportStatus[]>>
-⋮----
-/**
-   * Retrieve Data Export
-   *
-   * Retrieve a processed data export (binary zip archive).
-   */
-getLedgersExport(params:
-⋮----
-/**
-   * Delete Export Report
-   *
-   * Delete or cancel exported trades/ledgers report.
-   */
-deleteLedgersExport(params: {
-    id: string;
-    type: 'cancel' | 'delete';
-}): Promise<SpotAPISuccessResponse<SpotDeleteExportReportResponse>>
-⋮----
-/**
-   *
-   * Spot REST API - Trading
-   *
-   */
-⋮----
-/**
-   * Add Order
-   *
-   * Place a new order.
-   * Note: See the getAssetPairs() endpoint for details on the available trading pairs, their price and quantity precisions,
-   * order minimums, available leverage, etc.
-   */
-submitOrder(
-    params: SpotSubmitOrderParams,
-): Promise<SpotAPISuccessResponse<SpotSubmitOrderResponse>>
-⋮----
-/**
-   * Amend Order
-   *
-   * Amend an existing order. The order identifiers assigned by Kraken and/or client will stay the same.
-   * Queue priority in the order book will be maintained where possible.
-   */
-amendOrder(params: SpotAmendOrderParams): Promise<
-    SpotAPISuccessResponse<{
-      amend_id: string;
-    }>
-  > {
-    return this.postPrivate('0/private/AmendOrder', {
-      body: params,
-    });
-⋮----
-/**
-   * Cancel Order
-   *
-   * Cancel a particular open order (or set of open orders) by txid, userref or cl_ord_id.
-   */
-cancelOrder(params: { txid?: string | number; cl_ord_id?: string }): Promise<
-    SpotAPISuccessResponse<{
-      count: number;
-      pending?: boolean;
-    }>
-  > {
-    return this.postPrivate('0/private/CancelOrder', {
-      body: params,
-    });
-⋮----
-/**
-   * Cancel All Orders
-   *
-   * Cancel all open orders.
-   */
-cancelAllOrders(): Promise<
-    SpotAPISuccessResponse<{
-      count: number;
-      pending: boolean;
-    }>
-  > {
-return this.postPrivate('0/private/CancelAll',
-⋮----
-/**
-   * Cancel All Orders After X
-   *
-   * CancelAllOrdersAfter provides a "Dead Man's Switch" mechanism to protect the client from network malfunction,
-   * extreme latency or unexpected matching engine downtime. The client can send a request with a timeout (in seconds),
-   * that will start a countdown timer which will cancel all client orders when the timer expires.
-   */
-cancelAllOrdersAfter(params: { timeout: number }): Promise<
-    SpotAPISuccessResponse<{
-      currentTime: string;
-      triggerTime: string;
-    }>
-  > {
-    return this.postPrivate('0/private/CancelAllOrdersAfter', {
-      body: params,
-    });
-⋮----
-/**
-   * Get Websockets Token
-   *
-   * An authentication token must be requested via this REST API endpoint in order to connect to and authenticate
-   * with the Websockets API. The token should be used within 15 minutes of creation.
-   */
-getWebSocketsToken(): Promise<
-    SpotAPISuccessResponse<SpotWebSocketsTokenResponse>
-  > {
-return this.postPrivate('0/private/GetWebSocketsToken',
-⋮----
-/**
-   * Add Order Batch
-   *
-   * Sends a collection of orders (minimum of 2 and maximum 15). All orders in batch are limited to a single pair.
-   * Validation is performed on the whole batch prior to submission. If an order fails validation, the whole batch will be rejected.
-   */
-submitBatchOrders(params: SpotSubmitOrderBatchParams): Promise<
-    SpotAPISuccessResponse<{
-      orders: SpotBatchOrderResult[];
-    }>
-  > {
-    return this.postPrivate('0/private/AddOrderBatch', {
-      body: params,
-    });
-⋮----
-/**
-   * Cancel Order Batch
-   *
-   * Cancel multiple open orders by txid, userref or cl_ord_id (maximum 50 total unique IDs/references).
-   */
-cancelBatchOrders(params: {
-    orders?: Array<string | number>;
-    cl_ord_ids?: string[];
-  }): Promise<
-    SpotAPISuccessResponse<{
-      count: number;
-    }>
-  > {
-    return this.postPrivate('0/private/CancelOrderBatch', {
-      body: params,
-    });
-⋮----
-/**
-   *
-   * Spot REST API - Funding
-   *
-   */
-⋮----
-/**
-   * Get Deposit Methods
-   *
-   * Retrieve methods available for depositing a particular asset.
-   */
-getDepositMethods(
-    params: SpotGetDepositMethodsParams,
-): Promise<SpotAPISuccessResponse<SpotDepositMethod[]>>
-⋮----
-/**
-   * Get Deposit Addresses
-   *
-   * Retrieve (or generate a new) deposit addresses for a particular asset and method.
-   */
-getDepositAddresses(
-    params: SpotGetDepositAddressesParams,
-): Promise<SpotAPISuccessResponse<SpotDepositAddress[]>>
-⋮----
-/**
-   * Get Status of Recent Deposits
-   *
-   * Retrieve information about recent deposits. Results are sorted by recency.
-   */
-getDepositsStatus(
-    params?: SpotGetDepositStatusParams,
-): Promise<SpotAPISuccessResponse<SpotDepositStatusResponse>>
-⋮----
-/**
-   * Get Withdrawal Methods
-   *
-   * Retrieve a list of withdrawal methods available for the user.
-   */
-getWithdrawalMethods(
-    params?: SpotGetWithdrawalMethodsParams,
-): Promise<SpotAPISuccessResponse<SpotWithdrawalMethod[]>>
-⋮----
-/**
-   * Get Withdrawal Addresses
-   *
-   * Retrieve a list of withdrawal addresses available for the user.
-   */
-getWithdrawalAddresses(
-    params?: SpotGetWithdrawalAddressesParams,
-): Promise<SpotAPISuccessResponse<SpotWithdrawalAddress[]>>
-⋮----
-/**
-   * Get Withdrawal Information
-   *
-   * Retrieve fee information about potential withdrawals for a particular asset, key and amount.
-   */
-getWithdrawalInfo(
-    params: SpotGetWithdrawalInfoParams,
-): Promise<SpotAPISuccessResponse<SpotWithdrawalInfo>>
-⋮----
-/**
-   * Withdraw Funds
-   *
-   * Make a withdrawal request.
-   */
-submitWithdrawal(params: SpotWithdrawFundsParams): Promise<
-    SpotAPISuccessResponse<{
-      refid: string;
-    }>
-  > {
-return this.postPrivate('0/private/Withdraw',
-⋮----
-/**
-   * Get Status of Recent Withdrawals
-   *
-   * Retrieve information about recent withdrawals. Results are sorted by recency.
-   */
-getWithdrawalsStatus(
-    params?: SpotGetWithdrawalsStatusParams,
-): Promise<SpotAPISuccessResponse<SpotWithdrawalStatus[]>>
-⋮----
-/**
-   * Request Withdrawal Cancellation
-   *
-   * Cancel a recently requested withdrawal, if it has not already been successfully processed.
-   */
-cancelWithdrawal(params: {
-    asset: string;
-    refid: string;
-}): Promise<SpotAPISuccessResponse<boolean>>
-⋮----
-/**
-   * Request Wallet Transfer
-   *
-   * Transfer from a Kraken spot wallet to a Kraken Futures wallet.
-   * Note: Transfer in the other direction must be requested via the Kraken Futures API.
-   */
-submitTransferToFutures(params: SpotWalletTransferParams): Promise<
-    SpotAPISuccessResponse<{
-      refid: string;
-    }>
-  > {
-return this.postPrivate('0/private/WalletTransfer',
-⋮----
-/**
-   *
-   * Subaccounts
-   *
-   */
-⋮----
-/**
-   * Create Subaccount
-   *
-   * Create a trading subaccount.
-   * Note: CreateSubaccount must be called using an API key from the master account.
-   */
-createSubaccount(params: {
-    username: string;
-    email: string;
-}): Promise<SpotAPISuccessResponse<boolean>>
-⋮----
-/**
-   * Account Transfer
-   *
-   * Transfer funds to and from master and subaccounts.
-   * Note: AccountTransfer must be called using an API key from the master account.
-   */
-submitSubaccountTransfer(
-    params: SpotAccountTransferParams,
-): Promise<SpotAPISuccessResponse<SpotAccountTransferResponse>>
-⋮----
-/**
-   *
-   * Earn
-   *
-   */
-⋮----
-/**
-   * Allocate Earn Funds
-   *
-   * Allocate funds to the Strategy.
-   * This method is asynchronous. Use getAllocationStatus() to poll the result.
-   */
-allocateEarnFunds(params: {
-    amount: string;
-    strategy_id: string;
-}): Promise<SpotAPISuccessResponse<boolean>>
-⋮----
-/**
-   * Deallocate Earn Funds
-   *
-   * Deallocate funds from a strategy.
-   * This method is asynchronous. Use getDeallocationStatus() to poll the result.
-   */
-deallocateEarnFunds(params: {
-    amount: string;
-    strategy_id: string;
-}): Promise<SpotAPISuccessResponse<boolean>>
-⋮----
-/**
-   * Get Allocation Status
-   *
-   * Get the status of the last allocation request.
-   */
-getEarnAllocationStatus(params: { strategy_id: string }): Promise<
-    SpotAPISuccessResponse<{
-      pending: boolean;
-    }>
-  > {
-return this.postPrivate('0/private/Earn/AllocateStatus',
-⋮----
-/**
-   * Get Deallocation Status
-   *
-   * Get the status of the last deallocation request.
-   */
-getEarnDeallocationStatus(params: { strategy_id: string }): Promise<
-    SpotAPISuccessResponse<{
-      pending: boolean;
-    }>
-  > {
-    return this.postPrivate('0/private/Earn/DeallocateStatus', {
-      body: params,
-    });
-⋮----
-/**
-   * List Earn Strategies
-   *
-   * List earn strategies along with their parameters.
-   * Returns only strategies that are available to the user based on geographic region.
-   */
-getEarnStrategies(params?: SpotListEarnStrategiesParams): Promise<
-    SpotAPISuccessResponse<{
-      items: SpotEarnStrategy[];
-      next_cursor?: string;
-    }>
-  > {
-return this.postPrivate('0/private/Earn/Strategies',
-⋮----
-/**
-   * List Earn Allocations
-   *
-   * List all allocations for the user.
-   * By default all allocations are returned, even for strategies that have been used in the past and have zero balance now.
-   */
-getEarnAllocations(
-    params?: SpotListEarnAllocationsParams,
-): Promise<SpotAPISuccessResponse<SpotListEarnAllocationsResponse>>
-⋮----
-/**
-   *
-   * Transparency
-   *
-   */
-⋮----
-/**
-   * Pre-Trade Data
-   *
-   * Returns the price levels in the order book with aggregated order quantities at each price level.
-   * The top 10 levels are returned for each trading pair.
-   */
-getPreTradeData(params: {
-    symbol: string;
-}): Promise<SpotAPISuccessResponse<SpotPreTradeData>>
-⋮----
-/**
-   * Post-Trade Data
-   *
-   * Returns a list of trades on the spot exchange.
-   * If no filter parameters are specified, the last 1000 trades for all pairs are received.
-   */
-getPostTradeData(
-    params?: SpotGetPostTradeDataParams,
-): Promise<SpotAPISuccessResponse<SpotPostTradeDataResponse>>
-⋮----
-/**
-   *
-   * Spot REST API - OAuth
-   *
-   */
-⋮----
-/**
-   * Get Access Token
-   *
-   * Retrieve the access token.
-   * Note: This endpoint uses Basic authentication (Authorization header with base64-encoded client credentials).
-   */
-getOAuthAccessToken(
-    params: OauthGetAccessTokenParams,
-): Promise<OauthGetAccessTokenResponse>
-⋮----
-/**
-   * Get User Info
-   *
-   * Returns the email address and IIBAN of the user.
-   * Note: Requires OAuth2 Bearer token. Scopes required: account.info:basic
-   */
-getOAuthUserInfo(): Promise<OauthGetUserInfoResponse>
-⋮----
-/**
-   * Create Fast API Key
-   *
-   * Creates a Fast API key.
-   * Note: Requires OAuth2 Bearer token. Scopes required: account.fast-api-key:write
-   */
-createOAuthFastApiKey(
-    params: OauthCreateFastApiKeyParams,
-): Promise<OauthCreateFastApiKeyResponse>
-⋮----
-/**
-   * Delete Fast API Key
-   *
-   * Deletes a Fast API key.
-   * Note: Requires OAuth2 Bearer token. Scopes required: account.fast-api-key:write
-   */
-deleteOAuthFastApiKey(params: {
-    api_key_name: string; // max 32 chars
-}): Promise<
-⋮----
-api_key_name: string; // max 32 chars
-⋮----
-/**
-   * Update Fast API Key
-   *
-   * Updates a Fast API key.
-   * Note: Requires OAuth2 Bearer token. Scopes required: account.fast-api-key:write
-   */
-updateOAuthFastApiKey(params: OauthUpdateFastApiKeyParams): Promise<
-⋮----
-/**
-   * List Fast API Keys
-   *
-   * List all Fast API keys.
-   * Note: Requires OAuth2 Bearer token. Scopes required: account.fast-api-key:read
-   */
-listOAuthFastApiKeys(): Promise<
 
 ================
 File: src/DerivativesClient.ts
@@ -13070,6 +12274,935 @@ checkApiKeyV3(): Promise<FuturesApiKeyV3Check>
    * The data may not be available immediately. In these cases HTTP 204 is returned.
    */
 getAccountMarketShare(): Promise<FuturesMarketShare>
+
+================
+File: src/SpotClient.ts
+================
+import { BaseRestClient } from './lib/BaseRestClient.js';
+import { REST_CLIENT_TYPE_ENUM, RestClientType } from './lib/requestUtils.js';
+import {
+  OauthCreateFastApiKeyParams,
+  OauthGetAccessTokenParams,
+  OauthUpdateFastApiKeyParams,
+  SpotAccountTransferParams,
+  SpotAmendOrderParams,
+  SpotGetAccountBalanceParams,
+  SpotGetApiKeyInfoParams,
+  SpotGetAssetPairsParams,
+  SpotGetClosedOrdersParams,
+  SpotGetClosedStrategiesParams,
+  SpotGetDepositAddressesParams,
+  SpotGetDepositMethodsParams,
+  SpotGetDepositStatusParams,
+  SpotGetGroupedBookParams,
+  SpotGetLedgersInfoParams,
+  SpotGetLevel3Params,
+  SpotGetOHLCParams,
+  SpotGetOpenOrdersParams,
+  SpotGetOpenPositionsParams,
+  SpotGetOrderBookParams,
+  SpotGetPostTradeDataParams,
+  SpotGetRecentSpreadsParams,
+  SpotGetRecentTradesParams,
+  SpotGetTradesHistoryParams,
+  SpotGetTradingVolumeParams,
+  SpotGetWithdrawalAddressesParams,
+  SpotGetWithdrawalInfoParams,
+  SpotGetWithdrawalMethodsParams,
+  SpotGetWithdrawalsStatusParams,
+  SpotListEarnAllocationsParams,
+  SpotListEarnStrategiesParams,
+  SpotQueryLedgersParams,
+  SpotQueryOrdersParams,
+  SpotQueryTradesParams,
+  SpotRequestExportReportParams,
+  SpotSubmitOrderBatchParams,
+  SpotSubmitOrderParams,
+  SpotSubmitStrategyParams,
+  SpotWalletTransferParams,
+  SpotWithdrawFundsParams,
+} from './types/request/spot.types.js';
+import { SpotAPISuccessResponse } from './types/response/shared.types.js';
+import {
+  OauthCreateFastApiKeyResponse,
+  OauthFastApiKey,
+  OauthGetAccessTokenResponse,
+  OauthGetUserInfoResponse,
+  SpotAccountBalance,
+  SpotAccountTransferResponse,
+  SpotAlgoStrategy,
+  SpotApiKeyInfo,
+  SpotAssetInfo,
+  SpotAssetPair,
+  SpotAssetTickerInfo,
+  SpotBatchOrderResult,
+  SpotClosedOrdersResponse,
+  SpotClosedStrategiesResponse,
+  SpotCreditLines,
+  SpotDeleteExportReportResponse,
+  SpotDepositAddress,
+  SpotDepositMethod,
+  SpotDepositStatusResponse,
+  SpotEarnStrategy,
+  SpotExportReportStatus,
+  SpotExtendedBalance,
+  SpotGroupedBookResponse,
+  SpotLedgersInfoResponse,
+  SpotLevel3OrderBookResponse,
+  SpotListEarnAllocationsResponse,
+  SpotListWalletAccountsResponse,
+  SpotMaintenanceSchedule,
+  SpotOHLCResponse,
+  SpotOpenOrdersResponse,
+  SpotOpenPositionsResult,
+  SpotOrderAmendsResponse,
+  SpotOrderBookResponse,
+  SpotPostTradeDataResponse,
+  SpotPreTradeData,
+  SpotQueryLedgersResponse,
+  SpotQueryOrdersResponse,
+  SpotQueryTradesResponse,
+  SpotRecentSpreadsResponse,
+  SpotRecentTradesResponse,
+  SpotRequestExportReportResponse,
+  SpotSubmitOrderResponse,
+  SpotSystemStatus,
+  SpotTradeBalance,
+  SpotTradesHistoryResponse,
+  SpotTradeVolume,
+  SpotWebSocketsTokenResponse,
+  SpotWithdrawalAddress,
+  SpotWithdrawalInfo,
+  SpotWithdrawalMethod,
+  SpotWithdrawalStatus,
+} from './types/response/spot.types.js';
+⋮----
+/**
+ * The SpotClient provides integration to the Kraken Spot API.
+ *
+ * Docs:
+ * - https://docs.kraken.com/api/docs/guides/spot-rest-intro/
+ * - https://docs.kraken.com/api/docs/rest-api/get-server-time
+ */
+export class SpotClient extends BaseRestClient
+⋮----
+getClientType(): RestClientType
+⋮----
+// Points to api.kraken.com
+⋮----
+/**
+   *
+   * Misc Utility Methods
+   *
+   */
+⋮----
+generateNewOrderID(): string
+⋮----
+// Generate a short UUID format (32 hex characters without dashes)
+// Compatible with Kraken's cl_ord_id parameter
+⋮----
+/**
+   *
+   * Spot REST API - Market Data
+   *
+   */
+⋮----
+/**
+   * Get Server Time
+   *
+   * Get the server's time.
+   */
+getServerTime(): Promise<
+    SpotAPISuccessResponse<{
+      unixtime: number;
+      rfc1123: string;
+    }>
+  > {
+    return this.get('0/public/Time');
+⋮----
+/**
+   * Get System Status
+   *
+   * Get the current system status or trading mode.
+   */
+getSystemStatus(): Promise<SpotAPISuccessResponse<SpotSystemStatus>>
+⋮----
+/**
+   * Get Maintenance Schedule
+   *
+   * Get all scheduled maintenance events in the next 7-day window.
+   */
+getMaintenanceSchedule(): Promise<
+    SpotAPISuccessResponse<SpotMaintenanceSchedule>
+  > {
+    return this.get('0/public/MaintenanceSchedule');
+⋮----
+/**
+   * Get Asset Info
+   *
+   * Get information about the assets that are available for deposit, withdrawal, trading and earn.
+   */
+getAssetInfo(params?: {
+    asset?: string;
+    aclass?: 'currency' | 'tokenized_asset';
+}): Promise<SpotAPISuccessResponse<Record<string, SpotAssetInfo>>>
+⋮----
+/**
+   * Get Tradable Asset Pairs
+   *
+   * Get tradable asset pairs
+   */
+getAssetPairs(
+    params?: SpotGetAssetPairsParams,
+): Promise<SpotAPISuccessResponse<Record<string, SpotAssetPair>>>
+⋮----
+/**
+   * Get Ticker Information
+   *
+   * Get ticker information for all or requested markets.
+   * Note: Today's prices start at midnight UTC.
+   * Leaving the pair parameter blank will return tickers for all tradeable assets on Kraken.
+   */
+getTicker(params?: {
+    pair?: string;
+    asset_class?: 'tokenized_asset' | 'forex';
+}): Promise<SpotAPISuccessResponse<Record<string, SpotAssetTickerInfo>>>
+⋮----
+/**
+   * Get OHLC Data
+   *
+   * Retrieve OHLC market data. The last entry in the OHLC array is for the current, not-yet-committed timeframe,
+   * and will always be present, regardless of the value of since. Returns up to 720 of the most recent entries
+   * (older data cannot be retrieved, regardless of the value of since).
+   */
+getCandles(
+    params: SpotGetOHLCParams,
+): Promise<SpotAPISuccessResponse<SpotOHLCResponse>>
+⋮----
+/**
+   * Get Order Book
+   *
+   * Returns level 2 (L2) order book, which describes the individual price levels in the book with aggregated
+   * order quantities at each level.
+   */
+getOrderBook(
+    params: SpotGetOrderBookParams,
+): Promise<SpotAPISuccessResponse<SpotOrderBookResponse>>
+⋮----
+/**
+   * Get Grouped Order Book
+   *
+   * Aggregates order book volume over a configurable tick grouping.
+   */
+getGroupedBook(
+    params: SpotGetGroupedBookParams,
+): Promise<SpotAPISuccessResponse<SpotGroupedBookResponse>>
+⋮----
+/**
+   * Get Level 3 Order Book
+   *
+   * Individual order-level book data. Requires authentication.
+   */
+getLevel3OrderBook(
+    params: SpotGetLevel3Params,
+): Promise<SpotAPISuccessResponse<SpotLevel3OrderBookResponse>>
+⋮----
+/**
+   * Get Recent Trades
+   *
+   * Returns the last 1000 trades by default
+   */
+getRecentTrades(
+    params: SpotGetRecentTradesParams,
+): Promise<SpotAPISuccessResponse<SpotRecentTradesResponse>>
+⋮----
+/**
+   * Get Recent Spreads
+   *
+   * Returns the last ~200 top-of-book spreads for a given pair
+   */
+getRecentSpreads(
+    params: SpotGetRecentSpreadsParams,
+): Promise<SpotAPISuccessResponse<SpotRecentSpreadsResponse>>
+⋮----
+/**
+   *
+   * Spot REST API - Account Data
+   *
+   */
+⋮----
+/**
+   * Get Account Balance
+   *
+   * Retrieve all cash balances, net of pending withdrawals.
+   * Pass account_id to retrieve balances for a specific wallet.
+   */
+getAccountBalance(
+    params?: SpotGetAccountBalanceParams,
+): Promise<SpotAPISuccessResponse<SpotAccountBalance>>
+⋮----
+/**
+   * Get API Key Info
+   *
+   * Retrieve configuration and usage details for the API key used in the request.
+   */
+getApiKeyInfo(
+    params?: SpotGetApiKeyInfoParams,
+): Promise<SpotAPISuccessResponse<SpotApiKeyInfo>>
+⋮----
+/**
+   * List Wallet Accounts
+   *
+   * Retrieve the wallet accounts associated with the authenticated user.
+   */
+getWalletAccounts(): Promise<
+    SpotAPISuccessResponse<SpotListWalletAccountsResponse>
+  > {
+return this.postPrivate('0/private/ListWalletAccounts',
+⋮----
+/**
+   * Get Extended Balance
+   *
+   * Retrieve all extended account balances, including credits and held amounts.
+   * Balance available for trading is calculated as: available balance = balance + credit - credit_used - hold_trade
+   */
+getExtendedBalance(params?: {
+    rebase_multiplier?: 'rebased' | 'base';
+    account_id?: string;
+}): Promise<SpotAPISuccessResponse<SpotExtendedBalance>>
+⋮----
+/**
+   * Get Credit Lines
+   *
+   * Retrieve all credit line details for VIPs with this functionality.
+   */
+getCreditLines(params?: {
+    rebase_multiplier?: 'rebased' | 'base';
+    account_id?: string;
+}): Promise<SpotAPISuccessResponse<SpotCreditLines | null>>
+⋮----
+/**
+   * Get Trade Balance
+   *
+   * Retrieve a summary of collateral balances, margin position valuations, equity and margin level.
+   */
+getTradeBalance(params?: {
+    rebase_multiplier?: 'rebased' | 'base';
+    account_id?: string;
+}): Promise<SpotAPISuccessResponse<SpotTradeBalance>>
+⋮----
+/**
+   * Get Open Orders
+   *
+   * Retrieve information about currently open orders.
+   */
+getOpenOrders(
+    params?: SpotGetOpenOrdersParams,
+): Promise<SpotAPISuccessResponse<SpotOpenOrdersResponse>>
+⋮----
+/**
+   * Get Closed Orders
+   *
+   * Retrieve information about orders that have been closed (filled or cancelled).
+   * 50 results are returned at a time, the most recent by default.
+   */
+getClosedOrders(
+    params?: SpotGetClosedOrdersParams,
+): Promise<SpotAPISuccessResponse<SpotClosedOrdersResponse>>
+⋮----
+/**
+   * Query Orders Info
+   *
+   * Retrieve information about specific orders.
+   */
+getOrders(
+    params: SpotQueryOrdersParams,
+): Promise<SpotAPISuccessResponse<SpotQueryOrdersResponse>>
+⋮----
+/**
+   * Get Order Amends
+   *
+   * Retrieves an audit trail of amend transactions on the specified order.
+   * The list is ordered by ascending amend timestamp.
+   */
+getOrderAmends(params: {
+    order_id: string;
+    rebase_multiplier?: 'rebased' | 'base';
+    account_id?: string;
+}): Promise<SpotAPISuccessResponse<SpotOrderAmendsResponse>>
+⋮----
+/**
+   * Get Trades History
+   *
+   * Retrieve information about trades/fills. 50 results are returned at a time, the most recent by default.
+   */
+getTradesHistory(
+    params?: SpotGetTradesHistoryParams,
+): Promise<SpotAPISuccessResponse<SpotTradesHistoryResponse>>
+⋮----
+/**
+   * Query Trades Info
+   *
+   * Retrieve information about specific trades/fills.
+   */
+getTrades(
+    params: SpotQueryTradesParams,
+): Promise<SpotAPISuccessResponse<SpotQueryTradesResponse>>
+⋮----
+/**
+   * Get Open Positions
+   *
+   * Get information about open margin positions.
+   */
+getOpenPositions(
+    params?: SpotGetOpenPositionsParams,
+): Promise<SpotAPISuccessResponse<SpotOpenPositionsResult>>
+⋮----
+/**
+   * Get Ledgers Info
+   *
+   * Retrieve information about ledger entries. 50 results are returned at a time, the most recent by default.
+   * Pass account_id to retrieve ledger entries for a specific wallet.
+   */
+getLedgersInfo(
+    params?: SpotGetLedgersInfoParams,
+): Promise<SpotAPISuccessResponse<SpotLedgersInfoResponse>>
+⋮----
+/**
+   * Query Ledgers
+   *
+   * Retrieve information about specific ledger entries.
+   */
+getLedgers(
+    params: SpotQueryLedgersParams,
+): Promise<SpotAPISuccessResponse<SpotQueryLedgersResponse>>
+⋮----
+/**
+   * Get Trade Volume
+   *
+   * Returns 30 day USD trading volume and resulting fee schedule for any asset pair(s) provided.
+   * Also use this endpoint (with a Spot API key) to determine Futures fee rates as of 2026-06-22.
+   */
+getTradingVolume(
+    params?: SpotGetTradingVolumeParams,
+): Promise<SpotAPISuccessResponse<SpotTradeVolume>>
+⋮----
+/**
+   * Request Export Report
+   *
+   * Request export of trades or ledgers.
+   */
+requestLedgersExport(
+    params: SpotRequestExportReportParams,
+): Promise<SpotAPISuccessResponse<SpotRequestExportReportResponse>>
+⋮----
+/**
+   * Get Export Report Status
+   *
+   * Get status of requested data exports.
+   */
+getLedgersExportStatus(params: {
+    report: 'trades' | 'ledgers';
+}): Promise<SpotAPISuccessResponse<SpotExportReportStatus[]>>
+⋮----
+/**
+   * Retrieve Data Export
+   *
+   * Retrieve a processed data export (binary zip archive).
+   */
+getLedgersExport(params:
+⋮----
+/**
+   * Delete Export Report
+   *
+   * Delete or cancel exported trades/ledgers report.
+   */
+deleteLedgersExport(params: {
+    id: string;
+    type: 'cancel' | 'delete';
+}): Promise<SpotAPISuccessResponse<SpotDeleteExportReportResponse>>
+⋮----
+/**
+   *
+   * Spot REST API - Trading
+   *
+   */
+⋮----
+/**
+   * Add Order
+   *
+   * Place a new order.
+   * Note: See the getAssetPairs() endpoint for details on the available trading pairs, their price and quantity precisions,
+   * order minimums, available leverage, etc.
+   */
+submitOrder(
+    params: SpotSubmitOrderParams,
+): Promise<SpotAPISuccessResponse<SpotSubmitOrderResponse>>
+⋮----
+/**
+   * Amend Order
+   *
+   * Amend an existing order. The order identifiers assigned by Kraken and/or client will stay the same.
+   * Queue priority in the order book will be maintained where possible.
+   */
+amendOrder(params: SpotAmendOrderParams): Promise<
+    SpotAPISuccessResponse<{
+      amend_id: string;
+    }>
+  > {
+    return this.postPrivate('0/private/AmendOrder', {
+      body: params,
+    });
+⋮----
+/**
+   * Cancel Order
+   *
+   * Cancel a particular open order (or set of open orders) by txid, userref or cl_ord_id.
+   */
+cancelOrder(params: { txid?: string | number; cl_ord_id?: string }): Promise<
+    SpotAPISuccessResponse<{
+      count: number;
+      pending?: boolean;
+    }>
+  > {
+    return this.postPrivate('0/private/CancelOrder', {
+      body: params,
+    });
+⋮----
+/**
+   * Cancel All Orders
+   *
+   * Cancel all open orders.
+   */
+cancelAllOrders(): Promise<
+    SpotAPISuccessResponse<{
+      count: number;
+      pending: boolean;
+    }>
+  > {
+return this.postPrivate('0/private/CancelAll',
+⋮----
+/**
+   * Cancel All Orders After X
+   *
+   * CancelAllOrdersAfter provides a "Dead Man's Switch" mechanism to protect the client from network malfunction,
+   * extreme latency or unexpected matching engine downtime. The client can send a request with a timeout (in seconds),
+   * that will start a countdown timer which will cancel all client orders when the timer expires.
+   */
+cancelAllOrdersAfter(params: { timeout: number }): Promise<
+    SpotAPISuccessResponse<{
+      currentTime: string;
+      triggerTime: string;
+    }>
+  > {
+    return this.postPrivate('0/private/CancelAllOrdersAfter', {
+      body: params,
+    });
+⋮----
+/**
+   * Get Websockets Token
+   *
+   * An authentication token must be requested via this REST API endpoint in order to connect to and authenticate
+   * with the Websockets API. The token should be used within 15 minutes of creation.
+   */
+getWebSocketsToken(): Promise<
+    SpotAPISuccessResponse<SpotWebSocketsTokenResponse>
+  > {
+return this.postPrivate('0/private/GetWebSocketsToken',
+⋮----
+/**
+   * Add Order Batch
+   *
+   * Sends a collection of orders (minimum of 2 and maximum 15). All orders in batch are limited to a single pair.
+   * Validation is performed on the whole batch prior to submission. If an order fails validation, the whole batch will be rejected.
+   */
+submitBatchOrders(params: SpotSubmitOrderBatchParams): Promise<
+    SpotAPISuccessResponse<{
+      orders: SpotBatchOrderResult[];
+    }>
+  > {
+    return this.postPrivate('0/private/AddOrderBatch', {
+      body: params,
+    });
+⋮----
+/**
+   * Cancel Order Batch
+   *
+   * Cancel multiple open orders by txid, userref or cl_ord_id (maximum 50 total unique IDs/references).
+   */
+cancelBatchOrders(params: {
+    orders?: Array<string | number>;
+    cl_ord_ids?: string[];
+  }): Promise<
+    SpotAPISuccessResponse<{
+      count: number;
+    }>
+  > {
+    return this.postPrivate('0/private/CancelOrderBatch', {
+      body: params,
+    });
+⋮----
+/**
+   *
+   * Spot REST API - Algo Trading
+   *
+   */
+⋮----
+/**
+   * Add Strategy
+   *
+   * Submit a TWAP strategy with a time horizon of at least 60 seconds.
+   * Returns an AS-prefixed strategy ID, or an empty string when validate is true.
+   */
+submitStrategy(params: SpotSubmitStrategyParams): Promise<
+    SpotAPISuccessResponse<{
+      strategy_id: string;
+    }>
+  > {
+return this.postPrivate('0/private/AddStrategy',
+⋮----
+/**
+   * Cancel Strategy
+   *
+   * Cancel a pending or open strategy. Use queryStrategies() for the final status and fills.
+   */
+cancelStrategy(params: { strategy_id: string }): Promise<
+    SpotAPISuccessResponse<{
+      strategy_id: string;
+    }>
+  > {
+return this.postPrivate('0/private/CancelStrategy',
+⋮----
+/**
+   * Get Open Strategies
+   *
+   * Get pending and open strategies keyed by strategy ID.
+   */
+getOpenStrategies(params?: { strategy_type?: 'twap' }): Promise<
+    SpotAPISuccessResponse<{
+      open: Record<string, SpotAlgoStrategy>;
+    }>
+  > {
+return this.postPrivate('0/private/GetOpenStrategies',
+⋮----
+/**
+   * Query Strategies
+   *
+   * Query up to 20 comma-delimited strategy IDs. Unmatched IDs are omitted.
+   */
+queryStrategies(params: { strategy_ids: string }): Promise<
+    SpotAPISuccessResponse<{
+      strategies: Record<string, SpotAlgoStrategy>;
+    }>
+  > {
+return this.postPrivate('0/private/QueryStrategies',
+⋮----
+/**
+   * Get Closed Strategies
+   *
+   * Get terminal strategies with cursor pagination (limit 1-100, default 100).
+   * Repeat the original filters with next_cursor as cursor. No ofs or count is supported.
+   */
+getClosedStrategies(
+    params?: SpotGetClosedStrategiesParams,
+): Promise<SpotAPISuccessResponse<SpotClosedStrategiesResponse>>
+⋮----
+/**
+   *
+   * Spot REST API - Funding
+   *
+   */
+⋮----
+/**
+   * Get Deposit Methods
+   *
+   * Retrieve methods available for depositing a particular asset.
+   */
+getDepositMethods(
+    params: SpotGetDepositMethodsParams,
+): Promise<SpotAPISuccessResponse<SpotDepositMethod[]>>
+⋮----
+/**
+   * Get Deposit Addresses
+   *
+   * Retrieve (or generate a new) deposit addresses for a particular asset and method.
+   */
+getDepositAddresses(
+    params: SpotGetDepositAddressesParams,
+): Promise<SpotAPISuccessResponse<SpotDepositAddress[]>>
+⋮----
+/**
+   * Get Status of Recent Deposits
+   *
+   * Retrieve information about recent deposits. Results are sorted by recency.
+   */
+getDepositsStatus(
+    params?: SpotGetDepositStatusParams,
+): Promise<SpotAPISuccessResponse<SpotDepositStatusResponse>>
+⋮----
+/**
+   * Get Withdrawal Methods
+   *
+   * Retrieve a list of withdrawal methods available for the user.
+   */
+getWithdrawalMethods(
+    params?: SpotGetWithdrawalMethodsParams,
+): Promise<SpotAPISuccessResponse<SpotWithdrawalMethod[]>>
+⋮----
+/**
+   * Get Withdrawal Addresses
+   *
+   * Retrieve a list of withdrawal addresses available for the user.
+   */
+getWithdrawalAddresses(
+    params?: SpotGetWithdrawalAddressesParams,
+): Promise<SpotAPISuccessResponse<SpotWithdrawalAddress[]>>
+⋮----
+/**
+   * Get Withdrawal Information
+   *
+   * Retrieve fee information about potential withdrawals for a particular asset, key and amount.
+   */
+getWithdrawalInfo(
+    params: SpotGetWithdrawalInfoParams,
+): Promise<SpotAPISuccessResponse<SpotWithdrawalInfo>>
+⋮----
+/**
+   * Withdraw Funds
+   *
+   * Make a withdrawal request.
+   */
+submitWithdrawal(params: SpotWithdrawFundsParams): Promise<
+    SpotAPISuccessResponse<{
+      refid: string;
+    }>
+  > {
+return this.postPrivate('0/private/Withdraw',
+⋮----
+/**
+   * Get Status of Recent Withdrawals
+   *
+   * Retrieve information about recent withdrawals. Results are sorted by recency.
+   */
+getWithdrawalsStatus(
+    params?: SpotGetWithdrawalsStatusParams,
+): Promise<SpotAPISuccessResponse<SpotWithdrawalStatus[]>>
+⋮----
+/**
+   * Request Withdrawal Cancellation
+   *
+   * Cancel a recently requested withdrawal, if it has not already been successfully processed.
+   */
+cancelWithdrawal(params: {
+    asset: string;
+    refid: string;
+}): Promise<SpotAPISuccessResponse<boolean>>
+⋮----
+/**
+   * Request Wallet Transfer
+   *
+   * Transfer from a Kraken spot wallet to a Kraken Futures wallet.
+   * Note: Transfer in the other direction must be requested via the Kraken Futures API.
+   */
+submitTransferToFutures(params: SpotWalletTransferParams): Promise<
+    SpotAPISuccessResponse<{
+      refid: string;
+    }>
+  > {
+return this.postPrivate('0/private/WalletTransfer',
+⋮----
+/**
+   *
+   * Subaccounts
+   *
+   */
+⋮----
+/**
+   * Create Subaccount
+   *
+   * Create a trading subaccount.
+   * Note: CreateSubaccount must be called using an API key from the master account.
+   */
+createSubaccount(params: {
+    username: string;
+    email: string;
+}): Promise<SpotAPISuccessResponse<boolean>>
+⋮----
+/**
+   * Account Transfer
+   *
+   * Transfer funds to and from master and subaccounts.
+   * Note: AccountTransfer must be called using an API key from the master account.
+   */
+submitSubaccountTransfer(
+    params: SpotAccountTransferParams,
+): Promise<SpotAPISuccessResponse<SpotAccountTransferResponse>>
+⋮----
+/**
+   *
+   * Earn
+   *
+   */
+⋮----
+/**
+   * Allocate Earn Funds
+   *
+   * Allocate funds to the Strategy.
+   * This method is asynchronous. Use getAllocationStatus() to poll the result.
+   */
+allocateEarnFunds(params: {
+    amount: string;
+    strategy_id: string;
+}): Promise<SpotAPISuccessResponse<boolean>>
+⋮----
+/**
+   * Deallocate Earn Funds
+   *
+   * Deallocate funds from a strategy.
+   * This method is asynchronous. Use getDeallocationStatus() to poll the result.
+   */
+deallocateEarnFunds(params: {
+    amount: string;
+    strategy_id: string;
+}): Promise<SpotAPISuccessResponse<boolean>>
+⋮----
+/**
+   * Get Allocation Status
+   *
+   * Get the status of the last allocation request.
+   */
+getEarnAllocationStatus(params: { strategy_id: string }): Promise<
+    SpotAPISuccessResponse<{
+      pending: boolean;
+    }>
+  > {
+return this.postPrivate('0/private/Earn/AllocateStatus',
+⋮----
+/**
+   * Get Deallocation Status
+   *
+   * Get the status of the last deallocation request.
+   */
+getEarnDeallocationStatus(params: { strategy_id: string }): Promise<
+    SpotAPISuccessResponse<{
+      pending: boolean;
+    }>
+  > {
+    return this.postPrivate('0/private/Earn/DeallocateStatus', {
+      body: params,
+    });
+⋮----
+/**
+   * List Earn Strategies
+   *
+   * List earn strategies along with their parameters.
+   * Returns only strategies that are available to the user based on geographic region.
+   */
+getEarnStrategies(params?: SpotListEarnStrategiesParams): Promise<
+    SpotAPISuccessResponse<{
+      items: SpotEarnStrategy[];
+      next_cursor?: string;
+    }>
+  > {
+return this.postPrivate('0/private/Earn/Strategies',
+⋮----
+/**
+   * List Earn Allocations
+   *
+   * List all allocations for the user.
+   * By default all allocations are returned, even for strategies that have been used in the past and have zero balance now.
+   */
+getEarnAllocations(
+    params?: SpotListEarnAllocationsParams,
+): Promise<SpotAPISuccessResponse<SpotListEarnAllocationsResponse>>
+⋮----
+/**
+   *
+   * Transparency
+   *
+   */
+⋮----
+/**
+   * Pre-Trade Data
+   *
+   * Returns the price levels in the order book with aggregated order quantities at each price level.
+   * The top 10 levels are returned for each trading pair.
+   */
+getPreTradeData(params: {
+    symbol: string;
+}): Promise<SpotAPISuccessResponse<SpotPreTradeData>>
+⋮----
+/**
+   * Post-Trade Data
+   *
+   * Returns a list of trades on the spot exchange.
+   * If no filter parameters are specified, the last 1000 trades for all pairs are received.
+   */
+getPostTradeData(
+    params?: SpotGetPostTradeDataParams,
+): Promise<SpotAPISuccessResponse<SpotPostTradeDataResponse>>
+⋮----
+/**
+   *
+   * Spot REST API - OAuth
+   *
+   */
+⋮----
+/**
+   * Get Access Token
+   *
+   * Retrieve the access token.
+   * Note: This endpoint uses Basic authentication (Authorization header with base64-encoded client credentials).
+   */
+getOAuthAccessToken(
+    params: OauthGetAccessTokenParams,
+): Promise<OauthGetAccessTokenResponse>
+⋮----
+/**
+   * Get User Info
+   *
+   * Returns the email address and IIBAN of the user.
+   * Note: Requires OAuth2 Bearer token. Scopes required: account.info:basic
+   */
+getOAuthUserInfo(): Promise<OauthGetUserInfoResponse>
+⋮----
+/**
+   * Create Fast API Key
+   *
+   * Creates a Fast API key.
+   * Note: Requires OAuth2 Bearer token. Scopes required: account.fast-api-key:write
+   */
+createOAuthFastApiKey(
+    params: OauthCreateFastApiKeyParams,
+): Promise<OauthCreateFastApiKeyResponse>
+⋮----
+/**
+   * Delete Fast API Key
+   *
+   * Deletes a Fast API key.
+   * Note: Requires OAuth2 Bearer token. Scopes required: account.fast-api-key:write
+   */
+deleteOAuthFastApiKey(params: {
+    api_key_name: string; // max 32 chars
+}): Promise<
+⋮----
+api_key_name: string; // max 32 chars
+⋮----
+/**
+   * Update Fast API Key
+   *
+   * Updates a Fast API key.
+   * Note: Requires OAuth2 Bearer token. Scopes required: account.fast-api-key:write
+   */
+updateOAuthFastApiKey(params: OauthUpdateFastApiKeyParams): Promise<
+⋮----
+/**
+   * List Fast API Keys
+   *
+   * List all Fast API keys.
+   * Note: Requires OAuth2 Bearer token. Scopes required: account.fast-api-key:read
+   */
+listOAuthFastApiKeys(): Promise<
 
 ================
 File: docs/KRAKEN_SDK_QUICKSTART_GUIDE.md
@@ -15317,7 +15450,7 @@ File: package.json
 ================
 {
   "name": "@siebly/kraken-api",
-  "version": "1.1.9",
+  "version": "1.1.10",
   "description": "Complete & robust Node.js SDK for Kraken's REST APIs and WebSockets, with TypeScript & strong end to end tests.",
   "scripts": {
     "clean": "rm -rf dist",
