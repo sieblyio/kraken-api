@@ -53,71 +53,76 @@ This table includes all endpoints from the official Exchange API docs and corres
 
 | Function | AUTH | HTTP Method | Endpoint |
 | -------- | :------: | :------: | -------- |
-| [getSystemStatus()](https://github.com/sieblyio/kraken-api/blob/main/src/SpotClient.ts#L151) |  | GET | `0/public/SystemStatus` |
-| [getMaintenanceSchedule()](https://github.com/sieblyio/kraken-api/blob/main/src/SpotClient.ts#L160) |  | GET | `0/public/MaintenanceSchedule` |
-| [getAssetInfo()](https://github.com/sieblyio/kraken-api/blob/main/src/SpotClient.ts#L171) |  | GET | `0/public/Assets` |
-| [getAssetPairs()](https://github.com/sieblyio/kraken-api/blob/main/src/SpotClient.ts#L183) |  | GET | `0/public/AssetPairs` |
-| [getTicker()](https://github.com/sieblyio/kraken-api/blob/main/src/SpotClient.ts#L196) |  | GET | `0/public/Ticker` |
-| [getCandles()](https://github.com/sieblyio/kraken-api/blob/main/src/SpotClient.ts#L210) |  | GET | `0/public/OHLC` |
-| [getOrderBook()](https://github.com/sieblyio/kraken-api/blob/main/src/SpotClient.ts#L222) |  | GET | `0/public/Depth` |
-| [getGroupedBook()](https://github.com/sieblyio/kraken-api/blob/main/src/SpotClient.ts#L233) |  | GET | `0/public/GroupedBook` |
-| [getLevel3OrderBook()](https://github.com/sieblyio/kraken-api/blob/main/src/SpotClient.ts#L244) | :closed_lock_with_key:  | POST | `0/private/Level3` |
-| [getRecentTrades()](https://github.com/sieblyio/kraken-api/blob/main/src/SpotClient.ts#L255) |  | GET | `0/public/Trades` |
-| [getRecentSpreads()](https://github.com/sieblyio/kraken-api/blob/main/src/SpotClient.ts#L266) |  | GET | `0/public/Spread` |
-| [getAccountBalance()](https://github.com/sieblyio/kraken-api/blob/main/src/SpotClient.ts#L284) | :closed_lock_with_key:  | POST | `0/private/Balance` |
-| [getApiKeyInfo()](https://github.com/sieblyio/kraken-api/blob/main/src/SpotClient.ts#L299) | :closed_lock_with_key:  | POST | `0/private/GetApiKeyInfo` |
-| [getWalletAccounts()](https://github.com/sieblyio/kraken-api/blob/main/src/SpotClient.ts#L310) | :closed_lock_with_key:  | POST | `0/private/ListWalletAccounts` |
-| [getExtendedBalance()](https://github.com/sieblyio/kraken-api/blob/main/src/SpotClient.ts#L322) | :closed_lock_with_key:  | POST | `0/private/BalanceEx` |
-| [getCreditLines()](https://github.com/sieblyio/kraken-api/blob/main/src/SpotClient.ts#L338) | :closed_lock_with_key:  | POST | `0/private/CreditLines` |
-| [getTradeBalance()](https://github.com/sieblyio/kraken-api/blob/main/src/SpotClient.ts#L354) | :closed_lock_with_key:  | POST | `0/private/TradeBalance` |
-| [getOpenOrders()](https://github.com/sieblyio/kraken-api/blob/main/src/SpotClient.ts#L370) | :closed_lock_with_key:  | POST | `0/private/OpenOrders` |
-| [getClosedOrders()](https://github.com/sieblyio/kraken-api/blob/main/src/SpotClient.ts#L386) | :closed_lock_with_key:  | POST | `0/private/ClosedOrders` |
-| [getOrders()](https://github.com/sieblyio/kraken-api/blob/main/src/SpotClient.ts#L401) | :closed_lock_with_key:  | POST | `0/private/QueryOrders` |
-| [getOrderAmends()](https://github.com/sieblyio/kraken-api/blob/main/src/SpotClient.ts#L417) | :closed_lock_with_key:  | POST | `0/private/OrderAmends` |
-| [getTradesHistory()](https://github.com/sieblyio/kraken-api/blob/main/src/SpotClient.ts#L434) | :closed_lock_with_key:  | POST | `0/private/TradesHistory` |
-| [getTrades()](https://github.com/sieblyio/kraken-api/blob/main/src/SpotClient.ts#L449) | :closed_lock_with_key:  | POST | `0/private/QueryTrades` |
-| [getOpenPositions()](https://github.com/sieblyio/kraken-api/blob/main/src/SpotClient.ts#L464) | :closed_lock_with_key:  | POST | `0/private/OpenPositions` |
-| [getLedgersInfo()](https://github.com/sieblyio/kraken-api/blob/main/src/SpotClient.ts#L480) | :closed_lock_with_key:  | POST | `0/private/Ledgers` |
-| [getLedgers()](https://github.com/sieblyio/kraken-api/blob/main/src/SpotClient.ts#L495) | :closed_lock_with_key:  | POST | `0/private/QueryLedgers` |
-| [getTradingVolume()](https://github.com/sieblyio/kraken-api/blob/main/src/SpotClient.ts#L511) | :closed_lock_with_key:  | POST | `0/private/TradeVolume` |
-| [requestLedgersExport()](https://github.com/sieblyio/kraken-api/blob/main/src/SpotClient.ts#L522) | :closed_lock_with_key:  | POST | `0/private/AddExport` |
-| [getLedgersExportStatus()](https://github.com/sieblyio/kraken-api/blob/main/src/SpotClient.ts#L533) | :closed_lock_with_key:  | POST | `0/private/ExportStatus` |
-| [getLedgersExport()](https://github.com/sieblyio/kraken-api/blob/main/src/SpotClient.ts#L544) | :closed_lock_with_key:  | POST | `0/private/RetrieveExport` |
-| [deleteLedgersExport()](https://github.com/sieblyio/kraken-api/blob/main/src/SpotClient.ts#L553) | :closed_lock_with_key:  | POST | `0/private/RemoveExport` |
-| [submitOrder()](https://github.com/sieblyio/kraken-api/blob/main/src/SpotClient.ts#L573) | :closed_lock_with_key:  | POST | `0/private/AddOrder` |
-| [amendOrder()](https://github.com/sieblyio/kraken-api/blob/main/src/SpotClient.ts#L587) | :closed_lock_with_key:  | POST | `0/private/AmendOrder` |
-| [cancelOrder()](https://github.com/sieblyio/kraken-api/blob/main/src/SpotClient.ts#L602) | :closed_lock_with_key:  | POST | `0/private/CancelOrder` |
-| [cancelAllOrders()](https://github.com/sieblyio/kraken-api/blob/main/src/SpotClient.ts#L618) | :closed_lock_with_key:  | POST | `0/private/CancelAll` |
-| [cancelAllOrdersAfter()](https://github.com/sieblyio/kraken-api/blob/main/src/SpotClient.ts#L634) | :closed_lock_with_key:  | POST | `0/private/CancelAllOrdersAfter` |
-| [getWebSocketsToken()](https://github.com/sieblyio/kraken-api/blob/main/src/SpotClient.ts#L651) | :closed_lock_with_key:  | POST | `0/private/GetWebSocketsToken` |
-| [submitBatchOrders()](https://github.com/sieblyio/kraken-api/blob/main/src/SpotClient.ts#L663) | :closed_lock_with_key:  | POST | `0/private/AddOrderBatch` |
-| [cancelBatchOrders()](https://github.com/sieblyio/kraken-api/blob/main/src/SpotClient.ts#L678) | :closed_lock_with_key:  | POST | `0/private/CancelOrderBatch` |
-| [getDepositMethods()](https://github.com/sieblyio/kraken-api/blob/main/src/SpotClient.ts#L702) | :closed_lock_with_key:  | POST | `0/private/DepositMethods` |
-| [getDepositAddresses()](https://github.com/sieblyio/kraken-api/blob/main/src/SpotClient.ts#L713) | :closed_lock_with_key:  | POST | `0/private/DepositAddresses` |
-| [getDepositsStatus()](https://github.com/sieblyio/kraken-api/blob/main/src/SpotClient.ts#L724) | :closed_lock_with_key:  | POST | `0/private/DepositStatus` |
-| [getWithdrawalMethods()](https://github.com/sieblyio/kraken-api/blob/main/src/SpotClient.ts#L735) | :closed_lock_with_key:  | POST | `0/private/WithdrawMethods` |
-| [getWithdrawalAddresses()](https://github.com/sieblyio/kraken-api/blob/main/src/SpotClient.ts#L746) | :closed_lock_with_key:  | POST | `0/private/WithdrawAddresses` |
-| [getWithdrawalInfo()](https://github.com/sieblyio/kraken-api/blob/main/src/SpotClient.ts#L757) | :closed_lock_with_key:  | POST | `0/private/WithdrawInfo` |
-| [submitWithdrawal()](https://github.com/sieblyio/kraken-api/blob/main/src/SpotClient.ts#L768) | :closed_lock_with_key:  | POST | `0/private/Withdraw` |
-| [getWithdrawalsStatus()](https://github.com/sieblyio/kraken-api/blob/main/src/SpotClient.ts#L781) | :closed_lock_with_key:  | POST | `0/private/WithdrawStatus` |
-| [cancelWithdrawal()](https://github.com/sieblyio/kraken-api/blob/main/src/SpotClient.ts#L792) | :closed_lock_with_key:  | POST | `0/private/WithdrawCancel` |
-| [submitTransferToFutures()](https://github.com/sieblyio/kraken-api/blob/main/src/SpotClient.ts#L805) | :closed_lock_with_key:  | POST | `0/private/WalletTransfer` |
-| [createSubaccount()](https://github.com/sieblyio/kraken-api/blob/main/src/SpotClient.ts#L825) | :closed_lock_with_key:  | POST | `0/private/CreateSubaccount` |
-| [submitSubaccountTransfer()](https://github.com/sieblyio/kraken-api/blob/main/src/SpotClient.ts#L838) | :closed_lock_with_key:  | POST | `0/private/AccountTransfer` |
-| [allocateEarnFunds()](https://github.com/sieblyio/kraken-api/blob/main/src/SpotClient.ts#L856) | :closed_lock_with_key:  | POST | `0/private/Earn/Allocate` |
-| [deallocateEarnFunds()](https://github.com/sieblyio/kraken-api/blob/main/src/SpotClient.ts#L869) | :closed_lock_with_key:  | POST | `0/private/Earn/Deallocate` |
-| [getEarnAllocationStatus()](https://github.com/sieblyio/kraken-api/blob/main/src/SpotClient.ts#L881) | :closed_lock_with_key:  | POST | `0/private/Earn/AllocateStatus` |
-| [getEarnDeallocationStatus()](https://github.com/sieblyio/kraken-api/blob/main/src/SpotClient.ts#L894) | :closed_lock_with_key:  | POST | `0/private/Earn/DeallocateStatus` |
-| [getEarnStrategies()](https://github.com/sieblyio/kraken-api/blob/main/src/SpotClient.ts#L910) | :closed_lock_with_key:  | POST | `0/private/Earn/Strategies` |
-| [getEarnAllocations()](https://github.com/sieblyio/kraken-api/blob/main/src/SpotClient.ts#L925) | :closed_lock_with_key:  | POST | `0/private/Earn/Allocations` |
-| [getPreTradeData()](https://github.com/sieblyio/kraken-api/blob/main/src/SpotClient.ts#L943) |  | GET | `0/public/PreTrade` |
-| [getPostTradeData()](https://github.com/sieblyio/kraken-api/blob/main/src/SpotClient.ts#L955) |  | GET | `0/public/PostTrade` |
-| [getOAuthAccessToken()](https://github.com/sieblyio/kraken-api/blob/main/src/SpotClient.ts#L973) |  | POST | `oauth/token` |
-| [getOAuthUserInfo()](https://github.com/sieblyio/kraken-api/blob/main/src/SpotClient.ts#L985) | :closed_lock_with_key:  | GET | `oauth/userinfo` |
-| [createOAuthFastApiKey()](https://github.com/sieblyio/kraken-api/blob/main/src/SpotClient.ts#L995) | :closed_lock_with_key:  | POST | `oauth/fast-api-key` |
-| [deleteOAuthFastApiKey()](https://github.com/sieblyio/kraken-api/blob/main/src/SpotClient.ts#L1007) | :closed_lock_with_key:  | DELETE | `oauth/fast-api-key` |
-| [updateOAuthFastApiKey()](https://github.com/sieblyio/kraken-api/blob/main/src/SpotClient.ts#L1021) | :closed_lock_with_key:  | PUT | `oauth/fast-api-key` |
-| [listOAuthFastApiKeys()](https://github.com/sieblyio/kraken-api/blob/main/src/SpotClient.ts#L1033) | :closed_lock_with_key:  | GET | `oauth/fast-api-keys` |
+| [getSystemStatus()](https://github.com/sieblyio/kraken-api/blob/main/src/SpotClient.ts#L155) |  | GET | `0/public/SystemStatus` |
+| [getMaintenanceSchedule()](https://github.com/sieblyio/kraken-api/blob/main/src/SpotClient.ts#L164) |  | GET | `0/public/MaintenanceSchedule` |
+| [getAssetInfo()](https://github.com/sieblyio/kraken-api/blob/main/src/SpotClient.ts#L175) |  | GET | `0/public/Assets` |
+| [getAssetPairs()](https://github.com/sieblyio/kraken-api/blob/main/src/SpotClient.ts#L187) |  | GET | `0/public/AssetPairs` |
+| [getTicker()](https://github.com/sieblyio/kraken-api/blob/main/src/SpotClient.ts#L200) |  | GET | `0/public/Ticker` |
+| [getCandles()](https://github.com/sieblyio/kraken-api/blob/main/src/SpotClient.ts#L214) |  | GET | `0/public/OHLC` |
+| [getOrderBook()](https://github.com/sieblyio/kraken-api/blob/main/src/SpotClient.ts#L226) |  | GET | `0/public/Depth` |
+| [getGroupedBook()](https://github.com/sieblyio/kraken-api/blob/main/src/SpotClient.ts#L237) |  | GET | `0/public/GroupedBook` |
+| [getLevel3OrderBook()](https://github.com/sieblyio/kraken-api/blob/main/src/SpotClient.ts#L248) | :closed_lock_with_key:  | POST | `0/private/Level3` |
+| [getRecentTrades()](https://github.com/sieblyio/kraken-api/blob/main/src/SpotClient.ts#L259) |  | GET | `0/public/Trades` |
+| [getRecentSpreads()](https://github.com/sieblyio/kraken-api/blob/main/src/SpotClient.ts#L270) |  | GET | `0/public/Spread` |
+| [getAccountBalance()](https://github.com/sieblyio/kraken-api/blob/main/src/SpotClient.ts#L288) | :closed_lock_with_key:  | POST | `0/private/Balance` |
+| [getApiKeyInfo()](https://github.com/sieblyio/kraken-api/blob/main/src/SpotClient.ts#L303) | :closed_lock_with_key:  | POST | `0/private/GetApiKeyInfo` |
+| [getWalletAccounts()](https://github.com/sieblyio/kraken-api/blob/main/src/SpotClient.ts#L314) | :closed_lock_with_key:  | POST | `0/private/ListWalletAccounts` |
+| [getExtendedBalance()](https://github.com/sieblyio/kraken-api/blob/main/src/SpotClient.ts#L326) | :closed_lock_with_key:  | POST | `0/private/BalanceEx` |
+| [getCreditLines()](https://github.com/sieblyio/kraken-api/blob/main/src/SpotClient.ts#L342) | :closed_lock_with_key:  | POST | `0/private/CreditLines` |
+| [getTradeBalance()](https://github.com/sieblyio/kraken-api/blob/main/src/SpotClient.ts#L358) | :closed_lock_with_key:  | POST | `0/private/TradeBalance` |
+| [getOpenOrders()](https://github.com/sieblyio/kraken-api/blob/main/src/SpotClient.ts#L374) | :closed_lock_with_key:  | POST | `0/private/OpenOrders` |
+| [getClosedOrders()](https://github.com/sieblyio/kraken-api/blob/main/src/SpotClient.ts#L390) | :closed_lock_with_key:  | POST | `0/private/ClosedOrders` |
+| [getOrders()](https://github.com/sieblyio/kraken-api/blob/main/src/SpotClient.ts#L405) | :closed_lock_with_key:  | POST | `0/private/QueryOrders` |
+| [getOrderAmends()](https://github.com/sieblyio/kraken-api/blob/main/src/SpotClient.ts#L421) | :closed_lock_with_key:  | POST | `0/private/OrderAmends` |
+| [getTradesHistory()](https://github.com/sieblyio/kraken-api/blob/main/src/SpotClient.ts#L438) | :closed_lock_with_key:  | POST | `0/private/TradesHistory` |
+| [getTrades()](https://github.com/sieblyio/kraken-api/blob/main/src/SpotClient.ts#L453) | :closed_lock_with_key:  | POST | `0/private/QueryTrades` |
+| [getOpenPositions()](https://github.com/sieblyio/kraken-api/blob/main/src/SpotClient.ts#L468) | :closed_lock_with_key:  | POST | `0/private/OpenPositions` |
+| [getLedgersInfo()](https://github.com/sieblyio/kraken-api/blob/main/src/SpotClient.ts#L484) | :closed_lock_with_key:  | POST | `0/private/Ledgers` |
+| [getLedgers()](https://github.com/sieblyio/kraken-api/blob/main/src/SpotClient.ts#L499) | :closed_lock_with_key:  | POST | `0/private/QueryLedgers` |
+| [getTradingVolume()](https://github.com/sieblyio/kraken-api/blob/main/src/SpotClient.ts#L515) | :closed_lock_with_key:  | POST | `0/private/TradeVolume` |
+| [requestLedgersExport()](https://github.com/sieblyio/kraken-api/blob/main/src/SpotClient.ts#L526) | :closed_lock_with_key:  | POST | `0/private/AddExport` |
+| [getLedgersExportStatus()](https://github.com/sieblyio/kraken-api/blob/main/src/SpotClient.ts#L537) | :closed_lock_with_key:  | POST | `0/private/ExportStatus` |
+| [getLedgersExport()](https://github.com/sieblyio/kraken-api/blob/main/src/SpotClient.ts#L548) | :closed_lock_with_key:  | POST | `0/private/RetrieveExport` |
+| [deleteLedgersExport()](https://github.com/sieblyio/kraken-api/blob/main/src/SpotClient.ts#L557) | :closed_lock_with_key:  | POST | `0/private/RemoveExport` |
+| [submitOrder()](https://github.com/sieblyio/kraken-api/blob/main/src/SpotClient.ts#L577) | :closed_lock_with_key:  | POST | `0/private/AddOrder` |
+| [amendOrder()](https://github.com/sieblyio/kraken-api/blob/main/src/SpotClient.ts#L591) | :closed_lock_with_key:  | POST | `0/private/AmendOrder` |
+| [cancelOrder()](https://github.com/sieblyio/kraken-api/blob/main/src/SpotClient.ts#L606) | :closed_lock_with_key:  | POST | `0/private/CancelOrder` |
+| [cancelAllOrders()](https://github.com/sieblyio/kraken-api/blob/main/src/SpotClient.ts#L622) | :closed_lock_with_key:  | POST | `0/private/CancelAll` |
+| [cancelAllOrdersAfter()](https://github.com/sieblyio/kraken-api/blob/main/src/SpotClient.ts#L638) | :closed_lock_with_key:  | POST | `0/private/CancelAllOrdersAfter` |
+| [getWebSocketsToken()](https://github.com/sieblyio/kraken-api/blob/main/src/SpotClient.ts#L655) | :closed_lock_with_key:  | POST | `0/private/GetWebSocketsToken` |
+| [submitBatchOrders()](https://github.com/sieblyio/kraken-api/blob/main/src/SpotClient.ts#L667) | :closed_lock_with_key:  | POST | `0/private/AddOrderBatch` |
+| [cancelBatchOrders()](https://github.com/sieblyio/kraken-api/blob/main/src/SpotClient.ts#L682) | :closed_lock_with_key:  | POST | `0/private/CancelOrderBatch` |
+| [submitStrategy()](https://github.com/sieblyio/kraken-api/blob/main/src/SpotClient.ts#L707) | :closed_lock_with_key:  | POST | `0/private/AddStrategy` |
+| [cancelStrategy()](https://github.com/sieblyio/kraken-api/blob/main/src/SpotClient.ts#L720) | :closed_lock_with_key:  | POST | `0/private/CancelStrategy` |
+| [getOpenStrategies()](https://github.com/sieblyio/kraken-api/blob/main/src/SpotClient.ts#L733) | :closed_lock_with_key:  | POST | `0/private/GetOpenStrategies` |
+| [queryStrategies()](https://github.com/sieblyio/kraken-api/blob/main/src/SpotClient.ts#L746) | :closed_lock_with_key:  | POST | `0/private/QueryStrategies` |
+| [getClosedStrategies()](https://github.com/sieblyio/kraken-api/blob/main/src/SpotClient.ts#L760) | :closed_lock_with_key:  | POST | `0/private/GetClosedStrategies` |
+| [getDepositMethods()](https://github.com/sieblyio/kraken-api/blob/main/src/SpotClient.ts#L777) | :closed_lock_with_key:  | POST | `0/private/DepositMethods` |
+| [getDepositAddresses()](https://github.com/sieblyio/kraken-api/blob/main/src/SpotClient.ts#L788) | :closed_lock_with_key:  | POST | `0/private/DepositAddresses` |
+| [getDepositsStatus()](https://github.com/sieblyio/kraken-api/blob/main/src/SpotClient.ts#L799) | :closed_lock_with_key:  | POST | `0/private/DepositStatus` |
+| [getWithdrawalMethods()](https://github.com/sieblyio/kraken-api/blob/main/src/SpotClient.ts#L810) | :closed_lock_with_key:  | POST | `0/private/WithdrawMethods` |
+| [getWithdrawalAddresses()](https://github.com/sieblyio/kraken-api/blob/main/src/SpotClient.ts#L821) | :closed_lock_with_key:  | POST | `0/private/WithdrawAddresses` |
+| [getWithdrawalInfo()](https://github.com/sieblyio/kraken-api/blob/main/src/SpotClient.ts#L832) | :closed_lock_with_key:  | POST | `0/private/WithdrawInfo` |
+| [submitWithdrawal()](https://github.com/sieblyio/kraken-api/blob/main/src/SpotClient.ts#L843) | :closed_lock_with_key:  | POST | `0/private/Withdraw` |
+| [getWithdrawalsStatus()](https://github.com/sieblyio/kraken-api/blob/main/src/SpotClient.ts#L856) | :closed_lock_with_key:  | POST | `0/private/WithdrawStatus` |
+| [cancelWithdrawal()](https://github.com/sieblyio/kraken-api/blob/main/src/SpotClient.ts#L867) | :closed_lock_with_key:  | POST | `0/private/WithdrawCancel` |
+| [submitTransferToFutures()](https://github.com/sieblyio/kraken-api/blob/main/src/SpotClient.ts#L880) | :closed_lock_with_key:  | POST | `0/private/WalletTransfer` |
+| [createSubaccount()](https://github.com/sieblyio/kraken-api/blob/main/src/SpotClient.ts#L900) | :closed_lock_with_key:  | POST | `0/private/CreateSubaccount` |
+| [submitSubaccountTransfer()](https://github.com/sieblyio/kraken-api/blob/main/src/SpotClient.ts#L913) | :closed_lock_with_key:  | POST | `0/private/AccountTransfer` |
+| [allocateEarnFunds()](https://github.com/sieblyio/kraken-api/blob/main/src/SpotClient.ts#L931) | :closed_lock_with_key:  | POST | `0/private/Earn/Allocate` |
+| [deallocateEarnFunds()](https://github.com/sieblyio/kraken-api/blob/main/src/SpotClient.ts#L944) | :closed_lock_with_key:  | POST | `0/private/Earn/Deallocate` |
+| [getEarnAllocationStatus()](https://github.com/sieblyio/kraken-api/blob/main/src/SpotClient.ts#L956) | :closed_lock_with_key:  | POST | `0/private/Earn/AllocateStatus` |
+| [getEarnDeallocationStatus()](https://github.com/sieblyio/kraken-api/blob/main/src/SpotClient.ts#L969) | :closed_lock_with_key:  | POST | `0/private/Earn/DeallocateStatus` |
+| [getEarnStrategies()](https://github.com/sieblyio/kraken-api/blob/main/src/SpotClient.ts#L985) | :closed_lock_with_key:  | POST | `0/private/Earn/Strategies` |
+| [getEarnAllocations()](https://github.com/sieblyio/kraken-api/blob/main/src/SpotClient.ts#L1000) | :closed_lock_with_key:  | POST | `0/private/Earn/Allocations` |
+| [getPreTradeData()](https://github.com/sieblyio/kraken-api/blob/main/src/SpotClient.ts#L1018) |  | GET | `0/public/PreTrade` |
+| [getPostTradeData()](https://github.com/sieblyio/kraken-api/blob/main/src/SpotClient.ts#L1030) |  | GET | `0/public/PostTrade` |
+| [getOAuthAccessToken()](https://github.com/sieblyio/kraken-api/blob/main/src/SpotClient.ts#L1048) |  | POST | `oauth/token` |
+| [getOAuthUserInfo()](https://github.com/sieblyio/kraken-api/blob/main/src/SpotClient.ts#L1060) | :closed_lock_with_key:  | GET | `oauth/userinfo` |
+| [createOAuthFastApiKey()](https://github.com/sieblyio/kraken-api/blob/main/src/SpotClient.ts#L1070) | :closed_lock_with_key:  | POST | `oauth/fast-api-key` |
+| [deleteOAuthFastApiKey()](https://github.com/sieblyio/kraken-api/blob/main/src/SpotClient.ts#L1082) | :closed_lock_with_key:  | DELETE | `oauth/fast-api-key` |
+| [updateOAuthFastApiKey()](https://github.com/sieblyio/kraken-api/blob/main/src/SpotClient.ts#L1096) | :closed_lock_with_key:  | PUT | `oauth/fast-api-key` |
+| [listOAuthFastApiKeys()](https://github.com/sieblyio/kraken-api/blob/main/src/SpotClient.ts#L1108) | :closed_lock_with_key:  | GET | `oauth/fast-api-keys` |
 
 # DerivativesClient.ts
 
