@@ -71,8 +71,9 @@ async function start() {
       },
     },
     { topic: 'balances', payload: { snapshot: true } },
-    { topic: 'ledgers' },
     { topic: 'preferences' },
+    // Optional, subject to account and endpoint availability:
+    // { topic: 'ledgers' },
     // Optional derivatives-only channels:
     // {
     //   topic: 'positions',
@@ -88,7 +89,7 @@ async function start() {
     //   payload: { asset_class: 'derivatives' },
     // },
   ];
-  client.subscribe(subscriptions, WS_KEY_MAP.unifiedPrivateV2);
+  await client.subscribe(subscriptions, WS_KEY_MAP.unifiedPrivateV2);
 
   // Balances, ledgers, and preferences also accept bare topic names when no
   // options are needed, e.g. client.subscribe('balances', 'unifiedPrivateV2').
@@ -96,7 +97,8 @@ async function start() {
   // Ledgers has no snapshot; use REST to recover entries after a sequence gap.
   // Positions and margin each allow only one subscription per connection.
 
-  // Authenticated Level 3 uses the unified PUBLIC endpoint, not a separate L3 URL.
+  // Optional authenticated Level 3 uses the unified PUBLIC endpoint.
+  // Uncomment the subscribe call if your account and endpoint support it.
   // Discover symbols through instrument and pass the returned symbols unchanged.
   const level3: WSUnifiedPublicTopicRequest = {
     topic: 'level3',
@@ -107,7 +109,7 @@ async function start() {
       snapshot: true,
     },
   };
-  client.subscribe(level3, WS_KEY_MAP.unifiedPublicV2);
+  // client.subscribe(level3, WS_KEY_MAP.unifiedPublicV2);
 
   // Reuse the same requests, including optional parameters, to remove them
   // from the reconnect cache:

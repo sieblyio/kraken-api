@@ -482,11 +482,9 @@ client.subscribe(subscription, WS_KEY_MAP.unifiedPublicV2);
 
 Supported unauthenticated channels are `ticker`, `book`, `ohlc`, `trade`, and `instrument`. The current Kraken documentation limits unified `trade` to `asset_class: 'derivatives'`. Other channels accept `spot` or `derivatives`, subject to Kraken's rollout. Discover symbols through `instrument` for the chosen asset class; do not convert symbols between API families. Incoming messages are passed through without inferring or adding `asset_class`.
 
-A public endpoint check on 5 October 2026 received derivatives instrument, ticker, book, and trade data. Spot subscriptions were rejected with `currently supports only 'derivatives'`. OHLC subscribe and unsubscribe succeeded with `tick_type` omitted or set to `trade`, while `tick_type: 'mark'` was rejected. No candle messages arrived during a 65-second subscription, so live OHLC data delivery remains unverified. The example uses the default candle type during this rollout.
-
 Status updates are emitted on `message`; heartbeats and pongs are handled internally. Exported `WSUnifiedPublicTopicRequest`, `WSUnifiedPublicMessageEvent`, and `WSUnifiedPublicResponseEvent` types describe requests and received events. The client adds `wsKey` and `isWSAPIResponse` to emitted events.
 
-The SDK supports the documented authenticated Level 3 subscription on `unifiedPublicV2`: provide Spot API credentials to the client and subscribe to `level3` with `asset_class`, `symbol`, and an optional `depth` of `10`, `100`, or `1000`. The client supplies the authentication token for Level 3 while ordinary public subscriptions remain unauthenticated. A live check on 23 October 2026 returned `request not permitted on this instance` for unified Level 3; `spotL3V2` accepted the same Spot credentials. Kraken's Futures demo has been retired; `testnet: true` is rejected.
+The SDK supports the documented authenticated Level 3 subscription on `unifiedPublicV2`: provide Spot API credentials to the client and subscribe to `level3` with `asset_class`, `symbol`, and an optional `depth` of `10`, `100`, or `1000`. The client supplies the authentication token for Level 3 while ordinary public subscriptions remain unauthenticated. Level 3 is optional in the unified private example. Kraken's Futures demo has been retired; `testnet: true` is rejected.
 
 See the [unified public example](./examples/Unified/WebSockets/publicWs.ts) and [Kraken's unified WS reference](https://docs.kraken.com/exchange/api-reference/unified-ws/ticker).
 
@@ -517,8 +515,9 @@ const subscriptions: WSUnifiedPrivateTopicRequest[] = [
     },
   },
   { topic: 'balances' },
-  { topic: 'ledgers' },
   { topic: 'preferences' },
+  // Optional, subject to account and endpoint availability:
+  // { topic: 'ledgers' },
   // Optional derivatives-only channels:
   // {
   //   topic: 'positions',
@@ -550,11 +549,9 @@ client.subscribe(subscriptions, WS_KEY_MAP.unifiedPrivateV2);
 
 `balances`, `ledgers`, and `preferences` also accept bare topic names, for example `client.subscribe('balances', 'unifiedPrivateV2')`. Positions and margin each permit one subscription per connection. Keep position/margin decimal strings and derivatives `sequence_id` strings unchanged to preserve precision. Use the REST Ledgers endpoint to recover missed entries after a ledger sequence gap. Channel failures such as `margin_unavailable` are emitted on `exception`; the application can resubscribe when ready.
 
-Exported `WSUnifiedPrivateTopicRequest`, `WSUnifiedPrivateMessageEvent`, `WSUnifiedPrivateResponseEvent`, and `WSUnifiedPrivateExceptionEvent` describe requests and events. As with public streams, the SDK adds `wsKey` and `isWSAPIResponse` without otherwise transforming the payload.
+Exported `WSUnifiedPrivateTopicRequest`, `WSUnifiedPrivateMessageEvent`, `WSUnifiedPrivateResponseEvent`, and `WSUnifiedPrivateExceptionEvent` describe requests and events. The SDK adds `wsKey` and `isWSAPIResponse` to emitted events.
 
-Read-only live checks on 23 October 2026 confirmed Spot executions, balances, preferences, and derivatives executions and positions. Unsubscribe/resubscribe, automatic reconnection, cached-token reuse, and token renewal after forced local cache expiry passed. Unified `ledgers` returned `request not permitted on this instance`, including for a minimal raw WebSocket request. Margin and positions with `with_margin: true` were acknowledged, then the test account received `margin_unavailable` and the server dropped those subscriptions. A successful subscribe acknowledgement alone does not confirm ongoing data delivery. These results describe the tested account and deployment; availability may differ for other accounts or instances.
-
-See the [unified private example](./examples/Unified/WebSockets/privateWs.ts), which also demonstrates authenticated Level 3, and [Kraken's private stream reference](https://docs.kraken.com/exchange/api-reference/unified-ws/executions). Channel availability depends on the account and Kraken's rollout. Unified WS API trading commands remain a separate implementation stage.
+See the [unified private example](./examples/Unified/WebSockets/privateWs.ts), which defaults to Spot executions, balances, and preferences, with ledgers and authenticated Level 3 available to enable explicitly, and [Kraken's private stream reference](https://docs.kraken.com/exchange/api-reference/unified-ws/executions). Channel availability depends on the account and Kraken's rollout. Unified WS API trading commands are not supported.
 
 ### Private WebSocket Streams
 
