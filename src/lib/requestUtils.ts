@@ -50,8 +50,7 @@ export interface RestClientOptions {
   testnet?: boolean;
 
   /**
-   * Use access token instead of sign, if this is provided.
-   * For guidance refer to: https://github.com/tiagosiebler/kucoin-api/issues/2
+   * Use an OAuth2 Bearer token instead of API key signing for private requests.
    */
   apiAccessToken?: string;
 
