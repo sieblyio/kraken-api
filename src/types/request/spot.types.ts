@@ -306,6 +306,34 @@ export interface SpotSubmitOrderBatchParams {
 }
 
 /**
+ * Algo Trading
+ */
+
+export interface SpotSubmitStrategyParams {
+  strategy_type: 'twap';
+  symbol: string;
+  asset_class: 'forex';
+  side: 'buy' | 'sell';
+  volume: string;
+  ordertype: 'market' | 'limit';
+  price?: string; // Required for limit; must be omitted for market.
+  starttm?: string;
+  expiretm: string;
+  validate?: boolean;
+}
+
+export interface SpotGetClosedStrategiesParams {
+  asset_class?: 'forex' | 'tokenized_asset' | 'synthetic_pair';
+  strategy_type?: 'twap';
+  status?: 'closed' | 'expired' | 'cancelled';
+  start?: number;
+  end?: number;
+  query_time_mode?: 'open' | 'close' | 'both';
+  limit?: number;
+  cursor?: string;
+}
+
+/**
  * Funding
  */
 

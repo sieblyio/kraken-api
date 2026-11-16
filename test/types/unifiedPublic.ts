@@ -52,42 +52,42 @@ export function unifiedPublicTypes(
 
   // @ts-expect-error Unified subscriptions cannot omit their parameters.
   client.subscribe('ticker', 'unifiedPublicV2');
+  // @ts-expect-error asset_class is required.
   client.subscribe(
-    // @ts-expect-error asset_class is required.
     { topic: 'ticker', payload: { symbol: ['BTC/USD'] } },
     'unifiedPublicV2',
   );
+  // @ts-expect-error Market subscriptions require symbols.
   client.subscribe(
-    // @ts-expect-error Market subscriptions require symbols.
     { topic: 'ticker', payload: { asset_class: 'spot' } },
     'unifiedPublicV2',
   );
+  // @ts-expect-error Depth must be supported by Kraken.
   client.subscribe(
     {
       topic: 'book',
-      // @ts-expect-error Depth must be supported by Kraken.
       payload: { asset_class: 'spot', symbol: ['BTC/USD'], depth: 20 },
     },
     'unifiedPublicV2',
   );
+  // @ts-expect-error Candle intervals are minutes from Kraken's supported list.
   client.subscribe(
     {
       topic: 'ohlc',
-      // @ts-expect-error Candle intervals are minutes from Kraken's supported list.
       payload: { asset_class: 'spot', symbol: ['BTC/USD'], interval: 3 },
     },
     'unifiedPublicV2',
   );
+  // @ts-expect-error tick_type is specific to derivatives candles.
   client.subscribe(
     {
       topic: 'ohlc',
-      // @ts-expect-error tick_type is specific to derivatives candles.
       payload: { asset_class: 'spot', symbol: ['BTC/USD'], tick_type: 'mark' },
     },
     'unifiedPublicV2',
   );
+  // @ts-expect-error The unified trade channel is currently derivatives-only.
   client.subscribe(
-    // @ts-expect-error The unified trade channel is currently derivatives-only.
     { topic: 'trade', payload: { asset_class: 'spot', symbol: ['BTC/USD'] } },
     'unifiedPublicV2',
   );

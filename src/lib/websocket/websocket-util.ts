@@ -1,7 +1,10 @@
 import WebSocket from 'isomorphic-ws';
 
 import { WSAPIRequestOperationKrakenSpot } from '../../types/websockets/ws-api.js';
-import { WSTopic } from '../../types/websockets/ws-subscriptions.js';
+import {
+  WSPublicBookParams,
+  WSTopic,
+} from '../../types/websockets/ws-subscriptions.js';
 import {
   WSUnifiedPrivateTopicRequest,
   WSUnifiedPrivateTopicWithoutParams,
@@ -57,19 +60,21 @@ export type WSOperation = 'subscribe' | 'unsubscribe';
  */
 export interface WSTopicRequest<
   TWSTopic extends WSTopic = WSTopic,
-  TWSPayload = any,
+  TWSPayload = [TWSTopic] extends ['book'] ? WSPublicBookParams : any,
 > {
   topic: TWSTopic;
   payload?: TWSPayload;
 }
 
 /** Unified subscriptions require channel-specific payloads; existing keys retain their interface. */
-export type WSSubscriptionRequest<TWSKey extends WsKey> =
-  TWSKey extends 'unifiedPublicV2'
-    ? WSUnifiedPublicTopicRequest
-    : TWSKey extends 'unifiedPrivateV2'
-      ? WSUnifiedPrivateTopicRequest | WSUnifiedPrivateTopicWithoutParams
-      : WSTopicRequest<WSTopic> | WSTopic;
+export type WSSubscriptionRequest<
+  TWSKey extends WsKey,
+  TWSTopic extends WSTopic = WSTopic,
+> = TWSKey extends 'unifiedPublicV2'
+  ? WSUnifiedPublicTopicRequest
+  : TWSKey extends 'unifiedPrivateV2'
+    ? WSUnifiedPrivateTopicRequest | WSUnifiedPrivateTopicWithoutParams
+    : WSTopicRequest<TWSTopic> | TWSTopic;
 
 /**
  * Conveniently allow users to request a topic either as string topics or objects (containing string topic + params)

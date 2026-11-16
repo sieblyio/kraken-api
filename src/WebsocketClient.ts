@@ -105,15 +105,24 @@ export class WebsocketClient extends BaseWebsocketClient<WsKey, any> {
    *
    * Call `unsubscribe(topics)` to remove topics
    */
-  public subscribe<TWSKey extends WsKey>(
-    requests: WSSubscriptionRequest<TWSKey> | WSSubscriptionRequest<TWSKey>[],
+  public subscribe<TWSKey extends WsKey, TTopic extends WSTopic = WSTopic>(
+    requests:
+      | WSSubscriptionRequest<TWSKey, TTopic>
+      | WSSubscriptionRequest<TWSKey, TTopic>[],
     wsKey: TWSKey,
   ): void;
 
-  public subscribe(
+  public subscribe<TTopic extends WSTopic>(
     requests:
-      | (WSTopicRequest<WSTopic> | WSTopic)
-      | (WSTopicRequest<WSTopic> | WSTopic)[],
+      | (WSTopicRequest<TTopic> | TTopic)
+      | (WSTopicRequest<TTopic> | TTopic)[],
+    wsKey: Exclude<WsKey, 'unifiedPublicV2' | 'unifiedPrivateV2'>,
+  ): void;
+
+  public subscribe<TTopic extends WSTopic>(
+    requests:
+      | (WSTopicRequest<TTopic> | TTopic)
+      | (WSTopicRequest<TTopic> | TTopic)[],
     wsKey: WsKey,
   ) {
     if (!Array.isArray(requests)) {
@@ -133,15 +142,24 @@ export class WebsocketClient extends BaseWebsocketClient<WsKey, any> {
    * - These topics will be removed from the topic cache, so they won't be subscribed to again.
    * - Pass the same topic and payload used to subscribe, including optional parameters.
    */
-  public unsubscribe<TWSKey extends WsKey>(
-    requests: WSSubscriptionRequest<TWSKey> | WSSubscriptionRequest<TWSKey>[],
+  public unsubscribe<TWSKey extends WsKey, TTopic extends WSTopic = WSTopic>(
+    requests:
+      | WSSubscriptionRequest<TWSKey, TTopic>
+      | WSSubscriptionRequest<TWSKey, TTopic>[],
     wsKey: TWSKey,
   ): void;
 
-  public unsubscribe(
+  public unsubscribe<TTopic extends WSTopic>(
     requests:
-      | (WSTopicRequest<WSTopic> | WSTopic)
-      | (WSTopicRequest<WSTopic> | WSTopic)[],
+      | (WSTopicRequest<TTopic> | TTopic)
+      | (WSTopicRequest<TTopic> | TTopic)[],
+    wsKey: Exclude<WsKey, 'unifiedPublicV2' | 'unifiedPrivateV2'>,
+  ): void;
+
+  public unsubscribe<TTopic extends WSTopic>(
+    requests:
+      | (WSTopicRequest<TTopic> | TTopic)
+      | (WSTopicRequest<TTopic> | TTopic)[],
     wsKey: WsKey,
   ) {
     if (!Array.isArray(requests)) {

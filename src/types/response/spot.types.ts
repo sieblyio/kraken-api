@@ -660,6 +660,38 @@ export interface SpotBatchOrderResult {
 }
 
 /**
+ * Algo Trading
+ */
+
+export interface SpotTwapStrategyInfo {
+  strategy_type: 'twap';
+  side: 'buy' | 'sell';
+  volume: string;
+  filled_volume: string;
+  avg_price: string;
+  total_cost: string;
+  total_fee: string;
+  starttm: string;
+  expiretm: string;
+  symbol: string;
+  asset_class: 'forex' | 'tokenized_asset' | 'synthetic_pair';
+  ordertype: 'market' | 'limit';
+  price?: string;
+}
+
+export interface SpotAlgoStrategy {
+  strategy_id: string; // Kraken-assigned identifier with the AS prefix.
+  status: 'pending' | 'open' | 'closed' | 'expired' | 'cancelled';
+  reason?: string;
+  details: SpotTwapStrategyInfo;
+}
+
+export interface SpotClosedStrategiesResponse {
+  closed: SpotAlgoStrategy[];
+  next_cursor?: string;
+}
+
+/**
  * Funding
  */
 

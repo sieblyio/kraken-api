@@ -244,6 +244,8 @@ export interface FuturesRejectTriggerEvent {
     | 'EDIT_HAS_NO_EFFECT'
     | 'ORDER_FOR_CANCELLATION_NOT_FOUND'
     | 'ORDER_FOR_EDIT_NOT_FOUND'
+    // REST v4 edit status. v3 reports the same case as editAlreadyHeld. Market data still uses EDIT_HAS_NO_EFFECT.
+    | 'EDIT_ALREADY_HELD'
     | 'ORDER_CANNOT_HAVE_TRIGGER_PRICE'
     | 'POST_WOULD_EXECUTE'
     | 'IOC_WOULD_NOT_EXECUTE'
@@ -306,7 +308,9 @@ export interface FuturesBatchOrderStatus {
     | 'clientOrderIdTooLong'
     | 'outsidePriceCollar'
     | 'postWouldExecute'
-    | 'iocWouldNotExecute';
+    | 'iocWouldNotExecute'
+    | 'orderForEditNotFound'
+    | 'editAlreadyHeld';
 }
 
 export interface FuturesCancelledOrder {
@@ -351,6 +355,7 @@ export interface FuturesEditOrderStatus {
     | 'postWouldExecute'
     | 'wouldNotReducePosition'
     | 'orderForEditNotFound'
+    | 'editAlreadyHeld'
     | 'orderForEditNotAStop';
 }
 
@@ -397,6 +402,7 @@ export interface FuturesSendOrderStatus {
     | 'notFound'
     | 'orderForEditNotAStop'
     | 'orderForEditNotFound'
+    | 'editAlreadyHeld'
     | 'postWouldExecute'
     | 'iocWouldNotExecute'
     | 'selfFill'

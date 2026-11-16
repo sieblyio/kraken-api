@@ -85,38 +85,38 @@ export function unifiedPrivateTypes(client: WebsocketClient) {
   client.unsubscribe('positions', 'unifiedPrivateV2');
   // @ts-expect-error Ticker belongs on the public endpoint.
   client.subscribe('ticker', 'unifiedPrivateV2');
+  // @ts-expect-error Level 3 belongs on the public endpoint.
   client.subscribe(
-    // @ts-expect-error Level 3 belongs on the public endpoint.
     { topic: 'level3', payload: { asset_class: 'spot', symbol: ['BTC/USD'] } },
     'unifiedPrivateV2',
   );
+  // @ts-expect-error Ledgers rejects asset_class because it covers the account.
   client.subscribe(
-    // @ts-expect-error Ledgers rejects asset_class because it covers the account.
     { topic: 'ledgers', payload: { asset_class: 'derivatives' } },
     'unifiedPrivateV2',
   );
+  // @ts-expect-error Preferences always snapshots, without a snapshot option.
   client.subscribe(
-    // @ts-expect-error Preferences always snapshots, without a snapshot option.
     { topic: 'preferences', payload: { snapshot: false } },
     'unifiedPrivateV2',
   );
+  // @ts-expect-error Margin has no snapshot option.
   client.subscribe(
     {
       topic: 'margin',
-      // @ts-expect-error Margin has no snapshot option.
       payload: { asset_class: 'derivatives', snapshot: true },
     },
     'unifiedPrivateV2',
   );
+  // @ts-expect-error Positions are derivatives-only.
   client.subscribe(
-    // @ts-expect-error Positions are derivatives-only.
     { topic: 'positions', payload: { asset_class: 'spot' } },
     'unifiedPrivateV2',
   );
+  // @ts-expect-error snapshot and with_margin cannot be combined, even when false.
   client.subscribe(
     {
       topic: 'positions',
-      // @ts-expect-error snapshot and with_margin cannot be combined, even when false.
       payload: {
         asset_class: 'derivatives',
         snapshot: false,
@@ -125,10 +125,10 @@ export function unifiedPrivateTypes(client: WebsocketClient) {
     },
     'unifiedPrivateV2',
   );
+  // @ts-expect-error Level 3 supports a different set of depths from Level 2.
   client.subscribe(
     {
       topic: 'level3',
-      // @ts-expect-error Level 3 supports a different set of depths from Level 2.
       payload: { asset_class: 'derivatives', symbol: ['PF_XBTUSD'], depth: 25 },
     },
     'unifiedPublicV2',
