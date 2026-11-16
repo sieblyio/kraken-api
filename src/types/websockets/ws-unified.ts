@@ -3,6 +3,8 @@ export type WSUnifiedAssetClass = 'spot' | 'derivatives';
 
 export type WSUnifiedBookDepth = 10 | 25 | 100 | 500 | 1000;
 
+export type WSUnifiedLevel3Depth = 10 | 100 | 1000;
+
 /** trade is the deployed default; mark and spot are documented but availability varies. */
 export type WSUnifiedOHLCTickType = 'trade' | 'mark' | 'spot';
 
@@ -48,13 +50,19 @@ export interface WSUnifiedTradeSubscribeParams
   asset_class: 'derivatives';
 }
 
-/** Unauthenticated channels only. Status and heartbeats arrive automatically. */
+export interface WSUnifiedLevel3SubscribeParams
+  extends WSUnifiedTickerSubscribeParams {
+  depth?: WSUnifiedLevel3Depth;
+}
+
+/** Public endpoint channels. Level 3 requires authentication. */
 export interface WSUnifiedPublicSubscribeParamMap {
   ticker: WSUnifiedTickerSubscribeParams;
   book: WSUnifiedBookSubscribeParams;
   ohlc: WSUnifiedOHLCSubscribeParams;
   trade: WSUnifiedTradeSubscribeParams;
   instrument: WSUnifiedInstrumentSubscribeParams;
+  level3: WSUnifiedLevel3SubscribeParams;
 }
 
 export type WSUnifiedPublicTopic = keyof WSUnifiedPublicSubscribeParamMap;
@@ -66,3 +74,77 @@ export type WSUnifiedPublicTopicRequest = {
     payload: WSUnifiedPublicSubscribeParamMap[TTopic];
   };
 }[WSUnifiedPublicTopic];
+
+/** Authentication tokens are supplied by the client, as with Spot private subscriptions. */
+export interface WSUnifiedExecutionsSubscribeParams {
+  asset_class: WSUnifiedAssetClass;
+  snap_trades?: boolean;
+  snap_orders?: boolean;
+  order_status?: boolean;
+  ratecounter?: boolean;
+  /** @deprecated Use snap_trades. */
+  snapshot_trades?: boolean;
+  /** @deprecated Use snap_orders or snap_trades. */
+  snapshot?: boolean;
+}
+
+export interface WSUnifiedBalancesSubscribeParams {
+  snapshot?: boolean;
+  /** Balances cover all wallets on the account. */
+  asset_class?: never;
+}
+
+/** Account-wide channels that accept neither asset_class nor snapshot. */
+export interface WSUnifiedAccountSubscribeParams {
+  asset_class?: never;
+  snapshot?: never;
+}
+
+/** Kraken rejects snapshot together with with_margin, including false values. */
+export type WSUnifiedPositionsSubscribeParams = {
+  asset_class: 'derivatives';
+} & (
+  | { snapshot?: boolean; with_margin?: never }
+  | { with_margin: boolean; snapshot?: never }
+);
+
+/** Every margin message replaces the complete state of its section. */
+export interface WSUnifiedMarginSubscribeParams {
+  asset_class: 'derivatives';
+  snapshot?: never;
+}
+
+export const WS_UNIFIED_PRIVATE_TOPICS = [
+  'executions',
+  'balances',
+  'positions',
+  'margin',
+  'ledgers',
+  'preferences',
+] as const;
+
+export interface WSUnifiedPrivateSubscribeParamMap {
+  executions: WSUnifiedExecutionsSubscribeParams;
+  balances: WSUnifiedBalancesSubscribeParams;
+  positions: WSUnifiedPositionsSubscribeParams;
+  margin: WSUnifiedMarginSubscribeParams;
+  ledgers: WSUnifiedAccountSubscribeParams;
+  preferences: WSUnifiedAccountSubscribeParams;
+}
+
+export type WSUnifiedPrivateTopic = keyof WSUnifiedPrivateSubscribeParamMap;
+
+export type WSUnifiedPrivateTopicWithoutParams = {
+  [TTopic in WSUnifiedPrivateTopic]: {} extends WSUnifiedPrivateSubscribeParamMap[TTopic]
+    ? TTopic
+    : never;
+}[WSUnifiedPrivateTopic];
+
+/** Reuse the complete request when unsubscribing to remove the cached subscription. */
+export type WSUnifiedPrivateTopicRequest = {
+  [TTopic in WSUnifiedPrivateTopic]: {
+    topic: TTopic;
+  } & (TTopic extends WSUnifiedPrivateTopicWithoutParams
+    ? { payload?: WSUnifiedPrivateSubscribeParamMap[TTopic] }
+    : { payload: WSUnifiedPrivateSubscribeParamMap[TTopic] });
+}[WSUnifiedPrivateTopic];

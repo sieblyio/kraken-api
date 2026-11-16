@@ -1,3 +1,5 @@
+import { WSUnifiedPrivateTopic } from './ws-unified.js';
+
 export const WS_SPOT_PUBLIC_TOPICS = [
   'ticker',
   'book',
@@ -45,7 +47,7 @@ export type WSDerivativesTopic =
   | WSDerivativesPublicTopic
   | WSDerivativesPrivateTopic;
 
-export type WSTopic = WSSpotTopic | WSDerivativesTopic;
+export type WSTopic = WSSpotTopic | WSDerivativesTopic | WSUnifiedPrivateTopic;
 
 export interface WSSpotInstrumentSubscribeParams {
   execution_venue?: 'international' | 'bitnomial-exchange';

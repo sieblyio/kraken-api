@@ -379,10 +379,15 @@ export abstract class BaseWebsocketClient<
       return isConnectionInProgress;
     }
 
-    // We're connected. Check if auth is needed and if already authenticated
+    // Only wait for session auth when the protocol requires it. Token-based
+    // connections authenticate each request and have no login acknowledgement.
     const isPrivateConnection = this.isPrivateWsKey(wsKey);
     const isAuthenticated = this.wsStore.get(wsKey)?.isAuthenticated;
-    if (isPrivateConnection && !isAuthenticated) {
+    if (
+      isPrivateConnection &&
+      this.authPrivateConnectionsOnConnect(wsKey) &&
+      !isAuthenticated
+    ) {
       /**
        * If not authenticated yet and auth is required, don't request topics yet.
        *
@@ -420,10 +425,14 @@ export abstract class BaseWebsocketClient<
       return;
     }
 
-    // We're connected. Check if auth is needed and if already authenticated
+    // Per-request authentication does not require a separate login acknowledgement.
     const isPrivateConnection = this.isPrivateWsKey(wsKey);
     const isAuthenticated = this.wsStore.get(wsKey)?.isAuthenticated;
-    if (isPrivateConnection && !isAuthenticated) {
+    if (
+      isPrivateConnection &&
+      this.authPrivateConnectionsOnConnect(wsKey) &&
+      !isAuthenticated
+    ) {
       /**
        * If not authenticated yet and auth is required, don't need to do anything.
        * We don't subscribe to topics until auth is complete anyway.

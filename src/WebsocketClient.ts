@@ -47,6 +47,7 @@ import {
   WS_SPOT_PRIVATE_TOPICS,
   WSTopic,
 } from './types/websockets/ws-subscriptions.js';
+import { WS_UNIFIED_PRIVATE_TOPICS } from './types/websockets/ws-unified.js';
 
 const WS_LOGGER_CATEGORY_ID = 'kraken-ws';
 const WS_LOGGER_CATEGORY = {
@@ -96,7 +97,7 @@ export class WebsocketClient extends BaseWebsocketClient<WsKey, any> {
   /**
    * Request subscription to one or more topics. Pass topics as either an array of strings, or array of objects (if the topic has parameters).
    * Objects should be formatted as {topic: string, payload: object}.
-   * Unified public subscriptions require a payload with asset_class and channel-specific parameters.
+   * Unified subscriptions use channel-specific parameters, including asset_class where required.
    *
    * - Subscriptions are automatically routed to the correct websocket connection.
    * - Authentication/connection is automatic.
@@ -324,6 +325,9 @@ export class WebsocketClient extends BaseWebsocketClient<WsKey, any> {
       case WS_KEY_MAP.unifiedPublicV2: {
         return 'wss://uws.kraken.com/v2/public';
       }
+      case WS_KEY_MAP.unifiedPrivateV2: {
+        return 'wss://uws.kraken.com/v2/private';
+      }
       /**
        * https://docs.kraken.com/api/docs/guides/spot-ws-intro/
        *
@@ -372,6 +376,7 @@ export class WebsocketClient extends BaseWebsocketClient<WsKey, any> {
         break;
       }
       case WS_KEY_MAP.unifiedPublicV2:
+      case WS_KEY_MAP.unifiedPrivateV2:
       case WS_KEY_MAP.spotPublicV2:
       case WS_KEY_MAP.spotPrivateV2:
       case WS_KEY_MAP.spotL3V2:
@@ -550,6 +555,20 @@ export class WebsocketClient extends BaseWebsocketClient<WsKey, any> {
           return results;
         }
 
+        // Unified margin and enriched positions do not use snapshot/update types.
+        // Channel errors can arrive after a successful subscription.
+        if (
+          wsKey === WS_KEY_MAP.unifiedPrivateV2 &&
+          (parsed.channel === 'positions' || parsed.channel === 'margin') &&
+          !parsed.method
+        ) {
+          results.push({
+            eventType: parsed.error ? 'exception' : 'message',
+            event: parsed,
+          });
+          return results;
+        }
+
         // Most events use event: "update" or "snapshot" for topic updates
         if (['update', 'snapshot'].includes(eventAction)) {
           results.push({
@@ -642,10 +661,17 @@ export class WebsocketClient extends BaseWebsocketClient<WsKey, any> {
   /**
    * Determines if a topic is for a private channel, using a hardcoded list of strings
    */
-  protected isPrivateTopicRequest(request: WSTopicRequest<any>): boolean {
+  protected isPrivateTopicRequest(
+    request: WSTopicRequest<any>,
+    wsKey: WsKey,
+  ): boolean {
     const topicName = request?.topic?.toLowerCase();
     if (!topicName) {
       return false;
+    }
+
+    if (wsKey === WS_KEY_MAP.unifiedPrivateV2) {
+      return WS_UNIFIED_PRIVATE_TOPICS.includes(topicName);
     }
 
     if (WS_SPOT_PRIVATE_TOPICS.includes(topicName)) {
@@ -673,6 +699,7 @@ export class WebsocketClient extends BaseWebsocketClient<WsKey, any> {
    */
   protected getPrivateWSKeys(): WsKey[] {
     return [
+      WS_KEY_MAP.unifiedPrivateV2,
       WS_KEY_MAP.spotPrivateV2,
       WS_KEY_MAP.spotL3V2,
       WS_KEY_MAP.spotBetaPrivateV2,
@@ -719,6 +746,7 @@ export class WebsocketClient extends BaseWebsocketClient<WsKey, any> {
 
       switch (wsKey) {
         case WS_KEY_MAP.unifiedPublicV2:
+        case WS_KEY_MAP.unifiedPrivateV2:
         case WS_KEY_MAP.spotPublicV2:
         case WS_KEY_MAP.spotPrivateV2:
         case WS_KEY_MAP.spotL3V2:
@@ -737,7 +765,10 @@ export class WebsocketClient extends BaseWebsocketClient<WsKey, any> {
             this.options.authPrivateRequests &&
             (wsKey === WS_KEY_MAP.spotPrivateV2 ||
               wsKey === WS_KEY_MAP.spotL3V2 ||
-              wsKey === WS_KEY_MAP.spotBetaPrivateV2)
+              wsKey === WS_KEY_MAP.spotBetaPrivateV2 ||
+              wsKey === WS_KEY_MAP.unifiedPrivateV2 ||
+              (wsKey === WS_KEY_MAP.unifiedPublicV2 &&
+                topicRequest.topic === 'level3'))
           ) {
             // Get token from REST client cache
             const tokenResult =
@@ -749,7 +780,7 @@ export class WebsocketClient extends BaseWebsocketClient<WsKey, any> {
             if (!tokenResult?.token) {
               wsRequestBuildingErrors.push(
                 new Error(
-                  `No WS auth token could be retrieved for private spot WS request for topic "${topicRequest.topic}"`,
+                  `No WS auth token could be retrieved for ${wsKey} request for topic "${topicRequest.topic}"`,
                 ),
               );
               continue;
@@ -919,6 +950,7 @@ export class WebsocketClient extends BaseWebsocketClient<WsKey, any> {
   ): Promise<object | string | 'waitForEvent' | void> {
     try {
       switch (wsKey) {
+        case WS_KEY_MAP.unifiedPrivateV2:
         case WS_KEY_MAP.spotPrivateV2:
         case WS_KEY_MAP.spotL3V2:
         case WS_KEY_MAP.spotBetaPrivateV2: {

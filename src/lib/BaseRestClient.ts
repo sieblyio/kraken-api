@@ -378,6 +378,8 @@ export abstract class BaseRestClient {
             headers: {
               ...options.headers,
               APIKey: 'omittedFromError',
+              'API-Key': 'omittedFromError',
+              'API-Sign': 'omittedFromError',
             },
           },
         }),

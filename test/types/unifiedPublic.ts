@@ -11,7 +11,7 @@ import {
 // Compile-only contract checks. This function is never run.
 export function unifiedPublicTypes(
   client: WebsocketClient,
-  existingKey: Exclude<WsKey, 'unifiedPublicV2'>,
+  existingKey: Exclude<WsKey, 'unifiedPublicV2' | 'unifiedPrivateV2'>,
 ) {
   const instrument: WSUnifiedPublicTopicRequest = {
     topic: 'instrument',
@@ -92,7 +92,7 @@ export function unifiedPublicTypes(
     'unifiedPublicV2',
   );
   client.subscribe(
-    // @ts-expect-error Level 3 requires authentication, which is a later stage.
+    // Level 3 uses the public endpoint with automatic token injection.
     { topic: 'level3', payload: { asset_class: 'spot', symbol: ['BTC/USD'] } },
     'unifiedPublicV2',
   );

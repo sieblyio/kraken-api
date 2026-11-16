@@ -58,6 +58,7 @@ Complete & robust JavaScript & Node.js SDK for the Kraken REST APIs and WebSocke
     - [Why not raw ws?](#why-not-raw-ws)
     - [Public WebSocket Streams](#public-websocket-streams)
     - [Unified Public WebSocket Streams](#unified-public-websocket-streams)
+    - [Unified Private WebSocket Streams](#unified-private-websocket-streams)
     - [Private WebSocket Streams](#private-websocket-streams)
     - [WebSocket API (WebsocketAPIClient)](#websocket-api-websocketapiclient)
 - [Customise Logging](#customise-logging)
@@ -459,7 +460,7 @@ import {
 const client = new WebsocketClient();
 const subscription: WSUnifiedPublicTopicRequest = {
   topic: 'ticker',
-  payload: { asset_class: 'derivatives', symbol: ['PF_XBTUSD'] },
+  payload: { asset_class: 'spot', symbol: ['BTC/USD'] },
 };
 
 // This client only subscribes to unified public streams.
@@ -480,9 +481,75 @@ A public endpoint check on 5 October 2026 received derivatives instrument, ticke
 
 Status updates are emitted on `message`; heartbeats and pongs are handled internally. Exported `WSUnifiedPublicTopicRequest`, `WSUnifiedPublicMessageEvent`, and `WSUnifiedPublicResponseEvent` types describe requests and received events. The client adds `wsKey` and `isWSAPIResponse` to emitted events.
 
-This stage covers public streams without authentication. Unified Level 3, private account streams, and trading commands will follow separately. Existing Spot and derivatives connections keep their current behavior. `testnet` selects the legacy derivatives demo endpoint only; no unified demo URL is configured.
+The SDK supports the documented authenticated Level 3 subscription on `unifiedPublicV2`: provide Spot API credentials to the client and subscribe to `level3` with `asset_class`, `symbol`, and an optional `depth` of `10`, `100`, or `1000`. The client supplies the authentication token for Level 3 while ordinary public subscriptions remain unauthenticated. A live check on 23 October 2026 returned `request not permitted on this instance` for unified Level 3; `spotL3V2` accepted the same Spot credentials. Kraken's Futures demo has been retired; `testnet: true` is rejected.
 
 See the [unified public example](./examples/Unified/WebSockets/publicWs.ts) and [Kraken's unified WS reference](https://docs.kraken.com/exchange/api-reference/unified-ws/ticker).
+
+### Unified Private WebSocket Streams
+
+Use `WS_KEY_MAP.unifiedPrivateV2` for account streams at `wss://uws.kraken.com/v2/private`. As with Spot private streams, supply Spot API credentials with WebSocket access. The client fetches and caches tokens through `GetWebSocketsToken`, refreshes them when needed for requests, and includes them in subscribe and unsubscribe requests. Reconnection and resubscription are automatic. Subscribe acknowledgements confirm access; there is no separate login event.
+
+```typescript
+import {
+  WebsocketClient,
+  WS_KEY_MAP,
+  WSUnifiedPrivateMessageEvent,
+  WSUnifiedPrivateTopicRequest,
+} from '@siebly/kraken-api';
+
+const client = new WebsocketClient({
+  apiKey: process.env.API_SPOT_KEY,
+  apiSecret: process.env.API_SPOT_SECRET,
+});
+
+const subscriptions: WSUnifiedPrivateTopicRequest[] = [
+  {
+    topic: 'executions',
+    payload: {
+      asset_class: 'spot',
+      snap_orders: true,
+      snap_trades: true,
+    },
+  },
+  { topic: 'balances' },
+  { topic: 'ledgers' },
+  { topic: 'preferences' },
+  // Optional derivatives-only channels:
+  // {
+  //   topic: 'positions',
+  //   payload: { asset_class: 'derivatives', snapshot: true },
+  // },
+  // { topic: 'margin', payload: { asset_class: 'derivatives' } },
+];
+
+// This client only opens unifiedPrivateV2.
+client.on('message', (event: WSUnifiedPrivateMessageEvent) => {
+  console.log(event);
+});
+client.on('response', (event) => console.log(event));
+client.on('exception', (event) => console.error(event));
+client.subscribe(subscriptions, WS_KEY_MAP.unifiedPrivateV2);
+
+// Reuse the complete requests, including optional parameters:
+// client.unsubscribe(subscriptions, WS_KEY_MAP.unifiedPrivateV2);
+```
+
+| Channel       | Subscription parameters                                                                                               | Message behavior                                                                                   |
+| ------------- | --------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------- |
+| `executions`  | Required `asset_class`: `spot` or `derivatives`; optional `snap_orders`, `snap_trades`, `order_status`, `ratecounter` | Partial order and fill reports; fields depend on the event                                         |
+| `balances`    | Optional `snapshot`; no `asset_class`                                                                                 | Asset/wallet snapshots and ledger updates across the account                                       |
+| `positions`   | Required `asset_class: 'derivatives'`; optional `snapshot` or `with_margin`, never both                               | Default snapshots and position deltas; `with_margin: true` replaces all positions and omits `type` |
+| `margin`      | Required `asset_class: 'derivatives'`; no `snapshot`                                                                  | Each message replaces the `multi_collateral` or `single_collateral` section                        |
+| `ledgers`     | No parameters                                                                                                         | Account-wide ledger updates with sequence numbers; no snapshot                                     |
+| `preferences` | No parameters                                                                                                         | Account preference snapshots and updates                                                           |
+
+`balances`, `ledgers`, and `preferences` also accept bare topic names, for example `client.subscribe('balances', 'unifiedPrivateV2')`. Positions and margin each permit one subscription per connection. Keep position/margin decimal strings and derivatives `sequence_id` strings unchanged to preserve precision. Use the REST Ledgers endpoint to recover missed entries after a ledger sequence gap. Channel failures such as `margin_unavailable` are emitted on `exception`; the application can resubscribe when ready.
+
+Exported `WSUnifiedPrivateTopicRequest`, `WSUnifiedPrivateMessageEvent`, `WSUnifiedPrivateResponseEvent`, and `WSUnifiedPrivateExceptionEvent` describe requests and events. As with public streams, the SDK adds `wsKey` and `isWSAPIResponse` without otherwise transforming the payload.
+
+Read-only live checks on 23 October 2026 confirmed Spot executions, balances, preferences, and derivatives executions and positions. Unsubscribe/resubscribe, automatic reconnection, cached-token reuse, and token renewal after forced local cache expiry passed. Unified `ledgers` returned `request not permitted on this instance`, including for a minimal raw WebSocket request. Margin and positions with `with_margin: true` were acknowledged, then the test account received `margin_unavailable` and the server dropped those subscriptions. A successful subscribe acknowledgement alone does not confirm ongoing data delivery. These results describe the tested account and deployment; availability may differ for other accounts or instances.
+
+See the [unified private example](./examples/Unified/WebSockets/privateWs.ts), which also demonstrates authenticated Level 3, and [Kraken's private stream reference](https://docs.kraken.com/exchange/api-reference/unified-ws/executions). Channel availability depends on the account and Kraken's rollout. Unified WS API trading commands remain a separate implementation stage.
 
 ### Private WebSocket Streams
 
