@@ -39,8 +39,8 @@ Complete & robust JavaScript & Node.js SDK for the Kraken REST APIs and WebSocke
 - Heavy automated end-to-end testing with real API calls.
 - Proxy support via axios integration.
 - Active community support & collaboration in telegram: [Node.js Algo Traders](https://t.me/nodetraders).
-- QuickStart Guide: [Kraken JavaScript QuickStart Guide](https://siebly.io/sdk/kraken/javascript)
-- Kraken JavaScript Tutorial: [Kraken JavaScript REST API and WebSocket Tutorial](https://siebly.io/sdk/kraken/javascript/tutorial)
+- QuickStart Guide: [Kraken JavaScript QuickStart Guide](https://sieblyio.github.io/docs/kraken/getting-started)
+- [Kraken SDK Documentation](https://sieblyio.github.io/docs/kraken/)
 
 ## Table of Contents
 
