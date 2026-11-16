@@ -117,12 +117,12 @@ This table includes all endpoints from the official Exchange API docs and corres
 | [getEarnAllocations()](https://github.com/sieblyio/kraken-api/blob/main/src/SpotClient.ts#L1000) | :closed_lock_with_key:  | POST | `0/private/Earn/Allocations` |
 | [getPreTradeData()](https://github.com/sieblyio/kraken-api/blob/main/src/SpotClient.ts#L1018) |  | GET | `0/public/PreTrade` |
 | [getPostTradeData()](https://github.com/sieblyio/kraken-api/blob/main/src/SpotClient.ts#L1030) |  | GET | `0/public/PostTrade` |
-| [getOAuthAccessToken()](https://github.com/sieblyio/kraken-api/blob/main/src/SpotClient.ts#L1048) |  | POST | `oauth/token` |
-| [getOAuthUserInfo()](https://github.com/sieblyio/kraken-api/blob/main/src/SpotClient.ts#L1060) | :closed_lock_with_key:  | GET | `oauth/userinfo` |
-| [createOAuthFastApiKey()](https://github.com/sieblyio/kraken-api/blob/main/src/SpotClient.ts#L1070) | :closed_lock_with_key:  | POST | `oauth/fast-api-key` |
-| [deleteOAuthFastApiKey()](https://github.com/sieblyio/kraken-api/blob/main/src/SpotClient.ts#L1082) | :closed_lock_with_key:  | DELETE | `oauth/fast-api-key` |
-| [updateOAuthFastApiKey()](https://github.com/sieblyio/kraken-api/blob/main/src/SpotClient.ts#L1096) | :closed_lock_with_key:  | PUT | `oauth/fast-api-key` |
-| [listOAuthFastApiKeys()](https://github.com/sieblyio/kraken-api/blob/main/src/SpotClient.ts#L1108) | :closed_lock_with_key:  | GET | `oauth/fast-api-keys` |
+| [getOAuthAccessToken()](https://github.com/sieblyio/kraken-api/blob/main/src/SpotClient.ts#L1049) |  | POST | `oauth/token` |
+| [getOAuthUserInfo()](https://github.com/sieblyio/kraken-api/blob/main/src/SpotClient.ts#L1064) | :closed_lock_with_key:  | GET | `oauth/userinfo` |
+| [createOAuthFastApiKey()](https://github.com/sieblyio/kraken-api/blob/main/src/SpotClient.ts#L1074) | :closed_lock_with_key:  | POST | `oauth/fast-api-key` |
+| [deleteOAuthFastApiKey()](https://github.com/sieblyio/kraken-api/blob/main/src/SpotClient.ts#L1086) | :closed_lock_with_key:  | DELETE | `oauth/fast-api-key` |
+| [updateOAuthFastApiKey()](https://github.com/sieblyio/kraken-api/blob/main/src/SpotClient.ts#L1100) | :closed_lock_with_key:  | PUT | `oauth/fast-api-key` |
+| [listOAuthFastApiKeys()](https://github.com/sieblyio/kraken-api/blob/main/src/SpotClient.ts#L1112) | :closed_lock_with_key:  | GET | `oauth/fast-api-keys` |
 
 # DerivativesClient.ts
 

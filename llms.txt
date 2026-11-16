@@ -413,19 +413,19 @@ public setLogger(logger: DefaultLogger, loggerCategory: object): void
 public getSpotRESTClient(
     restOptions: RestClientOptions,
     requestOptions?: AxiosRequestConfig,
-): SpotClient
+  ): SpotClient
 ⋮----
 public async fetchSpotWebSocketToken(
     restOptions: RestClientOptions,
     requestOptions?: AxiosRequestConfig,
-): Promise<
+  ): Promise<{ token: string; expiresAtMs: number; timeLeftMs: number }>
 ⋮----
 // still valid for at least 10s
 ⋮----
 public getDerivativesRESTClient(
     restOptions: RestClientOptions,
     requestOptions?: AxiosRequestConfig,
-): DerivativesClient
+  ): DerivativesClient
 
 ================
 File: src/lib/websocket/WsStore.types.ts
@@ -2059,7 +2059,7 @@ generateNewOrderID(): string
    */
 listCustodyVaults(
     params: CustodyListVaultsParams,
-): Promise<CustodyListVaultsResponse>
+  ): Promise<CustodyListVaultsResponse>
 ⋮----
 /**
    * Get vault information by id
@@ -2069,7 +2069,7 @@ listCustodyVaults(
 getCustodyVaultbyId(params: {
     id: string;
     nonce?: number;
-}): Promise<CustodyGetVaultResponse>
+  }): Promise<CustodyGetVaultResponse>
 ⋮----
 /**
    * Get deposit methods
@@ -2079,7 +2079,7 @@ getCustodyVaultbyId(params: {
    */
 getCustodyDepositMethods(
     params: CustodyDepositMethodsParams,
-): Promise<CustodyDepositMethodsResponse>
+  ): Promise<CustodyDepositMethodsResponse>
 ⋮----
 /**
    * Get deposit addresses
@@ -2089,7 +2089,7 @@ getCustodyDepositMethods(
    */
 getCustodyDepositAddresses(
     params: CustodyDepositAddressesParams,
-): Promise<CustodyDepositAddressesResponse>
+  ): Promise<CustodyDepositAddressesResponse>
 ⋮----
 /**
    * List custody transactions
@@ -2098,7 +2098,7 @@ getCustodyDepositAddresses(
    */
 listCustodyTransactions(
     params: CustodyListTransactionsParams,
-): Promise<CustodyListTransactionsResponse>
+  ): Promise<CustodyListTransactionsResponse>
 ⋮----
 /**
    * Get transaction by id
@@ -2107,7 +2107,7 @@ listCustodyTransactions(
    */
 getCustodyTransactionbyId(
     params: CustodyGetTransactionParams,
-): Promise<CustodyGetTransactionResponse>
+  ): Promise<CustodyGetTransactionResponse>
 ⋮----
 /**
    *
@@ -2122,7 +2122,7 @@ getCustodyTransactionbyId(
    */
 getCustodyWithdrawMethods(
     params: CustodyWithdrawMethodsParams,
-): Promise<CustodyWithdrawMethodsResponse>
+  ): Promise<CustodyWithdrawMethodsResponse>
 ⋮----
 /**
    * Get withdraw addresses
@@ -2131,7 +2131,7 @@ getCustodyWithdrawMethods(
    */
 getCustodyWithdrawAddresses(
     params: CustodyWithdrawAddressesParams,
-): Promise<CustodyWithdrawAddressesResponse>
+  ): Promise<CustodyWithdrawAddressesResponse>
 ⋮----
 /**
    *
@@ -2146,7 +2146,7 @@ getCustodyWithdrawAddresses(
    */
 listCustodyTasks(
     params: CustodyListTasksParams,
-): Promise<CustodyListTasksResponse>
+  ): Promise<CustodyListTasksResponse>
 ⋮----
 /**
    * Get task by id
@@ -2156,7 +2156,7 @@ listCustodyTasks(
 getCustodyTaskbyId(params: {
     id: string;
     nonce?: number;
-}): Promise<CustodyGetTaskResponse>
+  }): Promise<CustodyGetTaskResponse>
 ⋮----
 /**
    * List activities
@@ -2165,7 +2165,7 @@ getCustodyTaskbyId(params: {
    */
 listCustodyActivities(
     params: CustodyListActivitiesParams,
-): Promise<CustodyListActivitiesResponse>
+  ): Promise<CustodyListActivitiesResponse>
 ⋮----
 /**
    * Get activity by id
@@ -2175,7 +2175,7 @@ listCustodyActivities(
 getCustodyActivitybyId(params: {
     id: string;
     nonce?: number;
-}): Promise<CustodyGetActivityResponse>
+  }): Promise<CustodyGetActivityResponse>
 ⋮----
 /**
    *
@@ -2191,7 +2191,7 @@ getCustodyActivitybyId(params: {
    */
 createOtcQuoteRequest(
     params: OTCCreateQuoteRequestParams,
-): Promise<OTCCreateQuoteResponse>
+  ): Promise<OTCCreateQuoteResponse>
 ⋮----
 /**
    * Update OTC Quote
@@ -2201,7 +2201,7 @@ createOtcQuoteRequest(
    */
 updateOtcQuote(
     params: OTCUpdateQuoteParams,
-): Promise<OTCUpdateQuoteResponse>
+  ): Promise<OTCUpdateQuoteResponse>
 ⋮----
 /**
    * Get OTC Pairs
@@ -2209,7 +2209,7 @@ updateOtcQuote(
    * Retrieves the list of OTC trading pairs.
    * API Key Permissions Required: Funds permissions - Query and Funds permissions - Deposit
    */
-getOtcPairs(params?:
+getOtcPairs(params?: { nonce?: number }): Promise<OTCGetPairsResponse>
 ⋮----
 /**
    * Get OTC Active Quotes
@@ -2220,7 +2220,7 @@ getOtcPairs(params?:
 getOtcActiveQuotes(params?: {
     nonce?: number;
     vault_id?: string;
-}): Promise<OTCGetActiveQuotesResponse>
+  }): Promise<OTCGetActiveQuotesResponse>
 ⋮----
 /**
    * Get OTC Historical Quotes
@@ -2230,7 +2230,7 @@ getOtcActiveQuotes(params?: {
    */
 getOtcHistoricalQuotes(params?: {
     nonce?: number;
-}): Promise<OTCGetHistoricalQuotesResponse>
+  }): Promise<OTCGetHistoricalQuotesResponse>
 ⋮----
 /**
    * Get OTC Exposures
@@ -2240,7 +2240,7 @@ getOtcHistoricalQuotes(params?: {
    */
 getOtcExposures(params?: {
     nonce?: number;
-}): Promise<OTCGetExposuresResponse>
+  }): Promise<OTCGetExposuresResponse>
 ⋮----
 /**
    * Check OTC Eligibility
@@ -2248,7 +2248,7 @@ getOtcExposures(params?: {
    * Retrieves the client permissions for the OTC Portal.
    * API Key Permissions Required: Funds permissions - Query and Funds permissions - Deposit
    */
-checkOtcClient(params?:
+checkOtcClient(params?: { nonce?: number }): Promise<OTCCheckClientResponse>
 
 ================
 File: src/WebsocketAPIClient.ts
@@ -2326,7 +2326,7 @@ constructor(
     options?: WSClientConfigurableOptions &
       Partial<WSAPIClientConfigurableOptions>,
     logger?: DefaultLogger,
-)
+  )
 ⋮----
 public getWSClient(): WebsocketClient
 ⋮----
@@ -2336,7 +2336,7 @@ public getWSClient(): WebsocketClient
 submitSpotOrder(
     params: Omit<WSAPIAddSpotOrderParams, 'token' | 'req_id'>,
     wsKey?: WSAPIWsKey,
-): Promise<WSAPISpotResponse<WSAPIAddSpotOrderResult, 'add_order'>>
+  ): Promise<WSAPISpotResponse<WSAPIAddSpotOrderResult, 'add_order'>>
 ⋮----
 /**
    * Amend an existing order
@@ -2344,7 +2344,7 @@ submitSpotOrder(
 amendSpotOrder(
     params: WSAPIAmendSpotOrderParams,
     wsKey?: WSAPIWsKey,
-): Promise<WSAPISpotResponse<WSAPIAmendSpotOrderResult, 'amend_order'>>
+  ): Promise<WSAPISpotResponse<WSAPIAmendSpotOrderResult, 'amend_order'>>
 ⋮----
 /**
    * Cancel one or more orders
@@ -2352,14 +2352,14 @@ amendSpotOrder(
 cancelSpotOrder(
     params: WSAPICancelSpotOrderParams,
     wsKey?: WSAPIWsKey,
-): Promise<WSAPISpotResponse<WSAPICancelSpotOrderResult, 'cancel_order'>>
+  ): Promise<WSAPISpotResponse<WSAPICancelSpotOrderResult, 'cancel_order'>>
 ⋮----
 /**
    * Cancel all open orders
    */
 cancelAllSpotOrders(
     wsKey?: WSAPIWsKey,
-): Promise<WSAPISpotResponse<WSAPICancelAllSpotOrdersResult, 'cancel_all'>>
+  ): Promise<WSAPISpotResponse<WSAPICancelAllSpotOrdersResult, 'cancel_all'>>
 ⋮----
 /**
    * Cancel all orders after a timeout (Dead Man's Switch)
@@ -2372,12 +2372,7 @@ cancelAllSpotOrdersAfter(
       WSAPICancelAllSpotOrdersAfterResult,
       'cancel_all_orders_after'
     >
-  > {
-    return this.wsClient.sendWSAPIRequest(
-      wsKey || WS_KEY_MAP.spotPrivateV2,
-      'cancel_all_orders_after',
-      params,
-    );
+  >
 ⋮----
 /**
    * Add multiple orders in a single batch (2-15 orders)
@@ -2385,7 +2380,7 @@ cancelAllSpotOrdersAfter(
 batchSubmitSpotOrders(
     params: WSAPIBatchAddSpotOrdersParams,
     wsKey?: WSAPIWsKey,
-): Promise<WSAPISpotResponse<WSAPIBatchAddSpotOrdersResult[], 'batch_add'>>
+  ): Promise<WSAPISpotResponse<WSAPIBatchAddSpotOrdersResult[], 'batch_add'>>
 ⋮----
 /**
    * Cancel multiple orders in a single batch (2-50 orders)
@@ -2395,12 +2390,7 @@ batchCancelSpotOrders(
     wsKey?: WSAPIWsKey,
   ): Promise<
     WSAPISpotResponse<WSAPIBatchCancelSpotOrdersResult, 'batch_cancel'>
-  > {
-    return this.wsClient.sendWSAPIRequest(
-      wsKey || WS_KEY_MAP.spotPrivateV2,
-      'batch_cancel',
-      params,
-    );
+  >
 ⋮----
 /**
    * Edit an existing order (legacy method, use amendSpotOrder instead)
@@ -2409,7 +2399,7 @@ batchCancelSpotOrders(
 editSpotOrder(
     params: WSAPIEditSpotOrderParams,
     wsKey?: WSAPIWsKey,
-): Promise<WSAPISpotResponse<WSAPIEditSpotOrderResult, 'edit_order'>>
+  ): Promise<WSAPISpotResponse<WSAPIEditSpotOrderResult, 'edit_order'>>
 /**
    *
    *
@@ -3848,7 +3838,7 @@ function sorted(side: Map<string, Level>, highFirst: boolean)
 ⋮----
 // CRC32 of the top 10 asks (low to high), then bids (high to low).
 // https://docs.kraken.com/exchange/guides/websockets/book-checksum-v2
-const sideText = (levels: Level[])
+const sideText = (levels: Level[]) =>
 ⋮----
 // Drop the mismatched book and subscribe again for a fresh snapshot.
 
@@ -4215,7 +4205,7 @@ TWSKey extends string,
 constructor(
     options?: WSClientConfigurableOptions & { wsLoggerCategory: string },
     logger?: DefaultLogger,
-)
+  )
 ⋮----
 // Requires a confirmation "response" from the ws connection before assuming it is ready
 ⋮----
@@ -4342,7 +4332,7 @@ public setTimeOffsetMs(newOffset: number)
 protected async subscribeTopicsForWsKey(
     wsTopicRequests: WSTopicRequestOrStringTopic<WSTopic>[],
     wsKey: TWSKey,
-)
+  )
 ⋮----
 // Store topics, so future automation (post-auth, post-reconnect) has everything needed to resubscribe automatically
 ⋮----
@@ -4367,7 +4357,7 @@ protected async subscribeTopicsForWsKey(
 protected async unsubscribeTopicsForWsKey(
     wsTopicRequests: WSTopicRequestOrStringTopic<WSTopic>[],
     wsKey: TWSKey,
-): Promise<unknown>
+  ): Promise<unknown>
 ⋮----
 // Store topics, so future automation (post-auth, post-reconnect) has everything needed to resubscribe automatically
 ⋮----
@@ -4389,7 +4379,10 @@ protected async unsubscribeTopicsForWsKey(
 private sortTopicRequestsIntoPublicPrivate(
     wsTopicRequests: WSTopicRequest<WSTopic>[],
     wsKey: TWSKey,
-):
+  ): {
+    publicReqs: WSTopicRequest<WSTopic>[];
+    privateReqs: WSTopicRequest<WSTopic>[];
+  }
 ⋮----
 /** Get the WsStore that tracks websockets & topics */
 public getWsStore(): WsStore<TWSKey, WSTopicRequest<WSTopic>>
@@ -4407,7 +4400,7 @@ public async connect(
     wsKey: TWSKey,
     customUrl?: string | undefined,
     throwOnError?: boolean,
-): Promise<WSConnectedResult | undefined>
+  ): Promise<WSConnectedResult | undefined>
 ⋮----
 // Important: don't check for RECONNECTING here, or this clashes with reconnectWithDelay()!
 ⋮----
@@ -4423,7 +4416,7 @@ private parseWsError(context: string, error: any, wsKey: TWSKey): boolean
 private async sendAuthRequest(
     wsKey: TWSKey,
     eventToAuth?: object,
-): Promise<unknown>
+  ): Promise<unknown>
 ⋮----
 // If not required, this won't return anything
 ⋮----
@@ -4468,7 +4461,7 @@ protected async getWsOperationEventsForTopics(
     topics: WSTopicRequest<WSTopic>[],
     wsKey: TWSKey,
     operation: WSOperation,
-): Promise<MidflightWsRequestEvent<TWSRequestEvent>[]>
+  ): Promise<MidflightWsRequestEvent<TWSRequestEvent>[]>
 ⋮----
 // Events that are ready to send (usually stringified JSON)
 ⋮----
@@ -4480,7 +4473,7 @@ protected async getWsOperationEventsForTopics(
 private async requestSubscribeTopics(
     wsKey: TWSKey,
     wsTopicRequests: WSTopicRequest<WSTopic>[],
-)
+  )
 ⋮----
 // Automatically splits requests into smaller batches, if needed
 ⋮----
@@ -4496,7 +4489,7 @@ private async requestSubscribeTopics(
 private async requestUnsubscribeTopics(
     wsKey: TWSKey,
     wsTopicRequests: WSTopicRequest<WSTopic>[],
-)
+  )
 ⋮----
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 ⋮----
@@ -4507,14 +4500,14 @@ public tryWsSend(
     wsKey: TWSKey,
     wsMessage: string,
     throwExceptions?: boolean,
-)
+  )
 ⋮----
 private async onWsOpen(
     event: WebSocket.Event,
     wsKey: TWSKey,
     url: string,
     ws: WebSocket,
-)
+  )
 ⋮----
 private resolveConnectionInProgressPromise(wsKey: TWSKey)
 ⋮----
@@ -4545,7 +4538,7 @@ private async onWsReadyForEvents(wsKey: TWSKey)
 private onWsAuthenticated(
     wsKey: TWSKey,
     event: { isWSAPI?: boolean; WSAPIAuthChannel?: string },
-)
+  )
 ⋮----
 // Resolve & cleanup deferred "auth attempt in progress" promise
 ⋮----
@@ -4556,7 +4549,7 @@ private onWsPing(
     wsKey: TWSKey,
     ws: WebSocket,
     source: WsEventInternalSrc,
-)
+  )
 ⋮----
 private onWsPong(event: any, wsKey: TWSKey, source: WsEventInternalSrc)
 ⋮----
@@ -6323,21 +6316,21 @@ getClientType(): RestClientType
    */
 getCpaProgress(
     params: AffiliateGetCpaProgressParams,
-): Promise<AffiliateGetCpaProgressResponse>
+  ): Promise<AffiliateGetCpaProgressResponse>
 ⋮----
 /**
    * Get Payout History
    */
 getPayoutHistory(
     params?: AffiliateGetPayoutHistoryParams,
-): Promise<AffiliateGetPayoutHistoryResponse>
+  ): Promise<AffiliateGetPayoutHistoryResponse>
 ⋮----
 /**
    * Get Daily Activity
    */
 getDailyActivity(
     params?: AffiliateGetDailyActivityParams,
-): Promise<AffiliateGetDailyActivityResponse>
+  ): Promise<AffiliateGetDailyActivityResponse>
 
 ================
 File: src/index.ts
@@ -6441,14 +6434,14 @@ getClientType(): RestClientType
    */
 createEmbedUser(
     params: PartnerCreateUserParams,
-): Promise<PartnerCreateUserResponse>
+  ): Promise<PartnerCreateUserResponse>
 ⋮----
 /**
    * Get User
    *
    * Get a previously created user.
    */
-getEmbedUser(params:
+getEmbedUser(params: { user: string }): Promise<PartnerGetUserResponse>
 ⋮----
 /**
    * Update User
@@ -6457,7 +6450,7 @@ getEmbedUser(params:
    */
 updateEmbedUser(
     params: PartnerUpdateUserParams,
-): Promise<PartnerUpdateUserResponse>
+  ): Promise<PartnerUpdateUserResponse>
 ⋮----
 /**
    *
@@ -6474,7 +6467,7 @@ updateEmbedUser(
    */
 submitEmbedVerification(
     params: PartnerSubmitVerificationParams,
-): Promise<PartnerSubmitVerificationResponse>
+  ): Promise<PartnerSubmitVerificationResponse>
 ⋮----
 /**
    *
@@ -6490,7 +6483,7 @@ submitEmbedVerification(
    */
 listEmbedAssets(
     params?: PartnerListAssetsParams,
-): Promise<PartnerListAssetsResponse>
+  ): Promise<PartnerListAssetsResponse>
 ⋮----
 /**
    * Get Asset
@@ -6499,7 +6492,7 @@ listEmbedAssets(
    */
 getEmbedAsset(
     params: PartnerGetAssetParams,
-): Promise<PartnerGetAssetResponse>
+  ): Promise<PartnerGetAssetResponse>
 ⋮----
 /**
    * List Asset Rates
@@ -6509,7 +6502,7 @@ getEmbedAsset(
    */
 listEmbedAssetRates(
     params: PartnerListAssetRatesParams,
-): Promise<PartnerListAssetRatesResponse>
+  ): Promise<PartnerListAssetRatesResponse>
 ⋮----
 /**
    *
@@ -6524,7 +6517,7 @@ listEmbedAssetRates(
    */
 requestEmbedQuote(
     params: PartnerRequestQuoteParams,
-): Promise<PartnerRequestQuoteResponse>
+  ): Promise<PartnerRequestQuoteResponse>
 ⋮----
 /**
    * Get Quote
@@ -6533,7 +6526,7 @@ requestEmbedQuote(
    */
 getEmbedQuote(
     params: PartnerGetQuoteParams,
-): Promise<PartnerGetQuoteResponse>
+  ): Promise<PartnerGetQuoteResponse>
 ⋮----
 /**
    * Execute Quote
@@ -6542,7 +6535,7 @@ getEmbedQuote(
    */
 executeEmbedQuote(
     params: PartnerExecuteQuoteParams,
-): Promise<PartnerExecuteQuoteResponse>
+  ): Promise<PartnerExecuteQuoteResponse>
 ⋮----
 /**
    * Get Quote Limits (RFQ)
@@ -6551,7 +6544,7 @@ executeEmbedQuote(
    */
 getEmbedQuoteLimits(
     params: PartnerGetQuoteLimitsParams,
-): Promise<PartnerGetQuoteLimitsResponse>
+  ): Promise<PartnerGetQuoteLimitsResponse>
 ⋮----
 /**
    * Request Prospective Quote (RFQ)
@@ -6560,7 +6553,7 @@ getEmbedQuoteLimits(
    */
 requestEmbedProspectiveQuote(
     params: PartnerRequestProspectiveQuoteParams,
-): Promise<PartnerRequestProspectiveQuoteResponse>
+  ): Promise<PartnerRequestProspectiveQuoteResponse>
 ⋮----
 /**
    *
@@ -6575,7 +6568,7 @@ requestEmbedProspectiveQuote(
    */
 createEmbedCustomOrder(
     params: PartnerCreateCustomOrderParams,
-): Promise<PartnerCreateCustomOrderResponse>
+  ): Promise<PartnerCreateCustomOrderResponse>
 ⋮----
 /**
    * List Custom Orders
@@ -6584,7 +6577,7 @@ createEmbedCustomOrder(
    */
 listEmbedCustomOrders(
     params: PartnerListCustomOrdersParams,
-): Promise<PartnerListCustomOrdersResponse>
+  ): Promise<PartnerListCustomOrdersResponse>
 ⋮----
 /**
    * Get Custom Order
@@ -6593,7 +6586,7 @@ listEmbedCustomOrders(
    */
 getEmbedCustomOrder(
     params: PartnerGetCustomOrderParams,
-): Promise<PartnerGetCustomOrderResponse>
+  ): Promise<PartnerGetCustomOrderResponse>
 ⋮----
 /**
    * Cancel Custom Order
@@ -6602,7 +6595,7 @@ getEmbedCustomOrder(
    */
 cancelEmbedCustomOrder(
     params: PartnerCancelCustomOrderParams,
-): Promise<PartnerCancelCustomOrderResponse>
+  ): Promise<PartnerCancelCustomOrderResponse>
 ⋮----
 /**
    *
@@ -6617,7 +6610,7 @@ cancelEmbedCustomOrder(
    */
 getEmbedPortfolioSummary(
     params: PartnerGetPortfolioSummaryParams,
-): Promise<PartnerGetPortfolioSummaryResponse>
+  ): Promise<PartnerGetPortfolioSummaryResponse>
 ⋮----
 /**
    * Get Portfolio History
@@ -6627,7 +6620,7 @@ getEmbedPortfolioSummary(
    */
 getEmbedPortfolioHistory(
     params: PartnerGetPortfolioHistoryParams,
-): Promise<PartnerGetPortfolioHistoryResponse>
+  ): Promise<PartnerGetPortfolioHistoryResponse>
 ⋮----
 /**
    * List Portfolio Details
@@ -6636,7 +6629,7 @@ getEmbedPortfolioHistory(
    */
 listEmbedPortfolioDetails(
     params: PartnerListPortfolioDetailsParams,
-): Promise<PartnerListPortfolioDetailsResponse>
+  ): Promise<PartnerListPortfolioDetailsResponse>
 ⋮----
 /**
    * List Portfolio Transactions
@@ -6645,7 +6638,7 @@ listEmbedPortfolioDetails(
    */
 listEmbedPortfolioTransactions(
     params: PartnerListPortfolioTransactionsParams,
-): Promise<PartnerListPortfolioTransactionsResponse>
+  ): Promise<PartnerListPortfolioTransactionsResponse>
 ⋮----
 /**
    *
@@ -6661,7 +6654,7 @@ listEmbedPortfolioTransactions(
    */
 getEmbedEarnSummary(
     params: PartnerGetEarnSummaryParams,
-): Promise<PartnerGetEarnSummaryResponse>
+  ): Promise<PartnerGetEarnSummaryResponse>
 ⋮----
 /**
    * List Earn Assets
@@ -6671,7 +6664,7 @@ getEmbedEarnSummary(
    */
 listEmbedEarnAssets(
     params?: PartnerListEarnAssetsParams,
-): Promise<PartnerListEarnAssetsResponse>
+  ): Promise<PartnerListEarnAssetsResponse>
 ⋮----
 /**
    * Toggle Auto-Earn
@@ -6682,7 +6675,7 @@ listEmbedEarnAssets(
    */
 toggleEmbedAutoEarn(
     params: PartnerToggleAutoEarnParams,
-): Promise<PartnerToggleAutoEarnResponse>
+  ): Promise<PartnerToggleAutoEarnResponse>
 ⋮----
 /**
    *
@@ -6698,7 +6691,7 @@ toggleEmbedAutoEarn(
    */
 withdrawEmbedFunds(
     params: PartnerWithdrawFundsParams,
-): Promise<PartnerWithdrawFundsResponse>
+  ): Promise<PartnerWithdrawFundsResponse>
 ⋮----
 /**
    * List Funding Transactions
@@ -6709,7 +6702,7 @@ withdrawEmbedFunds(
    */
 listEmbedFundingTransactions(
     params: PartnerListFundingTransactionsParams,
-): Promise<PartnerListFundingTransactionsResponse>
+  ): Promise<PartnerListFundingTransactionsResponse>
 ⋮----
 /**
    *
@@ -6725,7 +6718,7 @@ listEmbedFundingTransactions(
    */
 listEmbedSettlementReports(
     params?: PartnerListSettlementReportsParams,
-): Promise<PartnerListSettlementReportsResponse>
+  ): Promise<PartnerListSettlementReportsResponse>
 ⋮----
 /**
    * Get Settlement Report
@@ -6734,7 +6727,7 @@ listEmbedSettlementReports(
    */
 getEmbedSettlementReport(
     params: PartnerGetSettlementReportParams,
-): Promise<PartnerGetSettlementReportResponse>
+  ): Promise<PartnerGetSettlementReportResponse>
 ⋮----
 /**
    *
@@ -6786,7 +6779,7 @@ listRampCountries(): Promise<PartnerListRampCountriesResponse>
    */
 getRampLimits(
     params: PartnerGetRampLimitsParams,
-): Promise<PartnerGetRampLimitsResponse>
+  ): Promise<PartnerGetRampLimitsResponse>
 ⋮----
 /**
    * Get Prospective Quote
@@ -6796,7 +6789,7 @@ getRampLimits(
    */
 getRampProspectiveQuote(
     params: PartnerGetRampProspectiveQuoteParams,
-): Promise<PartnerGetRampProspectiveQuoteResponse>
+  ): Promise<PartnerGetRampProspectiveQuoteResponse>
 ⋮----
 /**
    *
@@ -6812,7 +6805,7 @@ getRampProspectiveQuote(
    */
 getRampCheckoutUrl(
     params: PartnerGetRampCheckoutUrlParams,
-): Promise<PartnerGetRampCheckoutUrlResponse>
+  ): Promise<PartnerGetRampCheckoutUrlResponse>
 
 ================
 File: .gitignore
@@ -6851,11 +6844,6 @@ File: .npmrc
 ================
 min-release-age=30
 save-exact=true
-
-================
-File: .nvmrc
-================
-v24.18.0
 
 ================
 File: examples/Derivatives/Private/testnet.ts
@@ -7048,7 +7036,7 @@ get(
 get(
     key: WsKey,
     createIfMissing?: boolean,
-): WsStoredState<TWSTopicSubscribeEventArgs> | undefined
+  ): WsStoredState<TWSTopicSubscribeEventArgs> | undefined
 ⋮----
 getKeys(): WsKey[]
 ⋮----
@@ -7073,13 +7061,13 @@ setWs(key: WsKey, wsConnection: WebSocket): WebSocket
 getDeferredPromise<TSuccessResult = any>(
     wsKey: WsKey,
     promiseRef: string | DeferredPromiseRef,
-): DeferredPromise<TSuccessResult> | undefined
+  ): DeferredPromise<TSuccessResult> | undefined
 ⋮----
 createDeferredPromise<TSuccessResult = any>(
     wsKey: WsKey,
     promiseRef: string | DeferredPromiseRef,
     throwIfExists: boolean,
-): DeferredPromise<TSuccessResult>
+  ): DeferredPromise<TSuccessResult>
 ⋮----
 // console.log('existing promise');
 ⋮----
@@ -7092,19 +7080,19 @@ resolveDeferredPromise(
     promiseRef: string | DeferredPromiseRef,
     value: unknown,
     removeAfter: boolean,
-): void
+  ): void
 ⋮----
 rejectDeferredPromise(
     wsKey: WsKey,
     promiseRef: string | DeferredPromiseRef,
     value: unknown,
     removeAfter: boolean,
-): void
+  ): void
 ⋮----
 removeDeferredPromise(
     wsKey: WsKey,
     promiseRef: string | DeferredPromiseRef,
-): void
+  ): void
 ⋮----
 // Just in case it's pending
 ⋮----
@@ -7115,11 +7103,11 @@ rejectAllDeferredPromises(wsKey: WsKey, reason: string): void
 /** Get promise designed to track a connection attempt in progress. Resolves once connected. */
 getConnectionInProgressPromise(
     wsKey: WsKey,
-): DeferredPromise<WSConnectedResult> | undefined
+  ): DeferredPromise<WSConnectedResult> | undefined
 ⋮----
 getAuthenticationInProgressPromise(
     wsKey: WsKey,
-): DeferredPromise<WSConnectedResult &
+  ): DeferredPromise<WSConnectedResult & { event: any }> | undefined
 ⋮----
 /**
    * Create a deferred promise designed to track a connection attempt in progress.
@@ -7129,12 +7117,12 @@ getAuthenticationInProgressPromise(
 createConnectionInProgressPromise(
     wsKey: WsKey,
     throwIfExists: boolean,
-): DeferredPromise<WSConnectedResult>
+  ): DeferredPromise<WSConnectedResult>
 ⋮----
 createAuthenticationInProgressPromise(
     wsKey: WsKey,
     throwIfExists: boolean,
-): DeferredPromise<WSConnectedResult &
+  ): DeferredPromise<WSConnectedResult & { event: any }>
 ⋮----
 /** Remove promise designed to track a connection attempt in progress */
 removeConnectingInProgressPromise(wsKey: WsKey): void
@@ -7183,148 +7171,6 @@ addTopic(key: WsKey, topic: TWSTopicSubscribeEventArgs)
 deleteTopic(key: WsKey, topic: TWSTopicSubscribeEventArgs)
 ⋮----
 // Check if we're subscribed to a topic like this
-
-================
-File: src/lib/requestUtils.ts
-================
-/**
- * Used to switch how authentication/requests work under the hood
- */
-⋮----
-/** Spot */
-⋮----
-/** Futures */
-⋮----
-/** Institutional */
-⋮----
-/** Partner */
-⋮----
-/** Affiliate reporting */
-⋮----
-export type RestClientType =
-  (typeof REST_CLIENT_TYPE_ENUM)[keyof typeof REST_CLIENT_TYPE_ENUM];
-⋮----
-/**
- * Kraken decommissioned demo-futures.kraken.com at 13:00 UTC on 14 July 2026.
- * No replacement demo host exists, and Spot never had a testnet.
- */
-⋮----
-export interface RestClientOptions {
-  /** Your API key */
-  apiKey?: string;
-
-  /** Your API secret */
-  apiSecret?: string;
-
-  /**
-   * Kraken retired the Futures demo (testnet) environment on 14 July 2026.
-   * There is no replacement demo host, and Spot never had a testnet.
-   *
-   * Setting this to `true` throws. The live environment is used when it is omitted or `false`.
-   *
-   * See https://support.kraken.com/articles/360024809011-api-testing-environment-derivatives
-   */
-  testnet?: boolean;
-
-  /**
-   * Use access token instead of sign, if this is provided.
-   * For guidance refer to: https://github.com/tiagosiebler/kucoin-api/issues/2
-   */
-  apiAccessToken?: string;
-
-  /** Default: false. If true, we'll throw errors if any params are undefined */
-  strictParamValidation?: boolean;
-
-  /**
-   * Optionally override API protocol + domain
-   * e.g baseUrl: 'https://api.kraken.com'
-   **/
-  baseUrl?: string;
-
-  /** Default: true. whether to try and post-process request exceptions (and throw them). */
-  parseExceptions?: boolean;
-
-  customTimestampFn?: () => number;
-
-  /**
-   * Enable keep alive for REST API requests (via axios).
-   */
-  keepAlive?: boolean;
-
-  /**
-   * When using HTTP KeepAlive, how often to send TCP KeepAlive packets over sockets being kept alive. Default = 1000.
-   * Only relevant if keepAlive is set to true.
-   * Default: 1000 (defaults comes from https agent)
-   */
-  keepAliveMsecs?: number;
-
-  /**
-   * Allows you to provide a custom "signMessage" function, e.g. to use node's much faster createHmac method
-   *
-   * Look in the examples folder for a demonstration on using node's createHmac instead.
-   */
-  customSignMessageFn?: (message: string, secret: string) => Promise<string>;
-}
-⋮----
-/** Your API key */
-⋮----
-/** Your API secret */
-⋮----
-/**
-   * Kraken retired the Futures demo (testnet) environment on 14 July 2026.
-   * There is no replacement demo host, and Spot never had a testnet.
-   *
-   * Setting this to `true` throws. The live environment is used when it is omitted or `false`.
-   *
-   * See https://support.kraken.com/articles/360024809011-api-testing-environment-derivatives
-   */
-⋮----
-/**
-   * Use access token instead of sign, if this is provided.
-   * For guidance refer to: https://github.com/tiagosiebler/kucoin-api/issues/2
-   */
-⋮----
-/** Default: false. If true, we'll throw errors if any params are undefined */
-⋮----
-/**
-   * Optionally override API protocol + domain
-   * e.g baseUrl: 'https://api.kraken.com'
-   **/
-⋮----
-/** Default: true. whether to try and post-process request exceptions (and throw them). */
-⋮----
-/**
-   * Enable keep alive for REST API requests (via axios).
-   */
-⋮----
-/**
-   * When using HTTP KeepAlive, how often to send TCP KeepAlive packets over sockets being kept alive. Default = 1000.
-   * Only relevant if keepAlive is set to true.
-   * Default: 1000 (defaults comes from https agent)
-   */
-⋮----
-/**
-   * Allows you to provide a custom "signMessage" function, e.g. to use node's much faster createHmac method
-   *
-   * Look in the examples folder for a demonstration on using node's createHmac instead.
-   */
-⋮----
-export function serializeParams<T extends Record<string, any> | undefined = {}>(
-  params: T,
-  strict_validation: boolean | undefined,
-  encodeValues: boolean,
-  prefixWith: string,
-  repeatArrayValuesAsKVPairs: boolean,
-): string
-⋮----
-// Only prefix if there's a value
-⋮----
-export function isEmptyObject(obj: any, acceptStringIfNotEmpty: boolean)
-⋮----
-export function getRestBaseUrl(
-  restClientOptions: RestClientOptions,
-  restClientType: RestClientType,
-): string
 
 ================
 File: src/types/websockets/ws-subscriptions.ts
@@ -7399,6 +7245,11 @@ function generateConfig(name)
 // The REST client's https.Agent (for keepAlive) is Node.js-only and won't work in browsers
 ⋮----
 // Code is already transpiled from TypeScript, no additional loaders needed
+
+================
+File: .nvmrc
+================
+v24.22.3
 
 ================
 File: src/lib/websocket/websocket-util.ts
@@ -7527,305 +7378,144 @@ export function getNormalisedTopicRequests(
 // already a normalised object, thanks to user
 
 ================
-File: src/lib/BaseRestClient.ts
+File: src/lib/requestUtils.ts
 ================
-import axios, { AxiosRequestConfig, AxiosResponse, Method } from 'axios';
-// NOTE: https.Agent is Node.js-only and not available in browser environments
-// Browser builds (via webpack) exclude this module - see webpack.config.js fallback settings
-import https from 'https';
-⋮----
-import { neverGuard } from './misc-util.js';
-import {
-  APIIDMain,
-  APIIDMainKey,
-  getRestBaseUrl,
-  isEmptyObject,
-  REST_CLIENT_TYPE_ENUM,
-  RestClientOptions,
-  RestClientType,
-  serializeParams,
-} from './requestUtils.js';
-import {
-  checkWebCryptoAPISupported,
-  hashMessage,
-  SignAlgorithm,
-  SignEncodeMethod,
-  signMessage,
-  SignMessageOptions,
-} from './webCryptoAPI.js';
-⋮----
-interface SignedRequest<
-  T extends object | undefined = {},
-  TReqData = object,
-  TReqQuery = object,
-> {
-  originalParams: T;
-  paramsWithSign?: T & { sign: string };
-  // all request params intended for request body (e.g. POST)
-  requestData?: TReqData;
-  // all params intended for request query string (e.g. GET)
-  requestQuery?: TReqQuery;
-  serializedParams: string;
-  sign: string;
-  queryParamsWithSign: string;
-  timestamp: number;
-  recvWindow: number;
-  nonce?: string;
-}
-⋮----
-// all request params intended for request body (e.g. POST)
-⋮----
-// all params intended for request query string (e.g. GET)
-⋮----
-interface UnsignedRequest<T extends object | undefined = {}> {
-  originalParams: T;
-  paramsWithSign: T;
-  queryParamsWithSign: undefined;
-}
-⋮----
-type SignMethod = 'kraken';
-⋮----
 /**
- * Some requests require some params to be in the query string and some in the body. Some even support passing params via headers.
- * This type anticipates these are possible in any combination.
- *
- * The request builder will automatically handle where parameters should go.
+ * Used to switch how authentication/requests work under the hood
  */
-type ParamsInQueryBodyOrHeader = {
-  query?: object;
-  body?: object;
-  headers?: object;
-};
 ⋮----
-// request: {
-//   url: response.config.url,
-//   method: response.config.method,
-//   data: response.config.data,
-//   headers: response.config.headers,
-// },
+/** Spot */
+⋮----
+/** Futures */
+⋮----
+/** Institutional */
+⋮----
+/** Partner */
+⋮----
+/** Affiliate reporting */
+⋮----
+export type RestClientType =
+  (typeof REST_CLIENT_TYPE_ENUM)[keyof typeof REST_CLIENT_TYPE_ENUM];
 ⋮----
 /**
- * Impure, mutates params to remove any values that have a key but are undefined.
+ * Kraken decommissioned demo-futures.kraken.com at 13:00 UTC on 14 July 2026.
+ * No replacement demo host exists, and Spot never had a testnet.
  */
-function deleteUndefinedValues(params?: any): void
 ⋮----
-export abstract class BaseRestClient
-⋮----
-// A unique incrementing nonce
-⋮----
-/** Defines the client type (affecting how requests & signatures behave) */
-abstract getClientType(): RestClientType;
-⋮----
-/**
-   * Create an instance of the REST client. Pass API credentials in the object in the first parameter.
-   * @param {RestClientOptions} [restClientOptions={}] options to configure REST API connectivity
-   * @param {AxiosRequestConfig} [networkOptions={}] HTTP networking options for axios
-   */
-constructor(
-    restClientOptions: RestClientOptions = {},
-    networkOptions: AxiosRequestConfig = {},
-)
-⋮----
-/** Throw errors if any request params are empty */
-⋮----
-/** in ms == 5 minutes by default */
-⋮----
-/** inject custom request options based on axios specs - see axios docs for more guidance on AxiosRequestConfig: https://github.com/axios/axios#request-config */
-⋮----
-// If enabled, configure a https agent with keepAlive enabled
-// NOTE: This is Node.js-only functionality. In browser environments, this code is skipped
-// as the 'https' module is excluded via webpack fallback configuration.
-// Browser connection pooling is handled automatically by the browser itself.
-⋮----
-// Extract existing https agent parameters, if provided, to prevent the keepAlive flag from overwriting an existing https agent completely
-⋮----
-// For more advanced configuration, raise an issue on GitHub or use the "networkOptions"
-// parameter to define a custom httpsAgent with the desired properties
-⋮----
-// Check Web Crypto API support when credentials are provided
-⋮----
-// Throw if one of the 3 values is missing, but at least one of them is set
-⋮----
-/**
-   * Generates a timestamp for signing API requests.
+export interface RestClientOptions {
+  /** Your API key */
+  apiKey?: string;
+
+  /** Your API secret */
+  apiSecret?: string;
+
+  /**
+   * Kraken retired the Futures demo (testnet) environment on 14 July 2026.
+   * There is no replacement demo host, and Spot never had a testnet.
    *
-   * This method can be overridden or customized using `customTimestampFn`
-   * to implement a custom timestamp synchronization mechanism.
-   * If no custom function is provided, it defaults to the current system time.
+   * Setting this to `true` throws. The live environment is used when it is omitted or `false`.
+   *
+   * See https://support.kraken.com/articles/360024809011-api-testing-environment-derivatives
    */
-private getSignTimestampMs(): number
+  testnet?: boolean;
+
+  /**
+   * Use an OAuth2 Bearer token instead of API key signing for private requests.
+   */
+  apiAccessToken?: string;
+
+  /** Default: false. If true, we'll throw errors if any params are undefined */
+  strictParamValidation?: boolean;
+
+  /**
+   * Optionally override API protocol + domain
+   * e.g baseUrl: 'https://api.kraken.com'
+   **/
+  baseUrl?: string;
+
+  /** Default: true. whether to try and post-process request exceptions (and throw them). */
+  parseExceptions?: boolean;
+
+  customTimestampFn?: () => number;
+
+  /**
+   * Enable keep alive for REST API requests (via axios).
+   */
+  keepAlive?: boolean;
+
+  /**
+   * When using HTTP KeepAlive, how often to send TCP KeepAlive packets over sockets being kept alive. Default = 1000.
+   * Only relevant if keepAlive is set to true.
+   * Default: 1000 (defaults comes from https agent)
+   */
+  keepAliveMsecs?: number;
+
+  /**
+   * Allows you to provide a custom "signMessage" function, e.g. to use node's much faster createHmac method
+   *
+   * Look in the examples folder for a demonstration on using node's createHmac instead.
+   */
+  customSignMessageFn?: (message: string, secret: string) => Promise<string>;
+}
 ⋮----
-private getNextRequestNonce(): string
+/** Your API key */
 ⋮----
-private hasValidCredentials()
-⋮----
-setAccessToken(newAccessToken: string)
-⋮----
-hasAccessToken(): boolean
-⋮----
-protected get(endpoint: string, params?: object)
-⋮----
-// GET only supports params in the query string
-⋮----
-protected post(endpoint: string, params?: ParamsInQueryBodyOrHeader)
-⋮----
-protected getPrivate(endpoint: string, params?: object)
-⋮----
-// GET only supports params in the query string
-⋮----
-protected postPrivate(endpoint: string, params?: ParamsInQueryBodyOrHeader)
-⋮----
-protected deletePrivate(
-    endpoint: string,
-    params?: ParamsInQueryBodyOrHeader,
-)
-⋮----
-protected putPrivate(endpoint: string, params?: ParamsInQueryBodyOrHeader)
-⋮----
-// protected patchPrivate(endpoint: string, params?: any) {
-protected patchPrivate(endpoint: string, params?: ParamsInQueryBodyOrHeader)
+/** Your API secret */
 ⋮----
 /**
-   * @private Make a HTTP request to a specific endpoint. Private endpoint API calls are automatically signed.
+   * Kraken retired the Futures demo (testnet) environment on 14 July 2026.
+   * There is no replacement demo host, and Spot never had a testnet.
+   *
+   * Setting this to `true` throws. The live environment is used when it is omitted or `false`.
+   *
+   * See https://support.kraken.com/articles/360024809011-api-testing-environment-derivatives
    */
-private async _call(
-    method: Method,
-    endpoint: string,
-    params?: ParamsInQueryBodyOrHeader,
-    isPublicApi?: boolean,
-): Promise<any>
-⋮----
-// Sanity check to make sure it's only ever prefixed by one forward slash
-⋮----
-// Build a request and handle signature process
-⋮----
-// Dispatch request
-⋮----
-// Throw if API returns an error (e.g. insufficient balance)
-⋮----
-// const res = {
-//   result: 'error',
-//   error: 'authenticationError',
-//   serverTime: '2025-10-29T15:02:39.341Z',
-// };
 ⋮----
 /**
-   * @private generic handler to parse request exceptions
+   * Use an OAuth2 Bearer token instead of API key signing for private requests.
    */
-parseException(e: any, requestParams: any): unknown
 ⋮----
-// Something happened in setting up the request that triggered an error
-⋮----
-// request made but no response received
-⋮----
-// The request was made and the server responded with a status code
-// that falls out of the range of 2xx
-⋮----
-// console.error('err: ', response?.data);
-⋮----
-// Prevent credentials from leaking into error messages
-⋮----
-private async signMessage(
-    paramsStr: string,
-    secret: string,
-    method: SignEncodeMethod,
-    algorithm: SignAlgorithm,
-    options?: SignMessageOptions,
-): Promise<string>
+/** Default: false. If true, we'll throw errors if any params are undefined */
 ⋮----
 /**
-   * @private sign request and set recv window
+   * Optionally override API protocol + domain
+   * e.g baseUrl: 'https://api.kraken.com'
+   **/
+⋮----
+/** Default: true. whether to try and post-process request exceptions (and throw them). */
+⋮----
+/**
+   * Enable keep alive for REST API requests (via axios).
    */
-private async signRequest<
-    T extends ParamsInQueryBodyOrHeader | undefined = {},
-  >(
-    data: T,
-    endpoint: string,
-    method: Method,
-    signMethod: SignMethod,
-): Promise<SignedRequest<T>>
 ⋮----
-// handle JSON preprocessing for requests, including embedded stringify
+/**
+   * When using HTTP KeepAlive, how often to send TCP KeepAlive packets over sockets being kept alive. Default = 1000.
+   * Only relevant if keepAlive is set to true.
+   * Default: 1000 (defaults comes from https agent)
+   */
 ⋮----
-// Don't prefix with ? as part of sign. Prefix after sign
+/**
+   * Allows you to provide a custom "signMessage" function, e.g. to use node's much faster createHmac method
+   *
+   * Look in the examples folder for a demonstration on using node's createHmac instead.
+   */
 ⋮----
-// Array values are repeated into key value pairs
-// E.g. orderIds:[1,2] becomes orderIds=1&orderIds=2
+export function serializeParams<T extends Record<string, any> | undefined = {}>(
+  params: T,
+  strict_validation: boolean | undefined,
+  encodeValues: boolean,
+  prefixWith: string,
+  repeatArrayValuesAsKVPairs: boolean,
+): string
 ⋮----
-// Set default nonce, if not set yet
+// Only prefix if there's a value
 ⋮----
-// Allow nonce override in reuqest
-// Should never fallback to new nonce, since it's pre-set above with default val
+export function isEmptyObject(obj: any, acceptStringIfNotEmpty: boolean)
 ⋮----
-// for spot, serialise GET params, use JSON for POST
-⋮----
-// Only sign when no access token is provided
-⋮----
-// node:crypto equivalent
-// const sign = createHmac(
-//   'sha512',
-//   Buffer.from(this.apiSecret!, 'base64'),
-// )
-//   .update(signMessage, 'binary')
-//   .digest('base64');
-⋮----
-// Check if this is a base64 decoding error (invalid API credentials)
-⋮----
-// Re-throw other errors as-is
-⋮----
-// ONLY the query params. The rest goes in the body, if there is a body.
-⋮----
-const nonce = ''; //this.getNextRequestNonce();
-⋮----
-// Only sign when no access token is provided
-⋮----
-// node:crypto equivalent
-// const sign = createHmac(
-//   'sha512',
-//   Buffer.from(this.apiSecret!, 'base64'),
-// )
-//   .update(signMessage, 'binary')
-//   .digest('base64');
-⋮----
-// Submitted as query string in form body
-⋮----
-private async prepareSignParams<TParams extends object | undefined>(
-    method: Method,
-    endpoint: string,
-    signMethod: SignMethod,
-    params?: TParams,
-    isPublicApi?: true,
-  ): Promise<UnsignedRequest<TParams>>;
-⋮----
-private async prepareSignParams<TParams extends object | undefined>(
-    method: Method,
-    endpoint: string,
-    signMethod: SignMethod,
-    params?: TParams,
-    isPublicApi?: false | undefined,
-  ): Promise<SignedRequest<TParams>>;
-⋮----
-private async prepareSignParams<TParams extends object | undefined>(
-    method: Method,
-    endpoint: string,
-    signMethod: SignMethod,
-    params?: TParams,
-    isPublicApi?: boolean,
-)
-⋮----
-/** Returns an axios request object. Handles signing process automatically if this is a private API call */
-private async buildRequest(
-    method: Method,
-    endpoint: string,
-    url: string,
-    params?: ParamsInQueryBodyOrHeader,
-    isPublicApi?: boolean,
-): Promise<AxiosRequestConfig>
-⋮----
-// Support for Authorization header, if provided:
-// https://github.com/tiagosiebler/kucoin-api/issues/2
-// Use restClient.setAccessToken(newToken), if you need to store a new access token
-// Not supported for Kraken at this time
+export function getRestBaseUrl(
+  restClientOptions: RestClientOptions,
+  restClientType: RestClientType,
+): string
 
 ================
 File: src/types/response/derivatives.types.ts
@@ -8921,6 +8611,302 @@ export type FuturesSelfTradeStrategy =
   | 'CANCEL_MAKER_ANY';
 
 ================
+File: src/lib/BaseRestClient.ts
+================
+import axios, { AxiosRequestConfig, AxiosResponse, Method } from 'axios';
+// NOTE: https.Agent is Node.js-only and not available in browser environments
+// Browser builds (via webpack) exclude this module - see webpack.config.js fallback settings
+import https from 'https';
+⋮----
+import { neverGuard } from './misc-util.js';
+import {
+  APIIDMain,
+  APIIDMainKey,
+  getRestBaseUrl,
+  isEmptyObject,
+  REST_CLIENT_TYPE_ENUM,
+  RestClientOptions,
+  RestClientType,
+  serializeParams,
+} from './requestUtils.js';
+import {
+  checkWebCryptoAPISupported,
+  hashMessage,
+  SignAlgorithm,
+  SignEncodeMethod,
+  signMessage,
+  SignMessageOptions,
+} from './webCryptoAPI.js';
+⋮----
+interface SignedRequest<
+  T extends object | undefined = {},
+  TReqData = object,
+  TReqQuery = object,
+> {
+  originalParams: T;
+  paramsWithSign?: T & { sign: string };
+  // all request params intended for request body (e.g. POST)
+  requestData?: TReqData;
+  // all params intended for request query string (e.g. GET)
+  requestQuery?: TReqQuery;
+  serializedParams: string;
+  sign: string;
+  queryParamsWithSign: string;
+  timestamp: number;
+  recvWindow: number;
+  nonce?: string;
+}
+⋮----
+// all request params intended for request body (e.g. POST)
+⋮----
+// all params intended for request query string (e.g. GET)
+⋮----
+interface UnsignedRequest<T extends object | undefined = {}> {
+  originalParams: T;
+  paramsWithSign: T;
+  queryParamsWithSign: undefined;
+}
+⋮----
+type SignMethod = 'kraken';
+⋮----
+/**
+ * Some requests require some params to be in the query string and some in the body. Some even support passing params via headers.
+ * This type anticipates these are possible in any combination.
+ *
+ * The request builder will automatically handle where parameters should go.
+ */
+type ParamsInQueryBodyOrHeader = {
+  query?: object;
+  body?: object;
+  headers?: object;
+};
+⋮----
+// request: {
+//   url: response.config.url,
+//   method: response.config.method,
+//   data: response.config.data,
+//   headers: response.config.headers,
+// },
+⋮----
+/**
+ * Impure, mutates params to remove any values that have a key but are undefined.
+ */
+function deleteUndefinedValues(params?: any): void
+⋮----
+export abstract class BaseRestClient
+⋮----
+// A unique incrementing nonce
+⋮----
+/** Defines the client type (affecting how requests & signatures behave) */
+abstract getClientType(): RestClientType;
+⋮----
+/**
+   * Create an instance of the REST client. Pass API credentials in the object in the first parameter.
+   * @param {RestClientOptions} [restClientOptions={}] options to configure REST API connectivity
+   * @param {AxiosRequestConfig} [networkOptions={}] HTTP networking options for axios
+   */
+constructor(
+    restClientOptions: RestClientOptions = {},
+    networkOptions: AxiosRequestConfig = {},
+  )
+⋮----
+/** Throw errors if any request params are empty */
+⋮----
+/** in ms == 5 minutes by default */
+⋮----
+/** inject custom request options based on axios specs - see axios docs for more guidance on AxiosRequestConfig: https://github.com/axios/axios#request-config */
+⋮----
+// If enabled, configure a https agent with keepAlive enabled
+// NOTE: This is Node.js-only functionality. In browser environments, this code is skipped
+// as the 'https' module is excluded via webpack fallback configuration.
+// Browser connection pooling is handled automatically by the browser itself.
+⋮----
+// Extract existing https agent parameters, if provided, to prevent the keepAlive flag from overwriting an existing https agent completely
+⋮----
+// For more advanced configuration, raise an issue on GitHub or use the "networkOptions"
+// parameter to define a custom httpsAgent with the desired properties
+⋮----
+// Check Web Crypto API support when credentials are provided
+⋮----
+// Throw if one of the 3 values is missing, but at least one of them is set
+⋮----
+/**
+   * Generates a timestamp for signing API requests.
+   *
+   * This method can be overridden or customized using `customTimestampFn`
+   * to implement a custom timestamp synchronization mechanism.
+   * If no custom function is provided, it defaults to the current system time.
+   */
+private getSignTimestampMs(): number
+⋮----
+private getNextRequestNonce(): string
+⋮----
+private hasValidCredentials()
+⋮----
+setAccessToken(newAccessToken: string)
+⋮----
+hasAccessToken(): boolean
+⋮----
+protected get(endpoint: string, params?: object)
+⋮----
+// GET only supports params in the query string
+⋮----
+protected post(endpoint: string, params?: ParamsInQueryBodyOrHeader)
+⋮----
+protected getPrivate(endpoint: string, params?: object)
+⋮----
+// GET only supports params in the query string
+⋮----
+protected postPrivate(endpoint: string, params?: ParamsInQueryBodyOrHeader)
+⋮----
+protected deletePrivate(
+    endpoint: string,
+    params?: ParamsInQueryBodyOrHeader,
+  )
+⋮----
+protected putPrivate(endpoint: string, params?: ParamsInQueryBodyOrHeader)
+⋮----
+// protected patchPrivate(endpoint: string, params?: any) {
+protected patchPrivate(endpoint: string, params?: ParamsInQueryBodyOrHeader)
+⋮----
+/**
+   * @private Make a HTTP request to a specific endpoint. Private endpoint API calls are automatically signed.
+   */
+private async _call(
+    method: Method,
+    endpoint: string,
+    params?: ParamsInQueryBodyOrHeader,
+    isPublicApi?: boolean,
+  ): Promise<any>
+⋮----
+// Sanity check to make sure it's only ever prefixed by one forward slash
+⋮----
+// Build a request and handle signature process
+⋮----
+// Dispatch request
+⋮----
+// Throw if API returns an error (e.g. insufficient balance)
+⋮----
+// const res = {
+//   result: 'error',
+//   error: 'authenticationError',
+//   serverTime: '2025-10-29T15:02:39.341Z',
+// };
+⋮----
+/**
+   * @private generic handler to parse request exceptions
+   */
+parseException(e: any, requestParams: any): unknown
+⋮----
+// Something happened in setting up the request that triggered an error
+⋮----
+// request made but no response received
+⋮----
+// The request was made and the server responded with a status code
+// that falls out of the range of 2xx
+⋮----
+// console.error('err: ', response?.data);
+⋮----
+// Prevent credentials from leaking into error messages
+⋮----
+private async signMessage(
+    paramsStr: string,
+    secret: string,
+    method: SignEncodeMethod,
+    algorithm: SignAlgorithm,
+    options?: SignMessageOptions,
+  ): Promise<string>
+⋮----
+/**
+   * @private sign request and set recv window
+   */
+private async signRequest<
+    T extends ParamsInQueryBodyOrHeader | undefined = {},
+  >(
+    data: T,
+    endpoint: string,
+    method: Method,
+    signMethod: SignMethod,
+  ): Promise<SignedRequest<T>>
+⋮----
+// handle JSON preprocessing for requests, including embedded stringify
+⋮----
+// Don't prefix with ? as part of sign. Prefix after sign
+⋮----
+// Array values are repeated into key value pairs
+// E.g. orderIds:[1,2] becomes orderIds=1&orderIds=2
+⋮----
+// Set default nonce, if not set yet
+⋮----
+// Allow nonce override in reuqest
+// Should never fallback to new nonce, since it's pre-set above with default val
+⋮----
+// for spot, serialise GET params, use JSON for POST
+⋮----
+// Only sign when no access token is provided
+⋮----
+// node:crypto equivalent
+// const sign = createHmac(
+//   'sha512',
+//   Buffer.from(this.apiSecret!, 'base64'),
+// )
+//   .update(signMessage, 'binary')
+//   .digest('base64');
+⋮----
+// Check if this is a base64 decoding error (invalid API credentials)
+⋮----
+// Re-throw other errors as-is
+⋮----
+// ONLY the query params. The rest goes in the body, if there is a body.
+⋮----
+const nonce = ''; //this.getNextRequestNonce();
+⋮----
+// Only sign when no access token is provided
+⋮----
+// node:crypto equivalent
+// const sign = createHmac(
+//   'sha512',
+//   Buffer.from(this.apiSecret!, 'base64'),
+// )
+//   .update(signMessage, 'binary')
+//   .digest('base64');
+⋮----
+// Submitted as query string in form body
+⋮----
+private async prepareSignParams<TParams extends object | undefined>(
+    method: Method,
+    endpoint: string,
+    signMethod: SignMethod,
+    params?: TParams,
+    isPublicApi?: true,
+  ): Promise<UnsignedRequest<TParams>>;
+⋮----
+private async prepareSignParams<TParams extends object | undefined>(
+    method: Method,
+    endpoint: string,
+    signMethod: SignMethod,
+    params?: TParams,
+    isPublicApi?: false | undefined,
+  ): Promise<SignedRequest<TParams>>;
+⋮----
+private async prepareSignParams<TParams extends object | undefined>(
+    method: Method,
+    endpoint: string,
+    signMethod: SignMethod,
+    params?: TParams,
+    isPublicApi?: boolean,
+  )
+⋮----
+/** Returns an axios request object. Handles signing process automatically if this is a private API call */
+private async buildRequest(
+    method: Method,
+    endpoint: string,
+    url: string,
+    params?: ParamsInQueryBodyOrHeader,
+    isPublicApi?: boolean,
+  ): Promise<AxiosRequestConfig>
+
+================
 File: src/types/request/derivatives.types.ts
 ================
 /**
@@ -9484,7 +9470,7 @@ public subscribe<TTopic extends WSTopic>(
       | (WSTopicRequest<TTopic> | TTopic)
       | (WSTopicRequest<TTopic> | TTopic)[],
     wsKey: WsKey,
-)
+  )
 ⋮----
 /**
    * Unsubscribe from one or more topics. Similar to subscribe() but in reverse.
@@ -9497,7 +9483,7 @@ public unsubscribe<TTopic extends WSTopic>(
       | (WSTopicRequest<TTopic> | TTopic)
       | (WSTopicRequest<TTopic> | TTopic)[],
     wsKey: WsKey,
-)
+  )
 ⋮----
 /**
    * WS API Methods - similar to the REST API, but via WebSockets
@@ -9552,7 +9538,7 @@ async sendWSAPIRequest<
     operation: TWSOperation,
     params: TWSParams & { signRequest?: boolean },
     requestFlags?: WSAPIRequestFlags,
-): Promise<TWSAPIResponse | any>
+  ): Promise<TWSAPIResponse | any>
 ⋮----
 // if this throws a type error, probably forgot to add a new operation to WsAPITopicRequestParamMap
 ⋮----
@@ -9628,7 +9614,7 @@ protected isWsPong(msg: any): boolean
 protected resolveEmittableEvents(
     wsKey: WsKey,
     event: MessageEventLike,
-): EmittableEvent[]
+  ): EmittableEvent[]
 ⋮----
 // derivatives sends 'challenge' on successful auth-init (used for sign during subscribe)
 ⋮----
@@ -9689,7 +9675,7 @@ protected async getWsRequestEvents(
     wsKey: WsKey,
     operation: WSOperation,
     requests: WSTopicRequest<WSTopic>[],
-): Promise<MidflightWsRequestEvent<WSRequestOperationKraken<string>>[]>
+  ): Promise<MidflightWsRequestEvent<WSRequestOperationKraken<string>>[]>
 ⋮----
 // Previously used to track topics in a request. Keeping this for subscribe/unsubscribe requests, no need for incremental values
 ⋮----
@@ -9715,12 +9701,12 @@ private async signMessage(
     method: SignEncodeMethod,
     algorithm: SignAlgorithm,
     options?: SignMessageOptions,
-): Promise<string>
+  ): Promise<string>
 ⋮----
 protected async getWsAuthRequestEvent(
     wsKey: WsKey,
     eventToAuth?: WSAPIAuthenticationRequestFromServer,
-): Promise<object | string | 'waitForEvent' | void>
+  ): Promise<object | string | 'waitForEvent' | void>
 ⋮----
 // Not needed here, handled automatically with request during subscribe
 ⋮----
@@ -9737,7 +9723,7 @@ protected async getWsAuthRequestEvent(
    */
 private async signWSAPIRequest(
     requestEvent: WSAPIRequestOperationKrakenSpot,
-): Promise<WSAPIRequestOperationKrakenSpot>
+  ): Promise<WSAPIRequestOperationKrakenSpot>
 ⋮----
 // Get token from REST client cache
 ⋮----
@@ -11397,8 +11383,7 @@ getTradeHistory(params: {
     lastTime?: string;
   }): Promise<
     DerivativesAPISuccessResponse<{ history: FuturesTradeHistoryItem[] }>
-  > {
-    return this.get('derivatives/api/v3/history', params);
+  >
 ⋮----
 /**
    * Get orderbook
@@ -11407,7 +11392,7 @@ getTradeHistory(params: {
    */
 getOrderbook(params: {
     symbol: string;
-}): Promise<DerivativesAPISuccessResponse<
+  }): Promise<DerivativesAPISuccessResponse<{ orderBook: FuturesOrderBook }>>
 ⋮----
 /**
    * Get tickers
@@ -11416,8 +11401,7 @@ getOrderbook(params: {
    */
 getTickers(): Promise<
     DerivativesAPISuccessResponse<{ tickers: FuturesTicker[] }>
-  > {
-    return this.get('derivatives/api/v3/tickers');
+  >
 ⋮----
 /**
    * Get ticker by symbol
@@ -11426,7 +11410,7 @@ getTickers(): Promise<
    */
 getTicker(params: {
     symbol: string;
-}): Promise<DerivativesAPISuccessResponse<
+  }): Promise<DerivativesAPISuccessResponse<{ ticker: FuturesTicker }>>
 ⋮----
 /**
    *
@@ -11441,8 +11425,7 @@ getTicker(params: {
    */
 getInstruments(): Promise<
     DerivativesAPISuccessResponse<{ instruments: FuturesInstrument[] }>
-  > {
-    return this.get('derivatives/api/v3/instruments');
+  >
 ⋮----
 /**
    * Get trading instruments
@@ -11451,8 +11434,7 @@ getInstruments(): Promise<
    */
 getTradingInstruments(): Promise<
     DerivativesAPISuccessResponse<{ instruments: FuturesInstrument[] }>
-  > {
-    return this.getPrivate('derivatives/api/v3/trading/instruments');
+  >
 ⋮----
 /**
    * Get instrument status list
@@ -11463,8 +11445,7 @@ getInstrumentStatusList(): Promise<
     DerivativesAPISuccessResponse<{
       instrumentStatus: FuturesInstrumentStatus[];
     }>
-  > {
-    return this.get('derivatives/api/v3/instruments/status');
+  >
 ⋮----
 /**
    * Get instrument status
@@ -11473,7 +11454,7 @@ getInstrumentStatusList(): Promise<
    */
 getInstrumentStatus(params: {
     symbol: string;
-}): Promise<DerivativesAPISuccessResponse<FuturesInstrumentStatus>>
+  }): Promise<DerivativesAPISuccessResponse<FuturesInstrumentStatus>>
 ⋮----
 /**
    *
@@ -11493,14 +11474,7 @@ batchOrderManagement(
     params: FuturesBatchOrderParams,
   ): Promise<
     DerivativesAPISuccessResponse<{ batchStatus: FuturesBatchOrderStatus[] }>
-  > {
-    const { ProcessBefore, json } = params;
-    return this.postPrivate('derivatives/api/v3/batchorder', {
-      body: {
-        ProcessBefore: ProcessBefore,
-        json,
-      },
-    });
+  >
 ⋮----
 /**
    * Cancel all orders
@@ -11511,10 +11485,7 @@ cancelAllOrders(params?: { symbol?: string }): Promise<
     DerivativesAPISuccessResponse<{
       cancelStatus: FuturesCancelAllOrdersStatus;
     }>
-  > {
-    return this.postPrivate('derivatives/api/v3/cancelallorders', {
-      body: params,
-    });
+  >
 ⋮----
 /**
    * Dead man's switch
@@ -11526,10 +11497,7 @@ cancelAllOrdersAfter(params: {
     timeout: number;
   }): Promise<
     DerivativesAPISuccessResponse<{ status: FuturesDeadMansSwitchStatus }>
-  > {
-    return this.postPrivate('derivatives/api/v3/cancelallordersafter', {
-      body: params,
-    });
+  >
 ⋮----
 /**
    * Cancel order
@@ -11540,10 +11508,7 @@ cancelOrder(
     params: FuturesCancelOrderParams,
   ): Promise<
     DerivativesAPISuccessResponse<{ cancelStatus: FuturesCancelOrderStatus }>
-  > {
-    return this.postPrivate('derivatives/api/v3/cancelorder', {
-      body: params,
-    });
+  >
 ⋮----
 /**
    * Edit order
@@ -11563,10 +11528,7 @@ editOrder(
     params: FuturesEditOrderParams,
   ): Promise<
     DerivativesAPISuccessResponse<{ editStatus: FuturesEditOrderStatus }>
-  > {
-    return this.postPrivate('derivatives/api/v3/editorder', {
-      body: params,
-    });
+  >
 ⋮----
 /**
    * Get open orders
@@ -11575,8 +11537,7 @@ editOrder(
    */
 getOpenOrders(): Promise<
     DerivativesAPISuccessResponse<{ openOrders: FuturesOpenOrder[] }>
-  > {
-    return this.getPrivate('derivatives/api/v3/openorders');
+  >
 ⋮----
 /**
    * Send order
@@ -11587,10 +11548,7 @@ submitOrder(
     params: FuturesSendOrderParams,
   ): Promise<
     DerivativesAPISuccessResponse<{ sendStatus: FuturesSendOrderStatus }>
-  > {
-    return this.postPrivate('derivatives/api/v3/sendorder', {
-      body: params,
-    });
+  >
 ⋮----
 /**
    * Get Specific Orders' Status
@@ -11602,10 +11560,7 @@ getOrderStatus(params?: {
     cliOrdIds?: string[];
   }): Promise<
     DerivativesAPISuccessResponse<{ orders: FuturesOrderStatusInfo[] }>
-  > {
-    return this.postPrivate('derivatives/api/v3/orders/status', {
-      body: params,
-    });
+  >
 ⋮----
 /**
    *
@@ -11620,8 +11575,7 @@ getOrderStatus(params?: {
    */
 getPnlPreferences(): Promise<
     DerivativesAPISuccessResponse<{ preferences: FuturesPnlPreference[] }>
-  > {
-    return this.getPrivate('derivatives/api/v3/pnlpreferences');
+  >
 ⋮----
 /**
    * Set PNL currency preference
@@ -11632,7 +11586,7 @@ getPnlPreferences(): Promise<
 setPnlPreference(params: {
     symbol: string;
     pnlPreference: string;
-}): Promise<DerivativesAPISuccessResponse<Record<string, never>>>
+  }): Promise<DerivativesAPISuccessResponse<Record<string, never>>>
 ⋮----
 /**
    * Get leverage settings
@@ -11643,8 +11597,7 @@ getLeverageSettings(): Promise<
     DerivativesAPISuccessResponse<{
       leveragePreferences: FuturesLeveragePreference[];
     }>
-  > {
-    return this.getPrivate('derivatives/api/v3/leveragepreferences');
+  >
 ⋮----
 /**
    * Set leverage settings
@@ -11655,7 +11608,7 @@ getLeverageSettings(): Promise<
 setLeverageSettings(params: {
     symbol: string;
     maxLeverage?: number;
-}): Promise<DerivativesAPISuccessResponse<Record<string, never>>>
+  }): Promise<DerivativesAPISuccessResponse<Record<string, never>>>
 ⋮----
 /**
    * Get the off-book max leverage cap
@@ -11664,8 +11617,7 @@ setLeverageSettings(params: {
    */
 getRfqAssignmentMaxLeverage(): Promise<
     DerivativesAPISuccessResponse<{ maxLeverage: number | null }>
-  > {
-    return this.getPrivate('derivatives/api/v3/rfq-assignment/max-leverage');
+  >
 ⋮----
 /**
    * Set the off-book max leverage cap
@@ -11674,7 +11626,7 @@ getRfqAssignmentMaxLeverage(): Promise<
    */
 setRfqAssignmentMaxLeverage(
     params: FuturesSetRfqAssignmentMaxLeverageParams,
-): Promise<DerivativesAPISuccessResponse<
+  ): Promise<DerivativesAPISuccessResponse<{ maxLeverage: number | null }>>
 ⋮----
 /**
    * Clear the off-book max leverage cap
@@ -11683,8 +11635,7 @@ setRfqAssignmentMaxLeverage(
    */
 deleteRfqAssignmentMaxLeverage(): Promise<
     DerivativesAPISuccessResponse<{ maxLeverage: number | null }>
-  > {
-    return this.deletePrivate('derivatives/api/v3/rfq-assignment/max-leverage');
+  >
 ⋮----
 /**
    *
@@ -11701,8 +11652,7 @@ deleteRfqAssignmentMaxLeverage(): Promise<
    */
 getAccounts(): Promise<
     DerivativesAPISuccessResponse<{ accounts: FuturesAccounts }>
-  > {
-    return this.getPrivate('derivatives/api/v3/accounts');
+  >
 ⋮----
 /**
    * Get open positions
@@ -11712,8 +11662,7 @@ getAccounts(): Promise<
    */
 getOpenPositions(): Promise<
     DerivativesAPISuccessResponse<{ openPositions: FuturesOpenPosition[] }>
-  > {
-    return this.getPrivate('derivatives/api/v3/openpositions');
+  >
 ⋮----
 /**
    * Get position percentile of unwind queue
@@ -11722,8 +11671,7 @@ getOpenPositions(): Promise<
    */
 getPositionPercentile(): Promise<
     DerivativesAPISuccessResponse<{ queue: FuturesUnwindQueuePosition[] }>
-  > {
-    return this.getPrivate('derivatives/api/v3/unwindqueue');
+  >
 ⋮----
 /**
    * Get portfolio margin parameters
@@ -11736,8 +11684,7 @@ getPositionPercentile(): Promise<
    */
 getPortfolioMarginParameters(): Promise<
     DerivativesAPISuccessResponse<FuturesPortfolioMarginParameters>
-  > {
-    return this.getPrivate('derivatives/api/v3/portfolio-margining/parameters');
+  >
 ⋮----
 /**
    * Calculate portfolio margin, pnl and greeks
@@ -11749,7 +11696,7 @@ getPortfolioMarginParameters(): Promise<
    */
 simulateMarginRequirements(params: {
     json: any; // Complex structure for portfolio simulation
-}): Promise<DerivativesAPISuccessResponse<FuturesPortfolioSimulation>>
+  }): Promise<DerivativesAPISuccessResponse<FuturesPortfolioSimulation>>
 ⋮----
 json: any; // Complex structure for portfolio simulation
 ⋮----
@@ -11766,8 +11713,7 @@ json: any; // Complex structure for portfolio simulation
    */
 getAssignmentPrograms(): Promise<
     DerivativesAPISuccessResponse<{ participants: FuturesAssignmentProgram[] }>
-  > {
-    return this.getPrivate('derivatives/api/v3/assignmentprogram/current');
+  >
 ⋮----
 /**
    * Add assignment preference
@@ -11776,7 +11722,7 @@ getAssignmentPrograms(): Promise<
    */
 addAssignmentPreference(
     params: FuturesAddAssignmentPreferenceParams,
-): Promise<DerivativesAPISuccessResponse<FuturesAssignmentProgram>>
+  ): Promise<DerivativesAPISuccessResponse<FuturesAssignmentProgram>>
 ⋮----
 /**
    * Delete assignment preference
@@ -11785,7 +11731,7 @@ addAssignmentPreference(
    */
 deleteAssignmentPreference(params: {
     id: number;
-}): Promise<DerivativesAPISuccessResponse<FuturesAssignmentProgram>>
+  }): Promise<DerivativesAPISuccessResponse<FuturesAssignmentProgram>>
 ⋮----
 /**
    * List assignment preferences history
@@ -11796,8 +11742,7 @@ getAssignmentPreferencesHistory(): Promise<
     DerivativesAPISuccessResponse<{
       participants: FuturesAssignmentProgramHistory[];
     }>
-  > {
-    return this.getPrivate('derivatives/api/v3/assignmentprogram/history');
+  >
 ⋮----
 /**
    *
@@ -11814,8 +11759,7 @@ getAssignmentPreferencesHistory(): Promise<
    */
 getFeeSchedules(): Promise<
     DerivativesAPISuccessResponse<{ feeSchedules: FuturesFeeSchedule[] }>
-  > {
-    return this.get('derivatives/api/v3/feeschedules');
+  >
 ⋮----
 /**
    * Get fee schedule volumes
@@ -11828,8 +11772,7 @@ getFeeScheduleVolumes(): Promise<
     DerivativesAPISuccessResponse<{
       volumesByFeeSchedule: Record<string, number>;
     }>
-  > {
-    return this.getPrivate('derivatives/api/v3/feeschedules/volumes');
+  >
 ⋮----
 /**
    *
@@ -11844,8 +11787,7 @@ getFeeScheduleVolumes(): Promise<
    */
 getNotifications(): Promise<
     DerivativesAPISuccessResponse<{ notifications: FuturesNotification[] }>
-  > {
-    return this.getPrivate('derivatives/api/v3/notifications');
+  >
 ⋮----
 /**
    *
@@ -11860,7 +11802,7 @@ getNotifications(): Promise<
    */
 getFills(params?: {
     lastFillTime?: string;
-}): Promise<DerivativesAPISuccessResponse<
+  }): Promise<DerivativesAPISuccessResponse<{ fills: FuturesFill[] }>>
 ⋮----
 /**
    *
@@ -11877,8 +11819,7 @@ getHistoricalFundingRates(params: {
     symbol: string;
   }): Promise<
     DerivativesAPISuccessResponse<{ rates: FuturesHistoricalFundingRate[] }>
-  > {
-    return this.get('derivatives/api/v3/historical-funding-rates', params);
+  >
 ⋮----
 /**
    *
@@ -11895,8 +11836,7 @@ getSelfTradeStrategy(): Promise<
     DerivativesAPISuccessResponse<{
       strategy: FuturesSelfTradeStrategy;
     }>
-  > {
-    return this.getPrivate('derivatives/api/v3/self-trade-strategy');
+  >
 ⋮----
 /**
    * Update self trade strategy
@@ -11909,10 +11849,7 @@ updateSelfTradeStrategy(
     DerivativesAPISuccessResponse<{
       strategy: FuturesSelfTradeStrategy;
     }>
-  > {
-    return this.putPrivate('derivatives/api/v3/self-trade-strategy', {
-      query: params,
-    });
+  >
 ⋮----
 /**
    *
@@ -11927,7 +11864,7 @@ updateSelfTradeStrategy(
    */
 getSubaccountTradingStatus(params: {
     subaccountUid: string;
-}): Promise<DerivativesAPISuccessResponse<
+  }): Promise<DerivativesAPISuccessResponse<{ tradingEnabled: boolean }>>
 ⋮----
 /**
    * Update subaccount trading status
@@ -11937,7 +11874,7 @@ getSubaccountTradingStatus(params: {
 updateSubaccountTradingStatus(params: {
     subaccountUid: string;
     tradingEnabled: boolean;
-}): Promise<DerivativesAPISuccessResponse<
+  }): Promise<DerivativesAPISuccessResponse<{ tradingEnabled: boolean }>>
 ⋮----
 /**
    * Get subaccounts
@@ -11946,8 +11883,7 @@ updateSubaccountTradingStatus(params: {
    */
 getSubaccounts(): Promise<
     DerivativesAPISuccessResponse<FuturesSubaccountsInfo>
-  > {
-    return this.getPrivate('derivatives/api/v3/subaccounts');
+  >
 ⋮----
 /**
    *
@@ -11962,7 +11898,7 @@ getSubaccounts(): Promise<
    */
 submitWalletTransfer(
     params: FuturesInitiateWalletTransferParams,
-): Promise<DerivativesAPISuccessResponse<Record<string, never>>>
+  ): Promise<DerivativesAPISuccessResponse<Record<string, never>>>
 ⋮----
 /**
    * Initiate sub account transfer
@@ -11971,7 +11907,7 @@ submitWalletTransfer(
    */
 submitSubaccountTransfer(
     params: FuturesInitiateSubaccountTransferParams,
-): Promise<DerivativesAPISuccessResponse<Record<string, never>>>
+  ): Promise<DerivativesAPISuccessResponse<Record<string, never>>>
 ⋮----
 /**
    * Initiate withdrawal to Spot wallet
@@ -11981,7 +11917,7 @@ submitSubaccountTransfer(
    */
 submitTransferToSpot(
     params: FuturesSubmitToSpotParams,
-): Promise<DerivativesAPISuccessResponse<
+  ): Promise<DerivativesAPISuccessResponse<{ uid: string }>>
 ⋮----
 /**
    *
@@ -11999,8 +11935,7 @@ submitTransferToSpot(
    */
 getOpenRFQs(): Promise<
     DerivativesAPISuccessResponse<{ rfqs: FuturesRfq[] }>
-  > {
-    return this.get('derivatives/api/v3/rfqs');
+  >
 ⋮----
 /**
    * Retrieve a single open RFQ
@@ -12012,7 +11947,7 @@ getOpenRFQs(): Promise<
    */
 getOpenRFQ(params: {
     rfqUid: string;
-}): Promise<DerivativesAPISuccessResponse<
+  }): Promise<DerivativesAPISuccessResponse<{ rfq: FuturesRfq }>>
 ⋮----
 /**
    * List open offers on open RFQs
@@ -12024,8 +11959,7 @@ getOpenRFQ(params: {
    */
 getRFQOpenOffers(): Promise<
     DerivativesAPISuccessResponse<{ openOffers: FuturesOpenOffer[] }>
-  > {
-    return this.getPrivate('derivatives/api/v3/rfqs/open-offers');
+  >
 ⋮----
 /**
    * Place new offer on an open RFQ
@@ -12039,7 +11973,7 @@ submitRFQNewOffer(params: {
     rfqUid: string;
     bid?: number;
     ask?: number;
-}): Promise<DerivativesAPISuccessResponse<
+  }): Promise<DerivativesAPISuccessResponse<{ offerUid: string }>>
 ⋮----
 /**
    * Replace open offer on open RFQ
@@ -12053,7 +11987,7 @@ updateRFQOpenOffer(params: {
     rfqUid: string;
     bid?: number;
     ask?: number;
-}): Promise<DerivativesAPISuccessResponse<Record<string, never>>>
+  }): Promise<DerivativesAPISuccessResponse<Record<string, never>>>
 ⋮----
 /**
    * Cancel open offer on open RFQ
@@ -12065,7 +11999,7 @@ updateRFQOpenOffer(params: {
    */
 cancelRFQOffer(params: {
     rfqUid: string;
-}): Promise<DerivativesAPISuccessResponse<Record<string, never>>>
+  }): Promise<DerivativesAPISuccessResponse<Record<string, never>>>
 ⋮----
 /**
    *
@@ -12084,8 +12018,7 @@ getExecutionEvents(
     DerivativesAPISuccessResponse<
       FuturesHistoryResponse<FuturesHistoryExecutionEvent>
     >
-  > {
-    return this.getPrivate('api/history/v3/executions', params);
+  >
 ⋮----
 /**
    * Get order events
@@ -12098,8 +12031,7 @@ getOrderEvents(
     DerivativesAPISuccessResponse<
       FuturesHistoryResponse<FuturesHistoryOrderEvent>
     >
-  > {
-    return this.getPrivate('api/history/v3/orders', params);
+  >
 ⋮----
 /**
    * Get trigger events
@@ -12112,8 +12044,7 @@ getTriggerEvents(
     DerivativesAPISuccessResponse<
       FuturesHistoryResponse<FuturesHistoryTriggerEvent>
     >
-  > {
-    return this.getPrivate('api/history/v3/triggers', params);
+  >
 ⋮----
 /**
    * Get position update events
@@ -12126,8 +12057,7 @@ getPositionEvents(
     DerivativesAPISuccessResponse<
       FuturesHistoryResponse<FuturesPositionUpdateEvent>
     >
-  > {
-    return this.getPrivate('api/history/v3/positions', params);
+  >
 ⋮----
 /**
    * Get account log
@@ -12137,14 +12067,14 @@ getPositionEvents(
    */
 getAccountLog(
     params?: FuturesGetAccountLogParams,
-): Promise<DerivativesAPISuccessResponse<FuturesAccountLog>>
+  ): Promise<DerivativesAPISuccessResponse<FuturesAccountLog>>
 ⋮----
 /**
    * Account log (CSV)
    *
    * Lists recent account log entries in CSV format.
    */
-getAccountLogCsv(params?:
+getAccountLogCsv(params?: { conversion_details?: boolean }): Promise<string>
 ⋮----
 /**
    *
@@ -12159,7 +12089,7 @@ getAccountLogCsv(params?:
    */
 getPublicExecutionEvents(
     params: FuturesMarketHistoryBaseParams,
-): Promise<FuturesMarketHistoryResponse<FuturesPublicExecutionEvent>>
+  ): Promise<FuturesMarketHistoryResponse<FuturesPublicExecutionEvent>>
 ⋮----
 /**
    * Get public order events
@@ -12168,7 +12098,7 @@ getPublicExecutionEvents(
    */
 getPublicOrderEvents(
     params: FuturesMarketHistoryBaseParams,
-): Promise<FuturesMarketHistoryResponse<FuturesPublicOrderEvent>>
+  ): Promise<FuturesMarketHistoryResponse<FuturesPublicOrderEvent>>
 ⋮----
 /**
    * Get public mark price events
@@ -12177,7 +12107,7 @@ getPublicOrderEvents(
    */
 getPublicMarkPriceEvents(
     params: FuturesMarketHistoryBaseParams,
-): Promise<FuturesMarketHistoryResponse<FuturesPublicMarkPriceEvent>>
+  ): Promise<FuturesMarketHistoryResponse<FuturesPublicMarkPriceEvent>>
 ⋮----
 /**
    *
@@ -12200,7 +12130,7 @@ getTickTypes(): Promise<FuturesTickType[]>
    */
 getMarketsForTickType(params: {
     tickType: FuturesTickType;
-}): Promise<string[]>
+  }): Promise<string[]>
 ⋮----
 /**
    * Resolutions
@@ -12212,7 +12142,7 @@ getMarketsForTickType(params: {
 getResolutions(params: {
     tickType: FuturesTickType;
     symbol: string;
-}): Promise<FuturesResolution[]>
+  }): Promise<FuturesResolution[]>
 ⋮----
 /**
    * Market Candles
@@ -12237,7 +12167,7 @@ getCandles(params: FuturesGetCandlesParams): Promise<FuturesCandles>
    */
 getLiquidityPoolStatistic(
     params: FuturesGetAnalyticsParams,
-): Promise<FuturesAnalyticsResponse>
+  ): Promise<FuturesAnalyticsResponse>
 ⋮----
 /**
    * Market Analytics
@@ -12246,7 +12176,7 @@ getLiquidityPoolStatistic(
    */
 getMarketAnalytics(
     params: FuturesGetAnalyticsParams,
-): Promise<FuturesAnalyticsResponse>
+  ): Promise<FuturesAnalyticsResponse>
 ⋮----
 /**
    *
@@ -12417,8 +12347,7 @@ getServerTime(): Promise<
       unixtime: number;
       rfc1123: string;
     }>
-  > {
-    return this.get('0/public/Time');
+  >
 ⋮----
 /**
    * Get System Status
@@ -12434,8 +12363,7 @@ getSystemStatus(): Promise<SpotAPISuccessResponse<SpotSystemStatus>>
    */
 getMaintenanceSchedule(): Promise<
     SpotAPISuccessResponse<SpotMaintenanceSchedule>
-  > {
-    return this.get('0/public/MaintenanceSchedule');
+  >
 ⋮----
 /**
    * Get Asset Info
@@ -12445,7 +12373,7 @@ getMaintenanceSchedule(): Promise<
 getAssetInfo(params?: {
     asset?: string;
     aclass?: 'currency' | 'tokenized_asset';
-}): Promise<SpotAPISuccessResponse<Record<string, SpotAssetInfo>>>
+  }): Promise<SpotAPISuccessResponse<Record<string, SpotAssetInfo>>>
 ⋮----
 /**
    * Get Tradable Asset Pairs
@@ -12454,7 +12382,7 @@ getAssetInfo(params?: {
    */
 getAssetPairs(
     params?: SpotGetAssetPairsParams,
-): Promise<SpotAPISuccessResponse<Record<string, SpotAssetPair>>>
+  ): Promise<SpotAPISuccessResponse<Record<string, SpotAssetPair>>>
 ⋮----
 /**
    * Get Ticker Information
@@ -12466,7 +12394,7 @@ getAssetPairs(
 getTicker(params?: {
     pair?: string;
     asset_class?: 'tokenized_asset' | 'forex';
-}): Promise<SpotAPISuccessResponse<Record<string, SpotAssetTickerInfo>>>
+  }): Promise<SpotAPISuccessResponse<Record<string, SpotAssetTickerInfo>>>
 ⋮----
 /**
    * Get OHLC Data
@@ -12477,7 +12405,7 @@ getTicker(params?: {
    */
 getCandles(
     params: SpotGetOHLCParams,
-): Promise<SpotAPISuccessResponse<SpotOHLCResponse>>
+  ): Promise<SpotAPISuccessResponse<SpotOHLCResponse>>
 ⋮----
 /**
    * Get Order Book
@@ -12487,7 +12415,7 @@ getCandles(
    */
 getOrderBook(
     params: SpotGetOrderBookParams,
-): Promise<SpotAPISuccessResponse<SpotOrderBookResponse>>
+  ): Promise<SpotAPISuccessResponse<SpotOrderBookResponse>>
 ⋮----
 /**
    * Get Grouped Order Book
@@ -12496,7 +12424,7 @@ getOrderBook(
    */
 getGroupedBook(
     params: SpotGetGroupedBookParams,
-): Promise<SpotAPISuccessResponse<SpotGroupedBookResponse>>
+  ): Promise<SpotAPISuccessResponse<SpotGroupedBookResponse>>
 ⋮----
 /**
    * Get Level 3 Order Book
@@ -12505,7 +12433,7 @@ getGroupedBook(
    */
 getLevel3OrderBook(
     params: SpotGetLevel3Params,
-): Promise<SpotAPISuccessResponse<SpotLevel3OrderBookResponse>>
+  ): Promise<SpotAPISuccessResponse<SpotLevel3OrderBookResponse>>
 ⋮----
 /**
    * Get Recent Trades
@@ -12514,7 +12442,7 @@ getLevel3OrderBook(
    */
 getRecentTrades(
     params: SpotGetRecentTradesParams,
-): Promise<SpotAPISuccessResponse<SpotRecentTradesResponse>>
+  ): Promise<SpotAPISuccessResponse<SpotRecentTradesResponse>>
 ⋮----
 /**
    * Get Recent Spreads
@@ -12523,7 +12451,7 @@ getRecentTrades(
    */
 getRecentSpreads(
     params: SpotGetRecentSpreadsParams,
-): Promise<SpotAPISuccessResponse<SpotRecentSpreadsResponse>>
+  ): Promise<SpotAPISuccessResponse<SpotRecentSpreadsResponse>>
 ⋮----
 /**
    *
@@ -12539,7 +12467,7 @@ getRecentSpreads(
    */
 getAccountBalance(
     params?: SpotGetAccountBalanceParams,
-): Promise<SpotAPISuccessResponse<SpotAccountBalance>>
+  ): Promise<SpotAPISuccessResponse<SpotAccountBalance>>
 ⋮----
 /**
    * Get API Key Info
@@ -12548,7 +12476,7 @@ getAccountBalance(
    */
 getApiKeyInfo(
     params?: SpotGetApiKeyInfoParams,
-): Promise<SpotAPISuccessResponse<SpotApiKeyInfo>>
+  ): Promise<SpotAPISuccessResponse<SpotApiKeyInfo>>
 ⋮----
 /**
    * List Wallet Accounts
@@ -12557,8 +12485,7 @@ getApiKeyInfo(
    */
 getWalletAccounts(): Promise<
     SpotAPISuccessResponse<SpotListWalletAccountsResponse>
-  > {
-return this.postPrivate('0/private/ListWalletAccounts',
+  >
 ⋮----
 /**
    * Get Extended Balance
@@ -12569,7 +12496,7 @@ return this.postPrivate('0/private/ListWalletAccounts',
 getExtendedBalance(params?: {
     rebase_multiplier?: 'rebased' | 'base';
     account_id?: string;
-}): Promise<SpotAPISuccessResponse<SpotExtendedBalance>>
+  }): Promise<SpotAPISuccessResponse<SpotExtendedBalance>>
 ⋮----
 /**
    * Get Credit Lines
@@ -12579,7 +12506,7 @@ getExtendedBalance(params?: {
 getCreditLines(params?: {
     rebase_multiplier?: 'rebased' | 'base';
     account_id?: string;
-}): Promise<SpotAPISuccessResponse<SpotCreditLines | null>>
+  }): Promise<SpotAPISuccessResponse<SpotCreditLines | null>>
 ⋮----
 /**
    * Get Trade Balance
@@ -12589,7 +12516,7 @@ getCreditLines(params?: {
 getTradeBalance(params?: {
     rebase_multiplier?: 'rebased' | 'base';
     account_id?: string;
-}): Promise<SpotAPISuccessResponse<SpotTradeBalance>>
+  }): Promise<SpotAPISuccessResponse<SpotTradeBalance>>
 ⋮----
 /**
    * Get Open Orders
@@ -12598,7 +12525,7 @@ getTradeBalance(params?: {
    */
 getOpenOrders(
     params?: SpotGetOpenOrdersParams,
-): Promise<SpotAPISuccessResponse<SpotOpenOrdersResponse>>
+  ): Promise<SpotAPISuccessResponse<SpotOpenOrdersResponse>>
 ⋮----
 /**
    * Get Closed Orders
@@ -12608,7 +12535,7 @@ getOpenOrders(
    */
 getClosedOrders(
     params?: SpotGetClosedOrdersParams,
-): Promise<SpotAPISuccessResponse<SpotClosedOrdersResponse>>
+  ): Promise<SpotAPISuccessResponse<SpotClosedOrdersResponse>>
 ⋮----
 /**
    * Query Orders Info
@@ -12617,7 +12544,7 @@ getClosedOrders(
    */
 getOrders(
     params: SpotQueryOrdersParams,
-): Promise<SpotAPISuccessResponse<SpotQueryOrdersResponse>>
+  ): Promise<SpotAPISuccessResponse<SpotQueryOrdersResponse>>
 ⋮----
 /**
    * Get Order Amends
@@ -12629,7 +12556,7 @@ getOrderAmends(params: {
     order_id: string;
     rebase_multiplier?: 'rebased' | 'base';
     account_id?: string;
-}): Promise<SpotAPISuccessResponse<SpotOrderAmendsResponse>>
+  }): Promise<SpotAPISuccessResponse<SpotOrderAmendsResponse>>
 ⋮----
 /**
    * Get Trades History
@@ -12638,7 +12565,7 @@ getOrderAmends(params: {
    */
 getTradesHistory(
     params?: SpotGetTradesHistoryParams,
-): Promise<SpotAPISuccessResponse<SpotTradesHistoryResponse>>
+  ): Promise<SpotAPISuccessResponse<SpotTradesHistoryResponse>>
 ⋮----
 /**
    * Query Trades Info
@@ -12647,7 +12574,7 @@ getTradesHistory(
    */
 getTrades(
     params: SpotQueryTradesParams,
-): Promise<SpotAPISuccessResponse<SpotQueryTradesResponse>>
+  ): Promise<SpotAPISuccessResponse<SpotQueryTradesResponse>>
 ⋮----
 /**
    * Get Open Positions
@@ -12656,7 +12583,7 @@ getTrades(
    */
 getOpenPositions(
     params?: SpotGetOpenPositionsParams,
-): Promise<SpotAPISuccessResponse<SpotOpenPositionsResult>>
+  ): Promise<SpotAPISuccessResponse<SpotOpenPositionsResult>>
 ⋮----
 /**
    * Get Ledgers Info
@@ -12666,7 +12593,7 @@ getOpenPositions(
    */
 getLedgersInfo(
     params?: SpotGetLedgersInfoParams,
-): Promise<SpotAPISuccessResponse<SpotLedgersInfoResponse>>
+  ): Promise<SpotAPISuccessResponse<SpotLedgersInfoResponse>>
 ⋮----
 /**
    * Query Ledgers
@@ -12675,7 +12602,7 @@ getLedgersInfo(
    */
 getLedgers(
     params: SpotQueryLedgersParams,
-): Promise<SpotAPISuccessResponse<SpotQueryLedgersResponse>>
+  ): Promise<SpotAPISuccessResponse<SpotQueryLedgersResponse>>
 ⋮----
 /**
    * Get Trade Volume
@@ -12685,7 +12612,7 @@ getLedgers(
    */
 getTradingVolume(
     params?: SpotGetTradingVolumeParams,
-): Promise<SpotAPISuccessResponse<SpotTradeVolume>>
+  ): Promise<SpotAPISuccessResponse<SpotTradeVolume>>
 ⋮----
 /**
    * Request Export Report
@@ -12694,7 +12621,7 @@ getTradingVolume(
    */
 requestLedgersExport(
     params: SpotRequestExportReportParams,
-): Promise<SpotAPISuccessResponse<SpotRequestExportReportResponse>>
+  ): Promise<SpotAPISuccessResponse<SpotRequestExportReportResponse>>
 ⋮----
 /**
    * Get Export Report Status
@@ -12703,14 +12630,14 @@ requestLedgersExport(
    */
 getLedgersExportStatus(params: {
     report: 'trades' | 'ledgers';
-}): Promise<SpotAPISuccessResponse<SpotExportReportStatus[]>>
+  }): Promise<SpotAPISuccessResponse<SpotExportReportStatus[]>>
 ⋮----
 /**
    * Retrieve Data Export
    *
    * Retrieve a processed data export (binary zip archive).
    */
-getLedgersExport(params:
+getLedgersExport(params: { id: string }): Promise<any>
 ⋮----
 /**
    * Delete Export Report
@@ -12720,7 +12647,7 @@ getLedgersExport(params:
 deleteLedgersExport(params: {
     id: string;
     type: 'cancel' | 'delete';
-}): Promise<SpotAPISuccessResponse<SpotDeleteExportReportResponse>>
+  }): Promise<SpotAPISuccessResponse<SpotDeleteExportReportResponse>>
 ⋮----
 /**
    *
@@ -12737,7 +12664,7 @@ deleteLedgersExport(params: {
    */
 submitOrder(
     params: SpotSubmitOrderParams,
-): Promise<SpotAPISuccessResponse<SpotSubmitOrderResponse>>
+  ): Promise<SpotAPISuccessResponse<SpotSubmitOrderResponse>>
 ⋮----
 /**
    * Amend Order
@@ -12749,10 +12676,7 @@ amendOrder(params: SpotAmendOrderParams): Promise<
     SpotAPISuccessResponse<{
       amend_id: string;
     }>
-  > {
-    return this.postPrivate('0/private/AmendOrder', {
-      body: params,
-    });
+  >
 ⋮----
 /**
    * Cancel Order
@@ -12764,10 +12688,7 @@ cancelOrder(params: { txid?: string | number; cl_ord_id?: string }): Promise<
       count: number;
       pending?: boolean;
     }>
-  > {
-    return this.postPrivate('0/private/CancelOrder', {
-      body: params,
-    });
+  >
 ⋮----
 /**
    * Cancel All Orders
@@ -12779,8 +12700,7 @@ cancelAllOrders(): Promise<
       count: number;
       pending: boolean;
     }>
-  > {
-return this.postPrivate('0/private/CancelAll',
+  >
 ⋮----
 /**
    * Cancel All Orders After X
@@ -12794,10 +12714,7 @@ cancelAllOrdersAfter(params: { timeout: number }): Promise<
       currentTime: string;
       triggerTime: string;
     }>
-  > {
-    return this.postPrivate('0/private/CancelAllOrdersAfter', {
-      body: params,
-    });
+  >
 ⋮----
 /**
    * Get Websockets Token
@@ -12807,8 +12724,7 @@ cancelAllOrdersAfter(params: { timeout: number }): Promise<
    */
 getWebSocketsToken(): Promise<
     SpotAPISuccessResponse<SpotWebSocketsTokenResponse>
-  > {
-return this.postPrivate('0/private/GetWebSocketsToken',
+  >
 ⋮----
 /**
    * Add Order Batch
@@ -12820,10 +12736,7 @@ submitBatchOrders(params: SpotSubmitOrderBatchParams): Promise<
     SpotAPISuccessResponse<{
       orders: SpotBatchOrderResult[];
     }>
-  > {
-    return this.postPrivate('0/private/AddOrderBatch', {
-      body: params,
-    });
+  >
 ⋮----
 /**
    * Cancel Order Batch
@@ -12837,10 +12750,7 @@ cancelBatchOrders(params: {
     SpotAPISuccessResponse<{
       count: number;
     }>
-  > {
-    return this.postPrivate('0/private/CancelOrderBatch', {
-      body: params,
-    });
+  >
 ⋮----
 /**
    *
@@ -12858,8 +12768,7 @@ submitStrategy(params: SpotSubmitStrategyParams): Promise<
     SpotAPISuccessResponse<{
       strategy_id: string;
     }>
-  > {
-return this.postPrivate('0/private/AddStrategy',
+  >
 ⋮----
 /**
    * Cancel Strategy
@@ -12870,8 +12779,7 @@ cancelStrategy(params: { strategy_id: string }): Promise<
     SpotAPISuccessResponse<{
       strategy_id: string;
     }>
-  > {
-return this.postPrivate('0/private/CancelStrategy',
+  >
 ⋮----
 /**
    * Get Open Strategies
@@ -12882,8 +12790,7 @@ getOpenStrategies(params?: { strategy_type?: 'twap' }): Promise<
     SpotAPISuccessResponse<{
       open: Record<string, SpotAlgoStrategy>;
     }>
-  > {
-return this.postPrivate('0/private/GetOpenStrategies',
+  >
 ⋮----
 /**
    * Query Strategies
@@ -12894,8 +12801,7 @@ queryStrategies(params: { strategy_ids: string }): Promise<
     SpotAPISuccessResponse<{
       strategies: Record<string, SpotAlgoStrategy>;
     }>
-  > {
-return this.postPrivate('0/private/QueryStrategies',
+  >
 ⋮----
 /**
    * Get Closed Strategies
@@ -12905,7 +12811,7 @@ return this.postPrivate('0/private/QueryStrategies',
    */
 getClosedStrategies(
     params?: SpotGetClosedStrategiesParams,
-): Promise<SpotAPISuccessResponse<SpotClosedStrategiesResponse>>
+  ): Promise<SpotAPISuccessResponse<SpotClosedStrategiesResponse>>
 ⋮----
 /**
    *
@@ -12920,7 +12826,7 @@ getClosedStrategies(
    */
 getDepositMethods(
     params: SpotGetDepositMethodsParams,
-): Promise<SpotAPISuccessResponse<SpotDepositMethod[]>>
+  ): Promise<SpotAPISuccessResponse<SpotDepositMethod[]>>
 ⋮----
 /**
    * Get Deposit Addresses
@@ -12929,7 +12835,7 @@ getDepositMethods(
    */
 getDepositAddresses(
     params: SpotGetDepositAddressesParams,
-): Promise<SpotAPISuccessResponse<SpotDepositAddress[]>>
+  ): Promise<SpotAPISuccessResponse<SpotDepositAddress[]>>
 ⋮----
 /**
    * Get Status of Recent Deposits
@@ -12938,7 +12844,7 @@ getDepositAddresses(
    */
 getDepositsStatus(
     params?: SpotGetDepositStatusParams,
-): Promise<SpotAPISuccessResponse<SpotDepositStatusResponse>>
+  ): Promise<SpotAPISuccessResponse<SpotDepositStatusResponse>>
 ⋮----
 /**
    * Get Withdrawal Methods
@@ -12947,7 +12853,7 @@ getDepositsStatus(
    */
 getWithdrawalMethods(
     params?: SpotGetWithdrawalMethodsParams,
-): Promise<SpotAPISuccessResponse<SpotWithdrawalMethod[]>>
+  ): Promise<SpotAPISuccessResponse<SpotWithdrawalMethod[]>>
 ⋮----
 /**
    * Get Withdrawal Addresses
@@ -12956,7 +12862,7 @@ getWithdrawalMethods(
    */
 getWithdrawalAddresses(
     params?: SpotGetWithdrawalAddressesParams,
-): Promise<SpotAPISuccessResponse<SpotWithdrawalAddress[]>>
+  ): Promise<SpotAPISuccessResponse<SpotWithdrawalAddress[]>>
 ⋮----
 /**
    * Get Withdrawal Information
@@ -12965,7 +12871,7 @@ getWithdrawalAddresses(
    */
 getWithdrawalInfo(
     params: SpotGetWithdrawalInfoParams,
-): Promise<SpotAPISuccessResponse<SpotWithdrawalInfo>>
+  ): Promise<SpotAPISuccessResponse<SpotWithdrawalInfo>>
 ⋮----
 /**
    * Withdraw Funds
@@ -12976,8 +12882,7 @@ submitWithdrawal(params: SpotWithdrawFundsParams): Promise<
     SpotAPISuccessResponse<{
       refid: string;
     }>
-  > {
-return this.postPrivate('0/private/Withdraw',
+  >
 ⋮----
 /**
    * Get Status of Recent Withdrawals
@@ -12986,7 +12891,7 @@ return this.postPrivate('0/private/Withdraw',
    */
 getWithdrawalsStatus(
     params?: SpotGetWithdrawalsStatusParams,
-): Promise<SpotAPISuccessResponse<SpotWithdrawalStatus[]>>
+  ): Promise<SpotAPISuccessResponse<SpotWithdrawalStatus[]>>
 ⋮----
 /**
    * Request Withdrawal Cancellation
@@ -12996,7 +12901,7 @@ getWithdrawalsStatus(
 cancelWithdrawal(params: {
     asset: string;
     refid: string;
-}): Promise<SpotAPISuccessResponse<boolean>>
+  }): Promise<SpotAPISuccessResponse<boolean>>
 ⋮----
 /**
    * Request Wallet Transfer
@@ -13008,8 +12913,7 @@ submitTransferToFutures(params: SpotWalletTransferParams): Promise<
     SpotAPISuccessResponse<{
       refid: string;
     }>
-  > {
-return this.postPrivate('0/private/WalletTransfer',
+  >
 ⋮----
 /**
    *
@@ -13026,7 +12930,7 @@ return this.postPrivate('0/private/WalletTransfer',
 createSubaccount(params: {
     username: string;
     email: string;
-}): Promise<SpotAPISuccessResponse<boolean>>
+  }): Promise<SpotAPISuccessResponse<boolean>>
 ⋮----
 /**
    * Account Transfer
@@ -13036,7 +12940,7 @@ createSubaccount(params: {
    */
 submitSubaccountTransfer(
     params: SpotAccountTransferParams,
-): Promise<SpotAPISuccessResponse<SpotAccountTransferResponse>>
+  ): Promise<SpotAPISuccessResponse<SpotAccountTransferResponse>>
 ⋮----
 /**
    *
@@ -13053,7 +12957,7 @@ submitSubaccountTransfer(
 allocateEarnFunds(params: {
     amount: string;
     strategy_id: string;
-}): Promise<SpotAPISuccessResponse<boolean>>
+  }): Promise<SpotAPISuccessResponse<boolean>>
 ⋮----
 /**
    * Deallocate Earn Funds
@@ -13064,7 +12968,7 @@ allocateEarnFunds(params: {
 deallocateEarnFunds(params: {
     amount: string;
     strategy_id: string;
-}): Promise<SpotAPISuccessResponse<boolean>>
+  }): Promise<SpotAPISuccessResponse<boolean>>
 ⋮----
 /**
    * Get Allocation Status
@@ -13075,8 +12979,7 @@ getEarnAllocationStatus(params: { strategy_id: string }): Promise<
     SpotAPISuccessResponse<{
       pending: boolean;
     }>
-  > {
-return this.postPrivate('0/private/Earn/AllocateStatus',
+  >
 ⋮----
 /**
    * Get Deallocation Status
@@ -13087,10 +12990,7 @@ getEarnDeallocationStatus(params: { strategy_id: string }): Promise<
     SpotAPISuccessResponse<{
       pending: boolean;
     }>
-  > {
-    return this.postPrivate('0/private/Earn/DeallocateStatus', {
-      body: params,
-    });
+  >
 ⋮----
 /**
    * List Earn Strategies
@@ -13103,8 +13003,7 @@ getEarnStrategies(params?: SpotListEarnStrategiesParams): Promise<
       items: SpotEarnStrategy[];
       next_cursor?: string;
     }>
-  > {
-return this.postPrivate('0/private/Earn/Strategies',
+  >
 ⋮----
 /**
    * List Earn Allocations
@@ -13114,7 +13013,7 @@ return this.postPrivate('0/private/Earn/Strategies',
    */
 getEarnAllocations(
     params?: SpotListEarnAllocationsParams,
-): Promise<SpotAPISuccessResponse<SpotListEarnAllocationsResponse>>
+  ): Promise<SpotAPISuccessResponse<SpotListEarnAllocationsResponse>>
 ⋮----
 /**
    *
@@ -13130,7 +13029,7 @@ getEarnAllocations(
    */
 getPreTradeData(params: {
     symbol: string;
-}): Promise<SpotAPISuccessResponse<SpotPreTradeData>>
+  }): Promise<SpotAPISuccessResponse<SpotPreTradeData>>
 ⋮----
 /**
    * Post-Trade Data
@@ -13140,7 +13039,7 @@ getPreTradeData(params: {
    */
 getPostTradeData(
     params?: SpotGetPostTradeDataParams,
-): Promise<SpotAPISuccessResponse<SpotPostTradeDataResponse>>
+  ): Promise<SpotAPISuccessResponse<SpotPostTradeDataResponse>>
 ⋮----
 /**
    *
@@ -13153,10 +13052,11 @@ getPostTradeData(
    *
    * Retrieve the access token.
    * Note: This endpoint uses Basic authentication (Authorization header with base64-encoded client credentials).
+   * Set networkOptions.auth to { username: clientId, password: clientSecret } (empty password for public clients).
    */
 getOAuthAccessToken(
     params: OauthGetAccessTokenParams,
-): Promise<OauthGetAccessTokenResponse>
+  ): Promise<OauthGetAccessTokenResponse>
 ⋮----
 /**
    * Get User Info
@@ -13174,7 +13074,7 @@ getOAuthUserInfo(): Promise<OauthGetUserInfoResponse>
    */
 createOAuthFastApiKey(
     params: OauthCreateFastApiKeyParams,
-): Promise<OauthCreateFastApiKeyResponse>
+  ): Promise<OauthCreateFastApiKeyResponse>
 ⋮----
 /**
    * Delete Fast API Key
@@ -13184,7 +13084,9 @@ createOAuthFastApiKey(
    */
 deleteOAuthFastApiKey(params: {
     api_key_name: string; // max 32 chars
-}): Promise<
+  }): Promise<{
+    result: boolean;
+  }>
 ⋮----
 api_key_name: string; // max 32 chars
 ⋮----
@@ -13194,7 +13096,9 @@ api_key_name: string; // max 32 chars
    * Updates a Fast API key.
    * Note: Requires OAuth2 Bearer token. Scopes required: account.fast-api-key:write
    */
-updateOAuthFastApiKey(params: OauthUpdateFastApiKeyParams): Promise<
+updateOAuthFastApiKey(params: OauthUpdateFastApiKeyParams): Promise<{
+    result: boolean;
+  }>
 ⋮----
 /**
    * List Fast API Keys
@@ -13202,7 +13106,9 @@ updateOAuthFastApiKey(params: OauthUpdateFastApiKeyParams): Promise<
    * List all Fast API keys.
    * Note: Requires OAuth2 Bearer token. Scopes required: account.fast-api-key:read
    */
-listOAuthFastApiKeys(): Promise<
+listOAuthFastApiKeys(): Promise<{
+    result: OauthFastApiKey[];
+  }>
 
 ================
 File: docs/KRAKEN_SDK_QUICKSTART_GUIDE.md
@@ -15450,7 +15356,7 @@ File: package.json
 ================
 {
   "name": "@siebly/kraken-api",
-  "version": "1.1.10",
+  "version": "1.1.12",
   "description": "Complete & robust Node.js SDK for Kraken's REST APIs and WebSockets, with TypeScript & strong end to end tests.",
   "scripts": {
     "clean": "rm -rf dist",
