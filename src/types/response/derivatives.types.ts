@@ -310,7 +310,8 @@ export interface FuturesBatchOrderStatus {
     | 'postWouldExecute'
     | 'iocWouldNotExecute'
     | 'orderForEditNotFound'
-    | 'editAlreadyHeld';
+    | 'editAlreadyHeld'
+    | 'makerProtectionOrderLimitExceeded';
 }
 
 export interface FuturesCancelledOrder {
@@ -356,6 +357,7 @@ export interface FuturesEditOrderStatus {
     | 'wouldNotReducePosition'
     | 'orderForEditNotFound'
     | 'editAlreadyHeld'
+    | 'makerProtectionOrderLimitExceeded'
     | 'orderForEditNotAStop';
 }
 
@@ -409,6 +411,7 @@ export interface FuturesSendOrderStatus {
     | 'wouldNotReducePosition'
     | 'marketIsPostOnly'
     | 'tooManyOrders'
+    | 'makerProtectionOrderLimitExceeded'
     | 'fixedLeverageTooHigh'
     | 'clientOrderIdInvalid'
     | 'cannotEditTriggerPriceOfTrailingStop'
@@ -791,6 +794,20 @@ export interface FuturesSubaccount {
 export interface FuturesSubaccountsInfo {
   masterAccountUid: string;
   subaccounts: FuturesSubaccount[];
+}
+
+/**
+ * Transfers
+ */
+
+export interface FuturesTransferAsset {
+  asset: string;
+  /** Minimum Spot transfer amount, or null if the asset cannot move to or from Spot. */
+  minSpotTransferAmount: number | null;
+  /** Maximum Spot transfer amount, or null if the asset cannot move to or from Spot. */
+  maxSpotTransferAmount: number | null;
+  /** Whether MTF accounts may move the asset to the Spot wallet. */
+  allowMtfSpotTransfers: boolean;
 }
 
 /**

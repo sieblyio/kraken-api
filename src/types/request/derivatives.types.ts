@@ -166,7 +166,9 @@ export interface FuturesUpdateSelfTradeStrategyParams {
  */
 
 export interface FuturesInitiateWalletTransferParams {
+  /** The cash or margin wallet to debit, or 'spot' for the Kraken Spot wallet. */
   fromAccount: string;
+  /** The cash or margin wallet to credit, or 'spot' for the Kraken Spot wallet. */
   toAccount: string;
   unit: string;
   amount: number;
