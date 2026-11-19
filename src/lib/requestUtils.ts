@@ -50,7 +50,7 @@ export interface RestClientOptions {
   testnet?: boolean;
 
   /**
-   * Use an OAuth2 Bearer token instead of API key signing for private requests.
+   * Use an OAuth2 Bearer token instead of API key signing for private requests. For guidance refer to: https://github.com/sieblyio/kucoin-api/issues/2
    */
   apiAccessToken?: string;
 
