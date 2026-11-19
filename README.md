@@ -6,7 +6,7 @@
 [![npm downloads](https://img.shields.io/npm/dt/@siebly/kraken-api)][1]
 [![last commit](https://img.shields.io/github/last-commit/sieblyio/kraken-api)][1]
 [![Telegram](https://img.shields.io/badge/chat-on%20telegram-blue.svg)](https://t.me/nodetraders)
-[![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/sieblyio/kraken-api)
+[![Tutorial](https://img.shields.io/badge/Tutorial-siebly.io-blue)](https://siebly.io/sdk/kraken/javascript/tutorial)
 
 <p align="center">
   <a href="https://www.npmjs.com/package/@siebly/kraken-api">
@@ -58,8 +58,11 @@ Complete & robust JavaScript & Node.js SDK for the Kraken REST APIs and WebSocke
     - [Why not raw ws?](#why-not-raw-ws)
     - [Spot orderbook over WebSocket](#spot-orderbook-over-websocket)
     - [Public WebSocket Streams](#public-websocket-streams)
+    - [Unified Public WebSocket Streams](#unified-public-websocket-streams)
+    - [Unified Private WebSocket Streams](#unified-private-websocket-streams)
     - [Private WebSocket Streams](#private-websocket-streams)
     - [WebSocket API (WebsocketAPIClient)](#websocket-api-websocketapiclient)
+    - [Unified WebSocket API](#unified-websocket-api)
 - [Customise Logging](#customise-logging)
 - [Browser/Frontend Usage](#browserfrontend-usage)
   - [Webpack](#webpack)
@@ -448,6 +451,115 @@ wsClient.subscribe(
 );
 ```
 
+### Unified Public WebSocket Streams
+
+Use `WS_KEY_MAP.unifiedPublicV2` for Kraken's unified endpoint at `wss://uws.kraken.com/v2/public`. It reuses the client's connection management, heartbeats, and automatic resubscription. Each subscription specifies its own `asset_class`.
+
+```typescript
+import {
+  WebsocketClient,
+  WS_KEY_MAP,
+  WSUnifiedPublicMessageEvent,
+  WSUnifiedPublicTopicRequest,
+} from '@siebly/kraken-api';
+
+const client = new WebsocketClient();
+const subscription: WSUnifiedPublicTopicRequest = {
+  topic: 'ticker',
+  payload: { asset_class: 'spot', symbol: ['BTC/USD'] },
+};
+
+// This client only subscribes to unified public streams.
+client.on('message', (event: WSUnifiedPublicMessageEvent) => {
+  if (event.channel === 'ticker') console.log(event.data);
+});
+client.on('response', (event) => console.log(event));
+client.on('exception', (event) => console.error(event));
+client.subscribe(subscription, WS_KEY_MAP.unifiedPublicV2);
+
+// Later, reuse the complete request to remove it from the reconnect cache:
+// client.unsubscribe(subscription, WS_KEY_MAP.unifiedPublicV2);
+```
+
+Supported unauthenticated channels are `ticker`, `book`, `ohlc`, `trade`, `instrument`, and `rfqs`. The current Kraken documentation limits unified `trade` and `rfqs` to `asset_class: 'derivatives'`. Other channels accept `spot` or `derivatives`, subject to Kraken's rollout. Discover symbols through `instrument` for the chosen asset class; do not convert symbols between API families. Incoming messages are passed through without inferring or adding `asset_class`.
+
+The [`rfqs`](https://docs.kraken.com/exchange/api-reference/unified-ws/rfqs) channel streams all open options RFQs without a symbol filter. Subscribe with `{ topic: 'rfqs', payload: { asset_class: 'derivatives', snapshot: true } }`. Snapshots replace the current RFQ list; updates report openings and status changes. There are no sequence numbers. Resubscribe with `snapshot: true` after a gap. A `snapshot_too_large` error is emitted on `exception`.
+
+Status updates are emitted on `message`; heartbeats and pongs are handled internally. Exported `WSUnifiedPublicTopicRequest`, `WSUnifiedPublicMessageEvent`, `WSUnifiedPublicResponseEvent`, and `WSUnifiedPublicExceptionEvent` types describe requests and received events. The client adds `wsKey` and `isWSAPIResponse` to emitted events.
+
+The SDK supports the documented authenticated Level 3 subscription on `unifiedPublicV2`: provide Spot API credentials to the client and subscribe to `level3` with `asset_class`, `symbol`, and an optional `depth` of `10`, `100`, or `1000`. The client supplies the authentication token for Level 3 while ordinary public subscriptions remain unauthenticated. Level 3 is optional in the unified private example. Kraken's Futures demo has been retired; `testnet: true` is rejected.
+
+See the [unified public example](./examples/Unified/WebSockets/publicWs.ts) and [Kraken's unified WS reference](https://docs.kraken.com/exchange/api-reference/unified-ws/ticker).
+
+### Unified Private WebSocket Streams
+
+Use `WS_KEY_MAP.unifiedPrivateV2` for account streams at `wss://uws.kraken.com/v2/private`. As with Spot private streams, supply Spot API credentials with WebSocket access. The client fetches and caches tokens through `GetWebSocketsToken`, refreshes them when needed for requests, and includes them in subscribe and unsubscribe requests. Reconnection and resubscription are automatic. Subscribe acknowledgements confirm access; there is no separate login event.
+
+```typescript
+import {
+  WebsocketClient,
+  WS_KEY_MAP,
+  WSUnifiedPrivateMessageEvent,
+  WSUnifiedPrivateTopicRequest,
+} from '@siebly/kraken-api';
+
+const client = new WebsocketClient({
+  apiKey: process.env.API_SPOT_KEY,
+  apiSecret: process.env.API_SPOT_SECRET,
+});
+
+const subscriptions: WSUnifiedPrivateTopicRequest[] = [
+  {
+    topic: 'executions',
+    payload: {
+      asset_class: 'spot',
+      snap_orders: true,
+      snap_trades: true,
+    },
+  },
+  { topic: 'balances' },
+  { topic: 'preferences' },
+  // Optional, subject to account and endpoint availability:
+  // { topic: 'ledgers' },
+  // Optional derivatives-only channels:
+  // {
+  //   topic: 'positions',
+  //   payload: { asset_class: 'derivatives', snapshot: true },
+  // },
+  // { topic: 'margin', payload: { asset_class: 'derivatives' } },
+  // { topic: 'quotes', payload: { asset_class: 'derivatives', snapshot: true } },
+];
+
+// This client only opens unifiedPrivateV2.
+client.on('message', (event: WSUnifiedPrivateMessageEvent) => {
+  console.log(event);
+});
+client.on('response', (event) => console.log(event));
+client.on('exception', (event) => console.error(event));
+client.subscribe(subscriptions, WS_KEY_MAP.unifiedPrivateV2);
+
+// Reuse the complete requests, including optional parameters:
+// client.unsubscribe(subscriptions, WS_KEY_MAP.unifiedPrivateV2);
+```
+
+| Channel       | Subscription parameters                                                                                               | Message behavior                                                                                   |
+| ------------- | --------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------- |
+| `executions`  | Required `asset_class`: `spot` or `derivatives`; optional `snap_orders`, `snap_trades`, `order_status`, `ratecounter` | Partial order and fill reports; fields depend on the event                                         |
+| `balances`    | Optional `snapshot`; no `asset_class`                                                                                 | Asset/wallet snapshots and ledger updates across the account                                       |
+| `positions`   | Required `asset_class: 'derivatives'`; optional `snapshot` or `with_margin`, never both                               | Default snapshots and position deltas; `with_margin: true` replaces all positions and omits `type` |
+| `margin`      | Required `asset_class: 'derivatives'`; no `snapshot`                                                                  | Each message replaces the `multi_collateral` or `single_collateral` section                        |
+| `ledgers`     | No parameters                                                                                                         | Account-wide ledger updates with sequence numbers; no snapshot                                     |
+| `preferences` | No parameters                                                                                                         | Account preference snapshots and updates                                                           |
+| `quotes`      | Required `asset_class: 'derivatives'`; optional `snapshot`; no symbol filter | Your options RFQs and offers, discriminated by each entry's `type`: `rfq` or `offer` |
+
+`balances`, `ledgers`, and `preferences` also accept bare topic names, for example `client.subscribe('balances', 'unifiedPrivateV2')`. Positions and margin each permit one subscription per connection. Keep position/margin decimal strings and derivatives `sequence_id` strings unchanged to preserve precision. Use the REST Ledgers endpoint to recover missed entries after a ledger sequence gap. Channel failures such as `margin_unavailable` are emitted on `exception`; the application can resubscribe when ready.
+
+The [`quotes`](https://docs.kraken.com/exchange/api-reference/unified-ws/quotes) channel shares the RFQ snapshot and recovery behavior described above, including `snapshot_too_large` errors on `exception`. A quote's `filled_bid_side` or `filled_ask_side` status does not prove that your offer traded. Check `executions`, where RFQ fills carry `order_type: 'rfq'`, with one fill per leg.
+
+Exported `WSUnifiedPrivateTopicRequest`, `WSUnifiedPrivateMessageEvent`, `WSUnifiedPrivateResponseEvent`, and `WSUnifiedPrivateExceptionEvent` describe requests and events. The SDK adds `wsKey` and `isWSAPIResponse` to emitted events.
+
+See the [unified private example](./examples/Unified/WebSockets/privateWs.ts), which defaults to Spot executions, balances, and preferences, with ledgers and authenticated Level 3 available to enable explicitly, and [Kraken's private stream reference](https://docs.kraken.com/exchange/api-reference/unified-ws/executions). Channel availability depends on the account and Kraken's rollout. For trading commands, see [Unified WebSocket API](#unified-websocket-api).
+
 ### Private WebSocket Streams
 
 For private account data streams, API credentials are required:
@@ -528,7 +640,7 @@ For more comprehensive examples, including custom logging and error handling, ch
 
 ### WebSocket API (WebsocketAPIClient)
 
-The `WebsocketAPIClient` provides a REST-like interface for trading operations over WebSocket, offering lower latency than REST APIs. Currently, only Spot trading is supported.
+The `WebsocketAPIClient` provides a REST-like interface for trading operations over WebSocket, offering lower latency than REST APIs. Spot methods use the Spot WS API; unified methods support Spot and derivatives through the unified private endpoint.
 
 ```javascript
 import { WebsocketAPIClient } from '@siebly/kraken-api';
@@ -587,7 +699,50 @@ The WebSocket API provides several advantages:
 - **Better Performance** - Batch operations for submitting/canceling multiple orders
 - **Type Safety** - Full TypeScript support with typed requests and responses
 
-See the [WebSocket API examples](./examples/WebSockets/Spot/wsAPI.ts) for more detailed usage.
+See the [Spot WebSocket API example](./examples/Spot/WebSockets/wsAPI.ts) for more detailed usage.
+
+
+### Unified WebSocket API
+
+Use the unified methods on `WebsocketAPIClient`, or call `sendWSAPIRequest()` with `WS_KEY_MAP.unifiedPrivateV2`. Both reuse the existing connection, token caching, and request/response handling. Supply Spot API credentials for either asset class, and set `asset_class` explicitly on each request.
+
+```typescript
+import { WebsocketAPIClient } from '@siebly/kraken-api';
+
+const client = new WebsocketAPIClient({
+  apiKey: process.env.API_SPOT_KEY,
+  apiSecret: process.env.API_SPOT_SECRET,
+});
+
+const response = await client.submitUnifiedOrder({
+  asset_class: 'spot',
+  order_type: 'limit',
+  side: 'buy',
+  symbol: 'BTC/USD',
+  order_qty: 0.001,
+  limit_price: 10000,
+  validate: true, // Validate without placing an order.
+});
+console.log(response.result);
+client.getWSClient().closeAll();
+```
+
+| Method | Unified command |
+| --- | --- |
+| `submitUnifiedOrder()` | `add_order` |
+| `amendUnifiedOrder()` | `amend_order` |
+| `cancelUnifiedOrder()` | `cancel_order` |
+| `cancelAllUnifiedOrders()` | `cancel_all` |
+| `cancelAllUnifiedOrdersAfter()` | `cancel_all_orders_after` |
+| `batchSubmitUnifiedOrders()` | `batch_add` |
+| `batchCancelUnifiedOrders()` | `batch_cancel` |
+| `setUnifiedPreference()` | `set_preference` |
+
+`setUnifiedPreference()` supports derivatives leverage settings. The request types distinguish Spot and derivatives parameters. Legacy `edit_order` remains available through the Spot API; use `amendUnifiedOrder()` on unified.
+
+As with Spot, cancelling multiple orders through `cancelUnifiedOrder()` can produce several replies: the first settles the promise, and all replies are emitted through `response` or `exception`. Use `batchCancelUnifiedOrders()` for a single response containing the cancellation count.
+
+See the [unified WS API example](./examples/Unified/WebSockets/wsAPI.ts), the [raw request example](./examples/Unified/WebSockets/wsAPI.RAW.ts), and [Kraken's unified trading reference](https://docs.kraken.com/exchange/api-reference/unified-ws/add_order). Both examples default to Spot and validate orders without placing them.
 
 ---
 

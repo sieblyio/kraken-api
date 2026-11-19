@@ -5,6 +5,8 @@ import {
 } from './lib/BaseWSClient.js';
 import { neverGuard } from './lib/misc-util.js';
 import {
+  APIIDMain,
+  APIIDMainKey,
   KRAKEN_FUTURES_TESTNET_RETIRED_ERROR,
   RestClientOptions,
 } from './lib/requestUtils.js';
@@ -23,6 +25,7 @@ import {
   WsKey,
   WSOperation,
   WSRequestOperationKraken,
+  WSSubscriptionRequest,
   WSTopicRequest,
 } from './lib/websocket/websocket-util.js';
 import { WSConnectedResult } from './lib/websocket/WsStore.types.js';
@@ -31,8 +34,8 @@ import {
   WS_API_Operations,
   WSAPIAuthenticationRequestFromServer,
   WSAPIRequestOperationKrakenSpot,
-  WSAPITopicRequestParamMap,
-  WSAPITopicResponseMap,
+  WSAPIRequestParams,
+  WSAPIResponse,
   WSAPIWsKey,
   WSAPIWsKeyTopicMap,
 } from './types/websockets/ws-api.js';
@@ -46,6 +49,7 @@ import {
   WS_SPOT_PRIVATE_TOPICS,
   WSTopic,
 } from './types/websockets/ws-subscriptions.js';
+import { WS_UNIFIED_PRIVATE_TOPICS } from './types/websockets/ws-unified.js';
 
 const WS_LOGGER_CATEGORY_ID = 'kraken-ws';
 const WS_LOGGER_CATEGORY = {
@@ -94,7 +98,8 @@ export class WebsocketClient extends BaseWebsocketClient<WsKey, any> {
 
   /**
    * Request subscription to one or more topics. Pass topics as either an array of strings, or array of objects (if the topic has parameters).
-   * Objects should be formatted as {topic: string, params: object}.
+   * Objects should be formatted as {topic: string, payload: object}.
+   * Unified subscriptions use channel-specific parameters, including asset_class where required.
    *
    * - Subscriptions are automatically routed to the correct websocket connection.
    * - Authentication/connection is automatic.
@@ -102,6 +107,20 @@ export class WebsocketClient extends BaseWebsocketClient<WsKey, any> {
    *
    * Call `unsubscribe(topics)` to remove topics
    */
+  public subscribe<TWSKey extends WsKey, TTopic extends WSTopic = WSTopic>(
+    requests:
+      | WSSubscriptionRequest<TWSKey, TTopic>
+      | WSSubscriptionRequest<TWSKey, TTopic>[],
+    wsKey: TWSKey,
+  ): void;
+
+  public subscribe<TTopic extends WSTopic>(
+    requests:
+      | (WSTopicRequest<TTopic> | TTopic)
+      | (WSTopicRequest<TTopic> | TTopic)[],
+    wsKey: Exclude<WsKey, 'unifiedPublicV2' | 'unifiedPrivateV2'>,
+  ): void;
+
   public subscribe<TTopic extends WSTopic>(
     requests:
       | (WSTopicRequest<TTopic> | TTopic)
@@ -123,7 +142,22 @@ export class WebsocketClient extends BaseWebsocketClient<WsKey, any> {
    *
    * - Requests are automatically routed to the correct websocket connection.
    * - These topics will be removed from the topic cache, so they won't be subscribed to again.
+   * - Pass the same topic and payload used to subscribe, including optional parameters.
    */
+  public unsubscribe<TWSKey extends WsKey, TTopic extends WSTopic = WSTopic>(
+    requests:
+      | WSSubscriptionRequest<TWSKey, TTopic>
+      | WSSubscriptionRequest<TWSKey, TTopic>[],
+    wsKey: TWSKey,
+  ): void;
+
+  public unsubscribe<TTopic extends WSTopic>(
+    requests:
+      | (WSTopicRequest<TTopic> | TTopic)
+      | (WSTopicRequest<TTopic> | TTopic)[],
+    wsKey: Exclude<WsKey, 'unifiedPublicV2' | 'unifiedPrivateV2'>,
+  ): void;
+
   public unsubscribe<TTopic extends WSTopic>(
     requests:
       | (WSTopicRequest<TTopic> | TTopic)
@@ -149,58 +183,43 @@ export class WebsocketClient extends BaseWebsocketClient<WsKey, any> {
    *
    * Returned promise is rejected if an exception is detected in the reply OR the connection disconnects for any reason (even if automatic reconnect will happen).
    *
-   * After a fresh connection, you should always send a login request first.
+   * Spot and unified WS API requests use a Spot REST WebSocket token, fetched and
+   * cached automatically. There is no separate login request.
    *
-   * If you authenticated once and you're reconnected later (e.g. connection temporarily lost), the SDK will by default automatically:
-   * - Detect you were authenticated to the WS API before
-   * - Try to re-authenticate (up to 5 times, in case something (bad timestamp) goes wrong)
-   * - If it succeeds, it will emit the 'authenticated' event.
-   * - If it fails and gives up, it will emit an 'exception' event (type: 'wsapi.auth', reason: detailed text).
-   *
-   * You can turn off the automatic re-auth WS API logic using `reauthWSAPIOnReconnect: false` in the WSClient config.
-   *
-   * @param wsKey - The connection this event is for (e.g. "spotV4" | "perpFuturesUSDTV4" | "perpFuturesBTCV4" | "deliveryFuturesUSDTV4" | "deliveryFuturesBTCV4" | "optionsV4")
-   * @param channel - The channel this event is for (e.g. "spot.login" to authenticate)
-   * @param params - Any request parameters for the payload (contents of req_param in the docs). Signature generation is automatic, only send parameters such as order ID as per the docs.
-   * @returns Promise - tries to resolve with async WS API response. Rejects if disconnected or exception is seen in async WS API response
+   * @param wsKey - Spot private, Spot beta private, or unified private connection.
+   * @param operation - Trading command supported by the selected connection.
+   * @param params - Request parameters. Authentication tokens and request IDs are supplied by the client.
    */
 
-  // This overload allows the caller to omit the 3rd param, if it isn't required (e.g. for the login call)
   async sendWSAPIRequest<
     TWSKey extends keyof WSAPIWsKeyTopicMap,
     TWSOperation extends WSAPIWsKeyTopicMap[TWSKey],
-    TWSParams extends Exact<WSAPITopicRequestParamMap[TWSOperation]>,
+    TWSParams extends Exact<WSAPIRequestParams<TWSKey, TWSOperation>>,
     TWSAPIResponse extends
-      | WSAPITopicResponseMap[TWSOperation]
-      | object = WSAPITopicResponseMap[TWSOperation],
+      | WSAPIResponse<TWSKey, TWSOperation>
+      | object = WSAPIResponse<TWSKey, TWSOperation>,
   >(
     wsKey: TWSKey,
     operation: TWSOperation,
-    params?: TWSParams extends void | never ? undefined : TWSParams,
-    requestFlags?: WSAPIRequestFlags,
+    ...args: [WSAPIRequestParams<TWSKey, TWSOperation>] extends [void | never]
+      ? [params?: undefined, requestFlags?: WSAPIRequestFlags]
+      : [params: TWSParams, requestFlags?: WSAPIRequestFlags]
   ): Promise<TWSAPIResponse>;
 
   async sendWSAPIRequest<
     TWSKey extends keyof WSAPIWsKeyTopicMap,
     TWSOperation extends WSAPIWsKeyTopicMap[TWSKey],
-    // if this throws a type error, probably forgot to add a new operation to WsAPITopicRequestParamMap
-    TWSParams extends Exact<WSAPITopicRequestParamMap[TWSOperation]>,
+    // Parameters and responses are selected by both connection and operation.
+    TWSParams extends Exact<WSAPIRequestParams<TWSKey, TWSOperation>>,
     TWSAPIResponse extends
-      | WSAPITopicResponseMap[TWSOperation]
-      | object = WSAPITopicResponseMap[TWSOperation],
+      | WSAPIResponse<TWSKey, TWSOperation>
+      | object = WSAPIResponse<TWSKey, TWSOperation>,
   >(
     wsKey: TWSKey,
     operation: TWSOperation,
-    params: TWSParams & { signRequest?: boolean },
+    params?: TWSParams & { signRequest?: boolean },
     requestFlags?: WSAPIRequestFlags,
   ): Promise<TWSAPIResponse | any> {
-    /**
-     * Base Info:
-     * - https://docs.kraken.com/api/docs/websocket-v2/add_order
-     *
-     * Currently only supported for Spot markets
-     */
-
     this.logger.trace(`sendWSAPIRequest(): assert "${wsKey}" is connected`, {
       ...WS_LOGGER_CATEGORY,
     });
@@ -225,7 +244,7 @@ export class WebsocketClient extends BaseWebsocketClient<WsKey, any> {
     };
 
     // Sign request
-    const signedEvent = await this.signWSAPIRequest(requestEvent);
+    const signedEvent = await this.signWSAPIRequest(wsKey, requestEvent);
 
     // Store deferred promise
     const promiseRef = getPromiseRefForWSAPIRequest(wsKey, requestEvent);
@@ -308,6 +327,12 @@ export class WebsocketClient extends BaseWebsocketClient<WsKey, any> {
     }
 
     switch (wsKey) {
+      case WS_KEY_MAP.unifiedPublicV2: {
+        return 'wss://uws.kraken.com/v2/public';
+      }
+      case WS_KEY_MAP.unifiedPrivateV2: {
+        return 'wss://uws.kraken.com/v2/private';
+      }
       /**
        * https://docs.kraken.com/api/docs/guides/spot-ws-intro/
        *
@@ -355,6 +380,8 @@ export class WebsocketClient extends BaseWebsocketClient<WsKey, any> {
         }
         break;
       }
+      case WS_KEY_MAP.unifiedPublicV2:
+      case WS_KEY_MAP.unifiedPrivateV2:
       case WS_KEY_MAP.spotPublicV2:
       case WS_KEY_MAP.spotPrivateV2:
       case WS_KEY_MAP.spotL3V2:
@@ -533,6 +560,24 @@ export class WebsocketClient extends BaseWebsocketClient<WsKey, any> {
           return results;
         }
 
+        // Channel errors can arrive after a successful subscription.
+        // Unified margin and enriched positions do not use snapshot/update types.
+        if (
+          ((wsKey === WS_KEY_MAP.unifiedPrivateV2 &&
+            (parsed.channel === 'positions' ||
+              parsed.channel === 'margin' ||
+              parsed.channel === 'quotes')) ||
+            (wsKey === WS_KEY_MAP.unifiedPublicV2 &&
+              parsed.channel === 'rfqs')) &&
+          !parsed.method
+        ) {
+          results.push({
+            eventType: parsed.error ? 'exception' : 'message',
+            event: parsed,
+          });
+          return results;
+        }
+
         // Most events use event: "update" or "snapshot" for topic updates
         if (['update', 'snapshot'].includes(eventAction)) {
           results.push({
@@ -625,10 +670,17 @@ export class WebsocketClient extends BaseWebsocketClient<WsKey, any> {
   /**
    * Determines if a topic is for a private channel, using a hardcoded list of strings
    */
-  protected isPrivateTopicRequest(request: WSTopicRequest<any>): boolean {
+  protected isPrivateTopicRequest(
+    request: WSTopicRequest<any>,
+    wsKey: WsKey,
+  ): boolean {
     const topicName = request?.topic?.toLowerCase();
     if (!topicName) {
       return false;
+    }
+
+    if (wsKey === WS_KEY_MAP.unifiedPrivateV2) {
+      return WS_UNIFIED_PRIVATE_TOPICS.includes(topicName);
     }
 
     if (WS_SPOT_PRIVATE_TOPICS.includes(topicName)) {
@@ -656,6 +708,7 @@ export class WebsocketClient extends BaseWebsocketClient<WsKey, any> {
    */
   protected getPrivateWSKeys(): WsKey[] {
     return [
+      WS_KEY_MAP.unifiedPrivateV2,
       WS_KEY_MAP.spotPrivateV2,
       WS_KEY_MAP.spotL3V2,
       WS_KEY_MAP.spotBetaPrivateV2,
@@ -701,6 +754,8 @@ export class WebsocketClient extends BaseWebsocketClient<WsKey, any> {
       const req_id = this.getNewRequestId();
 
       switch (wsKey) {
+        case WS_KEY_MAP.unifiedPublicV2:
+        case WS_KEY_MAP.unifiedPrivateV2:
         case WS_KEY_MAP.spotPublicV2:
         case WS_KEY_MAP.spotPrivateV2:
         case WS_KEY_MAP.spotL3V2:
@@ -719,7 +774,10 @@ export class WebsocketClient extends BaseWebsocketClient<WsKey, any> {
             this.options.authPrivateRequests &&
             (wsKey === WS_KEY_MAP.spotPrivateV2 ||
               wsKey === WS_KEY_MAP.spotL3V2 ||
-              wsKey === WS_KEY_MAP.spotBetaPrivateV2)
+              wsKey === WS_KEY_MAP.spotBetaPrivateV2 ||
+              wsKey === WS_KEY_MAP.unifiedPrivateV2 ||
+              (wsKey === WS_KEY_MAP.unifiedPublicV2 &&
+                topicRequest.topic === 'level3'))
           ) {
             // Get token from REST client cache
             const tokenResult =
@@ -731,7 +789,7 @@ export class WebsocketClient extends BaseWebsocketClient<WsKey, any> {
             if (!tokenResult?.token) {
               wsRequestBuildingErrors.push(
                 new Error(
-                  `No WS auth token could be retrieved for private spot WS request for topic "${topicRequest.topic}"`,
+                  `No WS auth token could be retrieved for ${wsKey} request for topic "${topicRequest.topic}"`,
                 ),
               );
               continue;
@@ -901,6 +959,7 @@ export class WebsocketClient extends BaseWebsocketClient<WsKey, any> {
   ): Promise<object | string | 'waitForEvent' | void> {
     try {
       switch (wsKey) {
+        case WS_KEY_MAP.unifiedPrivateV2:
         case WS_KEY_MAP.spotPrivateV2:
         case WS_KEY_MAP.spotL3V2:
         case WS_KEY_MAP.spotBetaPrivateV2: {
@@ -912,6 +971,7 @@ export class WebsocketClient extends BaseWebsocketClient<WsKey, any> {
           return;
         }
 
+        case WS_KEY_MAP.unifiedPublicV2:
         case WS_KEY_MAP.spotPublicV2:
         case WS_KEY_MAP.spotBetaPublicV2:
         case WS_KEY_MAP.derivativesPublicV1: {
@@ -960,12 +1020,8 @@ export class WebsocketClient extends BaseWebsocketClient<WsKey, any> {
     }
   }
 
-  /**
-   *
-   * @param requestEvent
-   * @returns A signed updated WS API request object, ready to be sent
-   */
   private async signWSAPIRequest(
+    wsKey: WSAPIWsKey,
     requestEvent: WSAPIRequestOperationKrakenSpot,
   ): Promise<WSAPIRequestOperationKrakenSpot> {
     if (!this.options.apiSecret) {
@@ -980,26 +1036,31 @@ export class WebsocketClient extends BaseWebsocketClient<WsKey, any> {
 
     if (!tokenResult?.token) {
       const error = new Error(
-        `No WS auth token could be retrieved for private spot WS request for topic "${requestEvent.method}"`,
+        `No WS auth token could be retrieved for private WS API request for topic "${requestEvent.method}"`,
       );
       error.cause = tokenResult;
       throw error;
     }
 
-    const authParams: Record<string, any> = {};
-    if (tokenResult.token) {
-      authParams.token = tokenResult.token;
-    }
-    if (requestEvent.method === 'add_order') {
-      // authParams.broker = APIIDMain;
+    const params: Record<string, unknown> = {
+      ...requestEvent.params,
+      token: tokenResult.token,
+    };
+    if (wsKey === WS_KEY_MAP.unifiedPrivateV2) {
+      if (requestEvent.method === 'add_order') {
+        params[APIIDMainKey] = APIIDMain;
+      } else if (
+        requestEvent.method === 'batch_add' &&
+        Array.isArray(params.orders)
+      ) {
+        delete params[APIIDMainKey];
+        params.orders = params.orders.map((order) => ({
+          ...order,
+          [APIIDMainKey]: APIIDMain,
+        }));
+      }
     }
 
-    return {
-      ...requestEvent,
-      params: {
-        ...requestEvent.params,
-        ...authParams,
-      },
-    };
+    return { ...requestEvent, params };
   }
 }
