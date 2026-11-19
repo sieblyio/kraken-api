@@ -284,11 +284,19 @@ This client provides WebSocket API endpoints which allow for faster interactions
 
 | Function | AUTH | HTTP Method | Endpoint |
 | -------- | :------: | :------: | -------- |
-| [submitSpotOrder()](https://github.com/sieblyio/kraken-api/blob/main/src/WebsocketAPIClient.ts#L85) | :closed_lock_with_key:  | WS | `add_order` |
-| [amendSpotOrder()](https://github.com/sieblyio/kraken-api/blob/main/src/WebsocketAPIClient.ts#L99) | :closed_lock_with_key:  | WS | `amend_order` |
-| [cancelSpotOrder()](https://github.com/sieblyio/kraken-api/blob/main/src/WebsocketAPIClient.ts#L113) | :closed_lock_with_key:  | WS | `cancel_order` |
-| [cancelAllSpotOrders()](https://github.com/sieblyio/kraken-api/blob/main/src/WebsocketAPIClient.ts#L127) | :closed_lock_with_key:  | WS | `cancel_all` |
-| [cancelAllSpotOrdersAfter()](https://github.com/sieblyio/kraken-api/blob/main/src/WebsocketAPIClient.ts#L139) | :closed_lock_with_key:  | WS | `cancel_all_orders_after` |
-| [batchSubmitSpotOrders()](https://github.com/sieblyio/kraken-api/blob/main/src/WebsocketAPIClient.ts#L158) | :closed_lock_with_key:  | WS | `batch_add` |
-| [batchCancelSpotOrders()](https://github.com/sieblyio/kraken-api/blob/main/src/WebsocketAPIClient.ts#L172) | :closed_lock_with_key:  | WS | `batch_cancel` |
-| [editSpotOrder()](https://github.com/sieblyio/kraken-api/blob/main/src/WebsocketAPIClient.ts#L189) | :closed_lock_with_key:  | WS | `edit_order` |
+| [constructor()](https://github.com/sieblyio/kraken-api/blob/main/src/WebsocketAPIClient.ts#L90) | :closed_lock_with_key: | WS | `add_order` |
+| [amendSpotOrder()](https://github.com/sieblyio/kraken-api/blob/main/src/WebsocketAPIClient.ts#L126) | :closed_lock_with_key: | WS | `amend_order` |
+| [cancelSpotOrder()](https://github.com/sieblyio/kraken-api/blob/main/src/WebsocketAPIClient.ts#L140) | :closed_lock_with_key: | WS | `cancel_order` |
+| [cancelAllSpotOrders()](https://github.com/sieblyio/kraken-api/blob/main/src/WebsocketAPIClient.ts#L154) | :closed_lock_with_key: | WS | `cancel_all` |
+| [cancelAllSpotOrdersAfter()](https://github.com/sieblyio/kraken-api/blob/main/src/WebsocketAPIClient.ts#L166) | :closed_lock_with_key: | WS | `cancel_all_orders_after` |
+| [batchSubmitSpotOrders()](https://github.com/sieblyio/kraken-api/blob/main/src/WebsocketAPIClient.ts#L185) | :closed_lock_with_key: | WS | `batch_add` |
+| [batchCancelSpotOrders()](https://github.com/sieblyio/kraken-api/blob/main/src/WebsocketAPIClient.ts#L199) | :closed_lock_with_key: | WS | `batch_cancel` |
+| [editSpotOrder()](https://github.com/sieblyio/kraken-api/blob/main/src/WebsocketAPIClient.ts#L216) | :closed_lock_with_key: | WS | `edit_order` |
+| [submitUnifiedOrder()](https://github.com/sieblyio/kraken-api/blob/main/src/WebsocketAPIClient.ts#L228) | :closed_lock_with_key: | WS | `add_order` |
+| [amendUnifiedOrder()](https://github.com/sieblyio/kraken-api/blob/main/src/WebsocketAPIClient.ts#L236) | :closed_lock_with_key: | WS | `amend_order` |
+| [cancelUnifiedOrder()](https://github.com/sieblyio/kraken-api/blob/main/src/WebsocketAPIClient.ts#L246) | :closed_lock_with_key: | WS | `cancel_order` |
+| [cancelAllUnifiedOrders()](https://github.com/sieblyio/kraken-api/blob/main/src/WebsocketAPIClient.ts#L256) | :closed_lock_with_key: | WS | `cancel_all` |
+| [cancelAllUnifiedOrdersAfter()](https://github.com/sieblyio/kraken-api/blob/main/src/WebsocketAPIClient.ts#L266) | :closed_lock_with_key: | WS | `cancel_all_orders_after` |
+| [batchSubmitUnifiedOrders()](https://github.com/sieblyio/kraken-api/blob/main/src/WebsocketAPIClient.ts#L283) | :closed_lock_with_key: | WS | `batch_add` |
+| [batchCancelUnifiedOrders()](https://github.com/sieblyio/kraken-api/blob/main/src/WebsocketAPIClient.ts#L293) | :closed_lock_with_key: | WS | `batch_cancel` |
+| [setUnifiedPreference()](https://github.com/sieblyio/kraken-api/blob/main/src/WebsocketAPIClient.ts#L303) | :closed_lock_with_key: | WS | `set_preference` |

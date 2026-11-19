@@ -57,6 +57,11 @@ const subscriptions: WSUnifiedPublicTopicRequest[] = [
   //     snapshot: true,
   //   },
   // },
+  // Optional options RFQs (derivatives-only, no symbol filter):
+  // {
+  //   topic: 'rfqs',
+  //   payload: { asset_class: 'derivatives', snapshot: true },
+  // },
 ];
 client.subscribe(subscriptions, wsKey);
 

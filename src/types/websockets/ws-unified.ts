@@ -55,6 +55,12 @@ export interface WSUnifiedLevel3SubscribeParams
   depth?: WSUnifiedLevel3Depth;
 }
 
+/** All open options RFQs, without a symbol filter. */
+export interface WSUnifiedRFQsSubscribeParams
+  extends WSUnifiedInstrumentSubscribeParams {
+  asset_class: 'derivatives';
+}
+
 /** Public endpoint channels. Level 3 requires authentication. */
 export interface WSUnifiedPublicSubscribeParamMap {
   ticker: WSUnifiedTickerSubscribeParams;
@@ -63,6 +69,7 @@ export interface WSUnifiedPublicSubscribeParamMap {
   trade: WSUnifiedTradeSubscribeParams;
   instrument: WSUnifiedInstrumentSubscribeParams;
   level3: WSUnifiedLevel3SubscribeParams;
+  rfqs: WSUnifiedRFQsSubscribeParams;
 }
 
 export type WSUnifiedPublicTopic = keyof WSUnifiedPublicSubscribeParamMap;
@@ -114,6 +121,9 @@ export interface WSUnifiedMarginSubscribeParams {
   snapshot?: never;
 }
 
+/** Your options RFQs and offers. Authentication tokens are supplied by the client. */
+export type WSUnifiedQuotesSubscribeParams = WSUnifiedRFQsSubscribeParams;
+
 export const WS_UNIFIED_PRIVATE_TOPICS = [
   'executions',
   'balances',
@@ -121,6 +131,7 @@ export const WS_UNIFIED_PRIVATE_TOPICS = [
   'margin',
   'ledgers',
   'preferences',
+  'quotes',
 ] as const;
 
 export interface WSUnifiedPrivateSubscribeParamMap {
@@ -130,6 +141,7 @@ export interface WSUnifiedPrivateSubscribeParamMap {
   margin: WSUnifiedMarginSubscribeParams;
   ledgers: WSUnifiedAccountSubscribeParams;
   preferences: WSUnifiedAccountSubscribeParams;
+  quotes: WSUnifiedQuotesSubscribeParams;
 }
 
 export type WSUnifiedPrivateTopic = keyof WSUnifiedPrivateSubscribeParamMap;

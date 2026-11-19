@@ -88,6 +88,11 @@ async function start() {
     //   topic: 'margin',
     //   payload: { asset_class: 'derivatives' },
     // },
+    // Your options RFQs and offers:
+    // {
+    //   topic: 'quotes',
+    //   payload: { asset_class: 'derivatives', snapshot: true },
+    // },
   ];
   await client.subscribe(subscriptions, WS_KEY_MAP.unifiedPrivateV2);
 

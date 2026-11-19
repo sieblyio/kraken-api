@@ -163,6 +163,26 @@ export type WSUnifiedLevel3Event = { channel: 'level3' } & (
   | { type: 'update'; data: WSUnifiedLevel3Data<WSUnifiedLevel3OrderUpdate>[] }
 );
 
+export type WSUnifiedRFQStatus =
+  | 'open'
+  | 'expired'
+  | 'cancelled'
+  | 'filled_bid_side'
+  | 'filled_ask_side';
+
+export interface WSUnifiedRFQLeg {
+  symbol: string;
+  size: number;
+}
+
+export interface WSUnifiedRFQData {
+  rfq_id: string;
+  legs: WSUnifiedRFQLeg[];
+  /** RFC3339 expiry timestamp. */
+  expiry: string;
+  status: WSUnifiedRFQStatus;
+}
+
 export interface WSUnifiedPublicDataMap {
   ticker: WSUnifiedTickerData[];
   book: WSUnifiedBookData[];
@@ -170,6 +190,7 @@ export interface WSUnifiedPublicDataMap {
   trade: WSUnifiedTradeData[];
   instrument: WSUnifiedInstrumentData;
   level3: WSUnifiedLevel3Data[];
+  rfqs: WSUnifiedRFQData[];
 }
 
 /** Raw exchange messages, discriminated by channel. No asset_class is added or inferred. */
@@ -215,7 +236,11 @@ export type WSUnifiedPublicSubscriptionResult = {
     channel: TTopic;
     snapshot?: boolean;
     warnings?: string[];
-  } & (TTopic extends 'instrument' ? { symbol?: string } : { symbol: string }) &
+  } & (TTopic extends 'rfqs'
+    ? { asset_class?: 'derivatives' }
+    : TTopic extends 'instrument'
+      ? { symbol?: string }
+      : { symbol: string }) &
     (TTopic extends 'book' ? { depth?: WSUnifiedBookDepth } : object) &
     (TTopic extends 'level3' ? { depth?: WSUnifiedLevel3Depth } : object) &
     (TTopic extends 'ohlc'
@@ -251,6 +276,22 @@ export type WSUnifiedPublicResponseEvent =
     wsKey: 'unifiedPublicV2';
     isWSAPIResponse: false;
   };
+
+/** A failed RFQ snapshot is emitted on exception, with an empty data array. */
+export interface WSUnifiedPublicChannelError {
+  channel: 'rfqs';
+  type: 'snapshot';
+  error: 'snapshot_too_large';
+  data: [];
+}
+
+export type WSUnifiedPublicExceptionEvent = (
+  | Extract<WSUnifiedPublicSubscriptionResponse, { success: false }>
+  | WSUnifiedPublicChannelError
+) & {
+  wsKey: 'unifiedPublicV2';
+  isWSAPIResponse: false;
+};
 
 /** Heartbeats and successful pongs are consumed internally by the client. */
 export interface WSUnifiedHeartbeatEvent {
@@ -319,7 +360,7 @@ export interface WSUnifiedExecutionData {
   no_mpp?: boolean;
   ord_ref_id?: string;
   order_qty?: number;
-  order_type?: WSAPIAddSpotOrderParams['order_type'];
+  order_type?: WSAPIAddSpotOrderParams['order_type'] | 'rfq';
   order_userref?: number;
   post_only?: boolean;
   position_status?: 'opened' | 'closing' | 'closed';
@@ -557,13 +598,52 @@ export interface WSUnifiedPreferencesEvent {
   data: WSUnifiedPreferencesData;
 }
 
+export interface WSUnifiedQuoteLegPrice {
+  symbol: string;
+  price: number;
+}
+
+export interface WSUnifiedQuoteRFQData extends WSUnifiedRFQData {
+  type: 'rfq';
+  best_bid?: number;
+  best_ask?: number;
+  /** Omitted when the best bid is priced as a package. */
+  best_bid_legs?: WSUnifiedQuoteLegPrice[];
+  /** Omitted when the best ask is priced as a package. */
+  best_ask_legs?: WSUnifiedQuoteLegPrice[];
+}
+
+export interface WSUnifiedQuoteOfferData {
+  type: 'offer';
+  offer_id: string;
+  rfq_id: string;
+  bid?: number;
+  ask?: number;
+  bid_legs?: WSUnifiedQuoteLegPrice[];
+  ask_legs?: WSUnifiedQuoteLegPrice[];
+  /** filled_* describes the RFQ's status, not whether this offer traded. Check executions. */
+  status: WSUnifiedRFQStatus;
+}
+
+export type WSUnifiedQuoteData =
+  | WSUnifiedQuoteRFQData
+  | WSUnifiedQuoteOfferData;
+
+/** No sequence numbers. Replace local state on snapshots; resubscribe after a gap. */
+export interface WSUnifiedQuotesEvent {
+  channel: 'quotes';
+  type: 'snapshot' | 'update';
+  data: WSUnifiedQuoteData[];
+}
+
 export type WSUnifiedPrivateDataEvent =
   | WSUnifiedExecutionsEvent
   | WSUnifiedBalancesEvent
   | WSUnifiedPositionsEvent
   | WSUnifiedMarginEvent
   | WSUnifiedLedgersEvent
-  | WSUnifiedPreferencesEvent;
+  | WSUnifiedPreferencesEvent
+  | WSUnifiedQuotesEvent;
 
 export type WSUnifiedPrivateMessageEvent = (
   | WSUnifiedPrivateDataEvent
@@ -591,7 +671,9 @@ export type WSUnifiedPrivateSubscriptionResult = {
         ? { asset_class?: 'derivatives'; with_margin?: true }
         : TTopic extends 'margin'
           ? { asset_class?: 'derivatives' }
-          : object);
+          : TTopic extends 'quotes'
+            ? { asset_class?: 'derivatives'; snapshot?: boolean }
+            : object);
 }[WSUnifiedPrivateTopic];
 
 export type WSUnifiedPrivateSubscriptionResponse = {
@@ -634,7 +716,13 @@ export type WSUnifiedPrivateChannelError =
       /** The live service omits data when the margin subscription is dropped. */
       data?: never;
     }
-  | { channel: 'margin'; error: 'margin_unavailable' };
+  | { channel: 'margin'; error: 'margin_unavailable' }
+  | {
+      channel: 'quotes';
+      type: 'snapshot';
+      error: 'snapshot_too_large';
+      data: [];
+    };
 
 export type WSUnifiedPrivateExceptionEvent = (
   | Extract<WSUnifiedPrivateSubscriptionResponse, { success: false }>

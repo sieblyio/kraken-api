@@ -105,7 +105,7 @@ export function unifiedPublicTypes(
   );
   // @ts-expect-error Unsubscribe requires the same full request as subscribe.
   client.unsubscribe({ topic: 'ticker' }, 'unifiedPublicV2');
-  // @ts-expect-error No unified trading support in the public stage.
+  // @ts-expect-error Trading commands require the private endpoint.
   client.sendWSAPIRequest('unifiedPublicV2', 'cancel_all');
 
   const legacy: WSTopicRequest = {

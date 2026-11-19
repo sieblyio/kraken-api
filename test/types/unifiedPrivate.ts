@@ -133,7 +133,7 @@ export function unifiedPrivateTypes(client: WebsocketClient) {
     },
     'unifiedPublicV2',
   );
-  // @ts-expect-error Unified trading commands remain a separate implementation stage.
+  // @ts-expect-error Unified cancel_all requires an explicit asset_class.
   client.sendWSAPIRequest('unifiedPrivateV2', 'cancel_all');
 }
 

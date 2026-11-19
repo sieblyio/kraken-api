@@ -10,6 +10,16 @@ import {
   WSAPIEditSpotOrderParams,
 } from './types/request/wsapi.types.js';
 import {
+  WSAPIAddUnifiedOrderParams,
+  WSAPIAmendUnifiedOrderParams,
+  WSAPIBatchAddUnifiedOrdersParams,
+  WSAPIBatchCancelUnifiedOrdersParams,
+  WSAPICancelAllUnifiedOrdersAfterParams,
+  WSAPICancelAllUnifiedOrdersParams,
+  WSAPICancelUnifiedOrderParams,
+  WSAPISetUnifiedPreferenceParams,
+} from './types/request/wsapi-unified.types.js';
+import {
   WSAPIAddSpotOrderResult,
   WSAPIAmendSpotOrderResult,
   WSAPIBatchAddSpotOrdersResult,
@@ -19,7 +29,23 @@ import {
   WSAPICancelSpotOrderResult,
   WSAPIEditSpotOrderResult,
 } from './types/response/wsapi.types.js';
-import { WSAPISpotResponse, WSAPIWsKey } from './types/websockets/ws-api.js';
+import {
+  WSAPIAddUnifiedOrderResult,
+  WSAPIAmendUnifiedOrderResult,
+  WSAPIBatchAddUnifiedOrdersResult,
+  WSAPIBatchCancelUnifiedOrdersResult,
+  WSAPICancelAllUnifiedOrdersAfterResult,
+  WSAPICancelAllUnifiedOrdersResult,
+  WSAPICancelUnifiedOrderResult,
+  WSAPISetUnifiedPreferenceResult,
+} from './types/response/wsapi-unified.types.js';
+import {
+  WSAPISpotResponse,
+  WSAPISpotWsKey,
+  WSAPIUnifiedResponse,
+  WSAPIUnifiedWsKey,
+  WSAPIWsKey,
+} from './types/websockets/ws-api.js';
 import { WSClientConfigurableOptions } from './types/websockets/ws-general.js';
 import { WebsocketClient } from './WebsocketClient.js';
 
@@ -54,6 +80,7 @@ export interface WSAPIClientConfigurableOptions {
  *
  * Docs:
  * - Spot WS API: https://docs.kraken.com/api/docs/websocket-v2/add_order/
+ * - Unified WS API: https://docs.kraken.com/exchange/api-reference/unified-ws/add_order
  */
 export class WebsocketAPIClient {
   private wsClient: WebsocketClient;
@@ -84,7 +111,7 @@ export class WebsocketAPIClient {
    */
   submitSpotOrder(
     params: Omit<WSAPIAddSpotOrderParams, 'token' | 'req_id'>,
-    wsKey?: WSAPIWsKey,
+    wsKey?: WSAPISpotWsKey,
   ): Promise<WSAPISpotResponse<WSAPIAddSpotOrderResult, 'add_order'>> {
     return this.wsClient.sendWSAPIRequest(
       wsKey || WS_KEY_MAP.spotPrivateV2,
@@ -98,7 +125,7 @@ export class WebsocketAPIClient {
    */
   amendSpotOrder(
     params: WSAPIAmendSpotOrderParams,
-    wsKey?: WSAPIWsKey,
+    wsKey?: WSAPISpotWsKey,
   ): Promise<WSAPISpotResponse<WSAPIAmendSpotOrderResult, 'amend_order'>> {
     return this.wsClient.sendWSAPIRequest(
       wsKey || WS_KEY_MAP.spotPrivateV2,
@@ -112,7 +139,7 @@ export class WebsocketAPIClient {
    */
   cancelSpotOrder(
     params: WSAPICancelSpotOrderParams,
-    wsKey?: WSAPIWsKey,
+    wsKey?: WSAPISpotWsKey,
   ): Promise<WSAPISpotResponse<WSAPICancelSpotOrderResult, 'cancel_order'>> {
     return this.wsClient.sendWSAPIRequest(
       wsKey || WS_KEY_MAP.spotPrivateV2,
@@ -125,7 +152,7 @@ export class WebsocketAPIClient {
    * Cancel all open orders
    */
   cancelAllSpotOrders(
-    wsKey?: WSAPIWsKey,
+    wsKey?: WSAPISpotWsKey,
   ): Promise<WSAPISpotResponse<WSAPICancelAllSpotOrdersResult, 'cancel_all'>> {
     return this.wsClient.sendWSAPIRequest(
       wsKey || WS_KEY_MAP.spotPrivateV2,
@@ -138,7 +165,7 @@ export class WebsocketAPIClient {
    */
   cancelAllSpotOrdersAfter(
     params: WSAPICancelAllSpotOrdersAfterParams,
-    wsKey?: WSAPIWsKey,
+    wsKey?: WSAPISpotWsKey,
   ): Promise<
     WSAPISpotResponse<
       WSAPICancelAllSpotOrdersAfterResult,
@@ -157,7 +184,7 @@ export class WebsocketAPIClient {
    */
   batchSubmitSpotOrders(
     params: WSAPIBatchAddSpotOrdersParams,
-    wsKey?: WSAPIWsKey,
+    wsKey?: WSAPISpotWsKey,
   ): Promise<WSAPISpotResponse<WSAPIBatchAddSpotOrdersResult[], 'batch_add'>> {
     return this.wsClient.sendWSAPIRequest(
       wsKey || WS_KEY_MAP.spotPrivateV2,
@@ -171,7 +198,7 @@ export class WebsocketAPIClient {
    */
   batchCancelSpotOrders(
     params: WSAPIBatchCancelSpotOrdersParams,
-    wsKey?: WSAPIWsKey,
+    wsKey?: WSAPISpotWsKey,
   ): Promise<
     WSAPISpotResponse<WSAPIBatchCancelSpotOrdersResult, 'batch_cancel'>
   > {
@@ -188,13 +215,98 @@ export class WebsocketAPIClient {
    */
   editSpotOrder(
     params: WSAPIEditSpotOrderParams,
-    wsKey?: WSAPIWsKey,
+    wsKey?: WSAPISpotWsKey,
   ): Promise<WSAPISpotResponse<WSAPIEditSpotOrderResult, 'edit_order'>> {
     return this.wsClient.sendWSAPIRequest(
       wsKey || WS_KEY_MAP.spotPrivateV2,
       'edit_order',
       params,
     );
+  }
+
+  /** Add a Spot or derivatives order through the unified API. */
+  submitUnifiedOrder(
+    params: WSAPIAddUnifiedOrderParams,
+    wsKey: WSAPIUnifiedWsKey = WS_KEY_MAP.unifiedPrivateV2,
+  ): Promise<WSAPIUnifiedResponse<WSAPIAddUnifiedOrderResult, 'add_order'>> {
+    return this.wsClient.sendWSAPIRequest(wsKey, 'add_order', params);
+  }
+
+  /** Amend a unified order in-place. */
+  amendUnifiedOrder(
+    params: WSAPIAmendUnifiedOrderParams,
+    wsKey: WSAPIUnifiedWsKey = WS_KEY_MAP.unifiedPrivateV2,
+  ): Promise<
+    WSAPIUnifiedResponse<WSAPIAmendUnifiedOrderResult, 'amend_order'>
+  > {
+    return this.wsClient.sendWSAPIRequest(wsKey, 'amend_order', params);
+  }
+
+  /** Cancel unified orders. Multiple identifiers produce individual response events. */
+  cancelUnifiedOrder(
+    params: WSAPICancelUnifiedOrderParams,
+    wsKey: WSAPIUnifiedWsKey = WS_KEY_MAP.unifiedPrivateV2,
+  ): Promise<
+    WSAPIUnifiedResponse<WSAPICancelUnifiedOrderResult, 'cancel_order'>
+  > {
+    return this.wsClient.sendWSAPIRequest(wsKey, 'cancel_order', params);
+  }
+
+  /** Cancel all open orders for the specified asset class. */
+  cancelAllUnifiedOrders(
+    params: WSAPICancelAllUnifiedOrdersParams,
+    wsKey: WSAPIUnifiedWsKey = WS_KEY_MAP.unifiedPrivateV2,
+  ): Promise<
+    WSAPIUnifiedResponse<WSAPICancelAllUnifiedOrdersResult, 'cancel_all'>
+  > {
+    return this.wsClient.sendWSAPIRequest(wsKey, 'cancel_all', params);
+  }
+
+  /** Set the unified Dead Man's Switch timeout, or use zero to disable it. */
+  cancelAllUnifiedOrdersAfter(
+    params: WSAPICancelAllUnifiedOrdersAfterParams,
+    wsKey: WSAPIUnifiedWsKey = WS_KEY_MAP.unifiedPrivateV2,
+  ): Promise<
+    WSAPIUnifiedResponse<
+      WSAPICancelAllUnifiedOrdersAfterResult,
+      'cancel_all_orders_after'
+    >
+  > {
+    return this.wsClient.sendWSAPIRequest(
+      wsKey,
+      'cancel_all_orders_after',
+      params,
+    );
+  }
+
+  /** Add 2 to 15 unified orders for one symbol. */
+  batchSubmitUnifiedOrders(
+    params: WSAPIBatchAddUnifiedOrdersParams,
+    wsKey: WSAPIUnifiedWsKey = WS_KEY_MAP.unifiedPrivateV2,
+  ): Promise<
+    WSAPIUnifiedResponse<WSAPIBatchAddUnifiedOrdersResult[], 'batch_add'>
+  > {
+    return this.wsClient.sendWSAPIRequest(wsKey, 'batch_add', params);
+  }
+
+  /** Cancel 2 to 50 unified orders in one request. */
+  batchCancelUnifiedOrders(
+    params: WSAPIBatchCancelUnifiedOrdersParams,
+    wsKey: WSAPIUnifiedWsKey = WS_KEY_MAP.unifiedPrivateV2,
+  ): Promise<
+    WSAPIUnifiedResponse<WSAPIBatchCancelUnifiedOrdersResult, 'batch_cancel'>
+  > {
+    return this.wsClient.sendWSAPIRequest(wsKey, 'batch_cancel', params);
+  }
+
+  /** Set derivatives leverage preferences through the unified API. */
+  setUnifiedPreference(
+    params: WSAPISetUnifiedPreferenceParams,
+    wsKey: WSAPIUnifiedWsKey = WS_KEY_MAP.unifiedPrivateV2,
+  ): Promise<
+    WSAPIUnifiedResponse<WSAPISetUnifiedPreferenceResult, 'set_preference'>
+  > {
+    return this.wsClient.sendWSAPIRequest(wsKey, 'set_preference', params);
   }
   /**
    *
