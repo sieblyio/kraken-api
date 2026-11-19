@@ -1044,11 +1044,15 @@ export class SpotClient extends BaseRestClient {
    *
    * Retrieve the access token.
    * Note: This endpoint uses Basic authentication (Authorization header with base64-encoded client credentials).
+   * Set networkOptions.auth to { username: clientId, password: clientSecret } (empty password for public clients).
    */
   getOAuthAccessToken(
     params: OauthGetAccessTokenParams,
   ): Promise<OauthGetAccessTokenResponse> {
-    return this.post('oauth/token', { body: params });
+    return this.post('oauth/token', {
+      body: params,
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+    });
   }
 
   /**

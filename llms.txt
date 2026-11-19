@@ -268,6 +268,95 @@ interval: 60, // 1 minute
 // Get recent spreads
 
 ================
+File: examples/Spot/WebSockets/privateWs.ts
+================
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import {
+  DefaultLogger,
+  LogParams,
+  WebsocketClient,
+  WS_KEY_MAP,
+  WSTopicRequest,
+} from '../../../src/index.js';
+import { WSSpotTopic } from '../../../src/types/websockets/ws-subscriptions.js';
+// normally you should install this module via npm: `npm install @siebly/kraken-api` and import the module:
+// import { LogParams, WebsocketClient, WSTopicRequest } from '@siebly/kraken-api';
+⋮----
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+⋮----
+// console.log('trace', ...params);
+⋮----
+async function start()
+⋮----
+/**
+   * The WebsocketClient is the core class to manage WebSocket subscriptions. Give it the topics you want to subscribe to, and it will handle the rest:
+   * - Connection management (connect, disconnect, reconnect)
+   * - Authentication for private topics
+   * - Subscription management (subscribe, unsubscribe, resubscribe on reconnect)
+   * - Message handling (dispatch messages to appropriate handlers)
+   *
+   * All you need to do is provide the topics you want to subscribe to when calling `subscribe()`, and the client will take care of the rest.
+   *
+   * Here we create a WebsocketClient instance with API key/secret for private topic subscriptions.
+   *
+   * In terms of product groups such as Spot, Derivatives, etc., the WebsocketClient understand the product group from the WsKey you provide when subscribing. For example, using `WS_KEY_MAP.spotPrivateV2` indicates that the subscription is for Spot private topics, as shown below.
+   *
+   * Refer to WS_KEY_MAP in the source code for all available WsKey options.
+   */
+⋮----
+// Data received
+⋮----
+// Something happened, attempting to reconnect
+⋮----
+// Reconnect successful
+⋮----
+// Connection closed. If unexpected, expect reconnect -> reconnected.
+⋮----
+// Reply to a request, e.g. "subscribe"/"unsubscribe"/"authenticate"
+⋮----
+/**
+   * The below examples demonstrate how you can subscribe to private topics.
+   *
+   * Note: while the documentation specifies "token" as a required parameter, the SDK will automatically:
+   * - fetch the token using your API key/secret,
+   * - manage token caching/refreshing,
+   * - include the token in the request for you.
+   *
+   * So you do NOT need to manually fetch or provide the token when subscribing to private topics.
+   *
+   * Do note that:
+   * - Most private topics use "spotPrivateV2" WsKey, which connects to "wss://ws-auth.kraken.com/v2"
+   * - The level3 topic uses "spotL3V2" WsKey, which connects to "wss://ws-l3.kraken.com/v2" (dedicated L3 endpoint)
+   */
+⋮----
+// Balances, requires auth: https://docs.kraken.com/api/docs/websocket-v2/executions
+⋮----
+// below params are optional:
+snap_trades: true, // default: false
+snap_orders: true, // default: true
+order_status: true, // default: true
+// rebased: false, // default: true
+ratecounter: true, // default: false
+// users: 'all', // default: undefined
+// snapshot: true, // default: false, deprecated, use 'snap_orders' or 'snap_trades' instead
+⋮----
+// Balances, requires auth: https://docs.kraken.com/api/docs/websocket-v2/balances
+⋮----
+// below params are optional:
+// snapshot: true, // default: true
+// rebased: false, // default: true
+// users: 'all',
+⋮----
+// Orders Level 3, requires auth: https://docs.kraken.com/api/docs/websocket-v2/level3
+// Note: level3 uses a dedicated endpoint (wss://ws-l3.kraken.com/v2), so use WS_KEY_MAP.spotL3V2
+⋮----
+// topic: 'level3',
+⋮----
+// below params are optional:
+// depth: 10, // default: 10, Possible values: [10, 100, 1000]
+// snapshot: true, // default: true
+
+================
 File: examples/Spot/WebSockets/wsAPI.RAW.ts
 ================
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -413,19 +502,19 @@ public setLogger(logger: DefaultLogger, loggerCategory: object): void
 public getSpotRESTClient(
     restOptions: RestClientOptions,
     requestOptions?: AxiosRequestConfig,
-): SpotClient
+  ): SpotClient
 ⋮----
 public async fetchSpotWebSocketToken(
     restOptions: RestClientOptions,
     requestOptions?: AxiosRequestConfig,
-): Promise<
+  ): Promise<{ token: string; expiresAtMs: number; timeLeftMs: number }>
 ⋮----
 // still valid for at least 10s
 ⋮----
 public getDerivativesRESTClient(
     restOptions: RestClientOptions,
     requestOptions?: AxiosRequestConfig,
-): DerivativesClient
+  ): DerivativesClient
 
 ================
 File: src/lib/websocket/WsStore.types.ts
@@ -2059,7 +2148,7 @@ generateNewOrderID(): string
    */
 listCustodyVaults(
     params: CustodyListVaultsParams,
-): Promise<CustodyListVaultsResponse>
+  ): Promise<CustodyListVaultsResponse>
 ⋮----
 /**
    * Get vault information by id
@@ -2069,7 +2158,7 @@ listCustodyVaults(
 getCustodyVaultbyId(params: {
     id: string;
     nonce?: number;
-}): Promise<CustodyGetVaultResponse>
+  }): Promise<CustodyGetVaultResponse>
 ⋮----
 /**
    * Get deposit methods
@@ -2079,7 +2168,7 @@ getCustodyVaultbyId(params: {
    */
 getCustodyDepositMethods(
     params: CustodyDepositMethodsParams,
-): Promise<CustodyDepositMethodsResponse>
+  ): Promise<CustodyDepositMethodsResponse>
 ⋮----
 /**
    * Get deposit addresses
@@ -2089,7 +2178,7 @@ getCustodyDepositMethods(
    */
 getCustodyDepositAddresses(
     params: CustodyDepositAddressesParams,
-): Promise<CustodyDepositAddressesResponse>
+  ): Promise<CustodyDepositAddressesResponse>
 ⋮----
 /**
    * List custody transactions
@@ -2098,7 +2187,7 @@ getCustodyDepositAddresses(
    */
 listCustodyTransactions(
     params: CustodyListTransactionsParams,
-): Promise<CustodyListTransactionsResponse>
+  ): Promise<CustodyListTransactionsResponse>
 ⋮----
 /**
    * Get transaction by id
@@ -2107,7 +2196,7 @@ listCustodyTransactions(
    */
 getCustodyTransactionbyId(
     params: CustodyGetTransactionParams,
-): Promise<CustodyGetTransactionResponse>
+  ): Promise<CustodyGetTransactionResponse>
 ⋮----
 /**
    *
@@ -2122,7 +2211,7 @@ getCustodyTransactionbyId(
    */
 getCustodyWithdrawMethods(
     params: CustodyWithdrawMethodsParams,
-): Promise<CustodyWithdrawMethodsResponse>
+  ): Promise<CustodyWithdrawMethodsResponse>
 ⋮----
 /**
    * Get withdraw addresses
@@ -2131,7 +2220,7 @@ getCustodyWithdrawMethods(
    */
 getCustodyWithdrawAddresses(
     params: CustodyWithdrawAddressesParams,
-): Promise<CustodyWithdrawAddressesResponse>
+  ): Promise<CustodyWithdrawAddressesResponse>
 ⋮----
 /**
    *
@@ -2146,7 +2235,7 @@ getCustodyWithdrawAddresses(
    */
 listCustodyTasks(
     params: CustodyListTasksParams,
-): Promise<CustodyListTasksResponse>
+  ): Promise<CustodyListTasksResponse>
 ⋮----
 /**
    * Get task by id
@@ -2156,7 +2245,7 @@ listCustodyTasks(
 getCustodyTaskbyId(params: {
     id: string;
     nonce?: number;
-}): Promise<CustodyGetTaskResponse>
+  }): Promise<CustodyGetTaskResponse>
 ⋮----
 /**
    * List activities
@@ -2165,7 +2254,7 @@ getCustodyTaskbyId(params: {
    */
 listCustodyActivities(
     params: CustodyListActivitiesParams,
-): Promise<CustodyListActivitiesResponse>
+  ): Promise<CustodyListActivitiesResponse>
 ⋮----
 /**
    * Get activity by id
@@ -2175,7 +2264,7 @@ listCustodyActivities(
 getCustodyActivitybyId(params: {
     id: string;
     nonce?: number;
-}): Promise<CustodyGetActivityResponse>
+  }): Promise<CustodyGetActivityResponse>
 ⋮----
 /**
    *
@@ -2191,7 +2280,7 @@ getCustodyActivitybyId(params: {
    */
 createOtcQuoteRequest(
     params: OTCCreateQuoteRequestParams,
-): Promise<OTCCreateQuoteResponse>
+  ): Promise<OTCCreateQuoteResponse>
 ⋮----
 /**
    * Update OTC Quote
@@ -2201,7 +2290,7 @@ createOtcQuoteRequest(
    */
 updateOtcQuote(
     params: OTCUpdateQuoteParams,
-): Promise<OTCUpdateQuoteResponse>
+  ): Promise<OTCUpdateQuoteResponse>
 ⋮----
 /**
    * Get OTC Pairs
@@ -2209,7 +2298,7 @@ updateOtcQuote(
    * Retrieves the list of OTC trading pairs.
    * API Key Permissions Required: Funds permissions - Query and Funds permissions - Deposit
    */
-getOtcPairs(params?:
+getOtcPairs(params?: { nonce?: number }): Promise<OTCGetPairsResponse>
 ⋮----
 /**
    * Get OTC Active Quotes
@@ -2220,7 +2309,7 @@ getOtcPairs(params?:
 getOtcActiveQuotes(params?: {
     nonce?: number;
     vault_id?: string;
-}): Promise<OTCGetActiveQuotesResponse>
+  }): Promise<OTCGetActiveQuotesResponse>
 ⋮----
 /**
    * Get OTC Historical Quotes
@@ -2230,7 +2319,7 @@ getOtcActiveQuotes(params?: {
    */
 getOtcHistoricalQuotes(params?: {
     nonce?: number;
-}): Promise<OTCGetHistoricalQuotesResponse>
+  }): Promise<OTCGetHistoricalQuotesResponse>
 ⋮----
 /**
    * Get OTC Exposures
@@ -2240,7 +2329,7 @@ getOtcHistoricalQuotes(params?: {
    */
 getOtcExposures(params?: {
     nonce?: number;
-}): Promise<OTCGetExposuresResponse>
+  }): Promise<OTCGetExposuresResponse>
 ⋮----
 /**
    * Check OTC Eligibility
@@ -2248,7 +2337,7 @@ getOtcExposures(params?: {
    * Retrieves the client permissions for the OTC Portal.
    * API Key Permissions Required: Funds permissions - Query and Funds permissions - Deposit
    */
-checkOtcClient(params?:
+checkOtcClient(params?: { nonce?: number }): Promise<OTCCheckClientResponse>
 
 ================
 File: src/WebsocketAPIClient.ts
@@ -2326,7 +2415,7 @@ constructor(
     options?: WSClientConfigurableOptions &
       Partial<WSAPIClientConfigurableOptions>,
     logger?: DefaultLogger,
-)
+  )
 ⋮----
 public getWSClient(): WebsocketClient
 ⋮----
@@ -2336,7 +2425,7 @@ public getWSClient(): WebsocketClient
 submitSpotOrder(
     params: Omit<WSAPIAddSpotOrderParams, 'token' | 'req_id'>,
     wsKey?: WSAPIWsKey,
-): Promise<WSAPISpotResponse<WSAPIAddSpotOrderResult, 'add_order'>>
+  ): Promise<WSAPISpotResponse<WSAPIAddSpotOrderResult, 'add_order'>>
 ⋮----
 /**
    * Amend an existing order
@@ -2344,7 +2433,7 @@ submitSpotOrder(
 amendSpotOrder(
     params: WSAPIAmendSpotOrderParams,
     wsKey?: WSAPIWsKey,
-): Promise<WSAPISpotResponse<WSAPIAmendSpotOrderResult, 'amend_order'>>
+  ): Promise<WSAPISpotResponse<WSAPIAmendSpotOrderResult, 'amend_order'>>
 ⋮----
 /**
    * Cancel one or more orders
@@ -2352,14 +2441,14 @@ amendSpotOrder(
 cancelSpotOrder(
     params: WSAPICancelSpotOrderParams,
     wsKey?: WSAPIWsKey,
-): Promise<WSAPISpotResponse<WSAPICancelSpotOrderResult, 'cancel_order'>>
+  ): Promise<WSAPISpotResponse<WSAPICancelSpotOrderResult, 'cancel_order'>>
 ⋮----
 /**
    * Cancel all open orders
    */
 cancelAllSpotOrders(
     wsKey?: WSAPIWsKey,
-): Promise<WSAPISpotResponse<WSAPICancelAllSpotOrdersResult, 'cancel_all'>>
+  ): Promise<WSAPISpotResponse<WSAPICancelAllSpotOrdersResult, 'cancel_all'>>
 ⋮----
 /**
    * Cancel all orders after a timeout (Dead Man's Switch)
@@ -2372,12 +2461,7 @@ cancelAllSpotOrdersAfter(
       WSAPICancelAllSpotOrdersAfterResult,
       'cancel_all_orders_after'
     >
-  > {
-    return this.wsClient.sendWSAPIRequest(
-      wsKey || WS_KEY_MAP.spotPrivateV2,
-      'cancel_all_orders_after',
-      params,
-    );
+  >
 ⋮----
 /**
    * Add multiple orders in a single batch (2-15 orders)
@@ -2385,7 +2469,7 @@ cancelAllSpotOrdersAfter(
 batchSubmitSpotOrders(
     params: WSAPIBatchAddSpotOrdersParams,
     wsKey?: WSAPIWsKey,
-): Promise<WSAPISpotResponse<WSAPIBatchAddSpotOrdersResult[], 'batch_add'>>
+  ): Promise<WSAPISpotResponse<WSAPIBatchAddSpotOrdersResult[], 'batch_add'>>
 ⋮----
 /**
    * Cancel multiple orders in a single batch (2-50 orders)
@@ -2395,12 +2479,7 @@ batchCancelSpotOrders(
     wsKey?: WSAPIWsKey,
   ): Promise<
     WSAPISpotResponse<WSAPIBatchCancelSpotOrdersResult, 'batch_cancel'>
-  > {
-    return this.wsClient.sendWSAPIRequest(
-      wsKey || WS_KEY_MAP.spotPrivateV2,
-      'batch_cancel',
-      params,
-    );
+  >
 ⋮----
 /**
    * Edit an existing order (legacy method, use amendSpotOrder instead)
@@ -2409,7 +2488,7 @@ batchCancelSpotOrders(
 editSpotOrder(
     params: WSAPIEditSpotOrderParams,
     wsKey?: WSAPIWsKey,
-): Promise<WSAPISpotResponse<WSAPIEditSpotOrderResult, 'edit_order'>>
+  ): Promise<WSAPISpotResponse<WSAPIEditSpotOrderResult, 'edit_order'>>
 /**
    *
    *
@@ -3848,98 +3927,9 @@ function sorted(side: Map<string, Level>, highFirst: boolean)
 ⋮----
 // CRC32 of the top 10 asks (low to high), then bids (high to low).
 // https://docs.kraken.com/exchange/guides/websockets/book-checksum-v2
-const sideText = (levels: Level[])
+const sideText = (levels: Level[]) =>
 ⋮----
 // Drop the mismatched book and subscribe again for a fresh snapshot.
-
-================
-File: examples/Spot/WebSockets/privateWs.ts
-================
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-import {
-  DefaultLogger,
-  LogParams,
-  WebsocketClient,
-  WS_KEY_MAP,
-  WSTopicRequest,
-} from '../../../src/index.js';
-import { WSSpotTopic } from '../../../src/types/websockets/ws-subscriptions.js';
-// normally you should install this module via npm: `npm install @siebly/kraken-api` and import the module:
-// import { LogParams, WebsocketClient, WSTopicRequest } from '@siebly/kraken-api';
-⋮----
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-⋮----
-// console.log('trace', ...params);
-⋮----
-async function start()
-⋮----
-/**
-   * The WebsocketClient is the core class to manage WebSocket subscriptions. Give it the topics you want to subscribe to, and it will handle the rest:
-   * - Connection management (connect, disconnect, reconnect)
-   * - Authentication for private topics
-   * - Subscription management (subscribe, unsubscribe, resubscribe on reconnect)
-   * - Message handling (dispatch messages to appropriate handlers)
-   *
-   * All you need to do is provide the topics you want to subscribe to when calling `subscribe()`, and the client will take care of the rest.
-   *
-   * Here we create a WebsocketClient instance with API key/secret for private topic subscriptions.
-   *
-   * In terms of product groups such as Spot, Derivatives, etc., the WebsocketClient understand the product group from the WsKey you provide when subscribing. For example, using `WS_KEY_MAP.spotPrivateV2` indicates that the subscription is for Spot private topics, as shown below.
-   *
-   * Refer to WS_KEY_MAP in the source code for all available WsKey options.
-   */
-⋮----
-// Data received
-⋮----
-// Something happened, attempting to reconnect
-⋮----
-// Reconnect successful
-⋮----
-// Connection closed. If unexpected, expect reconnect -> reconnected.
-⋮----
-// Reply to a request, e.g. "subscribe"/"unsubscribe"/"authenticate"
-⋮----
-/**
-   * The below examples demonstrate how you can subscribe to private topics.
-   *
-   * Note: while the documentation specifies "token" as a required parameter, the SDK will automatically:
-   * - fetch the token using your API key/secret,
-   * - manage token caching/refreshing,
-   * - include the token in the request for you.
-   *
-   * So you do NOT need to manually fetch or provide the token when subscribing to private topics.
-   *
-   * Do note that:
-   * - Most private topics use "spotPrivateV2" WsKey, which connects to "wss://ws-auth.kraken.com/v2"
-   * - The level3 topic uses "spotL3V2" WsKey, which connects to "wss://ws-l3.kraken.com/v2" (dedicated L3 endpoint)
-   */
-⋮----
-// Balances, requires auth: https://docs.kraken.com/api/docs/websocket-v2/executions
-⋮----
-// below params are optional:
-snap_trades: true, // default: false
-snap_orders: true, // default: true
-order_status: true, // default: true
-// rebased: false, // default: true
-ratecounter: true, // default: false
-// users: 'all', // default: undefined
-// snapshot: true, // default: false, deprecated, use 'snap_orders' or 'snap_trades' instead
-⋮----
-// Balances, requires auth: https://docs.kraken.com/api/docs/websocket-v2/balances
-⋮----
-// below params are optional:
-// snapshot: true, // default: true
-// rebased: false, // default: true
-// users: 'all',
-⋮----
-// Orders Level 3, requires auth: https://docs.kraken.com/api/docs/websocket-v2/level3
-// Note: level3 uses a dedicated endpoint (wss://ws-l3.kraken.com/v2), so use WS_KEY_MAP.spotL3V2
-⋮----
-// topic: 'level3',
-⋮----
-// below params are optional:
-// depth: 10, // default: 10, Possible values: [10, 100, 1000]
-// snapshot: true, // default: true
 
 ================
 File: examples/Spot/WebSockets/publicWs.ts
@@ -4215,7 +4205,7 @@ TWSKey extends string,
 constructor(
     options?: WSClientConfigurableOptions & { wsLoggerCategory: string },
     logger?: DefaultLogger,
-)
+  )
 ⋮----
 // Requires a confirmation "response" from the ws connection before assuming it is ready
 ⋮----
@@ -4342,7 +4332,7 @@ public setTimeOffsetMs(newOffset: number)
 protected async subscribeTopicsForWsKey(
     wsTopicRequests: WSTopicRequestOrStringTopic<WSTopic>[],
     wsKey: TWSKey,
-)
+  )
 ⋮----
 // Store topics, so future automation (post-auth, post-reconnect) has everything needed to resubscribe automatically
 ⋮----
@@ -4367,7 +4357,7 @@ protected async subscribeTopicsForWsKey(
 protected async unsubscribeTopicsForWsKey(
     wsTopicRequests: WSTopicRequestOrStringTopic<WSTopic>[],
     wsKey: TWSKey,
-): Promise<unknown>
+  ): Promise<unknown>
 ⋮----
 // Store topics, so future automation (post-auth, post-reconnect) has everything needed to resubscribe automatically
 ⋮----
@@ -4389,7 +4379,10 @@ protected async unsubscribeTopicsForWsKey(
 private sortTopicRequestsIntoPublicPrivate(
     wsTopicRequests: WSTopicRequest<WSTopic>[],
     wsKey: TWSKey,
-):
+  ): {
+    publicReqs: WSTopicRequest<WSTopic>[];
+    privateReqs: WSTopicRequest<WSTopic>[];
+  }
 ⋮----
 /** Get the WsStore that tracks websockets & topics */
 public getWsStore(): WsStore<TWSKey, WSTopicRequest<WSTopic>>
@@ -4407,7 +4400,7 @@ public async connect(
     wsKey: TWSKey,
     customUrl?: string | undefined,
     throwOnError?: boolean,
-): Promise<WSConnectedResult | undefined>
+  ): Promise<WSConnectedResult | undefined>
 ⋮----
 // Important: don't check for RECONNECTING here, or this clashes with reconnectWithDelay()!
 ⋮----
@@ -4423,7 +4416,7 @@ private parseWsError(context: string, error: any, wsKey: TWSKey): boolean
 private async sendAuthRequest(
     wsKey: TWSKey,
     eventToAuth?: object,
-): Promise<unknown>
+  ): Promise<unknown>
 ⋮----
 // If not required, this won't return anything
 ⋮----
@@ -4468,7 +4461,7 @@ protected async getWsOperationEventsForTopics(
     topics: WSTopicRequest<WSTopic>[],
     wsKey: TWSKey,
     operation: WSOperation,
-): Promise<MidflightWsRequestEvent<TWSRequestEvent>[]>
+  ): Promise<MidflightWsRequestEvent<TWSRequestEvent>[]>
 ⋮----
 // Events that are ready to send (usually stringified JSON)
 ⋮----
@@ -4480,7 +4473,7 @@ protected async getWsOperationEventsForTopics(
 private async requestSubscribeTopics(
     wsKey: TWSKey,
     wsTopicRequests: WSTopicRequest<WSTopic>[],
-)
+  )
 ⋮----
 // Automatically splits requests into smaller batches, if needed
 ⋮----
@@ -4496,7 +4489,7 @@ private async requestSubscribeTopics(
 private async requestUnsubscribeTopics(
     wsKey: TWSKey,
     wsTopicRequests: WSTopicRequest<WSTopic>[],
-)
+  )
 ⋮----
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 ⋮----
@@ -4507,14 +4500,14 @@ public tryWsSend(
     wsKey: TWSKey,
     wsMessage: string,
     throwExceptions?: boolean,
-)
+  )
 ⋮----
 private async onWsOpen(
     event: WebSocket.Event,
     wsKey: TWSKey,
     url: string,
     ws: WebSocket,
-)
+  )
 ⋮----
 private resolveConnectionInProgressPromise(wsKey: TWSKey)
 ⋮----
@@ -4545,7 +4538,7 @@ private async onWsReadyForEvents(wsKey: TWSKey)
 private onWsAuthenticated(
     wsKey: TWSKey,
     event: { isWSAPI?: boolean; WSAPIAuthChannel?: string },
-)
+  )
 ⋮----
 // Resolve & cleanup deferred "auth attempt in progress" promise
 ⋮----
@@ -4556,7 +4549,7 @@ private onWsPing(
     wsKey: TWSKey,
     ws: WebSocket,
     source: WsEventInternalSrc,
-)
+  )
 ⋮----
 private onWsPong(event: any, wsKey: TWSKey, source: WsEventInternalSrc)
 ⋮----
@@ -6323,21 +6316,21 @@ getClientType(): RestClientType
    */
 getCpaProgress(
     params: AffiliateGetCpaProgressParams,
-): Promise<AffiliateGetCpaProgressResponse>
+  ): Promise<AffiliateGetCpaProgressResponse>
 ⋮----
 /**
    * Get Payout History
    */
 getPayoutHistory(
     params?: AffiliateGetPayoutHistoryParams,
-): Promise<AffiliateGetPayoutHistoryResponse>
+  ): Promise<AffiliateGetPayoutHistoryResponse>
 ⋮----
 /**
    * Get Daily Activity
    */
 getDailyActivity(
     params?: AffiliateGetDailyActivityParams,
-): Promise<AffiliateGetDailyActivityResponse>
+  ): Promise<AffiliateGetDailyActivityResponse>
 
 ================
 File: src/index.ts
@@ -6441,14 +6434,14 @@ getClientType(): RestClientType
    */
 createEmbedUser(
     params: PartnerCreateUserParams,
-): Promise<PartnerCreateUserResponse>
+  ): Promise<PartnerCreateUserResponse>
 ⋮----
 /**
    * Get User
    *
    * Get a previously created user.
    */
-getEmbedUser(params:
+getEmbedUser(params: { user: string }): Promise<PartnerGetUserResponse>
 ⋮----
 /**
    * Update User
@@ -6457,7 +6450,7 @@ getEmbedUser(params:
    */
 updateEmbedUser(
     params: PartnerUpdateUserParams,
-): Promise<PartnerUpdateUserResponse>
+  ): Promise<PartnerUpdateUserResponse>
 ⋮----
 /**
    *
@@ -6474,7 +6467,7 @@ updateEmbedUser(
    */
 submitEmbedVerification(
     params: PartnerSubmitVerificationParams,
-): Promise<PartnerSubmitVerificationResponse>
+  ): Promise<PartnerSubmitVerificationResponse>
 ⋮----
 /**
    *
@@ -6490,7 +6483,7 @@ submitEmbedVerification(
    */
 listEmbedAssets(
     params?: PartnerListAssetsParams,
-): Promise<PartnerListAssetsResponse>
+  ): Promise<PartnerListAssetsResponse>
 ⋮----
 /**
    * Get Asset
@@ -6499,7 +6492,7 @@ listEmbedAssets(
    */
 getEmbedAsset(
     params: PartnerGetAssetParams,
-): Promise<PartnerGetAssetResponse>
+  ): Promise<PartnerGetAssetResponse>
 ⋮----
 /**
    * List Asset Rates
@@ -6509,7 +6502,7 @@ getEmbedAsset(
    */
 listEmbedAssetRates(
     params: PartnerListAssetRatesParams,
-): Promise<PartnerListAssetRatesResponse>
+  ): Promise<PartnerListAssetRatesResponse>
 ⋮----
 /**
    *
@@ -6524,7 +6517,7 @@ listEmbedAssetRates(
    */
 requestEmbedQuote(
     params: PartnerRequestQuoteParams,
-): Promise<PartnerRequestQuoteResponse>
+  ): Promise<PartnerRequestQuoteResponse>
 ⋮----
 /**
    * Get Quote
@@ -6533,7 +6526,7 @@ requestEmbedQuote(
    */
 getEmbedQuote(
     params: PartnerGetQuoteParams,
-): Promise<PartnerGetQuoteResponse>
+  ): Promise<PartnerGetQuoteResponse>
 ⋮----
 /**
    * Execute Quote
@@ -6542,7 +6535,7 @@ getEmbedQuote(
    */
 executeEmbedQuote(
     params: PartnerExecuteQuoteParams,
-): Promise<PartnerExecuteQuoteResponse>
+  ): Promise<PartnerExecuteQuoteResponse>
 ⋮----
 /**
    * Get Quote Limits (RFQ)
@@ -6551,7 +6544,7 @@ executeEmbedQuote(
    */
 getEmbedQuoteLimits(
     params: PartnerGetQuoteLimitsParams,
-): Promise<PartnerGetQuoteLimitsResponse>
+  ): Promise<PartnerGetQuoteLimitsResponse>
 ⋮----
 /**
    * Request Prospective Quote (RFQ)
@@ -6560,7 +6553,7 @@ getEmbedQuoteLimits(
    */
 requestEmbedProspectiveQuote(
     params: PartnerRequestProspectiveQuoteParams,
-): Promise<PartnerRequestProspectiveQuoteResponse>
+  ): Promise<PartnerRequestProspectiveQuoteResponse>
 ⋮----
 /**
    *
@@ -6575,7 +6568,7 @@ requestEmbedProspectiveQuote(
    */
 createEmbedCustomOrder(
     params: PartnerCreateCustomOrderParams,
-): Promise<PartnerCreateCustomOrderResponse>
+  ): Promise<PartnerCreateCustomOrderResponse>
 ⋮----
 /**
    * List Custom Orders
@@ -6584,7 +6577,7 @@ createEmbedCustomOrder(
    */
 listEmbedCustomOrders(
     params: PartnerListCustomOrdersParams,
-): Promise<PartnerListCustomOrdersResponse>
+  ): Promise<PartnerListCustomOrdersResponse>
 ⋮----
 /**
    * Get Custom Order
@@ -6593,7 +6586,7 @@ listEmbedCustomOrders(
    */
 getEmbedCustomOrder(
     params: PartnerGetCustomOrderParams,
-): Promise<PartnerGetCustomOrderResponse>
+  ): Promise<PartnerGetCustomOrderResponse>
 ⋮----
 /**
    * Cancel Custom Order
@@ -6602,7 +6595,7 @@ getEmbedCustomOrder(
    */
 cancelEmbedCustomOrder(
     params: PartnerCancelCustomOrderParams,
-): Promise<PartnerCancelCustomOrderResponse>
+  ): Promise<PartnerCancelCustomOrderResponse>
 ⋮----
 /**
    *
@@ -6617,7 +6610,7 @@ cancelEmbedCustomOrder(
    */
 getEmbedPortfolioSummary(
     params: PartnerGetPortfolioSummaryParams,
-): Promise<PartnerGetPortfolioSummaryResponse>
+  ): Promise<PartnerGetPortfolioSummaryResponse>
 ⋮----
 /**
    * Get Portfolio History
@@ -6627,7 +6620,7 @@ getEmbedPortfolioSummary(
    */
 getEmbedPortfolioHistory(
     params: PartnerGetPortfolioHistoryParams,
-): Promise<PartnerGetPortfolioHistoryResponse>
+  ): Promise<PartnerGetPortfolioHistoryResponse>
 ⋮----
 /**
    * List Portfolio Details
@@ -6636,7 +6629,7 @@ getEmbedPortfolioHistory(
    */
 listEmbedPortfolioDetails(
     params: PartnerListPortfolioDetailsParams,
-): Promise<PartnerListPortfolioDetailsResponse>
+  ): Promise<PartnerListPortfolioDetailsResponse>
 ⋮----
 /**
    * List Portfolio Transactions
@@ -6645,7 +6638,7 @@ listEmbedPortfolioDetails(
    */
 listEmbedPortfolioTransactions(
     params: PartnerListPortfolioTransactionsParams,
-): Promise<PartnerListPortfolioTransactionsResponse>
+  ): Promise<PartnerListPortfolioTransactionsResponse>
 ⋮----
 /**
    *
@@ -6661,7 +6654,7 @@ listEmbedPortfolioTransactions(
    */
 getEmbedEarnSummary(
     params: PartnerGetEarnSummaryParams,
-): Promise<PartnerGetEarnSummaryResponse>
+  ): Promise<PartnerGetEarnSummaryResponse>
 ⋮----
 /**
    * List Earn Assets
@@ -6671,7 +6664,7 @@ getEmbedEarnSummary(
    */
 listEmbedEarnAssets(
     params?: PartnerListEarnAssetsParams,
-): Promise<PartnerListEarnAssetsResponse>
+  ): Promise<PartnerListEarnAssetsResponse>
 ⋮----
 /**
    * Toggle Auto-Earn
@@ -6682,7 +6675,7 @@ listEmbedEarnAssets(
    */
 toggleEmbedAutoEarn(
     params: PartnerToggleAutoEarnParams,
-): Promise<PartnerToggleAutoEarnResponse>
+  ): Promise<PartnerToggleAutoEarnResponse>
 ⋮----
 /**
    *
@@ -6698,7 +6691,7 @@ toggleEmbedAutoEarn(
    */
 withdrawEmbedFunds(
     params: PartnerWithdrawFundsParams,
-): Promise<PartnerWithdrawFundsResponse>
+  ): Promise<PartnerWithdrawFundsResponse>
 ⋮----
 /**
    * List Funding Transactions
@@ -6709,7 +6702,7 @@ withdrawEmbedFunds(
    */
 listEmbedFundingTransactions(
     params: PartnerListFundingTransactionsParams,
-): Promise<PartnerListFundingTransactionsResponse>
+  ): Promise<PartnerListFundingTransactionsResponse>
 ⋮----
 /**
    *
@@ -6725,7 +6718,7 @@ listEmbedFundingTransactions(
    */
 listEmbedSettlementReports(
     params?: PartnerListSettlementReportsParams,
-): Promise<PartnerListSettlementReportsResponse>
+  ): Promise<PartnerListSettlementReportsResponse>
 ⋮----
 /**
    * Get Settlement Report
@@ -6734,7 +6727,7 @@ listEmbedSettlementReports(
    */
 getEmbedSettlementReport(
     params: PartnerGetSettlementReportParams,
-): Promise<PartnerGetSettlementReportResponse>
+  ): Promise<PartnerGetSettlementReportResponse>
 ⋮----
 /**
    *
@@ -6786,7 +6779,7 @@ listRampCountries(): Promise<PartnerListRampCountriesResponse>
    */
 getRampLimits(
     params: PartnerGetRampLimitsParams,
-): Promise<PartnerGetRampLimitsResponse>
+  ): Promise<PartnerGetRampLimitsResponse>
 ⋮----
 /**
    * Get Prospective Quote
@@ -6796,7 +6789,7 @@ getRampLimits(
    */
 getRampProspectiveQuote(
     params: PartnerGetRampProspectiveQuoteParams,
-): Promise<PartnerGetRampProspectiveQuoteResponse>
+  ): Promise<PartnerGetRampProspectiveQuoteResponse>
 ⋮----
 /**
    *
@@ -6812,7 +6805,7 @@ getRampProspectiveQuote(
    */
 getRampCheckoutUrl(
     params: PartnerGetRampCheckoutUrlParams,
-): Promise<PartnerGetRampCheckoutUrlResponse>
+  ): Promise<PartnerGetRampCheckoutUrlResponse>
 
 ================
 File: .gitignore
@@ -6851,11 +6844,6 @@ File: .npmrc
 ================
 min-release-age=30
 save-exact=true
-
-================
-File: .nvmrc
-================
-v24.18.0
 
 ================
 File: examples/Derivatives/Private/testnet.ts
@@ -7004,403 +6992,6 @@ async function getAccountLogFiltered()
 // initiateWithdrawalToSpot();
 
 ================
-File: src/lib/websocket/WsStore.ts
-================
-import WebSocket from 'isomorphic-ws';
-⋮----
-import { DefaultLogger } from './logger.js';
-import {
-  DeferredPromise,
-  WSConnectedResult,
-  WsConnectionStateEnum,
-  WsStoredState,
-} from './WsStore.types.js';
-⋮----
-/**
- * Simple comparison of two objects, recursive for nested objects. Adoped from OKX SDK.
- */
-export function isDeepObjectMatch(object1: any, object2: any): boolean
-⋮----
-// console.log('not same key count', { keys1, keys2 });
-// not the same amount of keys or keys don't match
-⋮----
-// console.log('not same key names: ', { keys1, keys2 });
-⋮----
-type DeferredPromiseRef =
-  (typeof DEFERRED_PROMISE_REF)[keyof typeof DEFERRED_PROMISE_REF];
-⋮----
-export class WsStore<
-WsKey extends string,
-⋮----
-constructor(logger: DefaultLogger)
-⋮----
-/** Get WS stored state for key, optionally create if missing */
-get(
-    key: WsKey,
-    createIfMissing?: true,
-  ): WsStoredState<TWSTopicSubscribeEventArgs>;
-⋮----
-get(
-    key: WsKey,
-    createIfMissing?: false,
-  ): WsStoredState<TWSTopicSubscribeEventArgs> | undefined;
-⋮----
-get(
-    key: WsKey,
-    createIfMissing?: boolean,
-): WsStoredState<TWSTopicSubscribeEventArgs> | undefined
-⋮----
-getKeys(): WsKey[]
-⋮----
-create(key: WsKey): WsStoredState<TWSTopicSubscribeEventArgs> | undefined
-⋮----
-delete(key: WsKey): void
-⋮----
-// TODO: should we allow this at all? Perhaps block this from happening...
-⋮----
-/* connection websocket */
-⋮----
-hasExistingActiveConnection(key: WsKey): boolean
-⋮----
-getWs(key: WsKey): WebSocket | undefined
-⋮----
-setWs(key: WsKey, wsConnection: WebSocket): WebSocket
-⋮----
-/**
-   * deferred promises
-   */
-⋮----
-getDeferredPromise<TSuccessResult = any>(
-    wsKey: WsKey,
-    promiseRef: string | DeferredPromiseRef,
-): DeferredPromise<TSuccessResult> | undefined
-⋮----
-createDeferredPromise<TSuccessResult = any>(
-    wsKey: WsKey,
-    promiseRef: string | DeferredPromiseRef,
-    throwIfExists: boolean,
-): DeferredPromise<TSuccessResult>
-⋮----
-// console.log('existing promise');
-⋮----
-// console.log('create promise');
-⋮----
-// TODO: Once stable, use Promise.withResolvers in future
-⋮----
-resolveDeferredPromise(
-    wsKey: WsKey,
-    promiseRef: string | DeferredPromiseRef,
-    value: unknown,
-    removeAfter: boolean,
-): void
-⋮----
-rejectDeferredPromise(
-    wsKey: WsKey,
-    promiseRef: string | DeferredPromiseRef,
-    value: unknown,
-    removeAfter: boolean,
-): void
-⋮----
-removeDeferredPromise(
-    wsKey: WsKey,
-    promiseRef: string | DeferredPromiseRef,
-): void
-⋮----
-// Just in case it's pending
-⋮----
-rejectAllDeferredPromises(wsKey: WsKey, reason: string): void
-⋮----
-// Skip reserved keys, such as the connection promise
-⋮----
-/** Get promise designed to track a connection attempt in progress. Resolves once connected. */
-getConnectionInProgressPromise(
-    wsKey: WsKey,
-): DeferredPromise<WSConnectedResult> | undefined
-⋮----
-getAuthenticationInProgressPromise(
-    wsKey: WsKey,
-): DeferredPromise<WSConnectedResult &
-⋮----
-/**
-   * Create a deferred promise designed to track a connection attempt in progress.
-   *
-   * Will throw if existing promise is found.
-   */
-createConnectionInProgressPromise(
-    wsKey: WsKey,
-    throwIfExists: boolean,
-): DeferredPromise<WSConnectedResult>
-⋮----
-createAuthenticationInProgressPromise(
-    wsKey: WsKey,
-    throwIfExists: boolean,
-): DeferredPromise<WSConnectedResult &
-⋮----
-/** Remove promise designed to track a connection attempt in progress */
-removeConnectingInProgressPromise(wsKey: WsKey): void
-⋮----
-removeAuthenticationInProgressPromise(wsKey: WsKey): void
-⋮----
-/* connection state */
-⋮----
-isWsOpen(key: WsKey): boolean
-⋮----
-getConnectionState(key: WsKey): WsConnectionStateEnum
-⋮----
-setConnectionState(key: WsKey, state: WsConnectionStateEnum)
-⋮----
-isConnectionState(key: WsKey, state: WsConnectionStateEnum): boolean
-⋮----
-/**
-   * Check if we're currently in the process of opening a connection for any reason. Safer than only checking "CONNECTING" as the state
-   * @param key
-   * @returns
-   */
-isConnectionAttemptInProgress(key: WsKey): boolean
-⋮----
-const stateChangeTimeout = 15000; // allow a max 15 second timeout since the last state change before assuming stuck;
-⋮----
-/* subscribed topics */
-⋮----
-getTopics(key: WsKey): Set<TWSTopicSubscribeEventArgs>
-⋮----
-getTopicsAsArray(key: WsKey): TWSTopicSubscribeEventArgs[]
-⋮----
-getTopicsByKey(): Record<string, Set<TWSTopicSubscribeEventArgs>>
-⋮----
-/**
-   * Find matching "topic" request from the store
-   * @param key
-   * @param topic
-   * @returns
-   */
-getMatchingTopic(key: WsKey, topic: TWSTopicSubscribeEventArgs)
-⋮----
-addTopic(key: WsKey, topic: TWSTopicSubscribeEventArgs)
-⋮----
-// Check for duplicate topic. If already tracked, don't store this one
-⋮----
-deleteTopic(key: WsKey, topic: TWSTopicSubscribeEventArgs)
-⋮----
-// Check if we're subscribed to a topic like this
-
-================
-File: src/lib/requestUtils.ts
-================
-/**
- * Used to switch how authentication/requests work under the hood
- */
-⋮----
-/** Spot */
-⋮----
-/** Futures */
-⋮----
-/** Institutional */
-⋮----
-/** Partner */
-⋮----
-/** Affiliate reporting */
-⋮----
-export type RestClientType =
-  (typeof REST_CLIENT_TYPE_ENUM)[keyof typeof REST_CLIENT_TYPE_ENUM];
-⋮----
-/**
- * Kraken decommissioned demo-futures.kraken.com at 13:00 UTC on 14 July 2026.
- * No replacement demo host exists, and Spot never had a testnet.
- */
-⋮----
-export interface RestClientOptions {
-  /** Your API key */
-  apiKey?: string;
-
-  /** Your API secret */
-  apiSecret?: string;
-
-  /**
-   * Kraken retired the Futures demo (testnet) environment on 14 July 2026.
-   * There is no replacement demo host, and Spot never had a testnet.
-   *
-   * Setting this to `true` throws. The live environment is used when it is omitted or `false`.
-   *
-   * See https://support.kraken.com/articles/360024809011-api-testing-environment-derivatives
-   */
-  testnet?: boolean;
-
-  /**
-   * Use access token instead of sign, if this is provided.
-   * For guidance refer to: https://github.com/tiagosiebler/kucoin-api/issues/2
-   */
-  apiAccessToken?: string;
-
-  /** Default: false. If true, we'll throw errors if any params are undefined */
-  strictParamValidation?: boolean;
-
-  /**
-   * Optionally override API protocol + domain
-   * e.g baseUrl: 'https://api.kraken.com'
-   **/
-  baseUrl?: string;
-
-  /** Default: true. whether to try and post-process request exceptions (and throw them). */
-  parseExceptions?: boolean;
-
-  customTimestampFn?: () => number;
-
-  /**
-   * Enable keep alive for REST API requests (via axios).
-   */
-  keepAlive?: boolean;
-
-  /**
-   * When using HTTP KeepAlive, how often to send TCP KeepAlive packets over sockets being kept alive. Default = 1000.
-   * Only relevant if keepAlive is set to true.
-   * Default: 1000 (defaults comes from https agent)
-   */
-  keepAliveMsecs?: number;
-
-  /**
-   * Allows you to provide a custom "signMessage" function, e.g. to use node's much faster createHmac method
-   *
-   * Look in the examples folder for a demonstration on using node's createHmac instead.
-   */
-  customSignMessageFn?: (message: string, secret: string) => Promise<string>;
-}
-⋮----
-/** Your API key */
-⋮----
-/** Your API secret */
-⋮----
-/**
-   * Kraken retired the Futures demo (testnet) environment on 14 July 2026.
-   * There is no replacement demo host, and Spot never had a testnet.
-   *
-   * Setting this to `true` throws. The live environment is used when it is omitted or `false`.
-   *
-   * See https://support.kraken.com/articles/360024809011-api-testing-environment-derivatives
-   */
-⋮----
-/**
-   * Use access token instead of sign, if this is provided.
-   * For guidance refer to: https://github.com/tiagosiebler/kucoin-api/issues/2
-   */
-⋮----
-/** Default: false. If true, we'll throw errors if any params are undefined */
-⋮----
-/**
-   * Optionally override API protocol + domain
-   * e.g baseUrl: 'https://api.kraken.com'
-   **/
-⋮----
-/** Default: true. whether to try and post-process request exceptions (and throw them). */
-⋮----
-/**
-   * Enable keep alive for REST API requests (via axios).
-   */
-⋮----
-/**
-   * When using HTTP KeepAlive, how often to send TCP KeepAlive packets over sockets being kept alive. Default = 1000.
-   * Only relevant if keepAlive is set to true.
-   * Default: 1000 (defaults comes from https agent)
-   */
-⋮----
-/**
-   * Allows you to provide a custom "signMessage" function, e.g. to use node's much faster createHmac method
-   *
-   * Look in the examples folder for a demonstration on using node's createHmac instead.
-   */
-⋮----
-export function serializeParams<T extends Record<string, any> | undefined = {}>(
-  params: T,
-  strict_validation: boolean | undefined,
-  encodeValues: boolean,
-  prefixWith: string,
-  repeatArrayValuesAsKVPairs: boolean,
-): string
-⋮----
-// Only prefix if there's a value
-⋮----
-export function isEmptyObject(obj: any, acceptStringIfNotEmpty: boolean)
-⋮----
-export function getRestBaseUrl(
-  restClientOptions: RestClientOptions,
-  restClientType: RestClientType,
-): string
-
-================
-File: src/types/websockets/ws-subscriptions.ts
-================
-] as const; // Note: Admin topics (Status, Heartbeat & Ping are automatically used internally and can't be subscribed to manually).
-⋮----
-export type WSSpotPublicTopic = (typeof WS_SPOT_PUBLIC_TOPICS)[number];
-⋮----
-export type WSSpotPrivateTopic = (typeof WS_SPOT_PRIVATE_TOPICS)[number];
-⋮----
-export type WSSpotTopic = WSSpotPublicTopic | WSSpotPrivateTopic;
-⋮----
-export type WSDerivativesPublicTopic =
-  (typeof WS_DERIVATIVES_PUBLIC_TOPICS)[number];
-⋮----
-export type WSDerivativesPrivateTopic =
-  (typeof WS_DERIVATIVES_PRIVATE_TOPICS)[number];
-⋮----
-export type WSDerivativesTopic =
-  | WSDerivativesPublicTopic
-  | WSDerivativesPrivateTopic;
-⋮----
-export type WSTopic = WSSpotTopic | WSDerivativesTopic;
-⋮----
-export interface WSSpotInstrumentSubscribeParams {
-  execution_venue?: 'international' | 'bitnomial-exchange';
-  snapshot?: boolean;
-}
-⋮----
-export interface WSSpotExecutionsSubscribeParams {
-  symbol?: string[];
-  snap_trades?: boolean;
-  snapshot?: boolean;
-  rebased?: boolean;
-}
-⋮----
-export interface WSSpotBalancesSubscribeParams {
-  snapshot?: boolean;
-  rebased?: boolean;
-}
-⋮----
-/** Spot public v2 `book` subscribe payload. Spread into `params` beside `channel`. */
-export interface WSSpotPublicBookParams {
-  symbol: string[];
-  /** 10, 25, 100, 500, or 1000. Default 10. */
-  depth?: 10 | 25 | 100 | 500 | 1000;
-  /** Default true. */
-  snapshot?: boolean;
-}
-⋮----
-/** 10, 25, 100, 500, or 1000. Default 10. */
-⋮----
-/** Default true. */
-⋮----
-/** Derivatives public v1 `book` subscribe payload. Spread beside `feed`. */
-export interface WSDerivativesPublicBookParams {
-  product_ids: string[];
-}
-⋮----
-export type WSPublicBookParams =
-  | WSSpotPublicBookParams
-  | WSDerivativesPublicBookParams;
-
-================
-File: webpack/webpack.config.cjs
-================
-function generateConfig(name)
-⋮----
-// Add '.ts' and '.tsx' as resolvable extensions.
-⋮----
-// Node.js core modules not available in browsers
-// The REST client's https.Agent (for keepAlive) is Node.js-only and won't work in browsers
-⋮----
-// Code is already transpiled from TypeScript, no additional loaders needed
-
-================
 File: src/lib/websocket/websocket-util.ts
 ================
 import WebSocket from 'isomorphic-ws';
@@ -7527,6 +7118,760 @@ export function getNormalisedTopicRequests(
 // already a normalised object, thanks to user
 
 ================
+File: src/lib/websocket/WsStore.ts
+================
+import WebSocket from 'isomorphic-ws';
+⋮----
+import { DefaultLogger } from './logger.js';
+import {
+  DeferredPromise,
+  WSConnectedResult,
+  WsConnectionStateEnum,
+  WsStoredState,
+} from './WsStore.types.js';
+⋮----
+/**
+ * Simple comparison of two objects, recursive for nested objects. Adoped from OKX SDK.
+ */
+export function isDeepObjectMatch(object1: any, object2: any): boolean
+⋮----
+// console.log('not same key count', { keys1, keys2 });
+// not the same amount of keys or keys don't match
+⋮----
+// console.log('not same key names: ', { keys1, keys2 });
+⋮----
+type DeferredPromiseRef =
+  (typeof DEFERRED_PROMISE_REF)[keyof typeof DEFERRED_PROMISE_REF];
+⋮----
+export class WsStore<
+WsKey extends string,
+⋮----
+constructor(logger: DefaultLogger)
+⋮----
+/** Get WS stored state for key, optionally create if missing */
+get(
+    key: WsKey,
+    createIfMissing?: true,
+  ): WsStoredState<TWSTopicSubscribeEventArgs>;
+⋮----
+get(
+    key: WsKey,
+    createIfMissing?: false,
+  ): WsStoredState<TWSTopicSubscribeEventArgs> | undefined;
+⋮----
+get(
+    key: WsKey,
+    createIfMissing?: boolean,
+  ): WsStoredState<TWSTopicSubscribeEventArgs> | undefined
+⋮----
+getKeys(): WsKey[]
+⋮----
+create(key: WsKey): WsStoredState<TWSTopicSubscribeEventArgs> | undefined
+⋮----
+delete(key: WsKey): void
+⋮----
+// TODO: should we allow this at all? Perhaps block this from happening...
+⋮----
+/* connection websocket */
+⋮----
+hasExistingActiveConnection(key: WsKey): boolean
+⋮----
+getWs(key: WsKey): WebSocket | undefined
+⋮----
+setWs(key: WsKey, wsConnection: WebSocket): WebSocket
+⋮----
+/**
+   * deferred promises
+   */
+⋮----
+getDeferredPromise<TSuccessResult = any>(
+    wsKey: WsKey,
+    promiseRef: string | DeferredPromiseRef,
+  ): DeferredPromise<TSuccessResult> | undefined
+⋮----
+createDeferredPromise<TSuccessResult = any>(
+    wsKey: WsKey,
+    promiseRef: string | DeferredPromiseRef,
+    throwIfExists: boolean,
+  ): DeferredPromise<TSuccessResult>
+⋮----
+// console.log('existing promise');
+⋮----
+// console.log('create promise');
+⋮----
+// TODO: Once stable, use Promise.withResolvers in future
+⋮----
+resolveDeferredPromise(
+    wsKey: WsKey,
+    promiseRef: string | DeferredPromiseRef,
+    value: unknown,
+    removeAfter: boolean,
+  ): void
+⋮----
+rejectDeferredPromise(
+    wsKey: WsKey,
+    promiseRef: string | DeferredPromiseRef,
+    value: unknown,
+    removeAfter: boolean,
+  ): void
+⋮----
+removeDeferredPromise(
+    wsKey: WsKey,
+    promiseRef: string | DeferredPromiseRef,
+  ): void
+⋮----
+// Just in case it's pending
+⋮----
+rejectAllDeferredPromises(wsKey: WsKey, reason: string): void
+⋮----
+// Skip reserved keys, such as the connection promise
+⋮----
+/** Get promise designed to track a connection attempt in progress. Resolves once connected. */
+getConnectionInProgressPromise(
+    wsKey: WsKey,
+  ): DeferredPromise<WSConnectedResult> | undefined
+⋮----
+getAuthenticationInProgressPromise(
+    wsKey: WsKey,
+  ): DeferredPromise<WSConnectedResult & { event: any }> | undefined
+⋮----
+/**
+   * Create a deferred promise designed to track a connection attempt in progress.
+   *
+   * Will throw if existing promise is found.
+   */
+createConnectionInProgressPromise(
+    wsKey: WsKey,
+    throwIfExists: boolean,
+  ): DeferredPromise<WSConnectedResult>
+⋮----
+createAuthenticationInProgressPromise(
+    wsKey: WsKey,
+    throwIfExists: boolean,
+  ): DeferredPromise<WSConnectedResult & { event: any }>
+⋮----
+/** Remove promise designed to track a connection attempt in progress */
+removeConnectingInProgressPromise(wsKey: WsKey): void
+⋮----
+removeAuthenticationInProgressPromise(wsKey: WsKey): void
+⋮----
+/* connection state */
+⋮----
+isWsOpen(key: WsKey): boolean
+⋮----
+getConnectionState(key: WsKey): WsConnectionStateEnum
+⋮----
+setConnectionState(key: WsKey, state: WsConnectionStateEnum)
+⋮----
+isConnectionState(key: WsKey, state: WsConnectionStateEnum): boolean
+⋮----
+/**
+   * Check if we're currently in the process of opening a connection for any reason. Safer than only checking "CONNECTING" as the state
+   * @param key
+   * @returns
+   */
+isConnectionAttemptInProgress(key: WsKey): boolean
+⋮----
+const stateChangeTimeout = 15000; // allow a max 15 second timeout since the last state change before assuming stuck;
+⋮----
+/* subscribed topics */
+⋮----
+getTopics(key: WsKey): Set<TWSTopicSubscribeEventArgs>
+⋮----
+getTopicsAsArray(key: WsKey): TWSTopicSubscribeEventArgs[]
+⋮----
+getTopicsByKey(): Record<string, Set<TWSTopicSubscribeEventArgs>>
+⋮----
+/**
+   * Find matching "topic" request from the store
+   * @param key
+   * @param topic
+   * @returns
+   */
+getMatchingTopic(key: WsKey, topic: TWSTopicSubscribeEventArgs)
+⋮----
+addTopic(key: WsKey, topic: TWSTopicSubscribeEventArgs)
+⋮----
+// Check for duplicate topic. If already tracked, don't store this one
+⋮----
+deleteTopic(key: WsKey, topic: TWSTopicSubscribeEventArgs)
+⋮----
+// Check if we're subscribed to a topic like this
+
+================
+File: src/types/websockets/ws-subscriptions.ts
+================
+] as const; // Note: Admin topics (Status, Heartbeat & Ping are automatically used internally and can't be subscribed to manually).
+⋮----
+export type WSSpotPublicTopic = (typeof WS_SPOT_PUBLIC_TOPICS)[number];
+⋮----
+export type WSSpotPrivateTopic = (typeof WS_SPOT_PRIVATE_TOPICS)[number];
+⋮----
+export type WSSpotTopic = WSSpotPublicTopic | WSSpotPrivateTopic;
+⋮----
+export type WSDerivativesPublicTopic =
+  (typeof WS_DERIVATIVES_PUBLIC_TOPICS)[number];
+⋮----
+export type WSDerivativesPrivateTopic =
+  (typeof WS_DERIVATIVES_PRIVATE_TOPICS)[number];
+⋮----
+export type WSDerivativesTopic =
+  | WSDerivativesPublicTopic
+  | WSDerivativesPrivateTopic;
+⋮----
+export type WSTopic = WSSpotTopic | WSDerivativesTopic;
+⋮----
+export interface WSSpotInstrumentSubscribeParams {
+  execution_venue?: 'international' | 'bitnomial-exchange';
+  snapshot?: boolean;
+}
+⋮----
+export interface WSSpotExecutionsSubscribeParams {
+  symbol?: string[];
+  snap_trades?: boolean;
+  snapshot?: boolean;
+  rebased?: boolean;
+}
+⋮----
+export interface WSSpotBalancesSubscribeParams {
+  snapshot?: boolean;
+  rebased?: boolean;
+}
+⋮----
+/** Spot public v2 `book` subscribe payload. Spread into `params` beside `channel`. */
+export interface WSSpotPublicBookParams {
+  symbol: string[];
+  /** 10, 25, 100, 500, or 1000. Default 10. */
+  depth?: 10 | 25 | 100 | 500 | 1000;
+  /** Default true. */
+  snapshot?: boolean;
+}
+⋮----
+/** 10, 25, 100, 500, or 1000. Default 10. */
+⋮----
+/** Default true. */
+⋮----
+/** Derivatives public v1 `book` subscribe payload. Spread beside `feed`. */
+export interface WSDerivativesPublicBookParams {
+  product_ids: string[];
+}
+⋮----
+export type WSPublicBookParams =
+  | WSSpotPublicBookParams
+  | WSDerivativesPublicBookParams;
+
+================
+File: src/WebsocketClient.ts
+================
+import {
+  BaseWebsocketClient,
+  EmittableEvent,
+  MidflightWsRequestEvent,
+} from './lib/BaseWSClient.js';
+import { neverGuard } from './lib/misc-util.js';
+import {
+  KRAKEN_FUTURES_TESTNET_RETIRED_ERROR,
+  RestClientOptions,
+} from './lib/requestUtils.js';
+import {
+  hashMessage,
+  SignAlgorithm,
+  SignEncodeMethod,
+  signMessage,
+  SignMessageOptions,
+} from './lib/webCryptoAPI.js';
+import { DefaultLogger } from './lib/websocket/logger.js';
+import { RestClientCache } from './lib/websocket/rest-client-cache.js';
+import {
+  getPromiseRefForWSAPIRequest,
+  WS_KEY_MAP,
+  WsKey,
+  WSOperation,
+  WSRequestOperationKraken,
+  WSTopicRequest,
+} from './lib/websocket/websocket-util.js';
+import { WSConnectedResult } from './lib/websocket/WsStore.types.js';
+import {
+  Exact,
+  WS_API_Operations,
+  WSAPIAuthenticationRequestFromServer,
+  WSAPIRequestOperationKrakenSpot,
+  WSAPITopicRequestParamMap,
+  WSAPITopicResponseMap,
+  WSAPIWsKey,
+  WSAPIWsKeyTopicMap,
+} from './types/websockets/ws-api.js';
+import { MessageEventLike } from './types/websockets/ws-events.js';
+import {
+  WSClientConfigurableOptions,
+  WsMarket,
+} from './types/websockets/ws-general.js';
+import {
+  WS_DERIVATIVES_PRIVATE_TOPICS,
+  WS_SPOT_PRIVATE_TOPICS,
+  WSTopic,
+} from './types/websockets/ws-subscriptions.js';
+⋮----
+export interface WSAPIRequestFlags {
+  /** If true, will skip auth requirement for WS API connection */
+  authIsOptional?: boolean | undefined;
+}
+⋮----
+/** If true, will skip auth requirement for WS API connection */
+⋮----
+export class WebsocketClient extends BaseWebsocketClient<WsKey, any>
+⋮----
+constructor(options?: WSClientConfigurableOptions, logger?: DefaultLogger)
+⋮----
+/**
+   * Request connection of all dependent (public & private) websockets, instead of waiting for automatic connection by library.
+   *
+   * Returns array of promises that individually resolve when each connection is successfully opened.
+   */
+public connectAll(): Promise<WSConnectedResult | undefined>[]
+⋮----
+/**
+   * Ensures the WS API connection is active and ready.
+   *
+   * You do not need to call this, but if you call this before making any WS API requests,
+   * it can accelerate the first request (by preparing the connection in advance).
+   */
+public connectWSAPI(wsKey: WSAPIWsKey, skipAuth?: boolean): Promise<unknown>
+⋮----
+/** This call automatically ensures the connection is active AND authenticated before resolving */
+⋮----
+/**
+   * Request subscription to one or more topics. Pass topics as either an array of strings, or array of objects (if the topic has parameters).
+   * Objects should be formatted as {topic: string, params: object}.
+   *
+   * - Subscriptions are automatically routed to the correct websocket connection.
+   * - Authentication/connection is automatic.
+   * - Resubscribe after network issues is automatic.
+   *
+   * Call `unsubscribe(topics)` to remove topics
+   */
+public subscribe<TTopic extends WSTopic>(
+    requests:
+      | (WSTopicRequest<TTopic> | TTopic)
+      | (WSTopicRequest<TTopic> | TTopic)[],
+    wsKey: WsKey,
+  )
+⋮----
+/**
+   * Unsubscribe from one or more topics. Similar to subscribe() but in reverse.
+   *
+   * - Requests are automatically routed to the correct websocket connection.
+   * - These topics will be removed from the topic cache, so they won't be subscribed to again.
+   */
+public unsubscribe<TTopic extends WSTopic>(
+    requests:
+      | (WSTopicRequest<TTopic> | TTopic)
+      | (WSTopicRequest<TTopic> | TTopic)[],
+    wsKey: WsKey,
+  )
+⋮----
+/**
+   * WS API Methods - similar to the REST API, but via WebSockets
+   */
+⋮----
+/**
+   * Send a Websocket API event on a connection. Returns a promise that resolves on reply.
+   *
+   * Returned promise is rejected if an exception is detected in the reply OR the connection disconnects for any reason (even if automatic reconnect will happen).
+   *
+   * After a fresh connection, you should always send a login request first.
+   *
+   * If you authenticated once and you're reconnected later (e.g. connection temporarily lost), the SDK will by default automatically:
+   * - Detect you were authenticated to the WS API before
+   * - Try to re-authenticate (up to 5 times, in case something (bad timestamp) goes wrong)
+   * - If it succeeds, it will emit the 'authenticated' event.
+   * - If it fails and gives up, it will emit an 'exception' event (type: 'wsapi.auth', reason: detailed text).
+   *
+   * You can turn off the automatic re-auth WS API logic using `reauthWSAPIOnReconnect: false` in the WSClient config.
+   *
+   * @param wsKey - The connection this event is for (e.g. "spotV4" | "perpFuturesUSDTV4" | "perpFuturesBTCV4" | "deliveryFuturesUSDTV4" | "deliveryFuturesBTCV4" | "optionsV4")
+   * @param channel - The channel this event is for (e.g. "spot.login" to authenticate)
+   * @param params - Any request parameters for the payload (contents of req_param in the docs). Signature generation is automatic, only send parameters such as order ID as per the docs.
+   * @returns Promise - tries to resolve with async WS API response. Rejects if disconnected or exception is seen in async WS API response
+   */
+⋮----
+// This overload allows the caller to omit the 3rd param, if it isn't required (e.g. for the login call)
+async sendWSAPIRequest<
+    TWSKey extends keyof WSAPIWsKeyTopicMap,
+    TWSOperation extends WSAPIWsKeyTopicMap[TWSKey],
+    TWSParams extends Exact<WSAPITopicRequestParamMap[TWSOperation]>,
+    TWSAPIResponse extends
+      | WSAPITopicResponseMap[TWSOperation]
+      | object = WSAPITopicResponseMap[TWSOperation],
+  >(
+    wsKey: TWSKey,
+    operation: TWSOperation,
+    params?: TWSParams extends void | never ? undefined : TWSParams,
+    requestFlags?: WSAPIRequestFlags,
+  ): Promise<TWSAPIResponse>;
+⋮----
+async sendWSAPIRequest<
+    TWSKey extends keyof WSAPIWsKeyTopicMap,
+    TWSOperation extends WSAPIWsKeyTopicMap[TWSKey],
+    // if this throws a type error, probably forgot to add a new operation to WsAPITopicRequestParamMap
+    TWSParams extends Exact<WSAPITopicRequestParamMap[TWSOperation]>,
+    TWSAPIResponse extends
+      | WSAPITopicResponseMap[TWSOperation]
+      | object = WSAPITopicResponseMap[TWSOperation],
+  >(
+    wsKey: TWSKey,
+    operation: TWSOperation,
+    params: TWSParams & { signRequest?: boolean },
+    requestFlags?: WSAPIRequestFlags,
+  ): Promise<TWSAPIResponse | any>
+⋮----
+// if this throws a type error, probably forgot to add a new operation to WsAPITopicRequestParamMap
+⋮----
+/**
+     * Base Info:
+     * - https://docs.kraken.com/api/docs/websocket-v2/add_order
+     *
+     * Currently only supported for Spot markets
+     */
+⋮----
+// Some commands don't require authentication.
+⋮----
+// Sign request
+⋮----
+// Store deferred promise
+⋮----
+// Enrich returned promise with request context for easier debugging
+⋮----
+// Send event
+⋮----
+// Return deferred promise, so caller can await this call
+⋮----
+/**
+   *
+   * Internal methods - not intended for public use
+   *
+   */
+⋮----
+private getRestClientOptions(): RestClientOptions
+⋮----
+/**
+   * Note: implementing this method will wipe the WsStore state for this WsKey, once this method returns
+   */
+protected isCustomReconnectionNeeded(): boolean
+⋮----
+protected async triggerCustomReconnectionWorkflow(): Promise<void>
+⋮----
+protected async getWsUrl(wsKey: WsKey): Promise<string>
+⋮----
+/**
+       * https://docs.kraken.com/api/docs/guides/spot-ws-intro/
+       *
+       * Note: Kraken's v2 WebSockets clean up a number idiosyncrasies and ambiguities from v1 with the overall aim to enable easier integration with applications. It is intended that v1 will be maintained but future enhancements will be developed in v2.
+       *
+       * Given the above, we are only integrating with V2 for now.
+       *
+       * V2 SpotWebSocket Reference: https://docs.kraken.com/api/docs/websocket-v2/add_order/
+       */
+⋮----
+// Uses the same URL, but we maintain separate connections for easier management
+⋮----
+protected sendPingEvent(wsKey: WsKey)
+⋮----
+// let pingChannel: WsRequestPing['channel'];
+⋮----
+// Spot: https://docs.kraken.com/api/docs/websocket-v2/ping
+⋮----
+protected sendPongEvent(wsKey: WsKey)
+⋮----
+// Send a protocol layer pong
+⋮----
+// NOT IN USE for kraken
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+protected isWsPing(_msg: any): boolean
+⋮----
+protected isWsPong(msg: any): boolean
+⋮----
+// Pre-parsed in resolveEmittableEvents into "pong" eventType:
+⋮----
+/**
+   * Parse incoming events into categories, before emitting to the user
+   */
+protected resolveEmittableEvents(
+    wsKey: WsKey,
+    event: MessageEventLike,
+  ): EmittableEvent[]
+⋮----
+// derivatives sends 'challenge' on successful auth-init (used for sign during subscribe)
+⋮----
+// spot confirmation for subscription success
+⋮----
+// derivatives confirmation for subscription success
+⋮----
+// WS API
+⋮----
+// WS API Exception
+⋮----
+// WS API Success
+⋮----
+} // end of WS API response processing
+⋮----
+// exceptions with derivatives v1 WS. E.g. { event: 'alert', message: 'Bad websocket message' }
+⋮----
+// Most events use event: "update" or "snapshot" for topic updates
+⋮----
+// These are request/reply pattern events (e.g. after subscribing to topics or authenticating)
+// e.g. "method":"subscribe"
+⋮----
+// derivatives events include the "feed" property to identify the channel name
+⋮----
+// Request/reply pattern for authentication success
+⋮----
+/**
+   * Determines if a topic is for a private channel, using a hardcoded list of strings
+   */
+protected isPrivateTopicRequest(request: WSTopicRequest<any>): boolean
+⋮----
+/**
+   * Not in use for Kraken
+   */
+⋮----
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+protected getWsMarketForWsKey(_wsKey: WsKey): WsMarket
+⋮----
+/**
+   * Whether key represents a private connection. Feeds into automatic auth on connect.
+   */
+protected getPrivateWSKeys(): WsKey[]
+⋮----
+protected isAuthOnConnectWsKey(wsKey: WsKey): boolean
+⋮----
+/** Force subscription requests to be sent in smaller batches, if a number is returned */
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+protected getMaxTopicsPerSubscribeEvent(_wsKey: WsKey): number | null
+⋮----
+protected authPrivateConnectionsOnConnect(wsKey: WsKey): boolean
+⋮----
+// derivatives require you to send a challenge on connect
+⋮----
+/**
+   * @returns one or more correctly structured request events for performing a operations over WS. This can vary per exchange spec.
+   */
+protected async getWsRequestEvents(
+    wsKey: WsKey,
+    operation: WSOperation,
+    requests: WSTopicRequest<WSTopic>[],
+  ): Promise<MidflightWsRequestEvent<WSRequestOperationKraken<string>>[]>
+⋮----
+// Previously used to track topics in a request. Keeping this for subscribe/unsubscribe requests, no need for incremental values
+⋮----
+// Get token from REST client cache
+⋮----
+// Cache midflight subs on the req ID
+// Enrich response with subs for that req ID
+⋮----
+// No auth needed, it's public topics only here
+⋮----
+// Cache midflight subs on the req ID
+// Enrich response with subs for that req ID
+⋮----
+// https://docs.kraken.com/api/docs/guides/futures-websockets
+// Authenticated requests must include both the original challenge message (original_challenge) and the signed (signed_challenge) in JSON format.
+⋮----
+// Cache midflight subs on the req ID
+// Enrich response with subs for that req ID
+⋮----
+private async signMessage(
+    paramsStr: string,
+    secret: string,
+    method: SignEncodeMethod,
+    algorithm: SignAlgorithm,
+    options?: SignMessageOptions,
+  ): Promise<string>
+⋮----
+protected async getWsAuthRequestEvent(
+    wsKey: WsKey,
+    eventToAuth?: WSAPIAuthenticationRequestFromServer,
+  ): Promise<object | string | 'waitForEvent' | void>
+⋮----
+// Not needed here, handled automatically with request during subscribe
+⋮----
+// Public WS - no auth
+⋮----
+// cleanup old challenge key (in case we were reconnected)
+⋮----
+// https://docs.kraken.com/api/docs/futures-api/websocket/challenge/
+⋮----
+/**
+   *
+   * @param requestEvent
+   * @returns A signed updated WS API request object, ready to be sent
+   */
+private async signWSAPIRequest(
+    requestEvent: WSAPIRequestOperationKrakenSpot,
+  ): Promise<WSAPIRequestOperationKrakenSpot>
+⋮----
+// Get token from REST client cache
+⋮----
+// authParams.broker = APIIDMain;
+
+================
+File: webpack/webpack.config.cjs
+================
+function generateConfig(name)
+⋮----
+// Add '.ts' and '.tsx' as resolvable extensions.
+⋮----
+// Node.js core modules not available in browsers
+// The REST client's https.Agent (for keepAlive) is Node.js-only and won't work in browsers
+⋮----
+// Code is already transpiled from TypeScript, no additional loaders needed
+
+================
+File: .nvmrc
+================
+v24.22.3
+
+================
+File: src/lib/requestUtils.ts
+================
+/**
+ * Used to switch how authentication/requests work under the hood
+ */
+⋮----
+/** Spot */
+⋮----
+/** Futures */
+⋮----
+/** Institutional */
+⋮----
+/** Partner */
+⋮----
+/** Affiliate reporting */
+⋮----
+export type RestClientType =
+  (typeof REST_CLIENT_TYPE_ENUM)[keyof typeof REST_CLIENT_TYPE_ENUM];
+⋮----
+/**
+ * Kraken decommissioned demo-futures.kraken.com at 13:00 UTC on 14 July 2026.
+ * No replacement demo host exists, and Spot never had a testnet.
+ */
+⋮----
+export interface RestClientOptions {
+  /** Your API key */
+  apiKey?: string;
+
+  /** Your API secret */
+  apiSecret?: string;
+
+  /**
+   * Kraken retired the Futures demo (testnet) environment on 14 July 2026.
+   * There is no replacement demo host, and Spot never had a testnet.
+   *
+   * Setting this to `true` throws. The live environment is used when it is omitted or `false`.
+   *
+   * See https://support.kraken.com/articles/360024809011-api-testing-environment-derivatives
+   */
+  testnet?: boolean;
+
+  /**
+   * Use an OAuth2 Bearer token instead of API key signing for private requests.
+   */
+  apiAccessToken?: string;
+
+  /** Default: false. If true, we'll throw errors if any params are undefined */
+  strictParamValidation?: boolean;
+
+  /**
+   * Optionally override API protocol + domain
+   * e.g baseUrl: 'https://api.kraken.com'
+   **/
+  baseUrl?: string;
+
+  /** Default: true. whether to try and post-process request exceptions (and throw them). */
+  parseExceptions?: boolean;
+
+  customTimestampFn?: () => number;
+
+  /**
+   * Enable keep alive for REST API requests (via axios).
+   */
+  keepAlive?: boolean;
+
+  /**
+   * When using HTTP KeepAlive, how often to send TCP KeepAlive packets over sockets being kept alive. Default = 1000.
+   * Only relevant if keepAlive is set to true.
+   * Default: 1000 (defaults comes from https agent)
+   */
+  keepAliveMsecs?: number;
+
+  /**
+   * Allows you to provide a custom "signMessage" function, e.g. to use node's much faster createHmac method
+   *
+   * Look in the examples folder for a demonstration on using node's createHmac instead.
+   */
+  customSignMessageFn?: (message: string, secret: string) => Promise<string>;
+}
+⋮----
+/** Your API key */
+⋮----
+/** Your API secret */
+⋮----
+/**
+   * Kraken retired the Futures demo (testnet) environment on 14 July 2026.
+   * There is no replacement demo host, and Spot never had a testnet.
+   *
+   * Setting this to `true` throws. The live environment is used when it is omitted or `false`.
+   *
+   * See https://support.kraken.com/articles/360024809011-api-testing-environment-derivatives
+   */
+⋮----
+/**
+   * Use an OAuth2 Bearer token instead of API key signing for private requests.
+   */
+⋮----
+/** Default: false. If true, we'll throw errors if any params are undefined */
+⋮----
+/**
+   * Optionally override API protocol + domain
+   * e.g baseUrl: 'https://api.kraken.com'
+   **/
+⋮----
+/** Default: true. whether to try and post-process request exceptions (and throw them). */
+⋮----
+/**
+   * Enable keep alive for REST API requests (via axios).
+   */
+⋮----
+/**
+   * When using HTTP KeepAlive, how often to send TCP KeepAlive packets over sockets being kept alive. Default = 1000.
+   * Only relevant if keepAlive is set to true.
+   * Default: 1000 (defaults comes from https agent)
+   */
+⋮----
+/**
+   * Allows you to provide a custom "signMessage" function, e.g. to use node's much faster createHmac method
+   *
+   * Look in the examples folder for a demonstration on using node's createHmac instead.
+   */
+⋮----
+export function serializeParams<T extends Record<string, any> | undefined = {}>(
+  params: T,
+  strict_validation: boolean | undefined,
+  encodeValues: boolean,
+  prefixWith: string,
+  repeatArrayValuesAsKVPairs: boolean,
+): string
+⋮----
+// Only prefix if there's a value
+⋮----
+export function isEmptyObject(obj: any, acceptStringIfNotEmpty: boolean)
+⋮----
+export function getRestBaseUrl(
+  restClientOptions: RestClientOptions,
+  restClientType: RestClientType,
+): string
+
+================
 File: src/lib/BaseRestClient.ts
 ================
 import axios, { AxiosRequestConfig, AxiosResponse, Method } from 'axios';
@@ -7624,7 +7969,7 @@ abstract getClientType(): RestClientType;
 constructor(
     restClientOptions: RestClientOptions = {},
     networkOptions: AxiosRequestConfig = {},
-)
+  )
 ⋮----
 /** Throw errors if any request params are empty */
 ⋮----
@@ -7678,7 +8023,7 @@ protected postPrivate(endpoint: string, params?: ParamsInQueryBodyOrHeader)
 protected deletePrivate(
     endpoint: string,
     params?: ParamsInQueryBodyOrHeader,
-)
+  )
 ⋮----
 protected putPrivate(endpoint: string, params?: ParamsInQueryBodyOrHeader)
 ⋮----
@@ -7693,7 +8038,7 @@ private async _call(
     endpoint: string,
     params?: ParamsInQueryBodyOrHeader,
     isPublicApi?: boolean,
-): Promise<any>
+  ): Promise<any>
 ⋮----
 // Sanity check to make sure it's only ever prefixed by one forward slash
 ⋮----
@@ -7731,7 +8076,7 @@ private async signMessage(
     method: SignEncodeMethod,
     algorithm: SignAlgorithm,
     options?: SignMessageOptions,
-): Promise<string>
+  ): Promise<string>
 ⋮----
 /**
    * @private sign request and set recv window
@@ -7743,7 +8088,7 @@ private async signRequest<
     endpoint: string,
     method: Method,
     signMethod: SignMethod,
-): Promise<SignedRequest<T>>
+  ): Promise<SignedRequest<T>>
 ⋮----
 // handle JSON preprocessing for requests, including embedded stringify
 ⋮----
@@ -7811,7 +8156,7 @@ private async prepareSignParams<TParams extends object | undefined>(
     signMethod: SignMethod,
     params?: TParams,
     isPublicApi?: boolean,
-)
+  )
 ⋮----
 /** Returns an axios request object. Handles signing process automatically if this is a private API call */
 private async buildRequest(
@@ -7820,12 +8165,7 @@ private async buildRequest(
     url: string,
     params?: ParamsInQueryBodyOrHeader,
     isPublicApi?: boolean,
-): Promise<AxiosRequestConfig>
-⋮----
-// Support for Authorization header, if provided:
-// https://github.com/tiagosiebler/kucoin-api/issues/2
-// Use restClient.setAccessToken(newToken), if you need to store a new access token
-// Not supported for Kraken at this time
+  ): Promise<AxiosRequestConfig>
 
 ================
 File: src/types/response/derivatives.types.ts
@@ -8162,7 +8502,8 @@ export interface FuturesBatchOrderStatus {
     | 'postWouldExecute'
     | 'iocWouldNotExecute'
     | 'orderForEditNotFound'
-    | 'editAlreadyHeld';
+    | 'editAlreadyHeld'
+    | 'makerProtectionOrderLimitExceeded';
 }
 ⋮----
 export interface FuturesCancelledOrder {
@@ -8208,6 +8549,7 @@ export interface FuturesEditOrderStatus {
     | 'wouldNotReducePosition'
     | 'orderForEditNotFound'
     | 'editAlreadyHeld'
+    | 'makerProtectionOrderLimitExceeded'
     | 'orderForEditNotAStop';
 }
 ⋮----
@@ -8261,6 +8603,7 @@ export interface FuturesSendOrderStatus {
     | 'wouldNotReducePosition'
     | 'marketIsPostOnly'
     | 'tooManyOrders'
+    | 'makerProtectionOrderLimitExceeded'
     | 'fixedLeverageTooHigh'
     | 'clientOrderIdInvalid'
     | 'cannotEditTriggerPriceOfTrailingStop'
@@ -8652,6 +8995,26 @@ export interface FuturesSubaccountsInfo {
 }
 ⋮----
 /**
+ * Transfers
+ */
+⋮----
+export interface FuturesTransferAsset {
+  asset: string;
+  /** Minimum Spot transfer amount, or null if the asset cannot move to or from Spot. */
+  minSpotTransferAmount: number | null;
+  /** Maximum Spot transfer amount, or null if the asset cannot move to or from Spot. */
+  maxSpotTransferAmount: number | null;
+  /** Whether MTF accounts may move the asset to the Spot wallet. */
+  allowMtfSpotTransfers: boolean;
+}
+⋮----
+/** Minimum Spot transfer amount, or null if the asset cannot move to or from Spot. */
+⋮----
+/** Maximum Spot transfer amount, or null if the asset cannot move to or from Spot. */
+⋮----
+/** Whether MTF accounts may move the asset to the Spot wallet. */
+⋮----
+/**
  * RFQs
  */
 ⋮----
@@ -8921,6 +9284,138 @@ export type FuturesSelfTradeStrategy =
   | 'CANCEL_MAKER_ANY';
 
 ================
+File: src/types/websockets/ws-general.ts
+================
+import { AxiosRequestConfig } from 'axios';
+import type { ClientRequestArgs } from 'http';
+import WebSocket from 'isomorphic-ws';
+⋮----
+import { RestClientOptions } from '../../lib/requestUtils.js';
+⋮----
+/** General configuration for the WebsocketClient */
+export interface WSClientConfigurableOptions {
+  /** Your API key */
+  apiKey?: string;
+
+  /** Your API secret */
+  apiSecret?: string;
+
+  /**
+   * Kraken retired the Futures demo (testnet) environment on 14 July 2026.
+   * There is no replacement demo host, and Spot never had a testnet.
+   *
+   * Setting this to `true` throws when a connection URL is resolved. The live environment is used when it is omitted or `false`.
+   *
+   * See https://support.kraken.com/articles/360024809011-api-testing-environment-derivatives
+   */
+  testnet?: boolean;
+
+  /** Define a recv window when preparing a private websocket signature. This is in milliseconds, so 5000 == 5 seconds */
+  recvWindow?: number;
+
+  /** How often to check if the connection is alive */
+  pingInterval?: number;
+
+  /** How long to wait for a pong (heartbeat reply) before assuming the connection is dead */
+  pongTimeout?: number;
+
+  /** Delay in milliseconds before respawning the connection */
+  reconnectTimeout?: number;
+
+  restOptions?: RestClientOptions;
+  requestOptions?: AxiosRequestConfig;
+
+  wsOptions?: {
+    protocols?: string[];
+    agent?: any;
+  } & (
+    | Omit<Partial<WebSocket.ClientOptions>, 'agent'>
+    | Omit<Partial<ClientRequestArgs>, 'agent'>
+  );
+
+  wsUrl?: string;
+
+  /**
+   * Allows you to provide a custom "signMessage" function, e.g. to use node's much faster createHmac method
+   *
+   * Look in the examples folder for a demonstration on using node's createHmac instead.
+   */
+  customSignMessageFn?: (message: string, secret: string) => Promise<string>;
+
+  /**
+   * If you authenticated the WS API before, automatically try to re-authenticate the WS API if you're disconnected/reconnected for any reason.
+   */
+  reauthWSAPIOnReconnect?: boolean;
+}
+⋮----
+/** Your API key */
+⋮----
+/** Your API secret */
+⋮----
+/**
+   * Kraken retired the Futures demo (testnet) environment on 14 July 2026.
+   * There is no replacement demo host, and Spot never had a testnet.
+   *
+   * Setting this to `true` throws when a connection URL is resolved. The live environment is used when it is omitted or `false`.
+   *
+   * See https://support.kraken.com/articles/360024809011-api-testing-environment-derivatives
+   */
+⋮----
+/** Define a recv window when preparing a private websocket signature. This is in milliseconds, so 5000 == 5 seconds */
+⋮----
+/** How often to check if the connection is alive */
+⋮----
+/** How long to wait for a pong (heartbeat reply) before assuming the connection is dead */
+⋮----
+/** Delay in milliseconds before respawning the connection */
+⋮----
+/**
+   * Allows you to provide a custom "signMessage" function, e.g. to use node's much faster createHmac method
+   *
+   * Look in the examples folder for a demonstration on using node's createHmac instead.
+   */
+⋮----
+/**
+   * If you authenticated the WS API before, automatically try to re-authenticate the WS API if you're disconnected/reconnected for any reason.
+   */
+⋮----
+/**
+ * WS configuration that's always defined, regardless of user configuration
+ * (usually comes from defaults if there's no user-provided values)
+ */
+export interface WebsocketClientOptions extends WSClientConfigurableOptions {
+  pingInterval: number;
+  pongTimeout: number;
+  reconnectTimeout: number;
+  recvWindow: number;
+
+  /**
+   * If true, require a "receipt" that the connection is ready for use (e.g. a specific event type)
+   */
+  requireConnectionReadyConfirmation: boolean;
+  authPrivateConnectionsOnConnect: boolean;
+  authPrivateRequests: boolean;
+  reauthWSAPIOnReconnect: boolean;
+
+  /**
+   * Whether to use native WebSocket ping/pong frames for heartbeats
+   */
+  useNativeHeartbeats: boolean;
+}
+⋮----
+/**
+   * If true, require a "receipt" that the connection is ready for use (e.g. a specific event type)
+   */
+⋮----
+/**
+   * Whether to use native WebSocket ping/pong frames for heartbeats
+   */
+⋮----
+export type WsMarket = 'spot' | 'futures';
+⋮----
+export type WsEventInternalSrc = 'event' | 'function' | 'frame';
+
+================
 File: src/types/request/derivatives.types.ts
 ================
 /**
@@ -9124,11 +9619,17 @@ export interface FuturesUpdateSelfTradeStrategyParams {
  */
 ⋮----
 export interface FuturesInitiateWalletTransferParams {
+  /** The cash or margin wallet to debit, or 'spot' for the Kraken Spot wallet. */
   fromAccount: string;
+  /** The cash or margin wallet to credit, or 'spot' for the Kraken Spot wallet. */
   toAccount: string;
   unit: string;
   amount: number;
 }
+⋮----
+/** The cash or margin wallet to debit, or 'spot' for the Kraken Spot wallet. */
+⋮----
+/** The cash or margin wallet to credit, or 'spot' for the Kraken Spot wallet. */
 ⋮----
 export interface FuturesInitiateSubaccountTransferParams {
   fromUser: string;
@@ -9256,492 +9757,6 @@ export interface FuturesGetAnalyticsParams {
 since: number; // Epoch time in seconds (required)
 interval: 60 | 300 | 900 | 1800 | 3600 | 14400 | 43200 | 86400 | 604800; // Resolution in seconds (required)
 to?: number; // Epoch time in seconds, default now
-
-================
-File: src/types/websockets/ws-general.ts
-================
-import { AxiosRequestConfig } from 'axios';
-import type { ClientRequestArgs } from 'http';
-import WebSocket from 'isomorphic-ws';
-⋮----
-import { RestClientOptions } from '../../lib/requestUtils.js';
-⋮----
-/** General configuration for the WebsocketClient */
-export interface WSClientConfigurableOptions {
-  /** Your API key */
-  apiKey?: string;
-
-  /** Your API secret */
-  apiSecret?: string;
-
-  /**
-   * Kraken retired the Futures demo (testnet) environment on 14 July 2026.
-   * There is no replacement demo host, and Spot never had a testnet.
-   *
-   * Setting this to `true` throws when a connection URL is resolved. The live environment is used when it is omitted or `false`.
-   *
-   * See https://support.kraken.com/articles/360024809011-api-testing-environment-derivatives
-   */
-  testnet?: boolean;
-
-  /** Define a recv window when preparing a private websocket signature. This is in milliseconds, so 5000 == 5 seconds */
-  recvWindow?: number;
-
-  /** How often to check if the connection is alive */
-  pingInterval?: number;
-
-  /** How long to wait for a pong (heartbeat reply) before assuming the connection is dead */
-  pongTimeout?: number;
-
-  /** Delay in milliseconds before respawning the connection */
-  reconnectTimeout?: number;
-
-  restOptions?: RestClientOptions;
-  requestOptions?: AxiosRequestConfig;
-
-  wsOptions?: {
-    protocols?: string[];
-    agent?: any;
-  } & (
-    | Omit<Partial<WebSocket.ClientOptions>, 'agent'>
-    | Omit<Partial<ClientRequestArgs>, 'agent'>
-  );
-
-  wsUrl?: string;
-
-  /**
-   * Allows you to provide a custom "signMessage" function, e.g. to use node's much faster createHmac method
-   *
-   * Look in the examples folder for a demonstration on using node's createHmac instead.
-   */
-  customSignMessageFn?: (message: string, secret: string) => Promise<string>;
-
-  /**
-   * If you authenticated the WS API before, automatically try to re-authenticate the WS API if you're disconnected/reconnected for any reason.
-   */
-  reauthWSAPIOnReconnect?: boolean;
-}
-⋮----
-/** Your API key */
-⋮----
-/** Your API secret */
-⋮----
-/**
-   * Kraken retired the Futures demo (testnet) environment on 14 July 2026.
-   * There is no replacement demo host, and Spot never had a testnet.
-   *
-   * Setting this to `true` throws when a connection URL is resolved. The live environment is used when it is omitted or `false`.
-   *
-   * See https://support.kraken.com/articles/360024809011-api-testing-environment-derivatives
-   */
-⋮----
-/** Define a recv window when preparing a private websocket signature. This is in milliseconds, so 5000 == 5 seconds */
-⋮----
-/** How often to check if the connection is alive */
-⋮----
-/** How long to wait for a pong (heartbeat reply) before assuming the connection is dead */
-⋮----
-/** Delay in milliseconds before respawning the connection */
-⋮----
-/**
-   * Allows you to provide a custom "signMessage" function, e.g. to use node's much faster createHmac method
-   *
-   * Look in the examples folder for a demonstration on using node's createHmac instead.
-   */
-⋮----
-/**
-   * If you authenticated the WS API before, automatically try to re-authenticate the WS API if you're disconnected/reconnected for any reason.
-   */
-⋮----
-/**
- * WS configuration that's always defined, regardless of user configuration
- * (usually comes from defaults if there's no user-provided values)
- */
-export interface WebsocketClientOptions extends WSClientConfigurableOptions {
-  pingInterval: number;
-  pongTimeout: number;
-  reconnectTimeout: number;
-  recvWindow: number;
-
-  /**
-   * If true, require a "receipt" that the connection is ready for use (e.g. a specific event type)
-   */
-  requireConnectionReadyConfirmation: boolean;
-  authPrivateConnectionsOnConnect: boolean;
-  authPrivateRequests: boolean;
-  reauthWSAPIOnReconnect: boolean;
-
-  /**
-   * Whether to use native WebSocket ping/pong frames for heartbeats
-   */
-  useNativeHeartbeats: boolean;
-}
-⋮----
-/**
-   * If true, require a "receipt" that the connection is ready for use (e.g. a specific event type)
-   */
-⋮----
-/**
-   * Whether to use native WebSocket ping/pong frames for heartbeats
-   */
-⋮----
-export type WsMarket = 'spot' | 'futures';
-⋮----
-export type WsEventInternalSrc = 'event' | 'function' | 'frame';
-
-================
-File: src/WebsocketClient.ts
-================
-import {
-  BaseWebsocketClient,
-  EmittableEvent,
-  MidflightWsRequestEvent,
-} from './lib/BaseWSClient.js';
-import { neverGuard } from './lib/misc-util.js';
-import {
-  KRAKEN_FUTURES_TESTNET_RETIRED_ERROR,
-  RestClientOptions,
-} from './lib/requestUtils.js';
-import {
-  hashMessage,
-  SignAlgorithm,
-  SignEncodeMethod,
-  signMessage,
-  SignMessageOptions,
-} from './lib/webCryptoAPI.js';
-import { DefaultLogger } from './lib/websocket/logger.js';
-import { RestClientCache } from './lib/websocket/rest-client-cache.js';
-import {
-  getPromiseRefForWSAPIRequest,
-  WS_KEY_MAP,
-  WsKey,
-  WSOperation,
-  WSRequestOperationKraken,
-  WSTopicRequest,
-} from './lib/websocket/websocket-util.js';
-import { WSConnectedResult } from './lib/websocket/WsStore.types.js';
-import {
-  Exact,
-  WS_API_Operations,
-  WSAPIAuthenticationRequestFromServer,
-  WSAPIRequestOperationKrakenSpot,
-  WSAPITopicRequestParamMap,
-  WSAPITopicResponseMap,
-  WSAPIWsKey,
-  WSAPIWsKeyTopicMap,
-} from './types/websockets/ws-api.js';
-import { MessageEventLike } from './types/websockets/ws-events.js';
-import {
-  WSClientConfigurableOptions,
-  WsMarket,
-} from './types/websockets/ws-general.js';
-import {
-  WS_DERIVATIVES_PRIVATE_TOPICS,
-  WS_SPOT_PRIVATE_TOPICS,
-  WSTopic,
-} from './types/websockets/ws-subscriptions.js';
-⋮----
-export interface WSAPIRequestFlags {
-  /** If true, will skip auth requirement for WS API connection */
-  authIsOptional?: boolean | undefined;
-}
-⋮----
-/** If true, will skip auth requirement for WS API connection */
-⋮----
-export class WebsocketClient extends BaseWebsocketClient<WsKey, any>
-⋮----
-constructor(options?: WSClientConfigurableOptions, logger?: DefaultLogger)
-⋮----
-/**
-   * Request connection of all dependent (public & private) websockets, instead of waiting for automatic connection by library.
-   *
-   * Returns array of promises that individually resolve when each connection is successfully opened.
-   */
-public connectAll(): Promise<WSConnectedResult | undefined>[]
-⋮----
-/**
-   * Ensures the WS API connection is active and ready.
-   *
-   * You do not need to call this, but if you call this before making any WS API requests,
-   * it can accelerate the first request (by preparing the connection in advance).
-   */
-public connectWSAPI(wsKey: WSAPIWsKey, skipAuth?: boolean): Promise<unknown>
-⋮----
-/** This call automatically ensures the connection is active AND authenticated before resolving */
-⋮----
-/**
-   * Request subscription to one or more topics. Pass topics as either an array of strings, or array of objects (if the topic has parameters).
-   * Objects should be formatted as {topic: string, params: object}.
-   *
-   * - Subscriptions are automatically routed to the correct websocket connection.
-   * - Authentication/connection is automatic.
-   * - Resubscribe after network issues is automatic.
-   *
-   * Call `unsubscribe(topics)` to remove topics
-   */
-public subscribe<TTopic extends WSTopic>(
-    requests:
-      | (WSTopicRequest<TTopic> | TTopic)
-      | (WSTopicRequest<TTopic> | TTopic)[],
-    wsKey: WsKey,
-)
-⋮----
-/**
-   * Unsubscribe from one or more topics. Similar to subscribe() but in reverse.
-   *
-   * - Requests are automatically routed to the correct websocket connection.
-   * - These topics will be removed from the topic cache, so they won't be subscribed to again.
-   */
-public unsubscribe<TTopic extends WSTopic>(
-    requests:
-      | (WSTopicRequest<TTopic> | TTopic)
-      | (WSTopicRequest<TTopic> | TTopic)[],
-    wsKey: WsKey,
-)
-⋮----
-/**
-   * WS API Methods - similar to the REST API, but via WebSockets
-   */
-⋮----
-/**
-   * Send a Websocket API event on a connection. Returns a promise that resolves on reply.
-   *
-   * Returned promise is rejected if an exception is detected in the reply OR the connection disconnects for any reason (even if automatic reconnect will happen).
-   *
-   * After a fresh connection, you should always send a login request first.
-   *
-   * If you authenticated once and you're reconnected later (e.g. connection temporarily lost), the SDK will by default automatically:
-   * - Detect you were authenticated to the WS API before
-   * - Try to re-authenticate (up to 5 times, in case something (bad timestamp) goes wrong)
-   * - If it succeeds, it will emit the 'authenticated' event.
-   * - If it fails and gives up, it will emit an 'exception' event (type: 'wsapi.auth', reason: detailed text).
-   *
-   * You can turn off the automatic re-auth WS API logic using `reauthWSAPIOnReconnect: false` in the WSClient config.
-   *
-   * @param wsKey - The connection this event is for (e.g. "spotV4" | "perpFuturesUSDTV4" | "perpFuturesBTCV4" | "deliveryFuturesUSDTV4" | "deliveryFuturesBTCV4" | "optionsV4")
-   * @param channel - The channel this event is for (e.g. "spot.login" to authenticate)
-   * @param params - Any request parameters for the payload (contents of req_param in the docs). Signature generation is automatic, only send parameters such as order ID as per the docs.
-   * @returns Promise - tries to resolve with async WS API response. Rejects if disconnected or exception is seen in async WS API response
-   */
-⋮----
-// This overload allows the caller to omit the 3rd param, if it isn't required (e.g. for the login call)
-async sendWSAPIRequest<
-    TWSKey extends keyof WSAPIWsKeyTopicMap,
-    TWSOperation extends WSAPIWsKeyTopicMap[TWSKey],
-    TWSParams extends Exact<WSAPITopicRequestParamMap[TWSOperation]>,
-    TWSAPIResponse extends
-      | WSAPITopicResponseMap[TWSOperation]
-      | object = WSAPITopicResponseMap[TWSOperation],
-  >(
-    wsKey: TWSKey,
-    operation: TWSOperation,
-    params?: TWSParams extends void | never ? undefined : TWSParams,
-    requestFlags?: WSAPIRequestFlags,
-  ): Promise<TWSAPIResponse>;
-⋮----
-async sendWSAPIRequest<
-    TWSKey extends keyof WSAPIWsKeyTopicMap,
-    TWSOperation extends WSAPIWsKeyTopicMap[TWSKey],
-    // if this throws a type error, probably forgot to add a new operation to WsAPITopicRequestParamMap
-    TWSParams extends Exact<WSAPITopicRequestParamMap[TWSOperation]>,
-    TWSAPIResponse extends
-      | WSAPITopicResponseMap[TWSOperation]
-      | object = WSAPITopicResponseMap[TWSOperation],
-  >(
-    wsKey: TWSKey,
-    operation: TWSOperation,
-    params: TWSParams & { signRequest?: boolean },
-    requestFlags?: WSAPIRequestFlags,
-): Promise<TWSAPIResponse | any>
-⋮----
-// if this throws a type error, probably forgot to add a new operation to WsAPITopicRequestParamMap
-⋮----
-/**
-     * Base Info:
-     * - https://docs.kraken.com/api/docs/websocket-v2/add_order
-     *
-     * Currently only supported for Spot markets
-     */
-⋮----
-// Some commands don't require authentication.
-⋮----
-// Sign request
-⋮----
-// Store deferred promise
-⋮----
-// Enrich returned promise with request context for easier debugging
-⋮----
-// Send event
-⋮----
-// Return deferred promise, so caller can await this call
-⋮----
-/**
-   *
-   * Internal methods - not intended for public use
-   *
-   */
-⋮----
-private getRestClientOptions(): RestClientOptions
-⋮----
-/**
-   * Note: implementing this method will wipe the WsStore state for this WsKey, once this method returns
-   */
-protected isCustomReconnectionNeeded(): boolean
-⋮----
-protected async triggerCustomReconnectionWorkflow(): Promise<void>
-⋮----
-protected async getWsUrl(wsKey: WsKey): Promise<string>
-⋮----
-/**
-       * https://docs.kraken.com/api/docs/guides/spot-ws-intro/
-       *
-       * Note: Kraken's v2 WebSockets clean up a number idiosyncrasies and ambiguities from v1 with the overall aim to enable easier integration with applications. It is intended that v1 will be maintained but future enhancements will be developed in v2.
-       *
-       * Given the above, we are only integrating with V2 for now.
-       *
-       * V2 SpotWebSocket Reference: https://docs.kraken.com/api/docs/websocket-v2/add_order/
-       */
-⋮----
-// Uses the same URL, but we maintain separate connections for easier management
-⋮----
-protected sendPingEvent(wsKey: WsKey)
-⋮----
-// let pingChannel: WsRequestPing['channel'];
-⋮----
-// Spot: https://docs.kraken.com/api/docs/websocket-v2/ping
-⋮----
-protected sendPongEvent(wsKey: WsKey)
-⋮----
-// Send a protocol layer pong
-⋮----
-// NOT IN USE for kraken
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-protected isWsPing(_msg: any): boolean
-⋮----
-protected isWsPong(msg: any): boolean
-⋮----
-// Pre-parsed in resolveEmittableEvents into "pong" eventType:
-⋮----
-/**
-   * Parse incoming events into categories, before emitting to the user
-   */
-protected resolveEmittableEvents(
-    wsKey: WsKey,
-    event: MessageEventLike,
-): EmittableEvent[]
-⋮----
-// derivatives sends 'challenge' on successful auth-init (used for sign during subscribe)
-⋮----
-// spot confirmation for subscription success
-⋮----
-// derivatives confirmation for subscription success
-⋮----
-// WS API
-⋮----
-// WS API Exception
-⋮----
-// WS API Success
-⋮----
-} // end of WS API response processing
-⋮----
-// exceptions with derivatives v1 WS. E.g. { event: 'alert', message: 'Bad websocket message' }
-⋮----
-// Most events use event: "update" or "snapshot" for topic updates
-⋮----
-// These are request/reply pattern events (e.g. after subscribing to topics or authenticating)
-// e.g. "method":"subscribe"
-⋮----
-// derivatives events include the "feed" property to identify the channel name
-⋮----
-// Request/reply pattern for authentication success
-⋮----
-/**
-   * Determines if a topic is for a private channel, using a hardcoded list of strings
-   */
-protected isPrivateTopicRequest(request: WSTopicRequest<any>): boolean
-⋮----
-/**
-   * Not in use for Kraken
-   */
-⋮----
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-protected getWsMarketForWsKey(_wsKey: WsKey): WsMarket
-⋮----
-/**
-   * Whether key represents a private connection. Feeds into automatic auth on connect.
-   */
-protected getPrivateWSKeys(): WsKey[]
-⋮----
-protected isAuthOnConnectWsKey(wsKey: WsKey): boolean
-⋮----
-/** Force subscription requests to be sent in smaller batches, if a number is returned */
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-protected getMaxTopicsPerSubscribeEvent(_wsKey: WsKey): number | null
-⋮----
-protected authPrivateConnectionsOnConnect(wsKey: WsKey): boolean
-⋮----
-// derivatives require you to send a challenge on connect
-⋮----
-/**
-   * @returns one or more correctly structured request events for performing a operations over WS. This can vary per exchange spec.
-   */
-protected async getWsRequestEvents(
-    wsKey: WsKey,
-    operation: WSOperation,
-    requests: WSTopicRequest<WSTopic>[],
-): Promise<MidflightWsRequestEvent<WSRequestOperationKraken<string>>[]>
-⋮----
-// Previously used to track topics in a request. Keeping this for subscribe/unsubscribe requests, no need for incremental values
-⋮----
-// Get token from REST client cache
-⋮----
-// Cache midflight subs on the req ID
-// Enrich response with subs for that req ID
-⋮----
-// No auth needed, it's public topics only here
-⋮----
-// Cache midflight subs on the req ID
-// Enrich response with subs for that req ID
-⋮----
-// https://docs.kraken.com/api/docs/guides/futures-websockets
-// Authenticated requests must include both the original challenge message (original_challenge) and the signed (signed_challenge) in JSON format.
-⋮----
-// Cache midflight subs on the req ID
-// Enrich response with subs for that req ID
-⋮----
-private async signMessage(
-    paramsStr: string,
-    secret: string,
-    method: SignEncodeMethod,
-    algorithm: SignAlgorithm,
-    options?: SignMessageOptions,
-): Promise<string>
-⋮----
-protected async getWsAuthRequestEvent(
-    wsKey: WsKey,
-    eventToAuth?: WSAPIAuthenticationRequestFromServer,
-): Promise<object | string | 'waitForEvent' | void>
-⋮----
-// Not needed here, handled automatically with request during subscribe
-⋮----
-// Public WS - no auth
-⋮----
-// cleanup old challenge key (in case we were reconnected)
-⋮----
-// https://docs.kraken.com/api/docs/futures-api/websocket/challenge/
-⋮----
-/**
-   *
-   * @param requestEvent
-   * @returns A signed updated WS API request object, ready to be sent
-   */
-private async signWSAPIRequest(
-    requestEvent: WSAPIRequestOperationKrakenSpot,
-): Promise<WSAPIRequestOperationKrakenSpot>
-⋮----
-// Get token from REST client cache
-⋮----
-// authParams.broker = APIIDMain;
 
 ================
 File: src/types/request/spot.types.ts
@@ -11356,6 +11371,7 @@ import {
   FuturesTicker,
   FuturesTickType,
   FuturesTradeHistoryItem,
+  FuturesTransferAsset,
   FuturesUnwindQueuePosition,
 } from './types/response/derivatives.types.js';
 import { DerivativesAPISuccessResponse } from './types/response/shared.types.js';
@@ -11397,8 +11413,7 @@ getTradeHistory(params: {
     lastTime?: string;
   }): Promise<
     DerivativesAPISuccessResponse<{ history: FuturesTradeHistoryItem[] }>
-  > {
-    return this.get('derivatives/api/v3/history', params);
+  >
 ⋮----
 /**
    * Get orderbook
@@ -11407,7 +11422,7 @@ getTradeHistory(params: {
    */
 getOrderbook(params: {
     symbol: string;
-}): Promise<DerivativesAPISuccessResponse<
+  }): Promise<DerivativesAPISuccessResponse<{ orderBook: FuturesOrderBook }>>
 ⋮----
 /**
    * Get tickers
@@ -11416,8 +11431,7 @@ getOrderbook(params: {
    */
 getTickers(): Promise<
     DerivativesAPISuccessResponse<{ tickers: FuturesTicker[] }>
-  > {
-    return this.get('derivatives/api/v3/tickers');
+  >
 ⋮----
 /**
    * Get ticker by symbol
@@ -11426,7 +11440,7 @@ getTickers(): Promise<
    */
 getTicker(params: {
     symbol: string;
-}): Promise<DerivativesAPISuccessResponse<
+  }): Promise<DerivativesAPISuccessResponse<{ ticker: FuturesTicker }>>
 ⋮----
 /**
    *
@@ -11441,8 +11455,7 @@ getTicker(params: {
    */
 getInstruments(): Promise<
     DerivativesAPISuccessResponse<{ instruments: FuturesInstrument[] }>
-  > {
-    return this.get('derivatives/api/v3/instruments');
+  >
 ⋮----
 /**
    * Get trading instruments
@@ -11451,8 +11464,7 @@ getInstruments(): Promise<
    */
 getTradingInstruments(): Promise<
     DerivativesAPISuccessResponse<{ instruments: FuturesInstrument[] }>
-  > {
-    return this.getPrivate('derivatives/api/v3/trading/instruments');
+  >
 ⋮----
 /**
    * Get instrument status list
@@ -11463,8 +11475,7 @@ getInstrumentStatusList(): Promise<
     DerivativesAPISuccessResponse<{
       instrumentStatus: FuturesInstrumentStatus[];
     }>
-  > {
-    return this.get('derivatives/api/v3/instruments/status');
+  >
 ⋮----
 /**
    * Get instrument status
@@ -11473,7 +11484,7 @@ getInstrumentStatusList(): Promise<
    */
 getInstrumentStatus(params: {
     symbol: string;
-}): Promise<DerivativesAPISuccessResponse<FuturesInstrumentStatus>>
+  }): Promise<DerivativesAPISuccessResponse<FuturesInstrumentStatus>>
 ⋮----
 /**
    *
@@ -11493,14 +11504,7 @@ batchOrderManagement(
     params: FuturesBatchOrderParams,
   ): Promise<
     DerivativesAPISuccessResponse<{ batchStatus: FuturesBatchOrderStatus[] }>
-  > {
-    const { ProcessBefore, json } = params;
-    return this.postPrivate('derivatives/api/v3/batchorder', {
-      body: {
-        ProcessBefore: ProcessBefore,
-        json,
-      },
-    });
+  >
 ⋮----
 /**
    * Cancel all orders
@@ -11511,10 +11515,7 @@ cancelAllOrders(params?: { symbol?: string }): Promise<
     DerivativesAPISuccessResponse<{
       cancelStatus: FuturesCancelAllOrdersStatus;
     }>
-  > {
-    return this.postPrivate('derivatives/api/v3/cancelallorders', {
-      body: params,
-    });
+  >
 ⋮----
 /**
    * Dead man's switch
@@ -11526,10 +11527,7 @@ cancelAllOrdersAfter(params: {
     timeout: number;
   }): Promise<
     DerivativesAPISuccessResponse<{ status: FuturesDeadMansSwitchStatus }>
-  > {
-    return this.postPrivate('derivatives/api/v3/cancelallordersafter', {
-      body: params,
-    });
+  >
 ⋮----
 /**
    * Cancel order
@@ -11540,10 +11538,7 @@ cancelOrder(
     params: FuturesCancelOrderParams,
   ): Promise<
     DerivativesAPISuccessResponse<{ cancelStatus: FuturesCancelOrderStatus }>
-  > {
-    return this.postPrivate('derivatives/api/v3/cancelorder', {
-      body: params,
-    });
+  >
 ⋮----
 /**
    * Edit order
@@ -11563,10 +11558,7 @@ editOrder(
     params: FuturesEditOrderParams,
   ): Promise<
     DerivativesAPISuccessResponse<{ editStatus: FuturesEditOrderStatus }>
-  > {
-    return this.postPrivate('derivatives/api/v3/editorder', {
-      body: params,
-    });
+  >
 ⋮----
 /**
    * Get open orders
@@ -11575,8 +11567,7 @@ editOrder(
    */
 getOpenOrders(): Promise<
     DerivativesAPISuccessResponse<{ openOrders: FuturesOpenOrder[] }>
-  > {
-    return this.getPrivate('derivatives/api/v3/openorders');
+  >
 ⋮----
 /**
    * Send order
@@ -11587,10 +11578,7 @@ submitOrder(
     params: FuturesSendOrderParams,
   ): Promise<
     DerivativesAPISuccessResponse<{ sendStatus: FuturesSendOrderStatus }>
-  > {
-    return this.postPrivate('derivatives/api/v3/sendorder', {
-      body: params,
-    });
+  >
 ⋮----
 /**
    * Get Specific Orders' Status
@@ -11602,10 +11590,7 @@ getOrderStatus(params?: {
     cliOrdIds?: string[];
   }): Promise<
     DerivativesAPISuccessResponse<{ orders: FuturesOrderStatusInfo[] }>
-  > {
-    return this.postPrivate('derivatives/api/v3/orders/status', {
-      body: params,
-    });
+  >
 ⋮----
 /**
    *
@@ -11620,8 +11605,7 @@ getOrderStatus(params?: {
    */
 getPnlPreferences(): Promise<
     DerivativesAPISuccessResponse<{ preferences: FuturesPnlPreference[] }>
-  > {
-    return this.getPrivate('derivatives/api/v3/pnlpreferences');
+  >
 ⋮----
 /**
    * Set PNL currency preference
@@ -11632,7 +11616,7 @@ getPnlPreferences(): Promise<
 setPnlPreference(params: {
     symbol: string;
     pnlPreference: string;
-}): Promise<DerivativesAPISuccessResponse<Record<string, never>>>
+  }): Promise<DerivativesAPISuccessResponse<Record<string, never>>>
 ⋮----
 /**
    * Get leverage settings
@@ -11643,8 +11627,7 @@ getLeverageSettings(): Promise<
     DerivativesAPISuccessResponse<{
       leveragePreferences: FuturesLeveragePreference[];
     }>
-  > {
-    return this.getPrivate('derivatives/api/v3/leveragepreferences');
+  >
 ⋮----
 /**
    * Set leverage settings
@@ -11655,7 +11638,7 @@ getLeverageSettings(): Promise<
 setLeverageSettings(params: {
     symbol: string;
     maxLeverage?: number;
-}): Promise<DerivativesAPISuccessResponse<Record<string, never>>>
+  }): Promise<DerivativesAPISuccessResponse<Record<string, never>>>
 ⋮----
 /**
    * Get the off-book max leverage cap
@@ -11664,8 +11647,7 @@ setLeverageSettings(params: {
    */
 getRfqAssignmentMaxLeverage(): Promise<
     DerivativesAPISuccessResponse<{ maxLeverage: number | null }>
-  > {
-    return this.getPrivate('derivatives/api/v3/rfq-assignment/max-leverage');
+  >
 ⋮----
 /**
    * Set the off-book max leverage cap
@@ -11674,7 +11656,7 @@ getRfqAssignmentMaxLeverage(): Promise<
    */
 setRfqAssignmentMaxLeverage(
     params: FuturesSetRfqAssignmentMaxLeverageParams,
-): Promise<DerivativesAPISuccessResponse<
+  ): Promise<DerivativesAPISuccessResponse<{ maxLeverage: number | null }>>
 ⋮----
 /**
    * Clear the off-book max leverage cap
@@ -11683,8 +11665,7 @@ setRfqAssignmentMaxLeverage(
    */
 deleteRfqAssignmentMaxLeverage(): Promise<
     DerivativesAPISuccessResponse<{ maxLeverage: number | null }>
-  > {
-    return this.deletePrivate('derivatives/api/v3/rfq-assignment/max-leverage');
+  >
 ⋮----
 /**
    *
@@ -11701,8 +11682,7 @@ deleteRfqAssignmentMaxLeverage(): Promise<
    */
 getAccounts(): Promise<
     DerivativesAPISuccessResponse<{ accounts: FuturesAccounts }>
-  > {
-    return this.getPrivate('derivatives/api/v3/accounts');
+  >
 ⋮----
 /**
    * Get open positions
@@ -11712,8 +11692,7 @@ getAccounts(): Promise<
    */
 getOpenPositions(): Promise<
     DerivativesAPISuccessResponse<{ openPositions: FuturesOpenPosition[] }>
-  > {
-    return this.getPrivate('derivatives/api/v3/openpositions');
+  >
 ⋮----
 /**
    * Get position percentile of unwind queue
@@ -11722,8 +11701,7 @@ getOpenPositions(): Promise<
    */
 getPositionPercentile(): Promise<
     DerivativesAPISuccessResponse<{ queue: FuturesUnwindQueuePosition[] }>
-  > {
-    return this.getPrivate('derivatives/api/v3/unwindqueue');
+  >
 ⋮----
 /**
    * Get portfolio margin parameters
@@ -11736,8 +11714,7 @@ getPositionPercentile(): Promise<
    */
 getPortfolioMarginParameters(): Promise<
     DerivativesAPISuccessResponse<FuturesPortfolioMarginParameters>
-  > {
-    return this.getPrivate('derivatives/api/v3/portfolio-margining/parameters');
+  >
 ⋮----
 /**
    * Calculate portfolio margin, pnl and greeks
@@ -11749,7 +11726,7 @@ getPortfolioMarginParameters(): Promise<
    */
 simulateMarginRequirements(params: {
     json: any; // Complex structure for portfolio simulation
-}): Promise<DerivativesAPISuccessResponse<FuturesPortfolioSimulation>>
+  }): Promise<DerivativesAPISuccessResponse<FuturesPortfolioSimulation>>
 ⋮----
 json: any; // Complex structure for portfolio simulation
 ⋮----
@@ -11766,8 +11743,7 @@ json: any; // Complex structure for portfolio simulation
    */
 getAssignmentPrograms(): Promise<
     DerivativesAPISuccessResponse<{ participants: FuturesAssignmentProgram[] }>
-  > {
-    return this.getPrivate('derivatives/api/v3/assignmentprogram/current');
+  >
 ⋮----
 /**
    * Add assignment preference
@@ -11776,7 +11752,7 @@ getAssignmentPrograms(): Promise<
    */
 addAssignmentPreference(
     params: FuturesAddAssignmentPreferenceParams,
-): Promise<DerivativesAPISuccessResponse<FuturesAssignmentProgram>>
+  ): Promise<DerivativesAPISuccessResponse<FuturesAssignmentProgram>>
 ⋮----
 /**
    * Delete assignment preference
@@ -11785,7 +11761,7 @@ addAssignmentPreference(
    */
 deleteAssignmentPreference(params: {
     id: number;
-}): Promise<DerivativesAPISuccessResponse<FuturesAssignmentProgram>>
+  }): Promise<DerivativesAPISuccessResponse<FuturesAssignmentProgram>>
 ⋮----
 /**
    * List assignment preferences history
@@ -11796,8 +11772,7 @@ getAssignmentPreferencesHistory(): Promise<
     DerivativesAPISuccessResponse<{
       participants: FuturesAssignmentProgramHistory[];
     }>
-  > {
-    return this.getPrivate('derivatives/api/v3/assignmentprogram/history');
+  >
 ⋮----
 /**
    *
@@ -11814,8 +11789,7 @@ getAssignmentPreferencesHistory(): Promise<
    */
 getFeeSchedules(): Promise<
     DerivativesAPISuccessResponse<{ feeSchedules: FuturesFeeSchedule[] }>
-  > {
-    return this.get('derivatives/api/v3/feeschedules');
+  >
 ⋮----
 /**
    * Get fee schedule volumes
@@ -11828,8 +11802,7 @@ getFeeScheduleVolumes(): Promise<
     DerivativesAPISuccessResponse<{
       volumesByFeeSchedule: Record<string, number>;
     }>
-  > {
-    return this.getPrivate('derivatives/api/v3/feeschedules/volumes');
+  >
 ⋮----
 /**
    *
@@ -11844,8 +11817,7 @@ getFeeScheduleVolumes(): Promise<
    */
 getNotifications(): Promise<
     DerivativesAPISuccessResponse<{ notifications: FuturesNotification[] }>
-  > {
-    return this.getPrivate('derivatives/api/v3/notifications');
+  >
 ⋮----
 /**
    *
@@ -11860,7 +11832,7 @@ getNotifications(): Promise<
    */
 getFills(params?: {
     lastFillTime?: string;
-}): Promise<DerivativesAPISuccessResponse<
+  }): Promise<DerivativesAPISuccessResponse<{ fills: FuturesFill[] }>>
 ⋮----
 /**
    *
@@ -11877,8 +11849,7 @@ getHistoricalFundingRates(params: {
     symbol: string;
   }): Promise<
     DerivativesAPISuccessResponse<{ rates: FuturesHistoricalFundingRate[] }>
-  > {
-    return this.get('derivatives/api/v3/historical-funding-rates', params);
+  >
 ⋮----
 /**
    *
@@ -11895,8 +11866,7 @@ getSelfTradeStrategy(): Promise<
     DerivativesAPISuccessResponse<{
       strategy: FuturesSelfTradeStrategy;
     }>
-  > {
-    return this.getPrivate('derivatives/api/v3/self-trade-strategy');
+  >
 ⋮----
 /**
    * Update self trade strategy
@@ -11909,10 +11879,7 @@ updateSelfTradeStrategy(
     DerivativesAPISuccessResponse<{
       strategy: FuturesSelfTradeStrategy;
     }>
-  > {
-    return this.putPrivate('derivatives/api/v3/self-trade-strategy', {
-      query: params,
-    });
+  >
 ⋮----
 /**
    *
@@ -11927,7 +11894,7 @@ updateSelfTradeStrategy(
    */
 getSubaccountTradingStatus(params: {
     subaccountUid: string;
-}): Promise<DerivativesAPISuccessResponse<
+  }): Promise<DerivativesAPISuccessResponse<{ tradingEnabled: boolean }>>
 ⋮----
 /**
    * Update subaccount trading status
@@ -11937,7 +11904,7 @@ getSubaccountTradingStatus(params: {
 updateSubaccountTradingStatus(params: {
     subaccountUid: string;
     tradingEnabled: boolean;
-}): Promise<DerivativesAPISuccessResponse<
+  }): Promise<DerivativesAPISuccessResponse<{ tradingEnabled: boolean }>>
 ⋮----
 /**
    * Get subaccounts
@@ -11946,8 +11913,7 @@ updateSubaccountTradingStatus(params: {
    */
 getSubaccounts(): Promise<
     DerivativesAPISuccessResponse<FuturesSubaccountsInfo>
-  > {
-    return this.getPrivate('derivatives/api/v3/subaccounts');
+  >
 ⋮----
 /**
    *
@@ -11956,13 +11922,28 @@ getSubaccounts(): Promise<
    */
 ⋮----
 /**
+   * Get transfer assets
+   *
+   * Returns the assets your account can transfer, their minimum and maximum amounts for transfers to or from Spot, and whether MTF accounts can move them to Spot.
+   * Assets with null Spot transfer bounds can only move between Futures wallets.
+   * Costs 2 rate-limit units.
+   */
+getTransferAssets(): Promise<
+    DerivativesAPISuccessResponse<{ assets: FuturesTransferAsset[] }>
+  >
+⋮----
+/**
    * Initiate wallet transfer
    *
-   * This endpoint allows you to transfer funds between two margin accounts with the same collateral currency, or between a margin account and your cash account.
+   * Transfers funds between Futures cash/margin wallets, including margin accounts with the same collateral currency.
+   * From 12 November 2026, also transfers between any Futures wallet and the Kraken Spot wallet by passing `spot` as fromAccount or toAccount.
+   * Transfers to or from Spot settle before the response, require an API key with withdrawal permission, and are only available to accounts linked to a Kraken account.
+   * Costs 100 rate-limit units for Spot transfers, or 10 between Futures wallets.
+   * Possible errors include insufficientFunds, invalidAmount, invalidUnit, invalidCurrency, and transferFailed.
    */
 submitWalletTransfer(
     params: FuturesInitiateWalletTransferParams,
-): Promise<DerivativesAPISuccessResponse<Record<string, never>>>
+  ): Promise<DerivativesAPISuccessResponse<Record<string, never>>>
 ⋮----
 /**
    * Initiate sub account transfer
@@ -11971,17 +11952,19 @@ submitWalletTransfer(
    */
 submitSubaccountTransfer(
     params: FuturesInitiateSubaccountTransferParams,
-): Promise<DerivativesAPISuccessResponse<Record<string, never>>>
+  ): Promise<DerivativesAPISuccessResponse<Record<string, never>>>
 ⋮----
 /**
    * Initiate withdrawal to Spot wallet
    *
    * This endpoint allows you to request to withdraw digital assets to your Kraken Spot wallet.
    * Wallet names can be found in the 'accounts' structure in the Get Wallets /accounts response.
+   *
+   * @deprecated Kraken removes this endpoint on 30 November 2026. Use submitWalletTransfer with toAccount: 'spot' instead.
    */
 submitTransferToSpot(
     params: FuturesSubmitToSpotParams,
-): Promise<DerivativesAPISuccessResponse<
+  ): Promise<DerivativesAPISuccessResponse<{ uid: string }>>
 ⋮----
 /**
    *
@@ -11999,8 +11982,7 @@ submitTransferToSpot(
    */
 getOpenRFQs(): Promise<
     DerivativesAPISuccessResponse<{ rfqs: FuturesRfq[] }>
-  > {
-    return this.get('derivatives/api/v3/rfqs');
+  >
 ⋮----
 /**
    * Retrieve a single open RFQ
@@ -12012,7 +11994,7 @@ getOpenRFQs(): Promise<
    */
 getOpenRFQ(params: {
     rfqUid: string;
-}): Promise<DerivativesAPISuccessResponse<
+  }): Promise<DerivativesAPISuccessResponse<{ rfq: FuturesRfq }>>
 ⋮----
 /**
    * List open offers on open RFQs
@@ -12024,8 +12006,7 @@ getOpenRFQ(params: {
    */
 getRFQOpenOffers(): Promise<
     DerivativesAPISuccessResponse<{ openOffers: FuturesOpenOffer[] }>
-  > {
-    return this.getPrivate('derivatives/api/v3/rfqs/open-offers');
+  >
 ⋮----
 /**
    * Place new offer on an open RFQ
@@ -12039,7 +12020,7 @@ submitRFQNewOffer(params: {
     rfqUid: string;
     bid?: number;
     ask?: number;
-}): Promise<DerivativesAPISuccessResponse<
+  }): Promise<DerivativesAPISuccessResponse<{ offerUid: string }>>
 ⋮----
 /**
    * Replace open offer on open RFQ
@@ -12053,7 +12034,7 @@ updateRFQOpenOffer(params: {
     rfqUid: string;
     bid?: number;
     ask?: number;
-}): Promise<DerivativesAPISuccessResponse<Record<string, never>>>
+  }): Promise<DerivativesAPISuccessResponse<Record<string, never>>>
 ⋮----
 /**
    * Cancel open offer on open RFQ
@@ -12065,7 +12046,7 @@ updateRFQOpenOffer(params: {
    */
 cancelRFQOffer(params: {
     rfqUid: string;
-}): Promise<DerivativesAPISuccessResponse<Record<string, never>>>
+  }): Promise<DerivativesAPISuccessResponse<Record<string, never>>>
 ⋮----
 /**
    *
@@ -12084,8 +12065,7 @@ getExecutionEvents(
     DerivativesAPISuccessResponse<
       FuturesHistoryResponse<FuturesHistoryExecutionEvent>
     >
-  > {
-    return this.getPrivate('api/history/v3/executions', params);
+  >
 ⋮----
 /**
    * Get order events
@@ -12098,8 +12078,7 @@ getOrderEvents(
     DerivativesAPISuccessResponse<
       FuturesHistoryResponse<FuturesHistoryOrderEvent>
     >
-  > {
-    return this.getPrivate('api/history/v3/orders', params);
+  >
 ⋮----
 /**
    * Get trigger events
@@ -12112,8 +12091,7 @@ getTriggerEvents(
     DerivativesAPISuccessResponse<
       FuturesHistoryResponse<FuturesHistoryTriggerEvent>
     >
-  > {
-    return this.getPrivate('api/history/v3/triggers', params);
+  >
 ⋮----
 /**
    * Get position update events
@@ -12126,8 +12104,7 @@ getPositionEvents(
     DerivativesAPISuccessResponse<
       FuturesHistoryResponse<FuturesPositionUpdateEvent>
     >
-  > {
-    return this.getPrivate('api/history/v3/positions', params);
+  >
 ⋮----
 /**
    * Get account log
@@ -12137,14 +12114,14 @@ getPositionEvents(
    */
 getAccountLog(
     params?: FuturesGetAccountLogParams,
-): Promise<DerivativesAPISuccessResponse<FuturesAccountLog>>
+  ): Promise<DerivativesAPISuccessResponse<FuturesAccountLog>>
 ⋮----
 /**
    * Account log (CSV)
    *
    * Lists recent account log entries in CSV format.
    */
-getAccountLogCsv(params?:
+getAccountLogCsv(params?: { conversion_details?: boolean }): Promise<string>
 ⋮----
 /**
    *
@@ -12159,7 +12136,7 @@ getAccountLogCsv(params?:
    */
 getPublicExecutionEvents(
     params: FuturesMarketHistoryBaseParams,
-): Promise<FuturesMarketHistoryResponse<FuturesPublicExecutionEvent>>
+  ): Promise<FuturesMarketHistoryResponse<FuturesPublicExecutionEvent>>
 ⋮----
 /**
    * Get public order events
@@ -12168,7 +12145,7 @@ getPublicExecutionEvents(
    */
 getPublicOrderEvents(
     params: FuturesMarketHistoryBaseParams,
-): Promise<FuturesMarketHistoryResponse<FuturesPublicOrderEvent>>
+  ): Promise<FuturesMarketHistoryResponse<FuturesPublicOrderEvent>>
 ⋮----
 /**
    * Get public mark price events
@@ -12177,7 +12154,7 @@ getPublicOrderEvents(
    */
 getPublicMarkPriceEvents(
     params: FuturesMarketHistoryBaseParams,
-): Promise<FuturesMarketHistoryResponse<FuturesPublicMarkPriceEvent>>
+  ): Promise<FuturesMarketHistoryResponse<FuturesPublicMarkPriceEvent>>
 ⋮----
 /**
    *
@@ -12200,7 +12177,7 @@ getTickTypes(): Promise<FuturesTickType[]>
    */
 getMarketsForTickType(params: {
     tickType: FuturesTickType;
-}): Promise<string[]>
+  }): Promise<string[]>
 ⋮----
 /**
    * Resolutions
@@ -12212,7 +12189,7 @@ getMarketsForTickType(params: {
 getResolutions(params: {
     tickType: FuturesTickType;
     symbol: string;
-}): Promise<FuturesResolution[]>
+  }): Promise<FuturesResolution[]>
 ⋮----
 /**
    * Market Candles
@@ -12237,7 +12214,7 @@ getCandles(params: FuturesGetCandlesParams): Promise<FuturesCandles>
    */
 getLiquidityPoolStatistic(
     params: FuturesGetAnalyticsParams,
-): Promise<FuturesAnalyticsResponse>
+  ): Promise<FuturesAnalyticsResponse>
 ⋮----
 /**
    * Market Analytics
@@ -12246,7 +12223,7 @@ getLiquidityPoolStatistic(
    */
 getMarketAnalytics(
     params: FuturesGetAnalyticsParams,
-): Promise<FuturesAnalyticsResponse>
+  ): Promise<FuturesAnalyticsResponse>
 ⋮----
 /**
    *
@@ -12417,8 +12394,7 @@ getServerTime(): Promise<
       unixtime: number;
       rfc1123: string;
     }>
-  > {
-    return this.get('0/public/Time');
+  >
 ⋮----
 /**
    * Get System Status
@@ -12434,8 +12410,7 @@ getSystemStatus(): Promise<SpotAPISuccessResponse<SpotSystemStatus>>
    */
 getMaintenanceSchedule(): Promise<
     SpotAPISuccessResponse<SpotMaintenanceSchedule>
-  > {
-    return this.get('0/public/MaintenanceSchedule');
+  >
 ⋮----
 /**
    * Get Asset Info
@@ -12445,7 +12420,7 @@ getMaintenanceSchedule(): Promise<
 getAssetInfo(params?: {
     asset?: string;
     aclass?: 'currency' | 'tokenized_asset';
-}): Promise<SpotAPISuccessResponse<Record<string, SpotAssetInfo>>>
+  }): Promise<SpotAPISuccessResponse<Record<string, SpotAssetInfo>>>
 ⋮----
 /**
    * Get Tradable Asset Pairs
@@ -12454,7 +12429,7 @@ getAssetInfo(params?: {
    */
 getAssetPairs(
     params?: SpotGetAssetPairsParams,
-): Promise<SpotAPISuccessResponse<Record<string, SpotAssetPair>>>
+  ): Promise<SpotAPISuccessResponse<Record<string, SpotAssetPair>>>
 ⋮----
 /**
    * Get Ticker Information
@@ -12466,7 +12441,7 @@ getAssetPairs(
 getTicker(params?: {
     pair?: string;
     asset_class?: 'tokenized_asset' | 'forex';
-}): Promise<SpotAPISuccessResponse<Record<string, SpotAssetTickerInfo>>>
+  }): Promise<SpotAPISuccessResponse<Record<string, SpotAssetTickerInfo>>>
 ⋮----
 /**
    * Get OHLC Data
@@ -12477,7 +12452,7 @@ getTicker(params?: {
    */
 getCandles(
     params: SpotGetOHLCParams,
-): Promise<SpotAPISuccessResponse<SpotOHLCResponse>>
+  ): Promise<SpotAPISuccessResponse<SpotOHLCResponse>>
 ⋮----
 /**
    * Get Order Book
@@ -12487,7 +12462,7 @@ getCandles(
    */
 getOrderBook(
     params: SpotGetOrderBookParams,
-): Promise<SpotAPISuccessResponse<SpotOrderBookResponse>>
+  ): Promise<SpotAPISuccessResponse<SpotOrderBookResponse>>
 ⋮----
 /**
    * Get Grouped Order Book
@@ -12496,7 +12471,7 @@ getOrderBook(
    */
 getGroupedBook(
     params: SpotGetGroupedBookParams,
-): Promise<SpotAPISuccessResponse<SpotGroupedBookResponse>>
+  ): Promise<SpotAPISuccessResponse<SpotGroupedBookResponse>>
 ⋮----
 /**
    * Get Level 3 Order Book
@@ -12505,7 +12480,7 @@ getGroupedBook(
    */
 getLevel3OrderBook(
     params: SpotGetLevel3Params,
-): Promise<SpotAPISuccessResponse<SpotLevel3OrderBookResponse>>
+  ): Promise<SpotAPISuccessResponse<SpotLevel3OrderBookResponse>>
 ⋮----
 /**
    * Get Recent Trades
@@ -12514,7 +12489,7 @@ getLevel3OrderBook(
    */
 getRecentTrades(
     params: SpotGetRecentTradesParams,
-): Promise<SpotAPISuccessResponse<SpotRecentTradesResponse>>
+  ): Promise<SpotAPISuccessResponse<SpotRecentTradesResponse>>
 ⋮----
 /**
    * Get Recent Spreads
@@ -12523,7 +12498,7 @@ getRecentTrades(
    */
 getRecentSpreads(
     params: SpotGetRecentSpreadsParams,
-): Promise<SpotAPISuccessResponse<SpotRecentSpreadsResponse>>
+  ): Promise<SpotAPISuccessResponse<SpotRecentSpreadsResponse>>
 ⋮----
 /**
    *
@@ -12539,7 +12514,7 @@ getRecentSpreads(
    */
 getAccountBalance(
     params?: SpotGetAccountBalanceParams,
-): Promise<SpotAPISuccessResponse<SpotAccountBalance>>
+  ): Promise<SpotAPISuccessResponse<SpotAccountBalance>>
 ⋮----
 /**
    * Get API Key Info
@@ -12548,7 +12523,7 @@ getAccountBalance(
    */
 getApiKeyInfo(
     params?: SpotGetApiKeyInfoParams,
-): Promise<SpotAPISuccessResponse<SpotApiKeyInfo>>
+  ): Promise<SpotAPISuccessResponse<SpotApiKeyInfo>>
 ⋮----
 /**
    * List Wallet Accounts
@@ -12557,8 +12532,7 @@ getApiKeyInfo(
    */
 getWalletAccounts(): Promise<
     SpotAPISuccessResponse<SpotListWalletAccountsResponse>
-  > {
-return this.postPrivate('0/private/ListWalletAccounts',
+  >
 ⋮----
 /**
    * Get Extended Balance
@@ -12569,7 +12543,7 @@ return this.postPrivate('0/private/ListWalletAccounts',
 getExtendedBalance(params?: {
     rebase_multiplier?: 'rebased' | 'base';
     account_id?: string;
-}): Promise<SpotAPISuccessResponse<SpotExtendedBalance>>
+  }): Promise<SpotAPISuccessResponse<SpotExtendedBalance>>
 ⋮----
 /**
    * Get Credit Lines
@@ -12579,7 +12553,7 @@ getExtendedBalance(params?: {
 getCreditLines(params?: {
     rebase_multiplier?: 'rebased' | 'base';
     account_id?: string;
-}): Promise<SpotAPISuccessResponse<SpotCreditLines | null>>
+  }): Promise<SpotAPISuccessResponse<SpotCreditLines | null>>
 ⋮----
 /**
    * Get Trade Balance
@@ -12589,7 +12563,7 @@ getCreditLines(params?: {
 getTradeBalance(params?: {
     rebase_multiplier?: 'rebased' | 'base';
     account_id?: string;
-}): Promise<SpotAPISuccessResponse<SpotTradeBalance>>
+  }): Promise<SpotAPISuccessResponse<SpotTradeBalance>>
 ⋮----
 /**
    * Get Open Orders
@@ -12598,7 +12572,7 @@ getTradeBalance(params?: {
    */
 getOpenOrders(
     params?: SpotGetOpenOrdersParams,
-): Promise<SpotAPISuccessResponse<SpotOpenOrdersResponse>>
+  ): Promise<SpotAPISuccessResponse<SpotOpenOrdersResponse>>
 ⋮----
 /**
    * Get Closed Orders
@@ -12608,7 +12582,7 @@ getOpenOrders(
    */
 getClosedOrders(
     params?: SpotGetClosedOrdersParams,
-): Promise<SpotAPISuccessResponse<SpotClosedOrdersResponse>>
+  ): Promise<SpotAPISuccessResponse<SpotClosedOrdersResponse>>
 ⋮----
 /**
    * Query Orders Info
@@ -12617,7 +12591,7 @@ getClosedOrders(
    */
 getOrders(
     params: SpotQueryOrdersParams,
-): Promise<SpotAPISuccessResponse<SpotQueryOrdersResponse>>
+  ): Promise<SpotAPISuccessResponse<SpotQueryOrdersResponse>>
 ⋮----
 /**
    * Get Order Amends
@@ -12629,7 +12603,7 @@ getOrderAmends(params: {
     order_id: string;
     rebase_multiplier?: 'rebased' | 'base';
     account_id?: string;
-}): Promise<SpotAPISuccessResponse<SpotOrderAmendsResponse>>
+  }): Promise<SpotAPISuccessResponse<SpotOrderAmendsResponse>>
 ⋮----
 /**
    * Get Trades History
@@ -12638,7 +12612,7 @@ getOrderAmends(params: {
    */
 getTradesHistory(
     params?: SpotGetTradesHistoryParams,
-): Promise<SpotAPISuccessResponse<SpotTradesHistoryResponse>>
+  ): Promise<SpotAPISuccessResponse<SpotTradesHistoryResponse>>
 ⋮----
 /**
    * Query Trades Info
@@ -12647,7 +12621,7 @@ getTradesHistory(
    */
 getTrades(
     params: SpotQueryTradesParams,
-): Promise<SpotAPISuccessResponse<SpotQueryTradesResponse>>
+  ): Promise<SpotAPISuccessResponse<SpotQueryTradesResponse>>
 ⋮----
 /**
    * Get Open Positions
@@ -12656,7 +12630,7 @@ getTrades(
    */
 getOpenPositions(
     params?: SpotGetOpenPositionsParams,
-): Promise<SpotAPISuccessResponse<SpotOpenPositionsResult>>
+  ): Promise<SpotAPISuccessResponse<SpotOpenPositionsResult>>
 ⋮----
 /**
    * Get Ledgers Info
@@ -12666,7 +12640,7 @@ getOpenPositions(
    */
 getLedgersInfo(
     params?: SpotGetLedgersInfoParams,
-): Promise<SpotAPISuccessResponse<SpotLedgersInfoResponse>>
+  ): Promise<SpotAPISuccessResponse<SpotLedgersInfoResponse>>
 ⋮----
 /**
    * Query Ledgers
@@ -12675,7 +12649,7 @@ getLedgersInfo(
    */
 getLedgers(
     params: SpotQueryLedgersParams,
-): Promise<SpotAPISuccessResponse<SpotQueryLedgersResponse>>
+  ): Promise<SpotAPISuccessResponse<SpotQueryLedgersResponse>>
 ⋮----
 /**
    * Get Trade Volume
@@ -12685,7 +12659,7 @@ getLedgers(
    */
 getTradingVolume(
     params?: SpotGetTradingVolumeParams,
-): Promise<SpotAPISuccessResponse<SpotTradeVolume>>
+  ): Promise<SpotAPISuccessResponse<SpotTradeVolume>>
 ⋮----
 /**
    * Request Export Report
@@ -12694,7 +12668,7 @@ getTradingVolume(
    */
 requestLedgersExport(
     params: SpotRequestExportReportParams,
-): Promise<SpotAPISuccessResponse<SpotRequestExportReportResponse>>
+  ): Promise<SpotAPISuccessResponse<SpotRequestExportReportResponse>>
 ⋮----
 /**
    * Get Export Report Status
@@ -12703,14 +12677,14 @@ requestLedgersExport(
    */
 getLedgersExportStatus(params: {
     report: 'trades' | 'ledgers';
-}): Promise<SpotAPISuccessResponse<SpotExportReportStatus[]>>
+  }): Promise<SpotAPISuccessResponse<SpotExportReportStatus[]>>
 ⋮----
 /**
    * Retrieve Data Export
    *
    * Retrieve a processed data export (binary zip archive).
    */
-getLedgersExport(params:
+getLedgersExport(params: { id: string }): Promise<any>
 ⋮----
 /**
    * Delete Export Report
@@ -12720,7 +12694,7 @@ getLedgersExport(params:
 deleteLedgersExport(params: {
     id: string;
     type: 'cancel' | 'delete';
-}): Promise<SpotAPISuccessResponse<SpotDeleteExportReportResponse>>
+  }): Promise<SpotAPISuccessResponse<SpotDeleteExportReportResponse>>
 ⋮----
 /**
    *
@@ -12737,7 +12711,7 @@ deleteLedgersExport(params: {
    */
 submitOrder(
     params: SpotSubmitOrderParams,
-): Promise<SpotAPISuccessResponse<SpotSubmitOrderResponse>>
+  ): Promise<SpotAPISuccessResponse<SpotSubmitOrderResponse>>
 ⋮----
 /**
    * Amend Order
@@ -12749,10 +12723,7 @@ amendOrder(params: SpotAmendOrderParams): Promise<
     SpotAPISuccessResponse<{
       amend_id: string;
     }>
-  > {
-    return this.postPrivate('0/private/AmendOrder', {
-      body: params,
-    });
+  >
 ⋮----
 /**
    * Cancel Order
@@ -12764,10 +12735,7 @@ cancelOrder(params: { txid?: string | number; cl_ord_id?: string }): Promise<
       count: number;
       pending?: boolean;
     }>
-  > {
-    return this.postPrivate('0/private/CancelOrder', {
-      body: params,
-    });
+  >
 ⋮----
 /**
    * Cancel All Orders
@@ -12779,8 +12747,7 @@ cancelAllOrders(): Promise<
       count: number;
       pending: boolean;
     }>
-  > {
-return this.postPrivate('0/private/CancelAll',
+  >
 ⋮----
 /**
    * Cancel All Orders After X
@@ -12794,10 +12761,7 @@ cancelAllOrdersAfter(params: { timeout: number }): Promise<
       currentTime: string;
       triggerTime: string;
     }>
-  > {
-    return this.postPrivate('0/private/CancelAllOrdersAfter', {
-      body: params,
-    });
+  >
 ⋮----
 /**
    * Get Websockets Token
@@ -12807,8 +12771,7 @@ cancelAllOrdersAfter(params: { timeout: number }): Promise<
    */
 getWebSocketsToken(): Promise<
     SpotAPISuccessResponse<SpotWebSocketsTokenResponse>
-  > {
-return this.postPrivate('0/private/GetWebSocketsToken',
+  >
 ⋮----
 /**
    * Add Order Batch
@@ -12820,10 +12783,7 @@ submitBatchOrders(params: SpotSubmitOrderBatchParams): Promise<
     SpotAPISuccessResponse<{
       orders: SpotBatchOrderResult[];
     }>
-  > {
-    return this.postPrivate('0/private/AddOrderBatch', {
-      body: params,
-    });
+  >
 ⋮----
 /**
    * Cancel Order Batch
@@ -12837,10 +12797,7 @@ cancelBatchOrders(params: {
     SpotAPISuccessResponse<{
       count: number;
     }>
-  > {
-    return this.postPrivate('0/private/CancelOrderBatch', {
-      body: params,
-    });
+  >
 ⋮----
 /**
    *
@@ -12858,8 +12815,7 @@ submitStrategy(params: SpotSubmitStrategyParams): Promise<
     SpotAPISuccessResponse<{
       strategy_id: string;
     }>
-  > {
-return this.postPrivate('0/private/AddStrategy',
+  >
 ⋮----
 /**
    * Cancel Strategy
@@ -12870,8 +12826,7 @@ cancelStrategy(params: { strategy_id: string }): Promise<
     SpotAPISuccessResponse<{
       strategy_id: string;
     }>
-  > {
-return this.postPrivate('0/private/CancelStrategy',
+  >
 ⋮----
 /**
    * Get Open Strategies
@@ -12882,8 +12837,7 @@ getOpenStrategies(params?: { strategy_type?: 'twap' }): Promise<
     SpotAPISuccessResponse<{
       open: Record<string, SpotAlgoStrategy>;
     }>
-  > {
-return this.postPrivate('0/private/GetOpenStrategies',
+  >
 ⋮----
 /**
    * Query Strategies
@@ -12894,8 +12848,7 @@ queryStrategies(params: { strategy_ids: string }): Promise<
     SpotAPISuccessResponse<{
       strategies: Record<string, SpotAlgoStrategy>;
     }>
-  > {
-return this.postPrivate('0/private/QueryStrategies',
+  >
 ⋮----
 /**
    * Get Closed Strategies
@@ -12905,7 +12858,7 @@ return this.postPrivate('0/private/QueryStrategies',
    */
 getClosedStrategies(
     params?: SpotGetClosedStrategiesParams,
-): Promise<SpotAPISuccessResponse<SpotClosedStrategiesResponse>>
+  ): Promise<SpotAPISuccessResponse<SpotClosedStrategiesResponse>>
 ⋮----
 /**
    *
@@ -12920,7 +12873,7 @@ getClosedStrategies(
    */
 getDepositMethods(
     params: SpotGetDepositMethodsParams,
-): Promise<SpotAPISuccessResponse<SpotDepositMethod[]>>
+  ): Promise<SpotAPISuccessResponse<SpotDepositMethod[]>>
 ⋮----
 /**
    * Get Deposit Addresses
@@ -12929,7 +12882,7 @@ getDepositMethods(
    */
 getDepositAddresses(
     params: SpotGetDepositAddressesParams,
-): Promise<SpotAPISuccessResponse<SpotDepositAddress[]>>
+  ): Promise<SpotAPISuccessResponse<SpotDepositAddress[]>>
 ⋮----
 /**
    * Get Status of Recent Deposits
@@ -12938,7 +12891,7 @@ getDepositAddresses(
    */
 getDepositsStatus(
     params?: SpotGetDepositStatusParams,
-): Promise<SpotAPISuccessResponse<SpotDepositStatusResponse>>
+  ): Promise<SpotAPISuccessResponse<SpotDepositStatusResponse>>
 ⋮----
 /**
    * Get Withdrawal Methods
@@ -12947,7 +12900,7 @@ getDepositsStatus(
    */
 getWithdrawalMethods(
     params?: SpotGetWithdrawalMethodsParams,
-): Promise<SpotAPISuccessResponse<SpotWithdrawalMethod[]>>
+  ): Promise<SpotAPISuccessResponse<SpotWithdrawalMethod[]>>
 ⋮----
 /**
    * Get Withdrawal Addresses
@@ -12956,7 +12909,7 @@ getWithdrawalMethods(
    */
 getWithdrawalAddresses(
     params?: SpotGetWithdrawalAddressesParams,
-): Promise<SpotAPISuccessResponse<SpotWithdrawalAddress[]>>
+  ): Promise<SpotAPISuccessResponse<SpotWithdrawalAddress[]>>
 ⋮----
 /**
    * Get Withdrawal Information
@@ -12965,7 +12918,7 @@ getWithdrawalAddresses(
    */
 getWithdrawalInfo(
     params: SpotGetWithdrawalInfoParams,
-): Promise<SpotAPISuccessResponse<SpotWithdrawalInfo>>
+  ): Promise<SpotAPISuccessResponse<SpotWithdrawalInfo>>
 ⋮----
 /**
    * Withdraw Funds
@@ -12976,8 +12929,7 @@ submitWithdrawal(params: SpotWithdrawFundsParams): Promise<
     SpotAPISuccessResponse<{
       refid: string;
     }>
-  > {
-return this.postPrivate('0/private/Withdraw',
+  >
 ⋮----
 /**
    * Get Status of Recent Withdrawals
@@ -12986,7 +12938,7 @@ return this.postPrivate('0/private/Withdraw',
    */
 getWithdrawalsStatus(
     params?: SpotGetWithdrawalsStatusParams,
-): Promise<SpotAPISuccessResponse<SpotWithdrawalStatus[]>>
+  ): Promise<SpotAPISuccessResponse<SpotWithdrawalStatus[]>>
 ⋮----
 /**
    * Request Withdrawal Cancellation
@@ -12996,7 +12948,7 @@ getWithdrawalsStatus(
 cancelWithdrawal(params: {
     asset: string;
     refid: string;
-}): Promise<SpotAPISuccessResponse<boolean>>
+  }): Promise<SpotAPISuccessResponse<boolean>>
 ⋮----
 /**
    * Request Wallet Transfer
@@ -13008,8 +12960,7 @@ submitTransferToFutures(params: SpotWalletTransferParams): Promise<
     SpotAPISuccessResponse<{
       refid: string;
     }>
-  > {
-return this.postPrivate('0/private/WalletTransfer',
+  >
 ⋮----
 /**
    *
@@ -13026,7 +12977,7 @@ return this.postPrivate('0/private/WalletTransfer',
 createSubaccount(params: {
     username: string;
     email: string;
-}): Promise<SpotAPISuccessResponse<boolean>>
+  }): Promise<SpotAPISuccessResponse<boolean>>
 ⋮----
 /**
    * Account Transfer
@@ -13036,7 +12987,7 @@ createSubaccount(params: {
    */
 submitSubaccountTransfer(
     params: SpotAccountTransferParams,
-): Promise<SpotAPISuccessResponse<SpotAccountTransferResponse>>
+  ): Promise<SpotAPISuccessResponse<SpotAccountTransferResponse>>
 ⋮----
 /**
    *
@@ -13053,7 +13004,7 @@ submitSubaccountTransfer(
 allocateEarnFunds(params: {
     amount: string;
     strategy_id: string;
-}): Promise<SpotAPISuccessResponse<boolean>>
+  }): Promise<SpotAPISuccessResponse<boolean>>
 ⋮----
 /**
    * Deallocate Earn Funds
@@ -13064,7 +13015,7 @@ allocateEarnFunds(params: {
 deallocateEarnFunds(params: {
     amount: string;
     strategy_id: string;
-}): Promise<SpotAPISuccessResponse<boolean>>
+  }): Promise<SpotAPISuccessResponse<boolean>>
 ⋮----
 /**
    * Get Allocation Status
@@ -13075,8 +13026,7 @@ getEarnAllocationStatus(params: { strategy_id: string }): Promise<
     SpotAPISuccessResponse<{
       pending: boolean;
     }>
-  > {
-return this.postPrivate('0/private/Earn/AllocateStatus',
+  >
 ⋮----
 /**
    * Get Deallocation Status
@@ -13087,10 +13037,7 @@ getEarnDeallocationStatus(params: { strategy_id: string }): Promise<
     SpotAPISuccessResponse<{
       pending: boolean;
     }>
-  > {
-    return this.postPrivate('0/private/Earn/DeallocateStatus', {
-      body: params,
-    });
+  >
 ⋮----
 /**
    * List Earn Strategies
@@ -13103,8 +13050,7 @@ getEarnStrategies(params?: SpotListEarnStrategiesParams): Promise<
       items: SpotEarnStrategy[];
       next_cursor?: string;
     }>
-  > {
-return this.postPrivate('0/private/Earn/Strategies',
+  >
 ⋮----
 /**
    * List Earn Allocations
@@ -13114,7 +13060,7 @@ return this.postPrivate('0/private/Earn/Strategies',
    */
 getEarnAllocations(
     params?: SpotListEarnAllocationsParams,
-): Promise<SpotAPISuccessResponse<SpotListEarnAllocationsResponse>>
+  ): Promise<SpotAPISuccessResponse<SpotListEarnAllocationsResponse>>
 ⋮----
 /**
    *
@@ -13130,7 +13076,7 @@ getEarnAllocations(
    */
 getPreTradeData(params: {
     symbol: string;
-}): Promise<SpotAPISuccessResponse<SpotPreTradeData>>
+  }): Promise<SpotAPISuccessResponse<SpotPreTradeData>>
 ⋮----
 /**
    * Post-Trade Data
@@ -13140,7 +13086,7 @@ getPreTradeData(params: {
    */
 getPostTradeData(
     params?: SpotGetPostTradeDataParams,
-): Promise<SpotAPISuccessResponse<SpotPostTradeDataResponse>>
+  ): Promise<SpotAPISuccessResponse<SpotPostTradeDataResponse>>
 ⋮----
 /**
    *
@@ -13153,10 +13099,11 @@ getPostTradeData(
    *
    * Retrieve the access token.
    * Note: This endpoint uses Basic authentication (Authorization header with base64-encoded client credentials).
+   * Set networkOptions.auth to { username: clientId, password: clientSecret } (empty password for public clients).
    */
 getOAuthAccessToken(
     params: OauthGetAccessTokenParams,
-): Promise<OauthGetAccessTokenResponse>
+  ): Promise<OauthGetAccessTokenResponse>
 ⋮----
 /**
    * Get User Info
@@ -13174,7 +13121,7 @@ getOAuthUserInfo(): Promise<OauthGetUserInfoResponse>
    */
 createOAuthFastApiKey(
     params: OauthCreateFastApiKeyParams,
-): Promise<OauthCreateFastApiKeyResponse>
+  ): Promise<OauthCreateFastApiKeyResponse>
 ⋮----
 /**
    * Delete Fast API Key
@@ -13184,7 +13131,9 @@ createOAuthFastApiKey(
    */
 deleteOAuthFastApiKey(params: {
     api_key_name: string; // max 32 chars
-}): Promise<
+  }): Promise<{
+    result: boolean;
+  }>
 ⋮----
 api_key_name: string; // max 32 chars
 ⋮----
@@ -13194,7 +13143,9 @@ api_key_name: string; // max 32 chars
    * Updates a Fast API key.
    * Note: Requires OAuth2 Bearer token. Scopes required: account.fast-api-key:write
    */
-updateOAuthFastApiKey(params: OauthUpdateFastApiKeyParams): Promise<
+updateOAuthFastApiKey(params: OauthUpdateFastApiKeyParams): Promise<{
+    result: boolean;
+  }>
 ⋮----
 /**
    * List Fast API Keys
@@ -13202,7 +13153,9 @@ updateOAuthFastApiKey(params: OauthUpdateFastApiKeyParams): Promise<
    * List all Fast API keys.
    * Note: Requires OAuth2 Bearer token. Scopes required: account.fast-api-key:read
    */
-listOAuthFastApiKeys(): Promise<
+listOAuthFastApiKeys(): Promise<{
+    result: OauthFastApiKey[];
+  }>
 
 ================
 File: docs/KRAKEN_SDK_QUICKSTART_GUIDE.md
@@ -15450,7 +15403,7 @@ File: package.json
 ================
 {
   "name": "@siebly/kraken-api",
-  "version": "1.1.10",
+  "version": "1.1.11",
   "description": "Complete & robust Node.js SDK for Kraken's REST APIs and WebSockets, with TypeScript & strong end to end tests.",
   "scripts": {
     "clean": "rm -rf dist",
