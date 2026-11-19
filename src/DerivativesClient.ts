@@ -68,6 +68,7 @@ import {
   FuturesTicker,
   FuturesTickType,
   FuturesTradeHistoryItem,
+  FuturesTransferAsset,
   FuturesUnwindQueuePosition,
 } from './types/response/derivatives.types.js';
 import { DerivativesAPISuccessResponse } from './types/response/shared.types.js';
@@ -741,9 +742,26 @@ export class DerivativesClient extends BaseRestClient {
    */
 
   /**
+   * Get transfer assets
+   *
+   * Returns the assets your account can transfer, their minimum and maximum amounts for transfers to or from Spot, and whether MTF accounts can move them to Spot.
+   * Assets with null Spot transfer bounds can only move between Futures wallets.
+   * Costs 2 rate-limit units.
+   */
+  getTransferAssets(): Promise<
+    DerivativesAPISuccessResponse<{ assets: FuturesTransferAsset[] }>
+  > {
+    return this.getPrivate('derivatives/api/v3/transfer/assets');
+  }
+
+  /**
    * Initiate wallet transfer
    *
-   * This endpoint allows you to transfer funds between two margin accounts with the same collateral currency, or between a margin account and your cash account.
+   * Transfers funds between Futures cash/margin wallets, including margin accounts with the same collateral currency.
+   * From 12 November 2026, also transfers between any Futures wallet and the Kraken Spot wallet by passing `spot` as fromAccount or toAccount.
+   * Transfers to or from Spot settle before the response, require an API key with withdrawal permission, and are only available to accounts linked to a Kraken account.
+   * Costs 100 rate-limit units for Spot transfers, or 10 between Futures wallets.
+   * Possible errors include insufficientFunds, invalidAmount, invalidUnit, invalidCurrency, and transferFailed.
    */
   submitWalletTransfer(
     params: FuturesInitiateWalletTransferParams,
@@ -771,6 +789,8 @@ export class DerivativesClient extends BaseRestClient {
    *
    * This endpoint allows you to request to withdraw digital assets to your Kraken Spot wallet.
    * Wallet names can be found in the 'accounts' structure in the Get Wallets /accounts response.
+   *
+   * @deprecated Kraken removes this endpoint on 30 November 2026. Use submitWalletTransfer with toAccount: 'spot' instead.
    */
   submitTransferToSpot(
     params: FuturesSubmitToSpotParams,

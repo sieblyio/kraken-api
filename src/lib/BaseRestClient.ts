@@ -496,6 +496,7 @@ export abstract class BaseRestClient {
       const clientType = this.getClientType();
 
       switch (clientType) {
+        case REST_CLIENT_TYPE_ENUM.institutional:
         case REST_CLIENT_TYPE_ENUM.main: {
           // Set default nonce, if not set yet
           if (!Array.isArray(res.requestData)) {
@@ -592,6 +593,7 @@ export abstract class BaseRestClient {
 
           break;
         }
+        case REST_CLIENT_TYPE_ENUM.partner:
         case REST_CLIENT_TYPE_ENUM.affiliate: {
           const nonce = this.getNextRequestNonce();
           const serialisedQueryParams = serializeParams(
@@ -765,10 +767,24 @@ export abstract class BaseRestClient {
     deleteUndefinedValues(params?.query);
     deleteUndefinedValues(params?.headers);
 
+    if (!isPublicApi && this.apiAccessToken) {
+      return {
+        ...options,
+        auth: undefined,
+        headers: {
+          ...options.headers,
+          Authorization: `Bearer ${this.apiAccessToken}`,
+        },
+        params: params?.query,
+        data: method === 'GET' ? undefined : params?.body,
+      };
+    }
+
     if (isPublicApi || !this.apiKey || !this.apiSecret) {
       return {
         ...options,
-        params: params?.query || params?.body || params,
+        params: params?.query,
+        data: method === 'GET' ? undefined : params?.body,
       };
     }
 
@@ -783,6 +799,7 @@ export abstract class BaseRestClient {
     let signHeaders: Record<string, string> = {};
 
     switch (this.getClientType()) {
+      case REST_CLIENT_TYPE_ENUM.institutional:
       case REST_CLIENT_TYPE_ENUM.main: {
         signHeaders = {
           'API-Key': this.apiKey,
@@ -792,31 +809,23 @@ export abstract class BaseRestClient {
         };
         break;
       }
+      case REST_CLIENT_TYPE_ENUM.partner:
       case REST_CLIENT_TYPE_ENUM.affiliate: {
         signHeaders = {
           'API-Key': this.apiKey,
           'API-Sign': signResult.sign,
           'API-Nonce': signResult.nonce ?? '',
+          'Content-Type': 'application/json',
           Accept: 'application/json',
         };
         break;
       }
       case REST_CLIENT_TYPE_ENUM.derivatives: {
-        // Support for Authorization header, if provided:
-        // https://github.com/tiagosiebler/kucoin-api/issues/2
-        // Use restClient.setAccessToken(newToken), if you need to store a new access token
-        // Not supported for Kraken at this time
-        if (this.apiAccessToken) {
-          signHeaders = {
-            Authorization: this.apiAccessToken,
-          };
-        } else {
-          signHeaders = {
-            Authent: signResult.sign,
-            APIKey: this.apiKey,
-            'Content-Type': 'application/x-www-form-urlencoded',
-          };
-        }
+        signHeaders = {
+          Authent: signResult.sign,
+          APIKey: this.apiKey,
+          'Content-Type': 'application/x-www-form-urlencoded',
+        };
         break;
       }
     }
