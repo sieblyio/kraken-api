@@ -19,7 +19,9 @@
 
 [1]: https://www.npmjs.com/package/@siebly/kraken-api
 
-Complete & robust JavaScript & Node.js SDK for the Kraken REST APIs and WebSockets:
+Complete & robust JavaScript & Node.js SDK for the Kraken REST APIs and WebSockets.
+
+Take a look at our dedicated [Kraken API quickstart guides for major frameworks and JavaScript runtimes](#frameworks--quickstart-guides).
 
 - Professional, robust & performant Kraken SDK with extensive production use in live trading environments.
 - Complete integration with all Kraken REST APIs and WebSockets.
@@ -45,6 +47,7 @@ Complete & robust JavaScript & Node.js SDK for the Kraken REST APIs and WebSocke
 ## Table of Contents
 
 - [Installation](#installation)
+  - [Frameworks & Quickstart Guides](#frameworks--quickstart-guides)
 - [Examples](#examples)
 - [Issues & Discussion](#issues--discussion)
 - [Related Projects](#related-projects)
@@ -76,6 +79,20 @@ npm install --save @siebly/kraken-api
 ```
 
 The unscoped npm package `kraken-api` is a different package. It is not this SDK.
+
+### Frameworks & Quickstart Guides
+
+Our complete Kraken SDK supports all the major JavaScript runtimes. For maximum convenience, we've included guides to quickly get you started with the most popular runtimes. If you're not sure how to use this SDK with a runtime or framework not listed here, feel free to [open an issue on GitHub](https://github.com/sieblyio/kraken-api/issues).
+
+| Runtime                    | Details                                                                                                                                                                                                                                                                                                                                                                                                  |
+| -------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Backend (trading bots)     | Using [Node.js and JavaScript](https://sieblyio.github.io/docs/kraken/environments/node.html), [Node.js and TypeScript](https://sieblyio.github.io/docs/kraken/environments/typescript.html), [Bun](https://sieblyio.github.io/docs/kraken/environments/bun.html), or [Deno](https://sieblyio.github.io/docs/kraken/environments/deno.html). This is the recommendation for algorithmic trading systems. |
+| Frontend / Web Development | Using [React with Vite](https://sieblyio.github.io/docs/kraken/environments/react.html) or [Vite with plain JavaScript](https://sieblyio.github.io/docs/kraken/environments/vite.html). Display REST and WebSocket prices in the browser.                                                                                                                                                                |
+| Next.js App Router         | Using the [Next.js App Router](https://sieblyio.github.io/docs/kraken/environments/next.html) to serve the price from a Route Handler running on Node.js.                                                                                                                                                                                                                                                |
+| Mobile (iOS & Android)     | Using [React Native with Expo for iOS and Android](https://sieblyio.github.io/docs/kraken/environments/expo.html). The example guides you to display the current BTC/USD price from Kraken and stream updates over WebSockets.                                                                                                                                                                           |
+| Cloudflare Workers         | [Cloudflare Workers](https://sieblyio.github.io/docs/kraken/environments/cloudflare-workers.html). Return a public price from a Worker, with a separate example for authenticated orders.                                                                                                                                                                                                                |
+
+Refer to [runtime compatibility](https://sieblyio.github.io/docs/kraken/compatibility.html) for a complete list of runtimes that we've actively tested, including setup guides.
 
 ## Examples
 
@@ -117,11 +134,13 @@ Check out our JavaScript/TypeScript/Node.js SDKs & Projects:
 
 ## Documentation
 
+The [Kraken SDK documentation](https://sieblyio.github.io/docs/kraken/) covers installation, client setup, public market data, authenticated trading, and WebSocket subscriptions.
+
 Most methods accept JS objects. These can be populated using parameters specified by Kraken's API documentation, or check the type definition in each class within this repository.
 
 ### API Documentation Links
 
-- [Kraken API Documentation](https://docs.kraken.com/api/)
+- [Kraken exchange API reference](https://docs.kraken.com/api/)
   - [Spot Trading API](https://docs.kraken.com/api/docs/rest-api/get-server-time)
   - [Futures Trading API](https://docs.futures.kraken.com/)
 
