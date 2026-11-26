@@ -65,7 +65,10 @@ Take a look at our dedicated [Kraken API quickstart guides for major frameworks 
     - [WebSocket API (WebsocketAPIClient)](#websocket-api-websocketapiclient)
 - [Customise Logging](#customise-logging)
 - [Browser/Frontend Usage](#browserfrontend-usage)
-  - [Webpack](#webpack)
+  - [Vite and React](#vite-and-react)
+  - [Next.js and server-side requests](#nextjs-and-server-side-requests)
+  - [React Native and Expo](#react-native-and-expo)
+  - [Standalone Webpack bundle](#standalone-webpack-bundle)
 - [LLMs & AI](#use-with-llms--ai)
 - [Used By](#used-by)
 - [Contributions & Thanks](#contributions--thanks)
@@ -642,15 +645,35 @@ const ws = new WebsocketClient(
 
 ## Browser/Frontend Usage
 
-### Webpack
+The npm package includes ES module and CommonJS builds. You do not need to build the SDK's standalone Webpack bundle to use it in a frontend project. Choose the setup for your application below.
 
-Build a bundle using webpack:
+### Vite and React
 
-- `npm install`
-- `npm run build`
-- `npm run pack`
+Use the [Vite guide](https://sieblyio.github.io/docs/kraken/environments/vite.html) or [React guide](https://sieblyio.github.io/docs/kraken/environments/react.html) for a complete public market-data project that imports `@siebly/kraken-api` from npm.
 
-The bundle can be found in `dist/`. Altough usage should be largely consistent, smaller differences will exist. Documentation is still TODO.
+Keep the supplied bundler configuration with the example: it provides EventEmitter through the `events` alias. These browser examples use public Kraken Spot data. Keep private keys and API credentials in a secure server-side environment and make authenticated calls there.
+
+Browser REST requests also depend on Kraken's CORS policy. Keep the guides' public GET client configuration, which removes the SDK's `UserAgent` and `locale` headers to avoid a failing CORS preflight. This setup is limited to public GET requests. If a request is blocked, call the SDK through your application's server route instead. A development proxy does not solve CORS for a deployed application.
+
+### Next.js and server-side requests
+
+The [Next.js guide](https://sieblyio.github.io/docs/kraken/environments/next.html) runs the SDK in a Node.js Route Handler and returns the result to the frontend. Use this pattern when requests need credentials or cannot be made directly from the browser.
+
+### React Native and Expo
+
+Follow the [Expo guide](https://sieblyio.github.io/docs/kraken/environments/expo.html) for its Metro configuration and required polyfill dependencies, including its HTTP, HTTPS and URL aliases. Browser bundler configuration is not interchangeable with Metro configuration. The example uses public Kraken Spot data; keep authenticated operations on your server.
+
+### Standalone Webpack bundle
+
+If you need a standalone UMD bundle rather than npm imports in your application, the SDK repository includes a [Webpack configuration](./webpack/webpack.config.cjs). From a checkout of this repository:
+
+```bash
+npm install
+npm run build
+npm run pack
+```
+
+The configuration writes `dist/krakenapi.js` with the `krakenapi` global name. It disables Node.js `http` and `https` imports; the REST client's Node-only `https.Agent` is unavailable in browsers. This is a separate packaging option, not a required step for the framework guides above. Browser-specific configuration and API access restrictions still apply.
 
 ## Use with LLMs & AI
 
