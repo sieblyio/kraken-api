@@ -48,6 +48,7 @@ Take a look at our dedicated [Kraken API quickstart guides for major frameworks 
 
 - [Installation](#installation)
   - [Frameworks & Quickstart Guides](#frameworks--quickstart-guides)
+  - [Try it in the browser](#try-it-in-the-browser)
 - [Examples](#examples)
 - [Issues & Discussion](#issues--discussion)
 - [Related Projects](#related-projects)
@@ -96,6 +97,15 @@ Our complete Kraken SDK supports all the major JavaScript runtimes. For maximum 
 | Cloudflare Workers         | [Cloudflare Workers](https://sieblyio.github.io/docs/kraken/environments/cloudflare-workers.html). Return a public price from a Worker, with a separate example for authenticated orders.                                                                                                                                                                                                                |
 
 Refer to [runtime compatibility](https://sieblyio.github.io/docs/kraken/compatibility.html) for a complete list of runtimes that we've actively tested, including setup guides.
+
+### Try it in the browser
+
+- Node.js / JavaScript: [![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/fork/github/sieblyio/docs/tree/main/starters/kraken/node?title=Kraken%20Node.js%20%2F%20JavaScript%20starter)
+- Node.js / TypeScript: [![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/fork/github/sieblyio/docs/tree/main/starters/kraken/typescript?title=Kraken%20Node.js%20%2F%20TypeScript%20starter)
+- Vite (plain JavaScript): [![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](<https://stackblitz.com/fork/github/sieblyio/docs/tree/main/starters/kraken/vite?title=Kraken%20Vite%20(plain%20JavaScript)%20starter>)
+- React: [![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/fork/github/sieblyio/docs/tree/main/starters/kraken/react?title=Kraken%20React%20starter)
+
+No account is needed. Keep API keys out of public sandboxes.
 
 ## Examples
 
